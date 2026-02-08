@@ -1,0 +1,9 @@
+0.1.0 - Initial release!
+
+0.2.0 - Changes 
+  * Added 16 more creatures.
+  * Added a "Tiles" folder with each creature exported individually.
+
+0.3.0 - Changes 
+  * Added 16 more creatures.
+  * Milestone of 64 creatures reached!
