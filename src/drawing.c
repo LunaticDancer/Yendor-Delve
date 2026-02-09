@@ -22,17 +22,26 @@ void DrawMainMenu()
     BeginMode2D(worldSpaceCamera);
 
     Vector2 textSize = MeasureTextEx(titleFont, GAME_TITLE, 120, 0);
-    Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 64};
+    Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 80};
     DrawTextEx(titleFont, GAME_TITLE, textPosition, 120, 0, MAROON);
-    DrawTextureNPatch(boneFrame, boneFrameInfo, (Rectangle){SCREEN_WIDTH/4, 224, SCREEN_WIDTH/2, 64}, (Vector2){0,0}, 0, GRAY);
+    DrawTextureNPatch(boneFrame, boneFrameInfo, (Rectangle){SCREEN_WIDTH/4, 256, SCREEN_WIDTH/2, 64}, (Vector2){0,0}, 0, GRAY);
     textSize = MeasureTextEx(basicFontLarger, "Play", 32, 0);
     textPosition.x = SCREEN_WIDTH / 2 - textSize.x / 2;
-    textPosition.y = 240;
+    textPosition.y = 272;
     DrawTextEx(basicFontLarger, "Play", textPosition, 32, 0, (menuSelection == Play) ? WHITE : GRAY);
     textSize = MeasureTextEx(basicFontLarger, "Quit", 32, 0);
     textPosition.x = SCREEN_WIDTH / 2 - textSize.x / 2;
-    textPosition.y = 240 + MENU_BUTTON_SPACING;
+    textPosition.y = 272 + MENU_BUTTON_SPACING;
     DrawTextEx(basicFontLarger, "Quit", textPosition, 32, 0, (menuSelection == Quit) ? WHITE : GRAY);
+
+    textSize = MeasureTextEx(basicFontLarger, "LunaticDancer, 2026", 16, 0);
+    textPosition.x = 0;
+    textPosition.y = SCREEN_HEIGHT - textSize.y;
+    DrawTextEx(basicFontLarger, "LunaticDancer, 2026", textPosition, 16, 0, GRAY);
+    textSize = MeasureTextEx(basicFontLarger, "made with C and Raylib", 16, 0);
+    textPosition.x = SCREEN_WIDTH - textSize.x;
+    textPosition.y = SCREEN_HEIGHT - textSize.y;
+    DrawTextEx(basicFontLarger, "made with C and Raylib", textPosition, 16, 0, GRAY);
 
     EndMode2D();
     EndTextureMode();

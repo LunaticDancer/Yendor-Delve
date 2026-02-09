@@ -49,7 +49,7 @@ int main()
 	SetTextureFilter(titleFont.texture, 0);
 	basicFont = LoadFontEx("fonts/alagard.ttf", 16, 0, 0);
 	SetTextureFilter(basicFont.texture, 0);
-	basicFontLarger = LoadFontEx("fonts/alagard.ttf", 16, 0, 0);
+	basicFontLarger = LoadFontEx("fonts/alagard.ttf", 32, 0, 0);
 	SetTextureFilter(basicFontLarger.texture, 0);
 
 	creatureAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/creatures_transparent.png");
