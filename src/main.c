@@ -64,7 +64,7 @@ int main()
 	dungeonAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/autotile_transparent.png");
 	boneFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/bone_breakers.png");
 
-	InitAppState(MainMenu);
+	InitAppState(AS_MAIN_MENU);
 
 	// game loop
 	while (!WindowShouldClose() && !markedToClose) // run the loop until the user presses ESCAPE or presses the Close button on the window
@@ -72,9 +72,9 @@ int main()
 		ReadInput();
 		HandleInput();
 
-		switch (appState.AppState)
+		switch (appState.appState)
 		{
-		case MainMenu:
+		case AS_MAIN_MENU:
 			DrawMainMenu();
 			break;
 		}
@@ -104,14 +104,14 @@ void InitAppState(enum APP_STATE state)
 {
 	switch(state)
 	{
-		case MainMenu:
-			appState.StateData.mainMenuState.CurrentSelection = Play;
+		case AS_MAIN_MENU:
+			appState.stateData.mainMenuState.currentSelection = MS_PLAY;
 			break;
-		case Gameplay:
-			appState.StateData.gameState.GameState = CharacterSelect;
+		case AS_GAMEPLAY:
+			appState.stateData.gameState.gameState = GS_CHARACTER_SELECT;
 			break;
 	}
-	appState.AppState = state;
+	appState.appState = state;
 }
 
 void ReadInput()
@@ -121,32 +121,32 @@ void ReadInput()
 	if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_Z) || IsKeyPressed(KEY_COMMA) 
 		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_UP))
 	{
-		inputThisFrame = inputThisFrame | Up;
+		inputThisFrame = inputThisFrame | VK_UP;
 	}
 	if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_O) 
 		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN))
 	{
-		inputThisFrame = inputThisFrame | Down;
+		inputThisFrame = inputThisFrame | VK_DOWN;
 	}
 	if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_Q) 
 		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT))
 	{
-		inputThisFrame = inputThisFrame | Left;
+		inputThisFrame = inputThisFrame | VK_LEFT;
 	}
 	if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_E) || IsKeyPressed(KEY_D) 
 		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT))
 	{
-		inputThisFrame = inputThisFrame | Right;
+		inputThisFrame = inputThisFrame | VK_RIGHT;
 	}
 	if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE) 
 		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
 	{
-		inputThisFrame = inputThisFrame | Confirm;
+		inputThisFrame = inputThisFrame | VK_CONFIRM;
 	}
 	if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_TAB) || IsKeyPressed(KEY_BACKSPACE) 
 		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
 	{
-		inputThisFrame = inputThisFrame | Back;
+		inputThisFrame = inputThisFrame | VK_BACK;
 	}
 }
 
@@ -157,9 +157,9 @@ bool IsPressed(enum CONTROLS input)
 
 void HandleInput()
 {
-	switch(appState.AppState)
+	switch(appState.appState)
 	{
-		case MainMenu:
+		case AS_MAIN_MENU:
 			HandleMainMenuInput();
 			break;
 	}
@@ -167,41 +167,41 @@ void HandleInput()
 
 void HandleMainMenuInput()
 {
-	if(IsPressed(Up))
+	if(IsPressed(VK_UP))
 	{
-		if(appState.StateData.mainMenuState.CurrentSelection == 0)
+		if(appState.stateData.mainMenuState.currentSelection == 0)
 		{
-			appState.StateData.mainMenuState.CurrentSelection = LENGTH - 1;
+			appState.stateData.mainMenuState.currentSelection = MS_LENGTH - 1;
 		}
 		else
 		{
-			appState.StateData.mainMenuState.CurrentSelection--;
+			appState.stateData.mainMenuState.currentSelection--;
 		}
 	}
-	if(IsPressed(Down))
+	if(IsPressed(VK_DOWN))
 	{
-		if(appState.StateData.mainMenuState.CurrentSelection + 1 == LENGTH)
+		if(appState.stateData.mainMenuState.currentSelection + 1 == MS_LENGTH)
 		{
-			appState.StateData.mainMenuState.CurrentSelection = 0;
+			appState.stateData.mainMenuState.currentSelection = 0;
 		}
 		else
 		{
-			appState.StateData.mainMenuState.CurrentSelection++;
+			appState.stateData.mainMenuState.currentSelection++;
 		}
 	}
-	if(IsPressed(Back))
+	if(IsPressed(VK_BACK))
 	{
-		appState.StateData.mainMenuState.CurrentSelection = Quit;
+		appState.stateData.mainMenuState.currentSelection = MS_QUIT;
 	}
-	if(IsPressed(Confirm))
+	if(IsPressed(VK_CONFIRM))
 	{
-		if (appState.StateData.mainMenuState.CurrentSelection == Quit)
+		if (appState.stateData.mainMenuState.currentSelection == MS_QUIT)
 		{
 			markedToClose = true;
 		}
-		if (appState.StateData.mainMenuState.CurrentSelection == Play)
+		if (appState.stateData.mainMenuState.currentSelection == MS_PLAY)
 		{
-			InitAppState(Gameplay);
+			InitAppState(AS_GAMEPLAY);
 		}
 	}
 
