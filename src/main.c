@@ -20,9 +20,15 @@ Texture generalAtlas;
 Texture dungeonAtlas;
 Texture boneFrame;
 
+bool markedToClose;
 struct AppState appState;
+char inputThisFrame;		// bitmask of possible inputs, see enum CONTROLS in constants.h
 
 void InitAppState(enum APP_STATE);
+void ReadInput();
+bool IsPressed(enum CONTROLS);
+void HandleInput();
+void HandleMainMenuInput();
 
 int main()
 {
@@ -61,16 +67,15 @@ int main()
 	InitAppState(MainMenu);
 
 	// game loop
-	while (!WindowShouldClose()) // run the loop until the user presses ESCAPE or presses the Close button on the window
+	while (!WindowShouldClose() && !markedToClose) // run the loop until the user presses ESCAPE or presses the Close button on the window
 	{
+		ReadInput();
+		HandleInput();
+
 		switch (appState.AppState)
 		{
 		case MainMenu:
 			DrawMainMenu();
-			break;
-
-		default:
-			// DrawMainMenu();
 			break;
 		}
 
@@ -107,4 +112,97 @@ void InitAppState(enum APP_STATE state)
 			break;
 	}
 	appState.AppState = state;
+}
+
+void ReadInput()
+{
+	inputThisFrame = 0;
+
+	if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_Z) || IsKeyPressed(KEY_COMMA) 
+		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_UP))
+	{
+		inputThisFrame = inputThisFrame | Up;
+	}
+	if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_O) 
+		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN))
+	{
+		inputThisFrame = inputThisFrame | Down;
+	}
+	if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_Q) 
+		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT))
+	{
+		inputThisFrame = inputThisFrame | Left;
+	}
+	if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_E) || IsKeyPressed(KEY_D) 
+		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT))
+	{
+		inputThisFrame = inputThisFrame | Right;
+	}
+	if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE) 
+		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
+	{
+		inputThisFrame = inputThisFrame | Confirm;
+	}
+	if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_TAB) || IsKeyPressed(KEY_BACKSPACE) 
+		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
+	{
+		inputThisFrame = inputThisFrame | Back;
+	}
+}
+
+bool IsPressed(enum CONTROLS input)
+{
+	return (inputThisFrame & (char)input) != 0;
+}
+
+void HandleInput()
+{
+	switch(appState.AppState)
+	{
+		case MainMenu:
+			HandleMainMenuInput();
+			break;
+	}
+}
+
+void HandleMainMenuInput()
+{
+	if(IsPressed(Up))
+	{
+		if(appState.StateData.mainMenuState.CurrentSelection == 0)
+		{
+			appState.StateData.mainMenuState.CurrentSelection = LENGTH - 1;
+		}
+		else
+		{
+			appState.StateData.mainMenuState.CurrentSelection--;
+		}
+	}
+	if(IsPressed(Down))
+	{
+		if(appState.StateData.mainMenuState.CurrentSelection + 1 == LENGTH)
+		{
+			appState.StateData.mainMenuState.CurrentSelection = 0;
+		}
+		else
+		{
+			appState.StateData.mainMenuState.CurrentSelection++;
+		}
+	}
+	if(IsPressed(Back))
+	{
+		appState.StateData.mainMenuState.CurrentSelection = Quit;
+	}
+	if(IsPressed(Confirm))
+	{
+		if (appState.StateData.mainMenuState.CurrentSelection == Quit)
+		{
+			markedToClose = true;
+		}
+		if (appState.StateData.mainMenuState.CurrentSelection == Play)
+		{
+			InitAppState(Gameplay);
+		}
+	}
+
 }

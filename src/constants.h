@@ -26,6 +26,16 @@ enum MENU_SELECTION
 	LENGTH,
 };
 
+enum CONTROLS
+{
+	Up = 1,
+	Down = 2,
+	Left = 4,
+	Right = 8,
+	Confirm = 16,
+	Back = 32,
+};
+
 struct MainMenuState
 {
 	enum MENU_SELECTION CurrentSelection;
