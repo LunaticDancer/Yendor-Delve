@@ -26,4 +26,26 @@ enum MENU_SELECTION
 	LENGTH,
 };
 
+struct MainMenuState
+{
+	enum MENU_SELECTION CurrentSelection;
+};
+
+struct GameState
+{
+	enum GAME_STATE GameState;
+};
+
+union AppStateData
+{
+	struct MainMenuState mainMenuState;
+	struct GameState gameState;
+};
+
+struct AppState
+{
+	enum APP_STATE AppState;
+	union AppStateData StateData;
+};
+
 #endif

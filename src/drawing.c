@@ -11,7 +11,7 @@ extern Font basicFontLarger;
 extern Camera2D worldSpaceCamera;
 extern RenderTexture2D renderTexture;
 extern Texture boneFrame;
-extern enum MENU_SELECTION menuSelection;
+extern struct AppState appState;
 
 NPatchInfo boneFrameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATCH};
 
@@ -24,15 +24,16 @@ void DrawMainMenu()
     Vector2 textSize = MeasureTextEx(titleFont, GAME_TITLE, 120, 0);
     Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 80};
     DrawTextEx(titleFont, GAME_TITLE, textPosition, 120, 0, MAROON);
-    DrawTextureNPatch(boneFrame, boneFrameInfo, (Rectangle){SCREEN_WIDTH/4, 256, SCREEN_WIDTH/2, 64}, (Vector2){0,0}, 0, GRAY);
+    DrawTextureNPatch(boneFrame, boneFrameInfo, (Rectangle){SCREEN_WIDTH/4, 254 + (MENU_BUTTON_SPACING * (int)appState.StateData.mainMenuState.CurrentSelection), 
+        SCREEN_WIDTH/2, 64}, (Vector2){0,0}, 0, GRAY);
     textSize = MeasureTextEx(basicFontLarger, "Play", 32, 0);
     textPosition.x = SCREEN_WIDTH / 2 - textSize.x / 2;
     textPosition.y = 272;
-    DrawTextEx(basicFontLarger, "Play", textPosition, 32, 0, (menuSelection == Play) ? WHITE : GRAY);
+    DrawTextEx(basicFontLarger, "Play", textPosition, 32, 0, (appState.StateData.mainMenuState.CurrentSelection == Play) ? WHITE : GRAY);
     textSize = MeasureTextEx(basicFontLarger, "Quit", 32, 0);
     textPosition.x = SCREEN_WIDTH / 2 - textSize.x / 2;
     textPosition.y = 272 + MENU_BUTTON_SPACING;
-    DrawTextEx(basicFontLarger, "Quit", textPosition, 32, 0, (menuSelection == Quit) ? WHITE : GRAY);
+    DrawTextEx(basicFontLarger, "Quit", textPosition, 32, 0, (appState.StateData.mainMenuState.CurrentSelection == Quit) ? WHITE : GRAY);
 
     textSize = MeasureTextEx(basicFontLarger, "LunaticDancer, 2026", 16, 0);
     textPosition.x = 0;

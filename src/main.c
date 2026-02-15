@@ -20,9 +20,9 @@ Texture generalAtlas;
 Texture dungeonAtlas;
 Texture boneFrame;
 
-enum APP_STATE appState = MainMenu;
-enum GAME_STATE gameState = CharacterSelect;
-enum MENU_SELECTION menuSelection = Play;
+struct AppState appState;
+
+void InitAppState(enum APP_STATE);
 
 int main()
 {
@@ -58,10 +58,12 @@ int main()
 	dungeonAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/autotile_transparent.png");
 	boneFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/bone_breakers.png");
 
+	InitAppState(MainMenu);
+
 	// game loop
 	while (!WindowShouldClose()) // run the loop until the user presses ESCAPE or presses the Close button on the window
 	{
-		switch (appState)
+		switch (appState.AppState)
 		{
 		case MainMenu:
 			DrawMainMenu();
@@ -91,4 +93,18 @@ int main()
 	// destroy the window and cleanup the OpenGL context
 	CloseWindow();
 	return 0;
+}
+
+void InitAppState(enum APP_STATE state)
+{
+	switch(state)
+	{
+		case MainMenu:
+			appState.StateData.mainMenuState.CurrentSelection = Play;
+			break;
+		case Gameplay:
+			appState.StateData.gameState.GameState = CharacterSelect;
+			break;
+	}
+	appState.AppState = state;
 }
