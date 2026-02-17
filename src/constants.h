@@ -9,8 +9,6 @@ extern const int SCREEN_HEIGHT;
 extern const int TILE_SIZE;
 extern const char *GAME_TITLE;
 
-extern struct Character;
-
 enum TILESET
 {
 	TL_CREATURES,

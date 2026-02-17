@@ -5,9 +5,6 @@
 #include "constants.h"
 #include "creature.h"
 
-extern enum TILESET;
-extern struct StatBonuses;
-
 typedef enum EQUIPMENT_SLOT
 {
     ES_EVERY,

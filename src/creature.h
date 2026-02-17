@@ -66,6 +66,6 @@ typedef struct CreatureStats
     char abilityCount;
 } CreatureStats;
 
-StatBonuses* CreateEmptyStatBonuses();
+StatBonuses CreateEmptyStatBonuses();
 
 #endif

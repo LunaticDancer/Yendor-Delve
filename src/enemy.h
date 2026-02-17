@@ -5,8 +5,6 @@
 #include "item.h"
 #include "ability.h"
 
-extern struct CreatureStats;
-
 typedef enum ENEMY_ID
 {
     EN_NONE,
