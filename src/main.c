@@ -20,12 +20,13 @@ Texture itemAtlas;
 Texture generalAtlas;
 Texture dungeonAtlas;
 Texture boneFrame;
+Texture spikeFrame;
+Texture ornateFrame;
 
 bool markedToClose;
 struct AppState appState;
 char inputThisFrame;		// bitmask of possible inputs, see enum CONTROLS in constants.h
 
-void InitAppState(enum APP_STATE);
 void ReadInput();
 bool IsPressed(enum CONTROLS);
 void HandleInput();
@@ -64,6 +65,8 @@ int main()
 	generalAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/general_transparent.png");
 	dungeonAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/autotile_transparent.png");
 	boneFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/bone_breakers.png");
+	spikeFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/spikecore.png");
+	ornateFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/polis_sanctuary.png");
 
 	InitAppState(AS_MAIN_MENU);
 
@@ -98,27 +101,12 @@ int main()
 	UnloadTexture(generalAtlas);
 	UnloadTexture(dungeonAtlas);
 	UnloadTexture(boneFrame);
+	UnloadTexture(spikeFrame);
+	UnloadTexture(ornateFrame);
 
 	// destroy the window and cleanup the OpenGL context
 	CloseWindow();
 	return 0;
-}
-
-void InitAppState(enum APP_STATE _state)
-{
-	switch(_state)
-	{
-		case AS_MAIN_MENU:
-			appState.stateData.mainMenuState.currentSelection = MS_PLAY;
-			break;
-		case AS_GAMEPLAY:
-			appState.stateData.gameState.gameState = GS_CHARACTER_SELECT;
-			appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_BERSERKER);
-			appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_BERSERKER);
-			appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_BERSERKER);
-			break;
-	}
-	appState.appState = _state;
 }
 
 void ReadInput()

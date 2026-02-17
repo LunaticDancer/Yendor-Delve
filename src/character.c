@@ -8,11 +8,12 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_BERSERKER:
         return (Character){
             id,
+            "As reckless as he is effective, the Berserker dominates his opponents \nthrough sheer force and rage, endangering himself beyond reason just to \nchase the thrill of murder.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Berserker",
                     TL_CREATURES,
-                    (Vector2){7, 0},
+                    (Vector2){6, 0},
                     RED,
 
                     0,

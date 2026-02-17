@@ -17,6 +17,7 @@ typedef enum CHARACTER_ID
 typedef struct Character
 {
     CHARACTER_ID characterId;
+    char* description;
     CreatureStats stats;
     Item items[4];
     StatBonuses itemStats;
