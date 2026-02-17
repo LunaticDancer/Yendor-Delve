@@ -1,5 +1,7 @@
 #include "raylib.h"
 #include "constants.h"
+#include "state.h"
+#include "drawing.h"
 
 const int MENU_BUTTON_SPACING = 56;
 

@@ -7,6 +7,7 @@
 
 #include "drawing.h"
 #include "constants.h"
+#include "state.h"
 
 Camera2D worldSpaceCamera = {0};
 Camera2D screenSpaceCamera = {0};
@@ -103,9 +104,9 @@ int main()
 	return 0;
 }
 
-void InitAppState(enum APP_STATE state)
+void InitAppState(enum APP_STATE _state)
 {
-	switch(state)
+	switch(_state)
 	{
 		case AS_MAIN_MENU:
 			appState.stateData.mainMenuState.currentSelection = MS_PLAY;
@@ -117,7 +118,7 @@ void InitAppState(enum APP_STATE state)
 			appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_BERSERKER);
 			break;
 	}
-	appState.appState = state;
+	appState.appState = _state;
 }
 
 void ReadInput()
