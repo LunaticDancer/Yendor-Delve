@@ -1,10 +1,22 @@
 #ifndef constants
 #define constants
 
+#include "character.h"
+#include "enemy.h"
+
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 extern const int TILE_SIZE;
 extern const char *GAME_TITLE;
+
+extern struct Character;
+
+enum TILESET
+{
+	TL_CREATURES,
+	TL_ITEMS,
+	TL_GENERAL,
+};
 
 enum APP_STATE
 {
@@ -44,6 +56,7 @@ struct MainMenuState
 struct GameState
 {
 	enum GAME_STATE gameState;
+	Character playerTeam[3];
 };
 
 union AppStateData

@@ -77,6 +77,9 @@ int main()
 		case AS_MAIN_MENU:
 			DrawMainMenu();
 			break;
+		case AS_GAMEPLAY:
+			DrawGameplay();
+			break;
 		}
 
 		BeginDrawing();
@@ -109,6 +112,9 @@ void InitAppState(enum APP_STATE state)
 			break;
 		case AS_GAMEPLAY:
 			appState.stateData.gameState.gameState = GS_CHARACTER_SELECT;
+			appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_BERSERKER);
+			appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_BERSERKER);
+			appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_BERSERKER);
 			break;
 	}
 	appState.appState = state;

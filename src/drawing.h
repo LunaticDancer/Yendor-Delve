@@ -10,8 +10,9 @@ extern Font basicFontLarger;
 extern Camera2D worldSpaceCamera;
 extern RenderTexture2D renderTexture;
 extern Texture boneFrame;
-extern enum MENU_SELECTION menuSelection;
 
 void DrawMainMenu();
+void DrawGameplay();
+void DrawCharacterSelect();
 
 #endif

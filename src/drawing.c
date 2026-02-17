@@ -48,3 +48,28 @@ void DrawMainMenu()
     EndTextureMode();
     return;
 }
+
+void DrawGameplay()
+{
+    switch(appState.stateData.gameState.gameState)
+    {
+        case GS_CHARACTER_SELECT:
+            DrawCharacterSelect();
+            break;
+    }
+}
+
+void DrawCharacterSelect()
+{
+    BeginTextureMode(renderTexture);
+    ClearBackground(BLACK);
+    BeginMode2D(worldSpaceCamera);
+
+    Vector2 textSize = MeasureTextEx(basicFontLarger, "Create your party:", 32, 0);
+    Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 8};
+    DrawTextEx(basicFont, "Create your party:", textPosition, 32, 0, LIGHTGRAY);
+
+    EndMode2D();
+    EndTextureMode();
+    return;
+}
