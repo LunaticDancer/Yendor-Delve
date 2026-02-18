@@ -95,13 +95,14 @@ void DrawCharacterSelect()
         (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3) ? GOLD : GRAY);
 
     char* name = (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3) ?
-        "Descent" : appState.stateData.gameState.playerTeam[0].stats.baseStats.name;
+        "Descent" : appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].stats.baseStats.name;
     textSize = MeasureTextEx(basicFontLarger, name, 32, 0);
     textPosition = (Vector2){SCREEN_WIDTH / 2 - textSize.x / 2, 72 + LAYOUT_SPACING};
     DrawTextEx(basicFontLarger, name, textPosition, 32, 0, WHITE);
     
     char* description = (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3) ?
-        "Press Confirm to delve into the dungeons of Yendor..." : appState.stateData.gameState.playerTeam[0].description;
+        "Press Confirm to delve into the dungeons of Yendor..." : 
+        appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].description;
     DrawTextEx(basicFontLarger, description, (Vector2){24+LAYOUT_SPACING, 128+LAYOUT_SPACING}, 16, 0, LIGHTGRAY);
 
         DrawTexturePro(

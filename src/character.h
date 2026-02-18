@@ -12,6 +12,7 @@ typedef enum CHARACTER_ID
     CHAR_DUELIST,       // speed amplification
     CHAR_MONK,          // high stamina costs, great mastery scaling
     CHAR_FLESH_GOLEM,   // starts off weak but gets stronger with each combat encounter
+    CHAR_LENGTH,
 } CHARACTER_ID;
 
 typedef struct Character

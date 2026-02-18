@@ -31,6 +31,7 @@ void ReadInput();
 bool IsPressed(enum CONTROLS);
 void HandleInput();
 void HandleMainMenuInput();
+void HandleCharacterSelectInput();
 
 int main()
 {
@@ -157,6 +158,14 @@ void HandleInput()
 		case AS_MAIN_MENU:
 			HandleMainMenuInput();
 			break;
+		case AS_GAMEPLAY:
+			switch(appState.stateData.gameState.gameState)
+			{
+				case GS_CHARACTER_SELECT:
+					HandleCharacterSelectInput();
+					break;
+			}
+		break;
 	}
 }
 
@@ -199,5 +208,39 @@ void HandleMainMenuInput()
 			InitAppState(AS_GAMEPLAY);
 		}
 	}
+}
 
+void HandleCharacterSelectInput()
+{
+	if(IsPressed(VK_LEFT))
+	{
+		appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected = 
+			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 3) % 4;
+	}
+	if(IsPressed(VK_RIGHT))
+	{
+		appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected = 
+			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 1) % 4;
+	}
+	if(IsPressed(VK_UP))
+	{
+		appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected] = 
+			InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId
+			- 1 + CHAR_LENGTH) % CHAR_LENGTH);
+	}
+	if(IsPressed(VK_DOWN))
+	{
+		appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected] = 
+			InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId
+			+ 1) % CHAR_LENGTH);
+	}
+	if(IsPressed(VK_BACK))
+	{
+		appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected = 3;
+	}
+	if(IsPressed(VK_CONFIRM))
+	{
+		if(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3)
+			appState.stateData.gameState.gameState = GS_DUNGEON;
+	}
 }
