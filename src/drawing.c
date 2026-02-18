@@ -76,7 +76,7 @@ void DrawCharacterSelect()
 
     Vector2 textSize = MeasureTextEx(basicFontLarger, "Create your party:", 32, 0);
     Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 10};
-    DrawTextEx(basicFontLarger, "Create your party:", textPosition, 32, 0, LIGHTGRAY);
+    DrawTextEx(basicFontLarger, "Create your party:", textPosition, 32, 0, DARKGRAY);
 
     DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){LAYOUT_SPACING, 48 + LAYOUT_SPACING, 
         SCREEN_WIDTH - 2 * LAYOUT_SPACING, SCREEN_HEIGHT - (SCREEN_WIDTH / 4) - (48 + 2 * LAYOUT_SPACING)}, (Vector2){0,0}, 0, GRAY);
@@ -94,9 +94,15 @@ void DrawCharacterSelect()
         (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
         (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3) ? GOLD : GRAY);
 
+    char* name = (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3) ?
+        "Descent" : appState.stateData.gameState.playerTeam[0].stats.baseStats.name;
+    textSize = MeasureTextEx(basicFontLarger, name, 32, 0);
+    textPosition = (Vector2){SCREEN_WIDTH / 2 - textSize.x / 2, 72 + LAYOUT_SPACING};
+    DrawTextEx(basicFontLarger, name, textPosition, 32, 0, WHITE);
+    
     char* description = (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3) ?
         "Press Confirm to delve into the dungeons of Yendor..." : appState.stateData.gameState.playerTeam[0].description;
-    DrawTextEx(basicFontLarger, description, (Vector2){24+LAYOUT_SPACING, 72+LAYOUT_SPACING}, 16, 0, LIGHTGRAY);
+    DrawTextEx(basicFontLarger, description, (Vector2){24+LAYOUT_SPACING, 128+LAYOUT_SPACING}, 16, 0, LIGHTGRAY);
 
         DrawTexturePro(
             GetTileset(appState.stateData.gameState.playerTeam[0].stats.baseStats.tileset),
