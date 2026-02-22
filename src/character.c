@@ -8,7 +8,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_BERSERKER:
         return (Character){
             id,
-            "As reckless as he is effective, the Berserker dominates his opponents \nthrough sheer force and rage, endangering himself beyond reason just to \nchase the thrill of murder.",
+            "As reckless as he is effective, the Berserker dominates his opponents through sheer force and rage, endangering himself beyond reason just to chase the thrill of murder.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Berserker",
@@ -48,7 +48,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_ASSASSIN:
         return (Character){
             id,
-            "Mysterious and elusive, the Assassin is a frail but tactical fighter, waiting \nfor the right opportunity to deal a decisive strike.",
+            "Mysterious and elusive, the Assassin is a frail but tactical fighter, waiting for the right opportunity to deal a decisive strike.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Assassin",
@@ -88,7 +88,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_DUELIST:
         return (Character){
             id,
-            "Speed and precission is what the Duelist is known for. \nThis highly trained fighter becomes more deadly the longer the fight lasts.",
+            "Speed and precission is what the Duelist is known for. This highly trained fighter becomes more deadly the longer the fight lasts.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Duelist",
@@ -168,7 +168,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_FLESH_GOLEM:
         return (Character){
             id,
-            "A newly born abominaton, an unlikely aliance. \nThe Flesh Golem is weak, but it absorbs every creature it kills, growing \nwith limitless potential.",
+            "A newly born abominaton, an unlikely aliance. The Flesh Golem is weak, but it absorbs every creature it kills, growing with limitless potential.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Flesh Golem",
