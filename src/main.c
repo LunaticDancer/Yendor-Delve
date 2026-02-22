@@ -224,15 +224,31 @@ void HandleCharacterSelectInput()
 	}
 	if(IsPressed(VK_UP))
 	{
-		appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected] = 
-			InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId
-			- 1 + CHAR_LENGTH) % CHAR_LENGTH);
+		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask & ~(1 <<
+			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
+		do
+		{
+			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected] = 
+				InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId
+				- 1 + CHAR_LENGTH) % CHAR_LENGTH);
+		}while (CheckIfHeroInParty(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId));
+		
+		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask | (1 <<
+			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
 	}
 	if(IsPressed(VK_DOWN))
 	{
-		appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected] = 
-			InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId
-			+ 1) % CHAR_LENGTH);
+		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask & ~(1 <<
+			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
+		do
+		{
+			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected] = 
+				InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId
+				+ 1) % CHAR_LENGTH);
+		}while (CheckIfHeroInParty(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId));
+		
+		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask | (1 <<
+			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
 	}
 	if(IsPressed(VK_BACK))
 	{

@@ -13,7 +13,6 @@ struct MainMenuState
 
 struct CharacterSelectState
 {
-	short selectedCharactersMask;
 	char currentSlotSelected;
 };
 
@@ -25,6 +24,7 @@ union GameStateData
 struct GameState
 {
 	enum GAME_STATE gameState;
+	char teamCompMask;
 	Character playerTeam[3];
 	union GameStateData stateData;
 };
@@ -43,5 +43,6 @@ struct AppState
 
 void InitAppState(enum APP_STATE);
 void InitGameState(enum GAME_STATE);
+bool CheckIfHeroInParty(CHARACTER_ID);
 
 #endif
