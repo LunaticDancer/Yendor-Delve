@@ -43,6 +43,7 @@ Character InitCharacterData(CHARACTER_ID id)
             },
             CreateEmptyStatBonuses(),
             6,      // carry
+            600,
         };
         break;
         case CHAR_ASSASSIN:
@@ -83,6 +84,7 @@ Character InitCharacterData(CHARACTER_ID id)
             },
             CreateEmptyStatBonuses(),
             3,      // carry
+            400,
         };
         break;
         case CHAR_DUELIST:
@@ -123,6 +125,7 @@ Character InitCharacterData(CHARACTER_ID id)
             },
             CreateEmptyStatBonuses(),
             4,      // carry
+            500,
         };
         break;
         case CHAR_MONK:
@@ -134,7 +137,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     "Monk",
                     TL_CREATURES,
                     (Vector2){2, 7},
-                    DARKGREEN,
+                    GREEN,
 
                     0,
                     1000,
@@ -163,6 +166,7 @@ Character InitCharacterData(CHARACTER_ID id)
             },
             CreateEmptyStatBonuses(),
             4,      // carry
+            500,
         };
         break;
         case CHAR_FLESH_GOLEM:
@@ -174,7 +178,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     "Flesh Golem",
                     TL_CREATURES,
                     (Vector2){5, 4},
-                    RED,
+                    MAROON,
 
                     0,
                     400,
@@ -203,6 +207,7 @@ Character InitCharacterData(CHARACTER_ID id)
             },
             CreateEmptyStatBonuses(),
             0,      // carry
+            500,
         };
         break;
     }

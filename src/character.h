@@ -23,6 +23,7 @@ typedef struct Character
     Item items[4];
     StatBonuses itemStats;
     short carryCapacity;            // contribution to shared inventory slots
+    short targetPriority;
 } Character;
 
 Character InitCharacterData(CHARACTER_ID);

@@ -49,6 +49,7 @@ typedef struct StatBonuses
     short critRate;
     short mastery;
     float damageMultiplier;
+    short targetPriority;
 } StatBonuses;
 
 typedef struct StatDebuff
