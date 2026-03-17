@@ -17,6 +17,7 @@ typedef enum EQUIPMENT_SLOT
 typedef enum ITEM_ID
 {
     ITEM_NONE,
+    ITEM_TEST,
 } ITEM_ID;
 
 typedef struct Item

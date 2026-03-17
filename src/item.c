@@ -14,5 +14,15 @@ Item InitItem(ITEM_ID id)
             ES_EVERY,
             CreateEmptyStatBonuses(),
         };
+        case ITEM_TEST:
+        return (Item){
+            id,
+            "Test Item",
+            TL_ITEMS,
+            (Vector2){0,0},
+            GRAY,
+            ES_EVERY,
+            CreateEmptyStatBonuses(),
+        };
     }
 }

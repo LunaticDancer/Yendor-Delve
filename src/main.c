@@ -32,6 +32,7 @@ bool IsPressed(enum CONTROLS);
 void HandleInput();
 void HandleMainMenuInput();
 void HandleCharacterSelectInput();
+void HandleDungeonInput();
 
 int main()
 {
@@ -66,7 +67,7 @@ int main()
 	generalAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/general_transparent.png");
 	dungeonAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/autotile_transparent.png");
 	boneFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/bone_breakers.png");
-	spikeFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/spikecore.png");
+	spikeFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/thorny_growth.png");
 	ornateFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/polis_sanctuary.png");
 
 	InitAppState(AS_MAIN_MENU);
@@ -164,6 +165,9 @@ void HandleInput()
 				case GS_CHARACTER_SELECT:
 					HandleCharacterSelectInput();
 					break;
+				case GS_DUNGEON:
+					HandleDungeonInput();
+					break;
 			}
 		break;
 	}
@@ -258,5 +262,38 @@ void HandleCharacterSelectInput()
 	{
 		if(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3)
 			appState.stateData.gameState.gameState = GS_DUNGEON;
+			InitGameState(GS_DUNGEON);
+	}
+}
+
+void HandleDungeonInput()
+{
+
+	if(IsPressed(VK_LEFT))
+	{
+		appState.stateData.gameState.stateData.dungeonState.selectionX = 
+			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ?
+			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 2) % 3 :
+			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 5) % 6;
+	}
+	if(IsPressed(VK_RIGHT))
+	{
+		appState.stateData.gameState.stateData.dungeonState.selectionX = 
+			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ?
+			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 1) % 3 :
+			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 1) % 6;
+	}
+	if(IsPressed(VK_DOWN) || IsPressed(VK_UP))
+	{
+		appState.stateData.gameState.stateData.dungeonState.selectionY = (appState.stateData.gameState.stateData.dungeonState.selectionY + 1) % 2;
+		switch(appState.stateData.gameState.stateData.dungeonState.selectionY)
+		{
+			case 0:
+				appState.stateData.gameState.stateData.dungeonState.selectionX *= 2;
+				break;
+			case 1:
+				appState.stateData.gameState.stateData.dungeonState.selectionX /= 2;
+				break;
+		}
 	}
 }

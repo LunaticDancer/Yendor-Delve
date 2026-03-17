@@ -16,9 +16,24 @@ struct CharacterSelectState
 	char currentSlotSelected;
 };
 
+struct DungeonState
+{
+	char selectionX;
+	char selectionY;
+	Encounter encounters[3];
+	Item rewards[3];
+	bool isBrowsingEquipment;
+	char highlightedEquipmentSlot;
+	bool isSelectingItem;
+	char highlightedItem;
+	char* slotItemIndexes;
+	char itemIndexListLength;
+};
+
 union GameStateData
 {
 	struct CharacterSelectState characterSelectState;
+	struct DungeonState dungeonState;
 };
 
 struct GameState
@@ -26,6 +41,9 @@ struct GameState
 	enum GAME_STATE gameState;
 	char teamCompMask;
 	Character playerTeam[3];
+	char floor;
+	bool isPaused;
+	char pauseMenuSelection;
 	union GameStateData stateData;
 };
 
