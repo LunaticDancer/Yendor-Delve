@@ -2,11 +2,12 @@
 #include "constants.h"
 #include "state.h"
 #include "drawing.h"
+#include "item.h"
 
 const int MENU_BUTTON_SPACING = 56;
 const int LAYOUT_SPACING = 4;
 
-extern const char *GAME_TITLE;
+extern const char* GAME_TITLE;
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 extern Font titleFont;
@@ -224,25 +225,31 @@ void DrawDungeonScreen()
     // descriptions
     char* text;
 
-    text = appState.stateData.gameState.stateData.dungeonState.encounters[0].name;
+    text =(appState.stateData.gameState.stateData.dungeonState.selectionX == 1 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
+        ? appState.stateData.gameState.stateData.dungeonState.rewards[0].name : appState.stateData.gameState.stateData.dungeonState.encounters[0].name;
     textSize = MeasureTextEx(basicFont, text, 16, 0);
     textPosition = (Vector2){110 - textSize.x / 2, 140 + LAYOUT_SPACING};
     DrawTextEx(basicFont, text, textPosition, 16, 0, WHITE);
-    text = appState.stateData.gameState.stateData.dungeonState.encounters[0].description;
+    text = (appState.stateData.gameState.stateData.dungeonState.selectionX == 1 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
+        ? GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[0]) : appState.stateData.gameState.stateData.dungeonState.encounters[0].description;
     DrawTextBoxed(basicFontLarger, text, (Rectangle){21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
 
-    text = appState.stateData.gameState.stateData.dungeonState.encounters[1].name;
+    text =(appState.stateData.gameState.stateData.dungeonState.selectionX == 3 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
+        ? appState.stateData.gameState.stateData.dungeonState.rewards[1].name : appState.stateData.gameState.stateData.dungeonState.encounters[1].name;
     textSize = MeasureTextEx(basicFont, text, 16, 0);
     textPosition = (Vector2){210 + 110 - textSize.x / 2, 140 + LAYOUT_SPACING};
     DrawTextEx(basicFont, text, textPosition, 16, 0, WHITE);
-    text = appState.stateData.gameState.stateData.dungeonState.encounters[1].description;
+    text = (appState.stateData.gameState.stateData.dungeonState.selectionX == 3 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
+        ? GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[1]) : appState.stateData.gameState.stateData.dungeonState.encounters[1].description;
     DrawTextBoxed(basicFontLarger, text, (Rectangle){210+21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
 
-    text = appState.stateData.gameState.stateData.dungeonState.encounters[2].name;
+    text =(appState.stateData.gameState.stateData.dungeonState.selectionX == 5 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
+        ? appState.stateData.gameState.stateData.dungeonState.rewards[2].name : appState.stateData.gameState.stateData.dungeonState.encounters[2].name;
     textSize = MeasureTextEx(basicFont, text, 16, 0);
     textPosition = (Vector2){420 + 110 - textSize.x / 2, 140 + LAYOUT_SPACING};
     DrawTextEx(basicFont, text, textPosition, 16, 0, WHITE);
-    text = appState.stateData.gameState.stateData.dungeonState.encounters[2].description;
+    text = (appState.stateData.gameState.stateData.dungeonState.selectionX == 5 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
+        ? GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[2]) : appState.stateData.gameState.stateData.dungeonState.encounters[2].description;
     DrawTextBoxed(basicFontLarger, text, (Rectangle){420+21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
 
     // party member frames

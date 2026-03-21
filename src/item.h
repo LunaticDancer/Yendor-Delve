@@ -32,6 +32,8 @@ typedef struct Item
     StatBonuses statBonuses;
 } Item;
 
+char* GetItemStatSpread();
+char* CombineStrings(char* str1, char* str2);
 Item InitItem(ITEM_ID);
 
 #endif

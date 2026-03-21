@@ -38,7 +38,7 @@ void InitGameState(enum GAME_STATE _state)
 		appState.stateData.gameState.stateData.dungeonState.encounters[0] = GetEncounterData(ENC_BONFIRE);
 		appState.stateData.gameState.stateData.dungeonState.encounters[1] = GetEncounterData(ENC_NONE);
 		appState.stateData.gameState.stateData.dungeonState.encounters[2] = GetEncounterData(ENC_CHEST);
-		appState.stateData.gameState.stateData.dungeonState.rewards[0] = InitItem(ITEM_TEST);
+		appState.stateData.gameState.stateData.dungeonState.rewards[0] = InitItem(ITEM_NONE);
 		appState.stateData.gameState.stateData.dungeonState.rewards[1] = InitItem(ITEM_TEST);
 		appState.stateData.gameState.stateData.dungeonState.rewards[2] = InitItem(ITEM_TEST);
 		break;
