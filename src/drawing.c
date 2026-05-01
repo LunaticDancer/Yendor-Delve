@@ -173,7 +173,13 @@ void DrawDungeonScreen()
         );
 
     // reward icons
-    DrawTexturePro(
+    if(appState.stateData.gameState.stateData.dungeonState.encounters[0].hidesLoot)
+    {
+        DrawTextEx(basicFont, "?", (Vector2){LAYOUT_SPACING + 132,  LAYOUT_SPACING + 100}, 16, 0, GRAY);
+    }
+    else
+    {
+        DrawTexturePro(
             GetTileset(appState.stateData.gameState.stateData.dungeonState.rewards[0].tileset),
             (Rectangle){
                 appState.stateData.gameState.stateData.dungeonState.rewards[0].tileLookupPosition.x * TILE_SIZE,
@@ -189,7 +195,14 @@ void DrawDungeonScreen()
             0,
             appState.stateData.gameState.stateData.dungeonState.rewards[0].color
         );
-    DrawTexturePro(
+    }
+    if(appState.stateData.gameState.stateData.dungeonState.encounters[1].hidesLoot)
+    {
+        DrawTextEx(basicFont, "?", (Vector2){LAYOUT_SPACING + 210 + 132,  LAYOUT_SPACING + 100}, 16, 0, GRAY);
+    }
+    else
+    {
+        DrawTexturePro(
             GetTileset(appState.stateData.gameState.stateData.dungeonState.rewards[1].tileset),
             (Rectangle){
                 appState.stateData.gameState.stateData.dungeonState.rewards[1].tileLookupPosition.x * TILE_SIZE,
@@ -205,7 +218,14 @@ void DrawDungeonScreen()
             0,
             appState.stateData.gameState.stateData.dungeonState.rewards[1].color
         );
-    DrawTexturePro(
+    }
+    if(appState.stateData.gameState.stateData.dungeonState.encounters[2].hidesLoot)
+    {
+        DrawTextEx(basicFont, "?", (Vector2){LAYOUT_SPACING + 420 + 132,  LAYOUT_SPACING + 100}, 16, 0, GRAY);
+    }
+    else
+    {
+        DrawTexturePro(
             GetTileset(appState.stateData.gameState.stateData.dungeonState.rewards[2].tileset),
             (Rectangle){
                 appState.stateData.gameState.stateData.dungeonState.rewards[2].tileLookupPosition.x * TILE_SIZE,
@@ -221,35 +241,42 @@ void DrawDungeonScreen()
             0,
             appState.stateData.gameState.stateData.dungeonState.rewards[2].color
         );
+    }
 
     // descriptions
     char* text;
 
     text =(appState.stateData.gameState.stateData.dungeonState.selectionX == 1 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? appState.stateData.gameState.stateData.dungeonState.rewards[0].name : appState.stateData.gameState.stateData.dungeonState.encounters[0].name;
+        ? (appState.stateData.gameState.stateData.dungeonState.encounters[0].hidesLoot ? "Unknown" :
+         appState.stateData.gameState.stateData.dungeonState.rewards[0].name) : appState.stateData.gameState.stateData.dungeonState.encounters[0].name;
     textSize = MeasureTextEx(basicFont, text, 16, 0);
     textPosition = (Vector2){110 - textSize.x / 2, 140 + LAYOUT_SPACING};
     DrawTextEx(basicFont, text, textPosition, 16, 0, WHITE);
     text = (appState.stateData.gameState.stateData.dungeonState.selectionX == 1 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[0]) : appState.stateData.gameState.stateData.dungeonState.encounters[0].description;
+        ? (appState.stateData.gameState.stateData.dungeonState.encounters[0].hidesLoot ? "You will only learn what this reward is after you obtain it." :
+        GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[0])) : appState.stateData.gameState.stateData.dungeonState.encounters[0].description;
     DrawTextBoxed(basicFontLarger, text, (Rectangle){21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
 
     text =(appState.stateData.gameState.stateData.dungeonState.selectionX == 3 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? appState.stateData.gameState.stateData.dungeonState.rewards[1].name : appState.stateData.gameState.stateData.dungeonState.encounters[1].name;
+        ? (appState.stateData.gameState.stateData.dungeonState.encounters[1].hidesLoot ? "Unknown" :
+         appState.stateData.gameState.stateData.dungeonState.rewards[1].name) : appState.stateData.gameState.stateData.dungeonState.encounters[1].name;
     textSize = MeasureTextEx(basicFont, text, 16, 0);
     textPosition = (Vector2){210 + 110 - textSize.x / 2, 140 + LAYOUT_SPACING};
     DrawTextEx(basicFont, text, textPosition, 16, 0, WHITE);
     text = (appState.stateData.gameState.stateData.dungeonState.selectionX == 3 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[1]) : appState.stateData.gameState.stateData.dungeonState.encounters[1].description;
+        ? (appState.stateData.gameState.stateData.dungeonState.encounters[1].hidesLoot ? "You will only learn what this reward is after you obtain it." :
+        GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[1])) : appState.stateData.gameState.stateData.dungeonState.encounters[1].description;
     DrawTextBoxed(basicFontLarger, text, (Rectangle){210+21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
 
     text =(appState.stateData.gameState.stateData.dungeonState.selectionX == 5 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? appState.stateData.gameState.stateData.dungeonState.rewards[2].name : appState.stateData.gameState.stateData.dungeonState.encounters[2].name;
+        ? (appState.stateData.gameState.stateData.dungeonState.encounters[2].hidesLoot ? "Unknown" :
+         appState.stateData.gameState.stateData.dungeonState.rewards[2].name) : appState.stateData.gameState.stateData.dungeonState.encounters[2].name;
     textSize = MeasureTextEx(basicFont, text, 16, 0);
     textPosition = (Vector2){420 + 110 - textSize.x / 2, 140 + LAYOUT_SPACING};
     DrawTextEx(basicFont, text, textPosition, 16, 0, WHITE);
     text = (appState.stateData.gameState.stateData.dungeonState.selectionX == 5 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[2]) : appState.stateData.gameState.stateData.dungeonState.encounters[2].description;
+        ? (appState.stateData.gameState.stateData.dungeonState.encounters[2].hidesLoot ? "You will only learn what this reward is after you obtain it." :
+        GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[2])) : appState.stateData.gameState.stateData.dungeonState.encounters[2].description;
     DrawTextBoxed(basicFontLarger, text, (Rectangle){420+21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
 
     // party member frames
