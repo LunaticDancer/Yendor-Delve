@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <time.h>
 #include "raylib.h"
 
 #ifndef resource_dir
@@ -70,6 +72,8 @@ int main()
 	spikeFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/thorny_growth.png");
 	ornateFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/polis_sanctuary.png");
 
+	srand(time(NULL));
+	InitEncounterPools();
 	InitAppState(AS_MAIN_MENU);
 
 	// game loop

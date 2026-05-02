@@ -9,6 +9,8 @@ typedef enum ENEMY_ID
 {
     EN_NONE,
     EN_MIMIC,
+    EN_BLOOD_FAE_WARRIOR,
+    EN_BLOOD_FAE_MYSTIC,
 } ENEMY_ID;
 
 typedef enum TARGETTING_TYPE

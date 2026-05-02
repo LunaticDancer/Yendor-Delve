@@ -9,7 +9,12 @@ typedef enum ENCOUNTER_ID
     ENC_BONFIRE,
     ENC_CHEST,
     ENC_MIMIC,
+    ENC_BLOOD_FAERIES,
 } ENCOUNTER_ID;
+
+extern ENCOUNTER_ID encounterPoolTier1[];
+extern ENCOUNTER_ID encounterPoolTier2[];
+extern ENCOUNTER_ID encounterPoolTier3[];
 
 typedef struct Encounter
 {
@@ -22,6 +27,8 @@ typedef struct Encounter
     bool hidesLoot;
 } Encounter;
 
+ENCOUNTER_ID* SelectRandomEncounters(char floor);
 Encounter GetEncounterData(ENCOUNTER_ID);
+void InitEncounterPools();
 
 #endif
