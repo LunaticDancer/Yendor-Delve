@@ -25,6 +25,15 @@ extern struct AppState appState;
 
 NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATCH};
 
+void DrawCharacterSelectOptionFrame(char index);
+void DrawCharacterSelectCharacterSprite(char index);
+void DrawDungeonScreenSelector();
+void DrawDungeonScreenPartyMember(char index);
+void DrawDungeonScreenPartyMemberFrame(char index);
+void DrawDungeonEncounterText(char index);
+void DrawDungeonScreenRewardSprite(char index);
+void DrawDungeonScreenEncounterSprite(char index);
+
 void DrawMainMenu()
 {
     BeginTextureMode(renderTexture);
@@ -96,7 +105,123 @@ void DrawDungeonScreen()
         ((appState.stateData.gameState.stateData.dungeonState.selectionX == 4 || appState.stateData.gameState.stateData.dungeonState.selectionX == 5)
             && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) ? GOLD : GRAY);
 
-    // info selection
+    DrawDungeonScreenSelector();
+
+    DrawDungeonScreenEncounterSprite(0);
+    DrawDungeonScreenEncounterSprite(1);
+    DrawDungeonScreenEncounterSprite(2);
+
+    DrawDungeonScreenRewardSprite(0);
+    DrawDungeonScreenRewardSprite(1);
+    DrawDungeonScreenRewardSprite(2);
+
+    DrawDungeonEncounterText(0);
+    DrawDungeonEncounterText(1);
+    DrawDungeonEncounterText(2);
+
+    DrawDungeonScreenPartyMemberFrame(0);
+    DrawDungeonScreenPartyMemberFrame(1);
+    DrawDungeonScreenPartyMemberFrame(2);
+
+    DrawDungeonScreenPartyMember(0);
+    DrawDungeonScreenPartyMember(1);
+    DrawDungeonScreenPartyMember(2);
+
+    EndMode2D();
+    EndTextureMode();
+    return;
+}
+
+void DrawDungeonScreenEncounterSprite(char index)
+{
+    DrawTexturePro(
+            GetTileset(appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset),
+            (Rectangle){
+                appState.stateData.gameState.stateData.dungeonState.encounters[index].tileLookupPosition.x * TILE_SIZE,
+                appState.stateData.gameState.stateData.dungeonState.encounters[index].tileLookupPosition.y * TILE_SIZE,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Rectangle){
+                LAYOUT_SPACING + 67 + 210 * index,
+                 LAYOUT_SPACING + 96,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Vector2){0,0},
+            0,
+            appState.stateData.gameState.stateData.dungeonState.encounters[index].color
+        );
+}
+
+void DrawDungeonScreenRewardSprite(char index)
+{
+    if(appState.stateData.gameState.stateData.dungeonState.encounters[index].hidesLoot)
+    {
+        DrawTextEx(basicFont, "?", (Vector2){LAYOUT_SPACING + (210 * index) + 132,  LAYOUT_SPACING + 100}, 16, 0, GRAY);
+    }
+    else
+    {
+        DrawTexturePro(
+            GetTileset(appState.stateData.gameState.stateData.dungeonState.rewards[index].tileset),
+            (Rectangle){
+                appState.stateData.gameState.stateData.dungeonState.rewards[index].tileLookupPosition.x * TILE_SIZE,
+                appState.stateData.gameState.stateData.dungeonState.rewards[index].tileLookupPosition.y * TILE_SIZE,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Rectangle){
+                -LAYOUT_SPACING + 137 + (210*index),
+                 LAYOUT_SPACING + 96,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Vector2){0,0},
+            0,
+            appState.stateData.gameState.stateData.dungeonState.rewards[index].color
+        );
+    }
+}
+
+void DrawDungeonEncounterText(char index)
+{
+    char* text =(appState.stateData.gameState.stateData.dungeonState.selectionX == (index * 2) + 1 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
+        ? (appState.stateData.gameState.stateData.dungeonState.encounters[index].hidesLoot ? "Unknown" :
+         appState.stateData.gameState.stateData.dungeonState.rewards[index].name) : appState.stateData.gameState.stateData.dungeonState.encounters[index].name;
+    Vector2 textSize = MeasureTextEx(basicFont, text, 16, 0);
+    Vector2 textPosition = (Vector2){(210 * index) + 110 - textSize.x / 2, 140 + LAYOUT_SPACING};
+    DrawTextEx(basicFont, text, textPosition, 16, 0, WHITE);
+    text = (appState.stateData.gameState.stateData.dungeonState.selectionX == (index * 2) + 1 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
+        ? (appState.stateData.gameState.stateData.dungeonState.encounters[index].hidesLoot ? "You will only learn what this reward is after you obtain it." :
+        GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[index])) : appState.stateData.gameState.stateData.dungeonState.encounters[index].description;
+    DrawTextBoxed(basicFontLarger, text, (Rectangle){(210*index)+21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
+}
+
+void DrawDungeonScreenPartyMemberFrame(char index)
+{
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + (SCREEN_WIDTH / 8) + 160 * index, SCREEN_HEIGHT - (SCREEN_HEIGHT  / 4) + LAYOUT_SPACING,
+        (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_HEIGHT / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
+        (appState.stateData.gameState.stateData.dungeonState.selectionX == index && appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ? GOLD : GRAY);
+}
+
+void DrawDungeonScreenPartyMember(char index)
+{
+        DrawTexturePro(
+            GetTileset(appState.stateData.gameState.playerTeam[index].stats.baseStats.tileset),
+            (Rectangle){
+                appState.stateData.gameState.playerTeam[index].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
+                appState.stateData.gameState.playerTeam[index].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Rectangle){
+                LAYOUT_SPACING + 138 + (160 * index),
+                SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) + LAYOUT_SPACING + 44,
+                TILE_SIZE * 2, TILE_SIZE * 2,
+            },
+            (Vector2){0,0},
+            0,
+            appState.stateData.gameState.playerTeam[index].stats.baseStats.color
+        );
+}
+
+void DrawDungeonScreenSelector()
+{
     if(appState.stateData.gameState.stateData.dungeonState.selectionY == 0)
     {
         switch(appState.stateData.gameState.stateData.dungeonState.selectionX)
@@ -121,228 +246,6 @@ void DrawDungeonScreen()
             break;
         }
     }
-
-    // encounter icons
-    DrawTexturePro(
-            GetTileset(appState.stateData.gameState.stateData.dungeonState.encounters[0].tileset),
-            (Rectangle){
-                appState.stateData.gameState.stateData.dungeonState.encounters[0].tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.stateData.dungeonState.encounters[0].tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                LAYOUT_SPACING + 67,
-                 LAYOUT_SPACING + 96,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.stateData.dungeonState.encounters[0].color
-        );
-    DrawTexturePro(
-            GetTileset(appState.stateData.gameState.stateData.dungeonState.encounters[1].tileset),
-            (Rectangle){
-                appState.stateData.gameState.stateData.dungeonState.encounters[1].tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.stateData.dungeonState.encounters[1].tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                LAYOUT_SPACING + 67 + 210,
-                 LAYOUT_SPACING + 96,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.stateData.dungeonState.encounters[1].color
-        );
-    DrawTexturePro(
-            GetTileset(appState.stateData.gameState.stateData.dungeonState.encounters[2].tileset),
-            (Rectangle){
-                appState.stateData.gameState.stateData.dungeonState.encounters[2].tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.stateData.dungeonState.encounters[2].tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                LAYOUT_SPACING + 67 + 420,
-                 LAYOUT_SPACING + 96,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.stateData.dungeonState.encounters[2].color
-        );
-
-    // reward icons
-    if(appState.stateData.gameState.stateData.dungeonState.encounters[0].hidesLoot)
-    {
-        DrawTextEx(basicFont, "?", (Vector2){LAYOUT_SPACING + 132,  LAYOUT_SPACING + 100}, 16, 0, GRAY);
-    }
-    else
-    {
-        DrawTexturePro(
-            GetTileset(appState.stateData.gameState.stateData.dungeonState.rewards[0].tileset),
-            (Rectangle){
-                appState.stateData.gameState.stateData.dungeonState.rewards[0].tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.stateData.dungeonState.rewards[0].tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                -LAYOUT_SPACING + 137,
-                 LAYOUT_SPACING + 96,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.stateData.dungeonState.rewards[0].color
-        );
-    }
-    if(appState.stateData.gameState.stateData.dungeonState.encounters[1].hidesLoot)
-    {
-        DrawTextEx(basicFont, "?", (Vector2){LAYOUT_SPACING + 210 + 132,  LAYOUT_SPACING + 100}, 16, 0, GRAY);
-    }
-    else
-    {
-        DrawTexturePro(
-            GetTileset(appState.stateData.gameState.stateData.dungeonState.rewards[1].tileset),
-            (Rectangle){
-                appState.stateData.gameState.stateData.dungeonState.rewards[1].tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.stateData.dungeonState.rewards[1].tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                -LAYOUT_SPACING + 137 + 210,
-                 LAYOUT_SPACING + 96,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.stateData.dungeonState.rewards[1].color
-        );
-    }
-    if(appState.stateData.gameState.stateData.dungeonState.encounters[2].hidesLoot)
-    {
-        DrawTextEx(basicFont, "?", (Vector2){LAYOUT_SPACING + 420 + 132,  LAYOUT_SPACING + 100}, 16, 0, GRAY);
-    }
-    else
-    {
-        DrawTexturePro(
-            GetTileset(appState.stateData.gameState.stateData.dungeonState.rewards[2].tileset),
-            (Rectangle){
-                appState.stateData.gameState.stateData.dungeonState.rewards[2].tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.stateData.dungeonState.rewards[2].tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                -LAYOUT_SPACING + 137 + 420,
-                 LAYOUT_SPACING + 96,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.stateData.dungeonState.rewards[2].color
-        );
-    }
-
-    // descriptions
-    char* text;
-
-    text =(appState.stateData.gameState.stateData.dungeonState.selectionX == 1 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? (appState.stateData.gameState.stateData.dungeonState.encounters[0].hidesLoot ? "Unknown" :
-         appState.stateData.gameState.stateData.dungeonState.rewards[0].name) : appState.stateData.gameState.stateData.dungeonState.encounters[0].name;
-    textSize = MeasureTextEx(basicFont, text, 16, 0);
-    textPosition = (Vector2){110 - textSize.x / 2, 140 + LAYOUT_SPACING};
-    DrawTextEx(basicFont, text, textPosition, 16, 0, WHITE);
-    text = (appState.stateData.gameState.stateData.dungeonState.selectionX == 1 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? (appState.stateData.gameState.stateData.dungeonState.encounters[0].hidesLoot ? "You will only learn what this reward is after you obtain it." :
-        GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[0])) : appState.stateData.gameState.stateData.dungeonState.encounters[0].description;
-    DrawTextBoxed(basicFontLarger, text, (Rectangle){21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
-
-    text =(appState.stateData.gameState.stateData.dungeonState.selectionX == 3 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? (appState.stateData.gameState.stateData.dungeonState.encounters[1].hidesLoot ? "Unknown" :
-         appState.stateData.gameState.stateData.dungeonState.rewards[1].name) : appState.stateData.gameState.stateData.dungeonState.encounters[1].name;
-    textSize = MeasureTextEx(basicFont, text, 16, 0);
-    textPosition = (Vector2){210 + 110 - textSize.x / 2, 140 + LAYOUT_SPACING};
-    DrawTextEx(basicFont, text, textPosition, 16, 0, WHITE);
-    text = (appState.stateData.gameState.stateData.dungeonState.selectionX == 3 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? (appState.stateData.gameState.stateData.dungeonState.encounters[1].hidesLoot ? "You will only learn what this reward is after you obtain it." :
-        GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[1])) : appState.stateData.gameState.stateData.dungeonState.encounters[1].description;
-    DrawTextBoxed(basicFontLarger, text, (Rectangle){210+21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
-
-    text =(appState.stateData.gameState.stateData.dungeonState.selectionX == 5 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? (appState.stateData.gameState.stateData.dungeonState.encounters[2].hidesLoot ? "Unknown" :
-         appState.stateData.gameState.stateData.dungeonState.rewards[2].name) : appState.stateData.gameState.stateData.dungeonState.encounters[2].name;
-    textSize = MeasureTextEx(basicFont, text, 16, 0);
-    textPosition = (Vector2){420 + 110 - textSize.x / 2, 140 + LAYOUT_SPACING};
-    DrawTextEx(basicFont, text, textPosition, 16, 0, WHITE);
-    text = (appState.stateData.gameState.stateData.dungeonState.selectionX == 5 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
-        ? (appState.stateData.gameState.stateData.dungeonState.encounters[2].hidesLoot ? "You will only learn what this reward is after you obtain it." :
-        GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[2])) : appState.stateData.gameState.stateData.dungeonState.encounters[2].description;
-    DrawTextBoxed(basicFontLarger, text, (Rectangle){420+21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
-
-    // party member frames
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + (SCREEN_WIDTH / 8), SCREEN_HEIGHT - (SCREEN_HEIGHT  / 4) + LAYOUT_SPACING,
-        (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_HEIGHT  / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.dungeonState.selectionX == 0 && appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ? GOLD : GRAY);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + (SCREEN_WIDTH / 8) + 160, SCREEN_HEIGHT - (SCREEN_HEIGHT  / 4) + LAYOUT_SPACING,
-        (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_HEIGHT / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.dungeonState.selectionX == 1 && appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ? GOLD : GRAY);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + (SCREEN_WIDTH / 8) + 320, SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) + LAYOUT_SPACING,
-        (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_HEIGHT / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.dungeonState.selectionX == 2 && appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ? GOLD : GRAY);
-
-    // party members
-    DrawTexturePro(
-            GetTileset(appState.stateData.gameState.playerTeam[0].stats.baseStats.tileset),
-            (Rectangle){
-                appState.stateData.gameState.playerTeam[0].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.playerTeam[0].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                LAYOUT_SPACING + 138,
-                SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) + LAYOUT_SPACING + 44,
-                TILE_SIZE * 2, TILE_SIZE * 2,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.playerTeam[0].stats.baseStats.color
-        );
-        DrawTexturePro(
-            GetTileset(appState.stateData.gameState.playerTeam[1].stats.baseStats.tileset),
-            (Rectangle){
-                appState.stateData.gameState.playerTeam[1].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.playerTeam[1].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                LAYOUT_SPACING + 138 + 160,
-                SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) + LAYOUT_SPACING + 44,
-                TILE_SIZE * 2, TILE_SIZE * 2,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.playerTeam[1].stats.baseStats.color
-        );
-        DrawTexturePro(
-            GetTileset(appState.stateData.gameState.playerTeam[2].stats.baseStats.tileset),
-            (Rectangle){
-                appState.stateData.gameState.playerTeam[2].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.playerTeam[2].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                LAYOUT_SPACING + 138 + 320,
-                SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) + LAYOUT_SPACING + 44,
-                TILE_SIZE * 2, TILE_SIZE * 2,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.playerTeam[2].stats.baseStats.color
-        );
-
-    EndMode2D();
-    EndTextureMode();
-    return;
 }
 
 void DrawCharacterSelect()
@@ -358,18 +261,10 @@ void DrawCharacterSelect()
     DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){LAYOUT_SPACING, 48 + LAYOUT_SPACING, 
         SCREEN_WIDTH - 2 * LAYOUT_SPACING, SCREEN_HEIGHT - (SCREEN_WIDTH / 4) - (48 + 2 * LAYOUT_SPACING)}, (Vector2){0,0}, 0, GRAY);
 
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING, SCREEN_HEIGHT - (SCREEN_WIDTH / 4) + LAYOUT_SPACING,
-        (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 0) ? GOLD : GRAY);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + 160, SCREEN_HEIGHT - (SCREEN_WIDTH / 4) + LAYOUT_SPACING,
-        (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 1) ? GOLD : GRAY);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + 320, SCREEN_HEIGHT - (SCREEN_WIDTH / 4) + LAYOUT_SPACING,
-        (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 2) ? GOLD : GRAY);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + 480, SCREEN_HEIGHT - (SCREEN_WIDTH / 4) + LAYOUT_SPACING,
-        (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3) ? GOLD : GRAY);
+    DrawCharacterSelectOptionFrame(0);
+    DrawCharacterSelectOptionFrame(1);
+    DrawCharacterSelectOptionFrame(2);
+    DrawCharacterSelectOptionFrame(3);
 
     char* name = (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3) ?
         "Descent" : appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].stats.baseStats.name;
@@ -382,54 +277,9 @@ void DrawCharacterSelect()
         appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].description;
     DrawTextBoxed(basicFontLarger, description, (Rectangle){24+LAYOUT_SPACING, 128+LAYOUT_SPACING, 592, 360}, 16, 0, true, LIGHTGRAY);
 
-        DrawTexturePro(
-            GetTileset(appState.stateData.gameState.playerTeam[0].stats.baseStats.tileset),
-            (Rectangle){
-                appState.stateData.gameState.playerTeam[0].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.playerTeam[0].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                LAYOUT_SPACING + 60,
-                SCREEN_HEIGHT - (SCREEN_WIDTH / 4) + LAYOUT_SPACING + 64,
-                TILE_SIZE * 2, TILE_SIZE * 2,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.playerTeam[0].stats.baseStats.color
-        );
-        DrawTexturePro(
-            GetTileset(appState.stateData.gameState.playerTeam[1].stats.baseStats.tileset),
-            (Rectangle){
-                appState.stateData.gameState.playerTeam[1].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.playerTeam[1].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                LAYOUT_SPACING + 60 + 160,
-                SCREEN_HEIGHT - (SCREEN_WIDTH / 4) + LAYOUT_SPACING + 64,
-                TILE_SIZE * 2, TILE_SIZE * 2,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.playerTeam[1].stats.baseStats.color
-        );
-        DrawTexturePro(
-            GetTileset(appState.stateData.gameState.playerTeam[2].stats.baseStats.tileset),
-            (Rectangle){
-                appState.stateData.gameState.playerTeam[2].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
-                appState.stateData.gameState.playerTeam[2].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE,
-            },
-            (Rectangle){
-                LAYOUT_SPACING + 60 + 320,
-                SCREEN_HEIGHT - (SCREEN_WIDTH / 4) + LAYOUT_SPACING + 64,
-                TILE_SIZE * 2, TILE_SIZE * 2,
-            },
-            (Vector2){0,0},
-            0,
-            appState.stateData.gameState.playerTeam[2].stats.baseStats.color
-        );
+    DrawCharacterSelectCharacterSprite(0);
+    DrawCharacterSelectCharacterSprite(1);
+    DrawCharacterSelectCharacterSprite(2);
         DrawTexturePro(
             GetTileset(TL_GENERAL),
             (Rectangle){
@@ -450,6 +300,33 @@ void DrawCharacterSelect()
     EndMode2D();
     EndTextureMode();
     return;
+}
+
+void DrawCharacterSelectCharacterSprite(char index)
+{
+        DrawTexturePro(
+            GetTileset(appState.stateData.gameState.playerTeam[index].stats.baseStats.tileset),
+            (Rectangle){
+                appState.stateData.gameState.playerTeam[index].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
+                appState.stateData.gameState.playerTeam[index].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Rectangle){
+                LAYOUT_SPACING + 60 + (160 * index),
+                SCREEN_HEIGHT - (SCREEN_WIDTH / 4) + LAYOUT_SPACING + 64,
+                TILE_SIZE * 2, TILE_SIZE * 2,
+            },
+            (Vector2){0,0},
+            0,
+            appState.stateData.gameState.playerTeam[index].stats.baseStats.color
+        );
+}
+
+void DrawCharacterSelectOptionFrame(char index)
+{
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + (160 * index), SCREEN_HEIGHT - (SCREEN_WIDTH / 4) + LAYOUT_SPACING,
+        (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
+        (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == index) ? GOLD : GRAY);
 }
 
 Texture GetTileset(enum TILESET ts)
