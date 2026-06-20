@@ -32,7 +32,7 @@ typedef struct Item
     StatBonuses statBonuses;
 } Item;
 
-char* GetItemStatSpread();
+char* GetItemStatSpread(Item it);
 char* CombineStrings(char* str1, char* str2);
 Item InitItem(ITEM_ID);
 

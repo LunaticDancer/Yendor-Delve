@@ -2,10 +2,10 @@
 #include <time.h>
 #include "raylib.h"
 
-#ifndef resource_dir
-#define resource_dir
-#include "resource_dir.h" // utility header for SearchAndSetResourceDir
-#endif
+//#ifndef resource_dir
+//#define resource_dir
+//#include "resource_dir.h" // utility header for SearchAndSetResourceDir
+//#endif
 
 #include "drawing.h"
 #include "constants.h"
@@ -44,7 +44,7 @@ int main()
 	InitWindow(GetScreenWidth(), GetScreenHeight(), GAME_TITLE);
 
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
-	SearchAndSetResourceDir("resources");
+	//SearchAndSetResourceDir("resources");
 
 	worldSpaceCamera.zoom = 1.0f;
 	screenSpaceCamera.zoom = 1.0f;
