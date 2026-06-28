@@ -27,6 +27,7 @@ void InitAppState(enum APP_STATE _state)
 
 void InitGameState(enum GAME_STATE _state)
 {
+	appState.stateData.gameState.playerTeam[0].items[3] = InitItem(ITEM_TEST);
     switch(_state)
     {
         case GS_CHARACTER_SELECT:

@@ -1,6 +1,7 @@
 #ifndef constants
 #define constants
 
+#define ITEM_SLOTS 4
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 extern const int TILE_SIZE;

@@ -20,7 +20,7 @@ typedef struct Character
     CHARACTER_ID characterId;
     char* description;
     CreatureStats stats;
-    Item items[4];
+    Item items[ITEM_SLOTS]; 
     StatBonuses itemStats;
     short carryCapacity;            // contribution to shared inventory slots
     short targetPriority;

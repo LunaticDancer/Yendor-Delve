@@ -35,6 +35,8 @@ void HandleInput();
 void HandleMainMenuInput();
 void HandleCharacterSelectInput();
 void HandleDungeonInput();
+void HandleEquipmentInput();
+void HandleItemSelectInput();
 
 int main()
 {
@@ -272,6 +274,11 @@ void HandleCharacterSelectInput()
 
 void HandleDungeonInput()
 {
+	if(appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment)
+	{
+		HandleEquipmentInput();
+		return;
+	}
 
 	if(IsPressed(VK_LEFT))
 	{
@@ -299,5 +306,45 @@ void HandleDungeonInput()
 				appState.stateData.gameState.stateData.dungeonState.selectionX /= 2;
 				break;
 		}
+	}
+	if(IsPressed(VK_CONFIRM))
+	{
+		if(appState.stateData.gameState.stateData.dungeonState.selectionY == 1)
+		{
+			appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment = true;
+			appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot = 0;
+		}
+	}
+}
+
+void HandleEquipmentInput()
+{
+	if(appState.stateData.gameState.stateData.dungeonState.isSelectingItem)
+	{
+		HandleItemSelectInput();
+		return;
+	}
+
+	if(IsPressed(VK_UP))
+	{
+		appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot =
+			(appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot + ITEM_SLOTS -1) % ITEM_SLOTS;
+	}
+	if(IsPressed(VK_DOWN))
+	{
+		appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot =
+			(appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot + 1) % ITEM_SLOTS;
+	}
+	if(IsPressed(VK_BACK))
+	{
+		appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment = false;
+	}
+}
+
+void HandleItemSelectInput()
+{
+	if(IsPressed(VK_BACK))
+	{
+		appState.stateData.gameState.stateData.dungeonState.isSelectingItem = false;
 	}
 }

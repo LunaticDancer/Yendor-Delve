@@ -25,6 +25,8 @@ extern struct AppState appState;
 
 NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATCH};
 
+void DrawEquipmentPanel();
+void DrawEquipmentSlot(char index);
 void DrawCharacterSelectOptionFrame(char index);
 void DrawCharacterSelectCharacterSprite(char index);
 void DrawDungeonScreenSelector();
@@ -127,9 +129,80 @@ void DrawDungeonScreen()
     DrawDungeonScreenPartyMember(1);
     DrawDungeonScreenPartyMember(2);
 
+    if(appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment)
+    {
+        DrawEquipmentPanel();
+    }
+
     EndMode2D();
     EndTextureMode();
     return;
+}
+
+void DrawEquipmentPanel()
+{
+    DrawRectangle(16,16, 224, 256, BLACK);
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){16, 16, 224, 256}, (Vector2){0,0}, 0, WHITE);
+
+    Vector2 textSize = MeasureTextEx(basicFont, "Equipment", 16, 0);
+    Vector2 textPosition = (Vector2){128 - textSize.x / 2, 32};
+    DrawTextEx(basicFont, "Equipment", textPosition, 16, 0, WHITE);
+
+    DrawEquipmentSlot(0);
+    DrawEquipmentSlot(1);
+    DrawEquipmentSlot(2);
+    DrawEquipmentSlot(3);
+}
+
+void DrawEquipmentSlot(char index)
+{
+    char* text;
+    switch(index + 1)
+    {
+        case ES_HEAD:
+        text = "Head";
+        break;
+        case ES_TORSO:
+        text = "Torso";
+        break;
+        case ES_LEGS:
+        text = "Legs";
+        break;
+        case ES_WEAPON:
+        text = "Weapon";
+        break;
+    }
+
+    DrawTextEx(basicFont, text, (Vector2){80, 80 + index*40}, 16, 0,
+    appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot == index ? GRAY : DARKGRAY);
+    DrawTextEx(basicFont, appState.stateData.gameState.playerTeam[
+        appState.stateData.gameState.stateData.dungeonState.selectionX
+    ].items[index].name, (Vector2){80, 96 + index*40}, 16, 0,
+    appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot == index ? WHITE : GRAY);
+
+    DrawTexturePro(
+            GetTileset(appState.stateData.gameState.playerTeam[
+                appState.stateData.gameState.stateData.dungeonState.selectionX
+            ].items[index].tileset),
+            (Rectangle){
+                appState.stateData.gameState.playerTeam[
+                    appState.stateData.gameState.stateData.dungeonState.selectionX
+                ].items[index].tileLookupPosition.x * TILE_SIZE,
+                appState.stateData.gameState.playerTeam[
+                    appState.stateData.gameState.stateData.dungeonState.selectionX
+                ].items[index].tileLookupPosition.y * TILE_SIZE,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Rectangle){
+                32,
+                 80 + (40*index),
+                32, 32
+            },
+            (Vector2){0,0},
+            0,
+            appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot == index ? appState.stateData.gameState.playerTeam[
+                appState.stateData.gameState.stateData.dungeonState.selectionX].items[index].color : GRAY
+        );
 }
 
 void DrawDungeonScreenEncounterSprite(char index)
