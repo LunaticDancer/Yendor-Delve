@@ -141,11 +141,12 @@ void DrawDungeonScreen()
 
 void DrawEquipmentPanel()
 {
-    DrawRectangle(16,16, 224, 256, BLACK);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){16, 16, 224, 256}, (Vector2){0,0}, 0, WHITE);
+    DrawRectangle(LAYOUT_SPACING + 5, 48 + LAYOUT_SPACING,
+        (630) - 2 * LAYOUT_SPACING, (312) - 2 * LAYOUT_SPACING, BLACK);
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + 5, 48 + LAYOUT_SPACING, 224, 256}, (Vector2){0,0}, 0, WHITE);
 
     Vector2 textSize = MeasureTextEx(basicFont, "Equipment", 16, 0);
-    Vector2 textPosition = (Vector2){128 - textSize.x / 2, 32};
+    Vector2 textPosition = (Vector2){122 - textSize.x / 2, 80};
     DrawTextEx(basicFont, "Equipment", textPosition, 16, 0, WHITE);
 
     DrawEquipmentSlot(0);
@@ -173,11 +174,11 @@ void DrawEquipmentSlot(char index)
         break;
     }
 
-    DrawTextEx(basicFont, text, (Vector2){80, 80 + index*40}, 16, 0,
+    DrawTextEx(basicFont, text, (Vector2){80, 128 + index*40}, 16, 0,
     appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot == index ? GRAY : DARKGRAY);
     DrawTextEx(basicFont, appState.stateData.gameState.playerTeam[
         appState.stateData.gameState.stateData.dungeonState.selectionX
-    ].items[index].name, (Vector2){80, 96 + index*40}, 16, 0,
+    ].items[index].name, (Vector2){80, 144 + index*40}, 16, 0,
     appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot == index ? WHITE : GRAY);
 
     DrawTexturePro(
@@ -195,7 +196,7 @@ void DrawEquipmentSlot(char index)
             },
             (Rectangle){
                 32,
-                 80 + (40*index),
+                 128 + (40*index),
                 32, 32
             },
             (Vector2){0,0},
