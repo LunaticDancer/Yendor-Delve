@@ -25,6 +25,7 @@ extern struct AppState appState;
 
 NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATCH};
 
+void DrawCharacterStats();
 void DrawEquipmentPanel();
 void DrawEquipmentSlot(char index);
 void DrawCharacterSelectOptionFrame(char index);
@@ -132,11 +133,29 @@ void DrawDungeonScreen()
     if(appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment)
     {
         DrawEquipmentPanel();
+        DrawCharacterStats();
     }
 
     EndMode2D();
     EndTextureMode();
     return;
+}
+
+void DrawCharacterStats()
+{
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){320, 48 + LAYOUT_SPACING, 320-LAYOUT_SPACING, 304}, (Vector2){0,0}, 0, GRAY);
+
+    char* name = appState.stateData.gameState.playerTeam[
+        appState.stateData.gameState.stateData.dungeonState.selectionX
+        ].stats.baseStats.name;
+    Vector2 textSize = MeasureTextEx(basicFontLarger, name, 16, 0);
+    Vector2 textPosition = (Vector2){480 - textSize.x / 2, 64 + LAYOUT_SPACING};
+    DrawTextEx(basicFontLarger, name, textPosition, 16, 0, WHITE);
+
+    char* text = GetCharacterStatsRundown(appState.stateData.gameState.playerTeam[
+        appState.stateData.gameState.stateData.dungeonState.selectionX
+    ]);
+    DrawTextBoxed(basicFontLarger, text, (Rectangle){336, 88+LAYOUT_SPACING, 304-LAYOUT_SPACING, 360}, 16, 0, true, GRAY);
 }
 
 void DrawEquipmentPanel()

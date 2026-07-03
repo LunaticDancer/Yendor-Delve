@@ -27,5 +27,6 @@ typedef struct Character
 } Character;
 
 Character InitCharacterData(CHARACTER_ID);
+char* GetCharacterStatsRundown(Character ch);
 
 #endif

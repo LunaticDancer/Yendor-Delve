@@ -1,5 +1,6 @@
 #include "character.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 Character InitCharacterData(CHARACTER_ID id)
 {
@@ -211,4 +212,53 @@ Character InitCharacterData(CHARACTER_ID id)
         };
         break;
     }
+}
+
+char* GetCharacterStatsRundown(Character ch)
+{
+     char* result = malloc(1);
+     result[0] =  '\0'; 
+     char str_num[6];
+
+     result = CombineStrings(result, "Health: ");
+     sprintf(str_num, "%d", ch.stats.baseStats.currentHealth);
+    result = CombineStrings(result, str_num);
+     result = CombineStrings(result, "/");
+     sprintf(str_num, "%d", ch.stats.baseStats.maxHealth + ch.itemStats.health);
+    result = CombineStrings(result, str_num);
+
+     result = CombineStrings(result, "\nStamina: ");
+     sprintf(str_num, "%d", ch.stats.baseStats.maxStamina + ch.itemStats.stamina);
+    result = CombineStrings(result, str_num);
+
+     result = CombineStrings(result, "\nSpeed: ");
+     sprintf(str_num, "%d", ch.stats.baseStats.speed + ch.itemStats.speed);
+    result = CombineStrings(result, str_num);
+
+     result = CombineStrings(result, "\nDefense: ");
+     sprintf(str_num, "%d", ch.stats.baseStats.defense + ch.itemStats.defense);
+    result = CombineStrings(result, str_num);
+
+     result = CombineStrings(result, "\nArmour: ");
+     sprintf(str_num, "%d", ch.stats.baseStats.armor + ch.itemStats.armor);
+    result = CombineStrings(result, str_num);
+
+     result = CombineStrings(result, "\nCrit Rate: ");
+     sprintf(str_num, "%d", ch.stats.baseStats.critRate + ch.itemStats.critRate);
+    result = CombineStrings(result, str_num);
+     result = CombineStrings(result, "%");
+
+     result = CombineStrings(result, "\nCrit Multiplier: ");
+     sprintf(str_num, "%.2f", ch.stats.baseStats.critMultiplier + ch.itemStats.critMultiplier);
+    result = CombineStrings(result, str_num);
+
+     result = CombineStrings(result, "\nMastery: ");
+     sprintf(str_num, "%d", ch.stats.baseStats.mastery + ch.itemStats.mastery);
+    result = CombineStrings(result, str_num);
+
+     result = CombineStrings(result, "\nTarget Priority: ");
+     sprintf(str_num, "%d", ch.targetPriority + ch.itemStats.targetPriority);
+    result = CombineStrings(result, str_num);
+
+     return result;
 }
