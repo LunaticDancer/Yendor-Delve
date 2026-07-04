@@ -1,4 +1,22 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 const int TILE_SIZE = 16;
 const char *GAME_TITLE = "Yendor Delve";
+
+
+char* CombineStrings(char* str1, char* str2)
+{
+    char* new_str;
+    if((new_str = malloc(strlen(str1)+strlen(str2)+1)) != NULL){
+        new_str[0] = '\0';   // ensures the memory is an empty string
+        strcat(new_str,str1);
+        strcat(new_str,str2);
+    } else {
+        fprintf(stderr,"malloc failed!\n");
+        // exit?
+    }
+}

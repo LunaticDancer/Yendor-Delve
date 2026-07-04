@@ -44,4 +44,7 @@ enum CONTROLS
 	VK_BACK = 32,
 };
 
+// UTILITY FUNCTIONS
+char* CombineStrings(char* str1, char* str2);
+
 #endif
