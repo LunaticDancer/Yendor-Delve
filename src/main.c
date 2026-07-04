@@ -30,6 +30,7 @@ struct AppState appState;
 char inputThisFrame;		// bitmask of possible inputs, see enum CONTROLS in constants.h
 
 void ReadInput();
+void HandleDrawing(Rectangle, Rectangle, Vector2);
 bool IsPressed(enum CONTROLS);
 void HandleInput();
 void HandleMainMenuInput();
@@ -84,22 +85,7 @@ int main()
 		ReadInput();
 		HandleInput();
 
-		switch (appState.appState)
-		{
-		case AS_MAIN_MENU:
-			DrawMainMenu();
-			break;
-		case AS_GAMEPLAY:
-			DrawGameplay();
-			break;
-		}
-
-		BeginDrawing();
-		ClearBackground(BLACK);
-		BeginMode2D(screenSpaceCamera);
-		DrawTexturePro(renderTexture.texture, sourceRec, destRec, origin, 0.0f, WHITE);
-		EndMode2D();
-		EndDrawing();
+		HandleDrawing(sourceRec, destRec, origin);
 	}
 
 	// cleanup
@@ -151,6 +137,26 @@ void ReadInput()
 	{
 		inputThisFrame = inputThisFrame | VK_BACK;
 	}
+}
+
+void HandleDrawing(Rectangle s, Rectangle d, Vector2 o)
+{
+		switch (appState.appState)
+		{
+		case AS_MAIN_MENU:
+			DrawMainMenu();
+			break;
+		case AS_GAMEPLAY:
+			DrawGameplay();
+			break;
+		}
+
+		BeginDrawing();
+		ClearBackground(BLACK);
+		BeginMode2D(screenSpaceCamera);
+		DrawTexturePro(renderTexture.texture, s, d, o, 0.0f, WHITE);
+		EndMode2D();
+		EndDrawing();
 }
 
 bool IsPressed(enum CONTROLS input)
