@@ -25,6 +25,7 @@ extern struct AppState appState;
 
 NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATCH};
 
+void DrawPauseMenu();
 void DrawCharacterStats();
 void DrawEquipmentPanel();
 void DrawEquipmentSlot(char index);
@@ -90,6 +91,14 @@ void DrawDungeonScreen()
     ClearBackground(BLACK);
     BeginMode2D(worldSpaceCamera);
 
+    if(appState.stateData.gameState.isPaused)
+    {
+        DrawPauseMenu();
+        EndMode2D();
+        EndTextureMode();
+        return;
+    }
+
     Vector2 textSize = MeasureTextEx(basicFontLarger, "Prepare for an encounter:", 32, 0);
     Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 10};
     DrawTextEx(basicFontLarger, "Prepare for an encounter:", textPosition, 32, 0, DARKGRAY);
@@ -139,6 +148,23 @@ void DrawDungeonScreen()
     EndMode2D();
     EndTextureMode();
     return;
+}
+
+void DrawPauseMenu()
+{
+    Vector2 textSize = MeasureTextEx(titleFont, "PAUSED", 80, 0);
+    Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 96};
+    DrawTextEx(titleFont, "PAUSED", textPosition, 80, 0, GRAY);
+    DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){SCREEN_WIDTH/4, 254 + (MENU_BUTTON_SPACING * appState.stateData.gameState.pauseMenuSelection), 
+        SCREEN_WIDTH/2, 64}, (Vector2){0,0}, 0, GRAY);
+    textSize = MeasureTextEx(basicFontLarger, "Resume", 32, 0);
+    textPosition.x = SCREEN_WIDTH / 2 - textSize.x / 2;
+    textPosition.y = 272;
+    DrawTextEx(basicFontLarger, "Resume", textPosition, 32, 0, (appState.stateData.gameState.pauseMenuSelection == 0) ? WHITE : GRAY);
+    textSize = MeasureTextEx(basicFontLarger, "Abandon", 32, 0);
+    textPosition.x = SCREEN_WIDTH / 2 - textSize.x / 2;
+    textPosition.y = 272 + MENU_BUTTON_SPACING;
+    DrawTextEx(basicFontLarger, "Abandon", textPosition, 32, 0, (appState.stateData.gameState.pauseMenuSelection == 1) ? WHITE : GRAY);
 }
 
 void DrawCharacterStats()

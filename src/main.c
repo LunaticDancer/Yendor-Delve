@@ -36,6 +36,7 @@ void HandleInput();
 void HandleMainMenuInput();
 void HandleCharacterSelectInput();
 void HandleDungeonInput();
+void HandlePauseMenuInput();
 void HandleEquipmentInput();
 void HandleItemSelectInput();
 
@@ -80,7 +81,7 @@ int main()
 	InitAppState(AS_MAIN_MENU);
 
 	// game loop
-	while (!WindowShouldClose() && !markedToClose) // run the loop until the user presses ESCAPE or presses the Close button on the window
+	while (!markedToClose) // run the loop until the user presses ESCAPE or presses the Close button on the window
 	{
 		ReadInput();
 		HandleInput();
@@ -286,6 +287,12 @@ void HandleDungeonInput()
 		return;
 	}
 
+	if(appState.stateData.gameState.isPaused)
+	{
+		HandlePauseMenuInput();
+		return;
+	}
+
 	if(IsPressed(VK_LEFT))
 	{
 		appState.stateData.gameState.stateData.dungeonState.selectionX = 
@@ -319,6 +326,53 @@ void HandleDungeonInput()
 		{
 			appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment = true;
 			appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot = 0;
+		}
+	}
+	if(IsPressed(VK_BACK))
+	{
+		appState.stateData.gameState.isPaused = !appState.stateData.gameState.isPaused;
+		appState.stateData.gameState.pauseMenuSelection = 0;
+	}
+}
+
+void HandlePauseMenuInput()
+{
+	if(IsPressed(VK_UP))
+	{
+		if(appState.stateData.gameState.pauseMenuSelection == 0)
+		{
+			appState.stateData.gameState.pauseMenuSelection = PAUSE_MENU_OPTION_COUNT - 1;
+		}
+		else
+		{
+			appState.stateData.gameState.pauseMenuSelection--;
+		}
+	}
+	if(IsPressed(VK_DOWN))
+	{
+		if(appState.stateData.gameState.pauseMenuSelection + 1 == PAUSE_MENU_OPTION_COUNT)
+		{
+			appState.stateData.gameState.pauseMenuSelection = 0;
+		}
+		else
+		{
+			appState.stateData.gameState.pauseMenuSelection++;
+		}
+	}
+	if(IsPressed(VK_BACK))
+	{
+		appState.stateData.gameState.isPaused = false;
+	}
+	if(IsPressed(VK_CONFIRM))
+	{
+		switch (appState.stateData.gameState.pauseMenuSelection)
+		{
+			case 0:
+				appState.stateData.gameState.isPaused = false;
+				break;
+			case 1:
+				InitAppState(AS_MAIN_MENU);
+				break;
 		}
 	}
 }
