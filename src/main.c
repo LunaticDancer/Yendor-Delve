@@ -35,6 +35,7 @@ bool IsPressed(enum CONTROLS);
 void HandleInput();
 void HandleMainMenuInput();
 void HandleCharacterSelectInput();
+void HandleBattleInput();
 void HandleDungeonInput();
 void HandlePauseMenuInput();
 void HandleEquipmentInput();
@@ -181,6 +182,9 @@ void HandleInput()
 				case GS_DUNGEON:
 					HandleDungeonInput();
 					break;
+				case GS_BATTLE:
+					HandleBattleInput();
+					break;
 			}
 		break;
 	}
@@ -274,8 +278,15 @@ void HandleCharacterSelectInput()
 	if(IsPressed(VK_CONFIRM))
 	{
 		if(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3)
-			appState.stateData.gameState.gameState = GS_DUNGEON;
 			InitGameState(GS_DUNGEON);
+	}
+}
+
+void HandleBattleInput()
+{
+	if(IsPressed(VK_BACK))
+	{
+		InitGameState(GS_DUNGEON);
 	}
 }
 
@@ -326,6 +337,10 @@ void HandleDungeonInput()
 		{
 			appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment = true;
 			appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot = 0;
+		}
+		else
+		{
+			TransitionToBattle();
 		}
 	}
 	if(IsPressed(VK_BACK))

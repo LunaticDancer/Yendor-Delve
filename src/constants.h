@@ -7,6 +7,7 @@ extern const int SCREEN_HEIGHT;
 extern const int TILE_SIZE;
 extern const char *GAME_TITLE;
 extern const int PAUSE_MENU_OPTION_COUNT;
+extern const char CRIT_PROGRESS_MAX;
 
 enum TILESET
 {

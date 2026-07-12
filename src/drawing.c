@@ -34,6 +34,7 @@ void DrawCharacterSelectCharacterSprite(char index);
 void DrawDungeonScreenSelector();
 void DrawDungeonScreenPartyMember(char index);
 void DrawDungeonScreenPartyMemberFrame(char index);
+void DrawDungeonScreenPartyMemberBars(char index);
 void DrawDungeonEncounterText(char index);
 void DrawDungeonScreenRewardSprite(char index);
 void DrawDungeonScreenEncounterSprite(char index);
@@ -82,7 +83,21 @@ void DrawGameplay()
         case GS_DUNGEON:
             DrawDungeonScreen();
             break;
+        case GS_BATTLE:
+            DrawBattle();
+            break;
     }
+}
+
+void DrawBattle()
+{
+    BeginTextureMode(renderTexture);
+    ClearBackground(BLACK);
+    BeginMode2D(worldSpaceCamera);
+
+    EndMode2D();
+    EndTextureMode();
+    return;
 }
 
 void DrawDungeonScreen()
@@ -138,6 +153,10 @@ void DrawDungeonScreen()
     DrawDungeonScreenPartyMember(0);
     DrawDungeonScreenPartyMember(1);
     DrawDungeonScreenPartyMember(2);
+
+    DrawDungeonScreenPartyMemberBars(0);
+    DrawDungeonScreenPartyMemberBars(1);
+    DrawDungeonScreenPartyMemberBars(2);
 
     if(appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment)
     {
@@ -337,6 +356,21 @@ void DrawDungeonScreenPartyMember(char index)
             0,
             appState.stateData.gameState.playerTeam[index].stats.baseStats.color
         );
+}
+
+void DrawDungeonScreenPartyMemberBars(char index)
+{
+    DrawRectangle(104 + index * 160, 449, 112, 2, DARKGRAY);
+    DrawRectangle(104 + index * 160, 448, 
+        (int)(112 * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
+        (float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].itemStats.health)), 
+        4, RED);
+
+    DrawRectangle(104 + index * 160, 457, 112, 2, DARKGRAY);
+    DrawRectangle(104 + index * 160, 456, 
+        (int)(112 * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.critCounter / 
+        (float)CRIT_PROGRESS_MAX)), 
+        4, YELLOW);
 }
 
 void DrawDungeonScreenSelector()

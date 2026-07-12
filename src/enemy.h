@@ -29,4 +29,6 @@ typedef struct Enemy
     short goldReward;
 } Enemy;
 
+Enemy InitEnemyData(ENEMY_ID id);
+
 #endif

@@ -30,10 +30,28 @@ struct DungeonState
 	char itemIndexListLength;
 };
 
+struct TurnIndicator
+{
+	bool isPlayer;
+	char senderId;
+	bool isAttack;
+	char receiverMask;
+};
+
+struct BattleState
+{
+	Enemy enemies[3];
+	Item reward;
+	char abilitySelection;
+	char targetSelection;
+	struct TurnIndicator turnIndicators[8];
+};
+
 union GameStateData
 {
 	struct CharacterSelectState characterSelectState;
 	struct DungeonState dungeonState;
+	struct BattleState battleState;
 };
 
 struct GameState
@@ -61,6 +79,7 @@ struct AppState
 
 void InitAppState(enum APP_STATE);
 void InitGameState(enum GAME_STATE);
+void TransitionToBattle();
 bool CheckIfHeroInParty(CHARACTER_ID);
 
 #endif

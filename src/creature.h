@@ -42,6 +42,7 @@ typedef struct StatBonuses
 {
     short health;
     short stamina;
+    short staminaRegen;
     short speed;
     short defense;
     short armor;
@@ -68,5 +69,6 @@ typedef struct CreatureStats
 } CreatureStats;
 
 StatBonuses CreateEmptyStatBonuses();
+void CreateEmptyStatusEffects(int[]);
 
 #endif

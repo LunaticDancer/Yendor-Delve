@@ -15,6 +15,7 @@ extern Texture boneFrame;
 
 void DrawMainMenu();
 void DrawGameplay();
+void DrawBattle();
 void DrawDungeonScreen();
 void DrawEquipmentDialog();
 void DrawItemSelection();
