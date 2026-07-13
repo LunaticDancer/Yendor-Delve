@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "raylib.h"
 #include "constants.h"
 #include "state.h"
@@ -27,6 +29,7 @@ NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATC
 
 void DrawBattleScreenPartyMember(char);
 void DrawBattleScreenEnemy(char);
+void DrawBattleScreenMessageFeed();
 void DrawPauseMenu();
 void DrawCharacterStats();
 void DrawEquipmentPanel();
@@ -96,6 +99,8 @@ void DrawBattle()
     BeginTextureMode(renderTexture);
     ClearBackground(BLACK);
     BeginMode2D(worldSpaceCamera);
+
+    DrawBattleScreenMessageFeed();
 
     DrawBattleScreenPartyMember(0);
     DrawBattleScreenPartyMember(1);
@@ -186,6 +191,26 @@ void DrawBattleScreenEnemy(char index)
         (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth)), 
         4, RED);
     }
+}
+
+void DrawBattleScreenMessageFeed()
+{
+    char* result = malloc(1);
+     result[0] =  '\0'; 
+
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[0]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[1]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[2]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[3]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[4]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[5]);
+
+    DrawTextBoxed(basicFontLarger, result, (Rectangle){272, 128+LAYOUT_SPACING, 368-LAYOUT_SPACING, 360}, 16, 0, true, LIGHTGRAY);
 }
 
 void DrawDungeonScreen()

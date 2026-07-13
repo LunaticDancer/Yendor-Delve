@@ -45,6 +45,7 @@ struct BattleState
 	char abilitySelection;
 	char targetSelection;
 	struct TurnIndicator turnIndicators[8];
+	char* messages[6];
 };
 
 union GameStateData
@@ -80,6 +81,7 @@ struct AppState
 void InitAppState(enum APP_STATE);
 void InitGameState(enum GAME_STATE);
 void TransitionToBattle();
+void AddMessageToFeed(char*);
 bool CheckIfHeroInParty(CHARACTER_ID);
 
 #endif

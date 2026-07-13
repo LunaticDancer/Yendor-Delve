@@ -50,6 +50,12 @@ void InitGameState(enum GAME_STATE _state)
 		case GS_BATTLE:
 		appState.stateData.gameState.stateData.battleState.abilitySelection = 0;
 		appState.stateData.gameState.stateData.battleState.targetSelection = 0;
+		appState.stateData.gameState.stateData.battleState.messages[0] = "The battle has begun!";
+		appState.stateData.gameState.stateData.battleState.messages[1] = "oppan";
+		appState.stateData.gameState.stateData.battleState.messages[2] = "gangnam";
+		appState.stateData.gameState.stateData.battleState.messages[3] = "style";
+		appState.stateData.gameState.stateData.battleState.messages[4] = "now this here is a test of a longer message to see if text wrapping works";
+		appState.stateData.gameState.stateData.battleState.messages[5] = "";
     }
 	appState.stateData.gameState.gameState = _state;
 }
@@ -67,6 +73,16 @@ void TransitionToBattle()
 	appState.stateData.gameState.stateData.battleState.enemies[0] = InitEnemyData(encounter.enemies[0]);
 	appState.stateData.gameState.stateData.battleState.enemies[1] = InitEnemyData(encounter.enemies[1]);
 	appState.stateData.gameState.stateData.battleState.enemies[2] = InitEnemyData(encounter.enemies[2]);
+}
+
+void AddMessageToFeed(char* msg)
+{
+		appState.stateData.gameState.stateData.battleState.messages[5] = appState.stateData.gameState.stateData.battleState.messages[4];
+		appState.stateData.gameState.stateData.battleState.messages[4] = appState.stateData.gameState.stateData.battleState.messages[3];
+		appState.stateData.gameState.stateData.battleState.messages[3] = appState.stateData.gameState.stateData.battleState.messages[2];
+		appState.stateData.gameState.stateData.battleState.messages[2] = appState.stateData.gameState.stateData.battleState.messages[1];
+		appState.stateData.gameState.stateData.battleState.messages[1] = appState.stateData.gameState.stateData.battleState.messages[0];
+		appState.stateData.gameState.stateData.battleState.messages[0] = msg;
 }
 
 bool CheckIfHeroInParty(CHARACTER_ID id)
