@@ -63,7 +63,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 (Vector2){10, 1},
                 BROWN,
                 "A tightly locked treasure chest. Whatever is inside must be valuable.",
-                {EN_MIMIC, EN_NONE, EN_NONE},
+                {EN_NONE, EN_MIMIC, EN_NONE},
                 true,
             };
         case ENC_BLOOD_FAERIES:

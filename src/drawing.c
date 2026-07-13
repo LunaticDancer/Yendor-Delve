@@ -25,6 +25,8 @@ extern struct AppState appState;
 
 NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATCH};
 
+void DrawBattleScreenPartyMember(char);
+void DrawBattleScreenEnemy(char);
 void DrawPauseMenu();
 void DrawCharacterStats();
 void DrawEquipmentPanel();
@@ -95,9 +97,95 @@ void DrawBattle()
     ClearBackground(BLACK);
     BeginMode2D(worldSpaceCamera);
 
+    DrawBattleScreenPartyMember(0);
+    DrawBattleScreenPartyMember(1);
+    DrawBattleScreenPartyMember(2);
+
+    DrawBattleScreenEnemy(0);
+    DrawBattleScreenEnemy(1);
+    DrawBattleScreenEnemy(2);
+
     EndMode2D();
     EndTextureMode();
     return;
+}
+
+void DrawBattleScreenPartyMember(char index)
+{
+    short creatureBoxSize = 128;
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + creatureBoxSize * index, SCREEN_HEIGHT - creatureBoxSize + LAYOUT_SPACING,
+        creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
+        (0) ? GOLD : GRAY);
+
+    DrawTexturePro(
+            GetTileset(appState.stateData.gameState.playerTeam[index].stats.baseStats.tileset),
+            (Rectangle){
+                appState.stateData.gameState.playerTeam[index].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
+                appState.stateData.gameState.playerTeam[index].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Rectangle){
+                (creatureBoxSize / 2) + (creatureBoxSize * index) - TILE_SIZE,
+                SCREEN_HEIGHT - (creatureBoxSize / 2) - TILE_SIZE,
+                TILE_SIZE * 2, TILE_SIZE * 2,
+            },
+            (Vector2){0,0},
+            0,
+            appState.stateData.gameState.playerTeam[index].stats.baseStats.color
+        );
+    
+
+    DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 441, creatureBoxSize-40, 2, DARKGRAY);
+    DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 440, 
+        (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
+        (float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].itemStats.health)), 
+        4, RED);
+
+    DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 449, creatureBoxSize-40, 2, DARKGRAY);
+    DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 448, 
+        (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentStamina / 
+        (float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxStamina + (float)appState.stateData.gameState.playerTeam[index].itemStats.stamina)), 
+        4, DARKGREEN);
+
+    DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 457, creatureBoxSize-40, 2, DARKGRAY);
+    DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 456, 
+        (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.critCounter / 
+        (float)CRIT_PROGRESS_MAX)), 
+        4, YELLOW);
+}
+
+void DrawBattleScreenEnemy(char index)
+{
+    short creatureBoxSize = 128;
+    DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1), LAYOUT_SPACING,
+        creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
+        (0) ? GOLD : GRAY);
+
+    DrawTexturePro(
+            GetTileset(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset),
+            (Rectangle){
+                appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
+                appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Rectangle){
+                SCREEN_WIDTH - (creatureBoxSize / 2) - (creatureBoxSize * index) - TILE_SIZE,
+                (creatureBoxSize / 2) - TILE_SIZE,
+                TILE_SIZE * 2, TILE_SIZE * 2,
+            },
+            (Vector2){0,0},
+            0,
+            appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.color
+        );
+    
+    if(appState.stateData.gameState.stateData.battleState.enemies[index].enemyId != EN_NONE)
+    {
+    DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize, 102, creatureBoxSize-40, 2, DARKGRAY);
+    DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize, 101, 
+        (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth / 
+        (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth)), 
+        4, RED);
+    }
 }
 
 void DrawDungeonScreen()
@@ -349,7 +437,7 @@ void DrawDungeonScreenPartyMember(char index)
             },
             (Rectangle){
                 LAYOUT_SPACING + 138 + (160 * index),
-                SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) + LAYOUT_SPACING + 44,
+                SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) + 40,
                 TILE_SIZE * 2, TILE_SIZE * 2,
             },
             (Vector2){0,0},
