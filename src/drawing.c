@@ -43,6 +43,7 @@ void DrawDungeonScreenPartyMemberBars(char index);
 void DrawDungeonEncounterText(char index);
 void DrawDungeonScreenRewardSprite(char index);
 void DrawDungeonScreenEncounterSprite(char index);
+void DrawPopupMessage();
 
 void DrawMainMenu()
 {
@@ -92,6 +93,7 @@ void DrawGameplay()
             DrawBattle();
             break;
     }
+    DrawPopupMessage();
 }
 
 void DrawBattle()
@@ -593,6 +595,23 @@ void DrawCharacterSelectOptionFrame(char index)
     DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + (160 * index), SCREEN_HEIGHT - (SCREEN_WIDTH / 4) + LAYOUT_SPACING,
         (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING, (SCREEN_WIDTH / 4) - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
         (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == index) ? GOLD : GRAY);
+}
+
+void DrawPopupMessage()
+{
+    if(appState.stateData.gameState.messageTimer < 0) return;
+
+    BeginTextureMode(renderTexture);
+    BeginMode2D(worldSpaceCamera);
+
+    Vector2 textSize = MeasureTextEx(basicFontLarger, appState.stateData.gameState.message, 16, 0);
+    Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, SCREEN_HEIGHT / 2 - textSize.y / 2};
+    DrawRectangle(textPosition.x-32, textPosition.y - 32, textSize.x+64, textSize.y+64, BLACK);
+    DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){textPosition.x-32, textPosition.y - 32, textSize.x+64, textSize.y+64}, (Vector2){0,0}, 0, LIGHTGRAY);
+    DrawTextEx(basicFontLarger, appState.stateData.gameState.message, textPosition, 16, 0, WHITE);
+
+    EndMode2D();
+    EndTextureMode();
 }
 
 Texture GetTileset(enum TILESET ts)

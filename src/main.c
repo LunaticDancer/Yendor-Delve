@@ -84,6 +84,7 @@ int main()
 	// game loop
 	while (!markedToClose) // run the loop until the user presses ESCAPE or presses the Close button on the window
 	{
+		HandleRealTimePopups();
 		ReadInput();
 		HandleInput();
 

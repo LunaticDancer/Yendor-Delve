@@ -1,3 +1,4 @@
+#include <string.h>
 #include "state.h"
 #include "dungeon.h"
 #include "item.h"
@@ -27,8 +28,6 @@ void InitAppState(enum APP_STATE _state)
 void InitGameState(enum GAME_STATE _state)
 {
 	appState.stateData.gameState.playerTeam[0].items[3] = InitItem(ITEM_TEST);
-	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = 700;
-	appState.stateData.gameState.playerTeam[0].stats.baseStats.critCounter = 40;
     switch(_state)
     {
         case GS_CHARACTER_SELECT:
@@ -45,17 +44,20 @@ void InitGameState(enum GAME_STATE _state)
 		appState.stateData.gameState.stateData.dungeonState.rewards[0] = InitItem(ITEM_TEST);
 		appState.stateData.gameState.stateData.dungeonState.rewards[1] = InitItem(ITEM_NONE);
 		appState.stateData.gameState.stateData.dungeonState.rewards[2] = InitItem(ITEM_TEST);
+		ShowPopupMessage("Velkom to Djoker's kitchers!");
 		break;
 
 		case GS_BATTLE:
 		appState.stateData.gameState.stateData.battleState.abilitySelection = 0;
 		appState.stateData.gameState.stateData.battleState.targetSelection = 0;
+		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
 		appState.stateData.gameState.stateData.battleState.messages[0] = "The battle has begun!";
-		appState.stateData.gameState.stateData.battleState.messages[1] = "oppan";
-		appState.stateData.gameState.stateData.battleState.messages[2] = "gangnam";
-		appState.stateData.gameState.stateData.battleState.messages[3] = "style";
-		appState.stateData.gameState.stateData.battleState.messages[4] = "now this here is a test of a longer message to see if text wrapping works";
+		appState.stateData.gameState.stateData.battleState.messages[1] = "";
+		appState.stateData.gameState.stateData.battleState.messages[2] = "";
+		appState.stateData.gameState.stateData.battleState.messages[3] = "";
+		appState.stateData.gameState.stateData.battleState.messages[4] = "";
 		appState.stateData.gameState.stateData.battleState.messages[5] = "";
+		ShowPopupMessage("The real Sofus Dungeon were the \nenemies we've made along the way.");
     }
 	appState.stateData.gameState.gameState = _state;
 }
@@ -73,6 +75,13 @@ void TransitionToBattle()
 	appState.stateData.gameState.stateData.battleState.enemies[0] = InitEnemyData(encounter.enemies[0]);
 	appState.stateData.gameState.stateData.battleState.enemies[1] = InitEnemyData(encounter.enemies[1]);
 	appState.stateData.gameState.stateData.battleState.enemies[2] = InitEnemyData(encounter.enemies[2]);
+
+	ResetTurnClock(appState.stateData.gameState.playerTeam[0].stats, appState.stateData.gameState.playerTeam[0].itemStats.speed);
+	ResetTurnClock(appState.stateData.gameState.playerTeam[1].stats, appState.stateData.gameState.playerTeam[1].itemStats.speed);
+	ResetTurnClock(appState.stateData.gameState.playerTeam[2].stats, appState.stateData.gameState.playerTeam[2].itemStats.speed);
+	ResetTurnClock(appState.stateData.gameState.stateData.battleState.enemies[0].stats, 0);
+	ResetTurnClock(appState.stateData.gameState.stateData.battleState.enemies[1].stats, 0);
+	ResetTurnClock(appState.stateData.gameState.stateData.battleState.enemies[2].stats, 0);
 }
 
 void AddMessageToFeed(char* msg)
@@ -88,4 +97,18 @@ void AddMessageToFeed(char* msg)
 bool CheckIfHeroInParty(CHARACTER_ID id)
 {
 	return appState.stateData.gameState.teamCompMask & (1 << id);
+}
+
+void HandleRealTimePopups()
+{
+	if(appState.appState == AS_GAMEPLAY)
+	{
+		appState.stateData.gameState.messageTimer -= GetFrameTime();
+	}
+}
+
+void ShowPopupMessage(char* msg)
+{
+	appState.stateData.gameState.messageTimer = GAME_MESSAGE_DISPLAY_TIME + strlen(msg) * GAME_MESSAGE_DISPLAY_TIME_PER_CHARACTER;
+	appState.stateData.gameState.message = msg;
 }

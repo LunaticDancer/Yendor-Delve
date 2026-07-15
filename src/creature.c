@@ -15,3 +15,9 @@ void CreateEmptyStatusEffects(int statusEffects[])
         statusEffects[i] = 0;
     }
 }
+
+void ResetTurnClock(CreatureStats _creature, short itemSpeedBonus)
+{
+    float value = 100.0 / (100 + _creature.baseStats.speed + _creature.encounterStats.speed + itemSpeedBonus);
+    _creature.baseStats.ticksUntilNextTurn = (short)value;
+}

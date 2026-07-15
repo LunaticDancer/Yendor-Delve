@@ -42,10 +42,13 @@ struct BattleState
 {
 	Enemy enemies[3];
 	Item reward;
+	char currentActingEntity;
 	char abilitySelection;
 	char targetSelection;
-	struct TurnIndicator turnIndicators[8];
+	struct TurnIndicator turnIndicators[6];
 	char* messages[6];
+	float statePauseTimer;
+	enum BATTLE_STATE battleState;
 };
 
 union GameStateData
@@ -64,6 +67,8 @@ struct GameState
 	bool isPaused;
 	char pauseMenuSelection;
 	union GameStateData stateData;
+	char* message;
+	float messageTimer;
 };
 
 union AppStateData
@@ -83,5 +88,7 @@ void InitGameState(enum GAME_STATE);
 void TransitionToBattle();
 void AddMessageToFeed(char*);
 bool CheckIfHeroInParty(CHARACTER_ID);
+void HandleRealTimePopups();
+void ShowPopupMessage(char*);
 
 #endif
