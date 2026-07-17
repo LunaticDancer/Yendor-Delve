@@ -122,7 +122,7 @@ void DrawBattleScreenPartyMember(char index)
     short creatureBoxSize = 128;
     DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + creatureBoxSize * index, SCREEN_HEIGHT - creatureBoxSize + LAYOUT_SPACING,
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (0) ? GOLD : GRAY);
+        (appState.stateData.gameState.stateData.battleState.currentActingEntity == index) ? RED : GRAY);
 
     DrawTexturePro(
             GetTileset(appState.stateData.gameState.playerTeam[index].stats.baseStats.tileset),
@@ -140,6 +140,11 @@ void DrawBattleScreenPartyMember(char index)
             0,
             appState.stateData.gameState.playerTeam[index].stats.baseStats.color
         );
+    
+        //                                                              DEBUG INFO SETUP
+        // char str_num[6];
+        // sprintf(str_num, "%d", appState.stateData.gameState.playerTeam[index].stats.baseStats.ticksUntilNextTurn);
+        // DrawText(str_num, LAYOUT_SPACING + creatureBoxSize * index + 16, SCREEN_HEIGHT - creatureBoxSize + LAYOUT_SPACING + 16, 16, PINK);
     
 
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 441, creatureBoxSize-40, 2, DARKGRAY);
@@ -166,7 +171,7 @@ void DrawBattleScreenEnemy(char index)
     short creatureBoxSize = 128;
     DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1), LAYOUT_SPACING,
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (0) ? GOLD : GRAY);
+        (appState.stateData.gameState.stateData.battleState.currentActingEntity == index+3) ? RED : GRAY);
 
     DrawTexturePro(
             GetTileset(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset),
@@ -599,7 +604,7 @@ void DrawCharacterSelectOptionFrame(char index)
 
 void DrawPopupMessage()
 {
-    if(appState.stateData.gameState.messageTimer < 0) return;
+    if(appState.stateData.gameState.messageTimer <= 0) return;
 
     BeginTextureMode(renderTexture);
     BeginMode2D(worldSpaceCamera);

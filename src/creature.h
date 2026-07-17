@@ -70,6 +70,6 @@ typedef struct CreatureStats
 
 StatBonuses CreateEmptyStatBonuses();
 void CreateEmptyStatusEffects(int[]);
-void ResetTurnClock(CreatureStats, short);
+void ResetTurnClock(CreatureStats*, short);
 
 #endif

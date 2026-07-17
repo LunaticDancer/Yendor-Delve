@@ -44,7 +44,6 @@ void InitGameState(enum GAME_STATE _state)
 		appState.stateData.gameState.stateData.dungeonState.rewards[0] = InitItem(ITEM_TEST);
 		appState.stateData.gameState.stateData.dungeonState.rewards[1] = InitItem(ITEM_NONE);
 		appState.stateData.gameState.stateData.dungeonState.rewards[2] = InitItem(ITEM_TEST);
-		ShowPopupMessage("Velkom to Djoker's kitchers!");
 		break;
 
 		case GS_BATTLE:
@@ -57,7 +56,6 @@ void InitGameState(enum GAME_STATE _state)
 		appState.stateData.gameState.stateData.battleState.messages[3] = "";
 		appState.stateData.gameState.stateData.battleState.messages[4] = "";
 		appState.stateData.gameState.stateData.battleState.messages[5] = "";
-		ShowPopupMessage("The real Sofus Dungeon were the \nenemies we've made along the way.");
     }
 	appState.stateData.gameState.gameState = _state;
 }
@@ -76,12 +74,15 @@ void TransitionToBattle()
 	appState.stateData.gameState.stateData.battleState.enemies[1] = InitEnemyData(encounter.enemies[1]);
 	appState.stateData.gameState.stateData.battleState.enemies[2] = InitEnemyData(encounter.enemies[2]);
 
-	ResetTurnClock(appState.stateData.gameState.playerTeam[0].stats, appState.stateData.gameState.playerTeam[0].itemStats.speed);
-	ResetTurnClock(appState.stateData.gameState.playerTeam[1].stats, appState.stateData.gameState.playerTeam[1].itemStats.speed);
-	ResetTurnClock(appState.stateData.gameState.playerTeam[2].stats, appState.stateData.gameState.playerTeam[2].itemStats.speed);
-	ResetTurnClock(appState.stateData.gameState.stateData.battleState.enemies[0].stats, 0);
-	ResetTurnClock(appState.stateData.gameState.stateData.battleState.enemies[1].stats, 0);
-	ResetTurnClock(appState.stateData.gameState.stateData.battleState.enemies[2].stats, 0);
+	ResetTurnClock(&appState.stateData.gameState.playerTeam[0].stats, appState.stateData.gameState.playerTeam[0].itemStats.speed);
+	ResetTurnClock(&appState.stateData.gameState.playerTeam[1].stats, appState.stateData.gameState.playerTeam[1].itemStats.speed);
+	ResetTurnClock(&appState.stateData.gameState.playerTeam[2].stats, appState.stateData.gameState.playerTeam[2].itemStats.speed);
+	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, 0);
+	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[1].stats, 0);
+	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[2].stats, 0);
+
+	short timeToProgress = DetermineCurrentActingEntity();
+	ProgressTime(timeToProgress);
 }
 
 void AddMessageToFeed(char* msg)
@@ -92,6 +93,52 @@ void AddMessageToFeed(char* msg)
 		appState.stateData.gameState.stateData.battleState.messages[2] = appState.stateData.gameState.stateData.battleState.messages[1];
 		appState.stateData.gameState.stateData.battleState.messages[1] = appState.stateData.gameState.stateData.battleState.messages[0];
 		appState.stateData.gameState.stateData.battleState.messages[0] = msg;
+}
+
+short DetermineCurrentActingEntity()
+{
+	char result = 0;
+	short minTicks = appState.stateData.gameState.playerTeam[0].stats.baseStats.ticksUntilNextTurn;
+
+	// no point in turning something this trivial into a loop
+	if (appState.stateData.gameState.playerTeam[1].stats.baseStats.ticksUntilNextTurn < minTicks)
+	{
+		minTicks = appState.stateData.gameState.playerTeam[1].stats.baseStats.ticksUntilNextTurn;
+		result = 1;
+	}
+	if (appState.stateData.gameState.playerTeam[2].stats.baseStats.ticksUntilNextTurn < minTicks)
+	{
+		minTicks = appState.stateData.gameState.playerTeam[2].stats.baseStats.ticksUntilNextTurn;
+		result = 2;
+	}
+	if (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn < minTicks)
+	{
+		minTicks = appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn;
+		result = 3;
+	}
+	if (appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn < minTicks)
+	{
+		minTicks = appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn;
+		result = 4;
+	}
+	if (appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn < minTicks)
+	{
+		minTicks = appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn;
+		result = 5;
+	}
+
+	appState.stateData.gameState.stateData.battleState.currentActingEntity = result;
+	return minTicks;
+}
+
+void ProgressTime(short ticks)
+{
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.ticksUntilNextTurn -= ticks;
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.ticksUntilNextTurn -= ticks;
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.ticksUntilNextTurn -= ticks;
+	appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn -= ticks;
+	appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn -= ticks;
+	appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn -= ticks;
 }
 
 bool CheckIfHeroInParty(CHARACTER_ID id)

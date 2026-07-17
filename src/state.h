@@ -87,6 +87,8 @@ void InitAppState(enum APP_STATE);
 void InitGameState(enum GAME_STATE);
 void TransitionToBattle();
 void AddMessageToFeed(char*);
+short DetermineCurrentActingEntity();
+void ProgressTime(short ticks);
 bool CheckIfHeroInParty(CHARACTER_ID);
 void HandleRealTimePopups();
 void ShowPopupMessage(char*);

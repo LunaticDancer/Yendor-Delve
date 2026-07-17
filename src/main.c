@@ -279,7 +279,10 @@ void HandleCharacterSelectInput()
 	if(IsPressed(VK_CONFIRM))
 	{
 		if(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3)
+		{
 			InitGameState(GS_DUNGEON);
+			ShowPopupMessage("Seek the amulet of Yendor in\nthe depths of the dungeon.");
+		}
 	}
 }
 
