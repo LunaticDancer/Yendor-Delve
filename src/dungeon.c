@@ -54,7 +54,7 @@ void InitEncounterPools()
     encounterPoolTier1[0] = ENC_BLOOD_FAERIES;
     encounterPoolTier1[1] = ENC_MIMIC;
     encounterPoolTier1[2] = ENC_CHEST;
-    encounterPoolTier1[3] = ENC_BLOOD_FAERIES;
+    encounterPoolTier1[3] = ENC_NONE;
     encounterPoolTier1[4] = ENC_BLOOD_FAERIES;
     encounterPoolTier1[5] = ENC_BLOOD_FAERIES;
     encounterPoolTier1[6] = ENC_BLOOD_FAERIES;
@@ -88,6 +88,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
         case ENC_BONFIRE:
             return (Encounter)
             {
+                id,
                 "Bonfire",
                 TL_GENERAL,
                 (Vector2){1, 1},
@@ -99,6 +100,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
         case ENC_CHEST:
             return (Encounter)
             {
+                id,
                 "Chest",
                 TL_GENERAL,
                 (Vector2){10, 1},
@@ -110,6 +112,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
         case ENC_MIMIC:
             return (Encounter)
             {
+                id,
                 "Chest",
                 TL_GENERAL,
                 (Vector2){10, 1},
@@ -121,6 +124,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
         case ENC_BLOOD_FAERIES:
             return (Encounter)
             {
+                id,
                 "Blood Fae",
                 TL_CREATURES,
                 (Vector2){12, 3},
@@ -132,6 +136,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
         default:
             return (Encounter)
             {
+                id,
                 "No encounter",
                 TL_GENERAL,
                 (Vector2){1, 0},

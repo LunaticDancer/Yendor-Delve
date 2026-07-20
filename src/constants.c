@@ -9,7 +9,7 @@ const char *GAME_TITLE = "Yendor Delve";
 const int PAUSE_MENU_OPTION_COUNT = 2;
 const char CRIT_PROGRESS_MAX = 100;
 const float TURN_ACTION_DURATION = 0.4;
-const float GAME_MESSAGE_DISPLAY_TIME = 0.6;
+const float GAME_MESSAGE_DISPLAY_TIME = 1.0;
 const float GAME_MESSAGE_DISPLAY_TIME_PER_CHARACTER = 0.05;
 
 

@@ -19,6 +19,7 @@ extern ENCOUNTER_ID encounterPoolTier3[];
 
 typedef struct Encounter
 {
+    ENCOUNTER_ID id;
     char* name;
     enum TILESET tileset;
     Vector2 tileLookupPosition;

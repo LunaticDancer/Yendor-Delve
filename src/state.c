@@ -95,6 +95,16 @@ void AddMessageToFeed(char* msg)
 		appState.stateData.gameState.stateData.battleState.messages[0] = msg;
 }
 
+void AddItemToInventory(Item it)
+{
+	for(int i = 0; i < INVENTORY_SIZE; i++)
+	{
+		if(appState.stateData.gameState.inventory[i].itemId != ITEM_NONE) continue;
+
+		appState.stateData.gameState.inventory[i] = it;
+	}
+}
+
 short DetermineCurrentActingEntity()
 {
 	char result = 0;

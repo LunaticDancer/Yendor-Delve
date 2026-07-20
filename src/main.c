@@ -37,6 +37,7 @@ void HandleMainMenuInput();
 void HandleCharacterSelectInput();
 void HandleBattleInput();
 void HandleDungeonInput();
+void HandleEncounterSelection();
 void HandlePauseMenuInput();
 void HandleEquipmentInput();
 void HandleItemSelectInput();
@@ -345,13 +346,45 @@ void HandleDungeonInput()
 		}
 		else
 		{
-			TransitionToBattle();
+			HandleEncounterSelection();
 		}
 	}
 	if(IsPressed(VK_BACK))
 	{
 		appState.stateData.gameState.isPaused = !appState.stateData.gameState.isPaused;
 		appState.stateData.gameState.pauseMenuSelection = 0;
+	}
+}
+
+void HandleEncounterSelection()
+{
+	Encounter encounter = appState.stateData.gameState.stateData.dungeonState.encounters[
+		appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
+
+	switch(encounter.id)
+	{
+		case ENC_NONE:
+		ShowPopupMessage("You've safely traversed the empty passage.");
+		appState.stateData.gameState.floor++;
+		InitGameState(GS_DUNGEON);
+		break;
+
+		case ENC_CHEST:
+		Item reward = appState.stateData.gameState.stateData.dungeonState.rewards[
+			appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
+		char* message = malloc(1);
+     	message[0] =  '\0'; 
+		message = CombineStrings("You've opened the chest and found\n", reward.name);
+		message = CombineStrings(message, ".");
+		ShowPopupMessage(message);
+		AddItemToInventory(reward);
+		appState.stateData.gameState.floor++;
+		InitGameState(GS_DUNGEON);
+		break;
+
+		default:
+		TransitionToBattle();
+		break;
 	}
 }
 

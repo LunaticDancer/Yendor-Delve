@@ -234,16 +234,16 @@ Item InitItem(ITEM_ID id)
         case ITEM_JUGGERNAUT_GREATHAMMER:
         result = (Item){
             id,
-            "Juggernaut Hammer",
+            "Juggernaut Greathammer",
             TL_ITEMS,
             (Vector2){5,0},
             DARKGRAY,
             ES_WEAPON,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.critRate = 5;
-        result.statBonuses.critMultiplier = 50;
-        result.statBonuses.mastery = 40;
+        result.statBonuses.critRate =15;
+        result.statBonuses.critMultiplier = 80;
+        result.statBonuses.mastery = 60;
         result.statBonuses.speed = - 30;
         return result;
         case ITEM_JUGGERNAUT_HELM:

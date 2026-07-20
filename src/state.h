@@ -64,6 +64,7 @@ struct GameState
 	char teamCompMask;
 	Character playerTeam[3];
 	char floor;
+	Item inventory[INVENTORY_SIZE];
 	bool isPaused;
 	char pauseMenuSelection;
 	union GameStateData stateData;
@@ -87,6 +88,7 @@ void InitAppState(enum APP_STATE);
 void InitGameState(enum GAME_STATE);
 void TransitionToBattle();
 void AddMessageToFeed(char*);
+void AddItemToInventory(Item);
 short DetermineCurrentActingEntity();
 void ProgressTime(short ticks);
 bool CheckIfHeroInParty(CHARACTER_ID);
