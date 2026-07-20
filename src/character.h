@@ -27,6 +27,8 @@ typedef struct Character
 } Character;
 
 Character InitCharacterData(CHARACTER_ID);
+void EquipItem(Character* ch, ITEM_ID it, char slot);
+void UnequipItem(Character* ch, char slot);
 char* GetCharacterStatsRundown(Character ch);
 
 #endif

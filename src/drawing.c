@@ -150,13 +150,13 @@ void DrawBattleScreenPartyMember(char index)
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 441, creatureBoxSize-40, 2, DARKGRAY);
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 440, 
         (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
-        (float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].itemStats.health)), 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].itemStats.health))), 
         4, RED);
 
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 449, creatureBoxSize-40, 2, DARKGRAY);
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 448, 
         (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentStamina / 
-        (float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxStamina + (float)appState.stateData.gameState.playerTeam[index].itemStats.stamina)), 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxStamina + (float)appState.stateData.gameState.playerTeam[index].itemStats.stamina))), 
         4, DARKGREEN);
 
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 457, creatureBoxSize-40, 2, DARKGRAY);
@@ -483,7 +483,7 @@ void DrawDungeonScreenPartyMemberBars(char index)
     DrawRectangle(104 + index * 160, 449, 112, 2, DARKGRAY);
     DrawRectangle(104 + index * 160, 448, 
         (int)(112 * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
-        (float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].itemStats.health)), 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].itemStats.health))), 
         4, RED);
 
     DrawRectangle(104 + index * 160, 457, 112, 2, DARKGRAY);

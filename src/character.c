@@ -214,6 +214,42 @@ Character InitCharacterData(CHARACTER_ID id)
     }
 }
 
+void EquipItem(Character* ch, ITEM_ID it, char slot)
+{
+    UnequipItem(ch, slot);
+
+    (*ch).items[slot] = InitItem(it);
+
+    (*ch).itemStats.armor += (*ch).items[slot].statBonuses.armor;
+    (*ch).itemStats.critMultiplier += (*ch).items[slot].statBonuses.critMultiplier;
+    (*ch).itemStats.critRate += (*ch).items[slot].statBonuses.critRate;
+    (*ch).itemStats.damageMultiplier += (*ch).items[slot].statBonuses.damageMultiplier;
+    (*ch).itemStats.defense += (*ch).items[slot].statBonuses.defense;
+    (*ch).itemStats.health += (*ch).items[slot].statBonuses.health;
+    (*ch).itemStats.mastery += (*ch).items[slot].statBonuses.mastery;
+    (*ch).itemStats.speed += (*ch).items[slot].statBonuses.speed;
+    (*ch).itemStats.stamina += (*ch).items[slot].statBonuses.stamina;
+    (*ch).itemStats.staminaRegen += (*ch).items[slot].statBonuses.staminaRegen;
+    (*ch).itemStats.targetPriority += (*ch).items[slot].statBonuses.targetPriority;
+}
+
+void UnequipItem(Character* ch, char slot)
+{
+    (*ch).itemStats.armor -= (*ch).items[slot].statBonuses.armor;
+    (*ch).itemStats.critMultiplier -= (*ch).items[slot].statBonuses.critMultiplier;
+    (*ch).itemStats.critRate -= (*ch).items[slot].statBonuses.critRate;
+    (*ch).itemStats.damageMultiplier -= (*ch).items[slot].statBonuses.damageMultiplier;
+    (*ch).itemStats.defense -= (*ch).items[slot].statBonuses.defense;
+    (*ch).itemStats.health -= (*ch).items[slot].statBonuses.health;
+    (*ch).itemStats.mastery -= (*ch).items[slot].statBonuses.mastery;
+    (*ch).itemStats.speed -= (*ch).items[slot].statBonuses.speed;
+    (*ch).itemStats.stamina -= (*ch).items[slot].statBonuses.stamina;
+    (*ch).itemStats.staminaRegen -= (*ch).items[slot].statBonuses.staminaRegen;
+    (*ch).itemStats.targetPriority -= (*ch).items[slot].statBonuses.targetPriority;
+
+    (*ch).items[slot] = InitItem(ITEM_NONE);
+}
+
 char* GetCharacterStatsRundown(Character ch)
 {
      char* result = malloc(1);
