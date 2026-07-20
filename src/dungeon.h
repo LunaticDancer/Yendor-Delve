@@ -2,6 +2,7 @@
 #define dungeon
 
 #include "enemy.h"
+#include "item.h"
 
 typedef enum ENCOUNTER_ID
 {
@@ -30,5 +31,7 @@ typedef struct Encounter
 ENCOUNTER_ID* SelectRandomEncounters(char floor);
 Encounter GetEncounterData(ENCOUNTER_ID);
 void InitEncounterPools();
+ITEM_ID MatchRewardToEncounter(ENCOUNTER_ID, char);
+void InitItemPools();
 
 #endif

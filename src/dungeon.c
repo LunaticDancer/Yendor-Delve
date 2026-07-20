@@ -5,9 +5,13 @@
 #define ARR_SIZE(arr) ( sizeof((arr)) / sizeof((arr[0])) )
 
 
-ENCOUNTER_ID encounterPoolTier1[4];
+ENCOUNTER_ID encounterPoolTier1[8];
 ENCOUNTER_ID encounterPoolTier2[4];
 ENCOUNTER_ID encounterPoolTier3[4];
+
+ITEM_ID itemPoolTier1[16];
+ITEM_ID itemPoolTier2[8];
+ITEM_ID itemPoolTier3[8];
 
 
 ENCOUNTER_ID* SelectRandomEncounters(char floor)
@@ -22,11 +26,59 @@ ENCOUNTER_ID* SelectRandomEncounters(char floor)
     return result;
 }
 
+ITEM_ID MatchRewardToEncounter(ENCOUNTER_ID enc, char floor)
+{
+    ITEM_ID result = ITEM_NONE;
+    switch(floor)
+    {
+        case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+        {
+            switch(enc)
+            {
+                case ENC_BONFIRE: case ENC_NONE:
+                result = ITEM_NONE;
+                break;
+
+                default:
+                result  = itemPoolTier1[rand() % ARR_SIZE(itemPoolTier1)];
+                break;
+            }
+            break;
+        }
+    }
+    return result;
+}
+
 void InitEncounterPools()
 {
     encounterPoolTier1[0] = ENC_BLOOD_FAERIES;
     encounterPoolTier1[1] = ENC_MIMIC;
     encounterPoolTier1[2] = ENC_CHEST;
+    encounterPoolTier1[3] = ENC_BLOOD_FAERIES;
+    encounterPoolTier1[4] = ENC_BLOOD_FAERIES;
+    encounterPoolTier1[5] = ENC_BLOOD_FAERIES;
+    encounterPoolTier1[6] = ENC_BLOOD_FAERIES;
+    encounterPoolTier1[7] = ENC_BLOOD_FAERIES;
+}
+
+void InitItemPools()
+{
+    itemPoolTier1[0] = ITEM_APPRENTICE_BOOTS;
+    itemPoolTier1[1] = ITEM_APPRENTICE_ROBE;
+    itemPoolTier1[2] = ITEM_APPRENTICE_STAFF;
+    itemPoolTier1[3] = ITEM_APPRENTICE_TIARA;
+    itemPoolTier1[4] = ITEM_JUGGERNAUT_ARMOR;
+    itemPoolTier1[5] = ITEM_JUGGERNAUT_GREATHAMMER;
+    itemPoolTier1[6] = ITEM_JUGGERNAUT_HELM;
+    itemPoolTier1[7] = ITEM_JUGGERNAUT_LEGGINS;
+    itemPoolTier1[8] = ITEM_MERCENARY_AXE;
+    itemPoolTier1[9] = ITEM_MERCENARY_CUIRAS;
+    itemPoolTier1[10] = ITEM_MERCENARY_GREAVES;
+    itemPoolTier1[11] = ITEM_MERCENARY_HELMET;
+    itemPoolTier1[12] = ITEM_THIEF_CAPE;
+    itemPoolTier1[13] = ITEM_THIEF_DAGGER;
+    itemPoolTier1[14] = ITEM_THIEF_HOOD;
+    itemPoolTier1[15] = ITEM_THIEF_PANTS;
 }
 
 Encounter GetEncounterData(ENCOUNTER_ID id)

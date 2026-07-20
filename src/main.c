@@ -79,6 +79,7 @@ int main()
 
 	srand(time(NULL));
 	InitEncounterPools();
+	InitItemPools();
 	InitAppState(AS_MAIN_MENU);
 
 	// game loop
