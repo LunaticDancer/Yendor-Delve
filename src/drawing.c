@@ -448,7 +448,7 @@ void DrawDungeonEncounterText(char index)
     text = (appState.stateData.gameState.stateData.dungeonState.selectionX == (index * 2) + 1 && appState.stateData.gameState.stateData.dungeonState.selectionY == 0) 
         ? (appState.stateData.gameState.stateData.dungeonState.encounters[index].hidesLoot ? "You will only learn what this reward is after you obtain it." :
         GetItemStatSpread(appState.stateData.gameState.stateData.dungeonState.rewards[index])) : appState.stateData.gameState.stateData.dungeonState.encounters[index].description;
-    DrawTextBoxed(basicFontLarger, text, (Rectangle){(210*index)+21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
+    DrawTextBoxed(basicFont, text, (Rectangle){(210*index)+21+LAYOUT_SPACING, 168+LAYOUT_SPACING, 174, 360}, 16, 0, true, GRAY);
 }
 
 void DrawDungeonScreenPartyMemberFrame(char index)

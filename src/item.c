@@ -385,5 +385,62 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.speed = 40;
         result.statBonuses.staminaRegen = 100;
         return result;
+        case ITEM_SOFUS_HAT:
+        result = (Item){
+            id,
+            "Hatfus",
+            TL_CREATURES,
+            (Vector2){10,9},
+            WHITE,
+            ES_HEAD,
+            CreateEmptyStatBonuses(),
+        };
+        result.statBonuses.mastery = 100;
+        result.statBonuses.health = -150;
+        result.statBonuses.targetPriority = 60;
+        return result;
+        case ITEM_SOFUS_LEGS:
+        result = (Item){
+            id,
+            "Sofoot",
+            TL_CREATURES,
+            (Vector2){14,15},
+            WHITE,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+        };
+        result.statBonuses.speed = 100;
+        result.statBonuses.defense = -60;
+        result.statBonuses.targetPriority = 60;
+        return result;
+        case ITEM_SOFUS_TORSO:
+        result = (Item){
+            id,
+            "Torsofus",
+            TL_CREATURES,
+            (Vector2){6,9},
+            WHITE,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+        };
+        result.statBonuses.stamina = 300;
+        result.statBonuses.armor = -10;
+        result.statBonuses.targetPriority = 60;
+        return result;
+        case ITEM_BATTLE_SHIELD:
+        result = (Item){
+            id,
+            "Battle Shield",
+            TL_ITEMS,
+            (Vector2){9,2},
+            GRAY,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+        };
+        result.statBonuses.defense = 80;
+        result.statBonuses.armor = 4;
+        result.statBonuses.targetPriority = 100;
+        result.statBonuses.speed = -20;
+        return result;
     }
 }

@@ -231,6 +231,11 @@ void EquipItem(Character* ch, ITEM_ID it, char slot)
     (*ch).itemStats.stamina += (*ch).items[slot].statBonuses.stamina;
     (*ch).itemStats.staminaRegen += (*ch).items[slot].statBonuses.staminaRegen;
     (*ch).itemStats.targetPriority += (*ch).items[slot].statBonuses.targetPriority;
+
+    if((*ch).stats.baseStats.currentHealth > (*ch).itemStats.health + (*ch).stats.baseStats.maxHealth)
+    {
+        (*ch).stats.baseStats.currentHealth = (*ch).itemStats.health + (*ch).stats.baseStats.maxHealth;
+    }
 }
 
 void UnequipItem(Character* ch, char slot)
@@ -246,6 +251,11 @@ void UnequipItem(Character* ch, char slot)
     (*ch).itemStats.stamina -= (*ch).items[slot].statBonuses.stamina;
     (*ch).itemStats.staminaRegen -= (*ch).items[slot].statBonuses.staminaRegen;
     (*ch).itemStats.targetPriority -= (*ch).items[slot].statBonuses.targetPriority;
+
+    if((*ch).stats.baseStats.currentHealth > (*ch).itemStats.health + (*ch).stats.baseStats.maxHealth)
+    {
+        (*ch).stats.baseStats.currentHealth = (*ch).itemStats.health + (*ch).stats.baseStats.maxHealth;
+    }
 
     (*ch).items[slot] = InitItem(ITEM_NONE);
 }

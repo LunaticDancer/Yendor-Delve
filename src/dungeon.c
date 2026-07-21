@@ -9,7 +9,7 @@ ENCOUNTER_ID encounterPoolTier1[8];
 ENCOUNTER_ID encounterPoolTier2[4];
 ENCOUNTER_ID encounterPoolTier3[4];
 
-ITEM_ID itemPoolTier1[16];
+ITEM_ID itemPoolTier1[20];
 ITEM_ID itemPoolTier2[8];
 ITEM_ID itemPoolTier3[8];
 
@@ -79,6 +79,10 @@ void InitItemPools()
     itemPoolTier1[13] = ITEM_THIEF_DAGGER;
     itemPoolTier1[14] = ITEM_THIEF_HOOD;
     itemPoolTier1[15] = ITEM_THIEF_PANTS;
+    itemPoolTier1[16] = ITEM_SOFUS_HAT;
+    itemPoolTier1[17] = ITEM_SOFUS_LEGS;
+    itemPoolTier1[18] = ITEM_SOFUS_TORSO;
+    itemPoolTier1[19] = ITEM_BATTLE_SHIELD;
 }
 
 Encounter GetEncounterData(ENCOUNTER_ID id)
