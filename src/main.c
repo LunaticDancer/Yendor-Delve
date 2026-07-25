@@ -112,6 +112,11 @@ void ReadInput()
 {
 	inputThisFrame = 0;
 
+	if (IsKeyPressed(KEY_K))
+	{
+		markedToClose = true;
+	}
+
 	if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_Z) || IsKeyPressed(KEY_COMMA) 
 		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_UP))
 	{
@@ -452,12 +457,32 @@ void HandleEquipmentInput()
 	{
 		appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment = false;
 	}
+	if(IsPressed(VK_CONFIRM))
+	{
+		appState.stateData.gameState.stateData.dungeonState.isSelectingItem = true;
+		appState.stateData.gameState.stateData.dungeonState.highlightedItem = 0;
+		PrepareListOfSlotAppropriateItems(appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot + 1);
+	}
 }
 
 void HandleItemSelectInput()
 {
+	if(IsPressed(VK_UP))
+	{
+		appState.stateData.gameState.stateData.dungeonState.highlightedItem =
+			(appState.stateData.gameState.stateData.dungeonState.highlightedItem + appState.stateData.gameState.stateData.dungeonState.itemIndexListLength) % (appState.stateData.gameState.stateData.dungeonState.itemIndexListLength+1);
+	}
+	if(IsPressed(VK_DOWN))
+	{
+		appState.stateData.gameState.stateData.dungeonState.highlightedItem =
+			(appState.stateData.gameState.stateData.dungeonState.highlightedItem + 1) % (appState.stateData.gameState.stateData.dungeonState.itemIndexListLength+1);
+	}
 	if(IsPressed(VK_BACK))
 	{
 		appState.stateData.gameState.stateData.dungeonState.isSelectingItem = false;
+	}
+	if(IsPressed(VK_CONFIRM))
+	{
+		HandleItemEquip();
 	}
 }

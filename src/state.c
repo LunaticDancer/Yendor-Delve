@@ -1,4 +1,6 @@
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "state.h"
 #include "dungeon.h"
 #include "item.h"
@@ -27,7 +29,6 @@ void InitAppState(enum APP_STATE _state)
 
 void InitGameState(enum GAME_STATE _state)
 {
-	EquipItem(&appState.stateData.gameState.playerTeam[0], ITEM_TEST, 3);
     switch(_state)
     {
         case GS_CHARACTER_SELECT:
@@ -102,7 +103,39 @@ void AddItemToInventory(Item it)
 		if(appState.stateData.gameState.inventory[i].itemId != ITEM_NONE) continue;
 
 		appState.stateData.gameState.inventory[i] = it;
+		return;
 	}
+}
+
+void HandleItemEquip()
+{
+	if (appState.stateData.gameState.playerTeam[
+		appState.stateData.gameState.stateData.dungeonState.selectionX
+	].items[appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot].itemId != ITEM_NONE)
+	{
+		AddItemToInventory(appState.stateData.gameState.playerTeam[
+		appState.stateData.gameState.stateData.dungeonState.selectionX
+	].items[appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot]);
+	}
+
+	UnequipItem(&appState.stateData.gameState.playerTeam[
+		appState.stateData.gameState.stateData.dungeonState.selectionX], 
+		appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot);
+
+	EquipItem(&appState.stateData.gameState.playerTeam[
+		appState.stateData.gameState.stateData.dungeonState.selectionX], 
+		(appState.stateData.gameState.stateData.dungeonState.highlightedItem == 0) ? ITEM_NONE : 
+		appState.stateData.gameState.inventory[appState.stateData.gameState.stateData.dungeonState.slotItemIndexes[
+			appState.stateData.gameState.stateData.dungeonState.highlightedItem - 1]].itemId,
+		appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot);
+
+	if (appState.stateData.gameState.stateData.dungeonState.highlightedItem != 0)
+	{
+	appState.stateData.gameState.inventory[appState.stateData.gameState.stateData.dungeonState.slotItemIndexes[
+		appState.stateData.gameState.stateData.dungeonState.highlightedItem - 1]] = InitItem(ITEM_NONE);
+	}
+
+	appState.stateData.gameState.stateData.dungeonState.isSelectingItem = false;
 }
 
 short DetermineCurrentActingEntity()
@@ -149,6 +182,27 @@ void ProgressTime(short ticks)
 	appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn -= ticks;
+}
+
+void PrepareListOfSlotAppropriateItems(EQUIPMENT_SLOT slot)
+{
+	char* result = malloc(sizeof(char));
+	char numberOfPositions = 0;
+
+	for (int i = 0; i < INVENTORY_SIZE; i++)
+	{
+		if((appState.stateData.gameState.inventory[i].slot == slot ||
+			appState.stateData.gameState.inventory[i].slot == ES_EVERY)
+		&& appState.stateData.gameState.inventory[i].itemId != ITEM_NONE)
+		{
+			numberOfPositions++;
+			result = realloc(result, numberOfPositions * sizeof(char));
+			result[numberOfPositions-1] = i;
+		}
+	}
+
+	appState.stateData.gameState.stateData.dungeonState.itemIndexListLength = numberOfPositions;
+	appState.stateData.gameState.stateData.dungeonState.slotItemIndexes = result;
 }
 
 bool CheckIfHeroInParty(CHARACTER_ID id)

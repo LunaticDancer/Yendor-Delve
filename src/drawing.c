@@ -32,6 +32,8 @@ void DrawBattleScreenEnemy(char);
 void DrawBattleScreenMessageFeed();
 void DrawPauseMenu();
 void DrawCharacterStats();
+void DrawItemSelection();
+void DrawItemListElement(Item it, char index);
 void DrawEquipmentPanel();
 void DrawEquipmentSlot(char index);
 void DrawCharacterSelectOptionFrame(char index);
@@ -282,6 +284,10 @@ void DrawDungeonScreen()
     {
         DrawEquipmentPanel();
         DrawCharacterStats();
+        if(appState.stateData.gameState.stateData.dungeonState.isSelectingItem)
+        {
+            DrawItemSelection();
+        }
     }
 
     EndMode2D();
@@ -323,11 +329,59 @@ void DrawCharacterStats()
     DrawTextBoxed(basicFontLarger, text, (Rectangle){336, 88+LAYOUT_SPACING, 304-LAYOUT_SPACING, 360}, 16, 0, true, GRAY);
 }
 
+void DrawItemSelection()
+{
+    Item none = InitItem(ITEM_NONE);
+    short listH = 50 + appState.stateData.gameState.stateData.dungeonState.itemIndexListLength * 18;
+
+    DrawRectangle(LAYOUT_SPACING + 434, 48 + LAYOUT_SPACING, 200, 304, BLACK);
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){434 + LAYOUT_SPACING, 48 + LAYOUT_SPACING, 200, 304}, (Vector2){0,0}, 0, GRAY);
+    if(appState.stateData.gameState.stateData.dungeonState.highlightedItem != 0)
+    {
+        char* itemDesc = GetItemStatSpread(
+            appState.stateData.gameState.inventory[appState.stateData.gameState.stateData.dungeonState.slotItemIndexes[appState.stateData.gameState.stateData.dungeonState.highlightedItem-1]]
+        );
+        DrawTextBoxed(basicFont, itemDesc, (Rectangle){LAYOUT_SPACING + 450, 64+LAYOUT_SPACING, 184, 360}, 16, 0, true, LIGHTGRAY);
+    }
+
+    DrawRectangle(LAYOUT_SPACING + 230, 48 + LAYOUT_SPACING, 208, listH, BLACK);
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){230 + LAYOUT_SPACING, 48 + LAYOUT_SPACING, 208, listH}, (Vector2){0,0}, 0, WHITE);
+
+    DrawItemListElement(none, 0);
+    for(int i = 0; i < appState.stateData.gameState.stateData.dungeonState.itemIndexListLength; i++)
+    {
+        DrawItemListElement(appState.stateData.gameState.inventory[appState.stateData.gameState.stateData.dungeonState.slotItemIndexes[i]], i+1);
+    }
+}
+
+void DrawItemListElement(Item it, char index)
+{
+    DrawTexturePro(
+            GetTileset(it.tileset),
+            (Rectangle){
+                it.tileLookupPosition.x * TILE_SIZE,
+                it.tileLookupPosition.y * TILE_SIZE,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Rectangle){
+                LAYOUT_SPACING + 244,
+                 64 + LAYOUT_SPACING + (18*index),
+                16, 16
+            },
+            (Vector2){0,0},
+            0,
+            appState.stateData.gameState.stateData.dungeonState.highlightedItem == index ? it.color : GRAY
+        );
+    DrawTextEx(basicFont, it.name, (Vector2){LAYOUT_SPACING + 262, 64 + LAYOUT_SPACING + (18*index)}, 16, 0,
+        appState.stateData.gameState.stateData.dungeonState.highlightedItem == index ? WHITE : GRAY);
+}
+
 void DrawEquipmentPanel()
 {
     DrawRectangle(LAYOUT_SPACING + 5, 48 + LAYOUT_SPACING,
         (630) - 2 * LAYOUT_SPACING, (312) - 2 * LAYOUT_SPACING, BLACK);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + 5, 48 + LAYOUT_SPACING, 224, 256}, (Vector2){0,0}, 0, WHITE);
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + 5, 48 + LAYOUT_SPACING, 224, 256}, (Vector2){0,0}, 0,
+    appState.stateData.gameState.stateData.dungeonState.isSelectingItem ? GRAY : WHITE);
 
     Vector2 textSize = MeasureTextEx(basicFont, "Equipment", 16, 0);
     Vector2 textPosition = (Vector2){122 - textSize.x / 2, 80};
