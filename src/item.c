@@ -84,7 +84,7 @@ char* GetItemStatSpread(Item it)    // what do you mean "item" is a keyword
         char str_num[6];
         sprintf(str_num, "%.2f", it.statBonuses.critMultiplier);
         result = CombineStrings(result, str_num);
-        result = CombineStrings(result, " Crit Multiplier\n");
+        result = CombineStrings(result, " Crit Bonus\n");
      }
      if(it.statBonuses.critRate != 0)
      {
