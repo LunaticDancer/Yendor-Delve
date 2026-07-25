@@ -427,10 +427,10 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.armor = -10;
         result.statBonuses.targetPriority = 60;
         return result;
-        case ITEM_BATTLE_SHIELD:
+        case ITEM_TOWER_SHIELD:
         result = (Item){
             id,
-            "Battle Shield",
+            "Tower Shield",
             TL_ITEMS,
             (Vector2){9,2},
             GRAY,

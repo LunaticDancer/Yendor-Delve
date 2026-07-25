@@ -82,7 +82,7 @@ void InitItemPools()
     itemPoolTier1[16] = ITEM_SOFUS_HAT;
     itemPoolTier1[17] = ITEM_SOFUS_LEGS;
     itemPoolTier1[18] = ITEM_SOFUS_TORSO;
-    itemPoolTier1[19] = ITEM_BATTLE_SHIELD;
+    itemPoolTier1[19] = ITEM_TOWER_SHIELD;
 }
 
 Encounter GetEncounterData(ENCOUNTER_ID id)
