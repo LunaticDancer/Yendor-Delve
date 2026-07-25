@@ -82,7 +82,7 @@ char* GetItemStatSpread(Item it)    // what do you mean "item" is a keyword
             result = CombineStrings(result, "+");
         }
         char str_num[6];
-        sprintf(str_num, "%.2f", it.statBonuses.critMultiplier);
+        sprintf(str_num, "%.0f", it.statBonuses.critMultiplier);
         result = CombineStrings(result, str_num);
         result = CombineStrings(result, " Crit Bonus\n");
      }
@@ -115,7 +115,7 @@ char* GetItemStatSpread(Item it)    // what do you mean "item" is a keyword
             result = CombineStrings(result, "+");
         }
         char str_num[6];
-        sprintf(str_num, "%.2f", it.statBonuses.damageMultiplier);
+        sprintf(str_num, "%.0f", it.statBonuses.damageMultiplier);
         result = CombineStrings(result, str_num);
         result = CombineStrings(result, " Damage Multiplier\n");
      }
