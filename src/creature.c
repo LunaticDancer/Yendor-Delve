@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "creature.h"
+#include "state.h"
 
 StatBonuses CreateEmptyStatBonuses()
 {
