@@ -36,6 +36,7 @@ typedef struct CreatureBaseStats
     short critRate;                     // crit can exceed 100%, making it proc mustiple times, applying the multiplier each time
     short critCounter;                  // crit occurence accumulation, persists between battles
     short mastery;                      // ability scaling
+    short targetPriority;
 } CreatureBaseStats;
 
 typedef struct StatBonuses
@@ -51,6 +52,7 @@ typedef struct StatBonuses
     short mastery;
     float damageMultiplier;
     short targetPriority;
+    short shield;
 } StatBonuses;
 
 typedef struct StatDebuff
@@ -64,6 +66,7 @@ typedef struct CreatureStats
     CreatureBaseStats baseStats;
     int statusEffects[SE_LENGTH];       // stores intensity values for each status effect
     StatBonuses encounterStats;         // resets after each encounter
+    StatBonuses itemStats;
     Ability* abilities;
     char abilityCount;
 } CreatureStats;

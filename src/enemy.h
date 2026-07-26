@@ -26,7 +26,6 @@ typedef struct Enemy
     ENEMY_ID enemyId;
     CreatureStats stats;
     TARGETTING_TYPE targettingBehavior;
-    short goldReward;
 } Enemy;
 
 Enemy InitEnemyData(ENEMY_ID id);

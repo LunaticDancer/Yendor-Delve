@@ -29,14 +29,15 @@ Enemy InitEnemyData(ENEMY_ID id)
                     5,
                     0,
                     0,
+                    0,
                 },
                 {},
+                CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 (Ability*)malloc(0),
                 0,
             },
             TG_TRUE_RANDOM,
-            100,
         };
         break;
         
@@ -63,14 +64,15 @@ Enemy InitEnemyData(ENEMY_ID id)
                     5,
                     0,
                     0,
+                    500,
                 },
                 {},
+                CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 (Ability*)malloc(0),
                 0,
             },
             TG_WEIGHTED_RANDOM,
-            100,
         };
         break;
         
@@ -97,14 +99,15 @@ Enemy InitEnemyData(ENEMY_ID id)
                     5,
                     0,
                     0,
+                    500,
                 },
                 {},
+                CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 (Ability*)malloc(0),
                 0,
             },
             TG_WEIGHTED_RANDOM,
-            100,
         };
         break;
         
@@ -131,14 +134,15 @@ Enemy InitEnemyData(ENEMY_ID id)
                     5,
                     0,
                     0,
+                    500,
                 },
                 {},
+                CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 (Ability*)malloc(0),
                 0,
             },
             TG_WEIGHTED_RANDOM,
-            100,
         };
         break;
     }

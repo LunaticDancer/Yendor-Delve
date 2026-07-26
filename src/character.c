@@ -30,8 +30,10 @@ Character InitCharacterData(CHARACTER_ID id)
                     5,
                     0,
                     0,
+                    600,
                 },
                 {},
+                CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 (Ability*)malloc(0),
                 0,
@@ -42,9 +44,6 @@ Character InitCharacterData(CHARACTER_ID id)
                 InitItem(ITEM_NONE),
                 InitItem(ITEM_NONE),
             },
-            CreateEmptyStatBonuses(),
-            6,      // carry
-            600,
         };
         break;
         case CHAR_ASSASSIN:
@@ -71,8 +70,10 @@ Character InitCharacterData(CHARACTER_ID id)
                     25,
                     0,
                     0,
+                    400,
                 },
                 {},
+                CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 (Ability*)malloc(0),
                 0,
@@ -83,9 +84,6 @@ Character InitCharacterData(CHARACTER_ID id)
                 InitItem(ITEM_NONE),
                 InitItem(ITEM_NONE),
             },
-            CreateEmptyStatBonuses(),
-            3,      // carry
-            400,
         };
         break;
         case CHAR_DUELIST:
@@ -112,8 +110,10 @@ Character InitCharacterData(CHARACTER_ID id)
                     5,
                     0,
                     0,
+                    500,
                 },
                 {},
+                CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 (Ability*)malloc(0),
                 0,
@@ -124,9 +124,6 @@ Character InitCharacterData(CHARACTER_ID id)
                 InitItem(ITEM_NONE),
                 InitItem(ITEM_NONE),
             },
-            CreateEmptyStatBonuses(),
-            4,      // carry
-            500,
         };
         break;
         case CHAR_MONK:
@@ -153,8 +150,10 @@ Character InitCharacterData(CHARACTER_ID id)
                     5,
                     0,
                     0,
+                    500,
                 },
                 {},
+                CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 (Ability*)malloc(0),
                 0,
@@ -165,9 +164,6 @@ Character InitCharacterData(CHARACTER_ID id)
                 InitItem(ITEM_NONE),
                 InitItem(ITEM_NONE),
             },
-            CreateEmptyStatBonuses(),
-            4,      // carry
-            500,
         };
         break;
         case CHAR_FLESH_GOLEM:
@@ -194,8 +190,10 @@ Character InitCharacterData(CHARACTER_ID id)
                     5,
                     0,
                     0,
+                    500,
                 },
                 {},
+                CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 (Ability*)malloc(0),
                 0,
@@ -206,9 +204,6 @@ Character InitCharacterData(CHARACTER_ID id)
                 InitItem(ITEM_NONE),
                 InitItem(ITEM_NONE),
             },
-            CreateEmptyStatBonuses(),
-            0,      // carry
-            500,
         };
         break;
     }
@@ -220,41 +215,41 @@ void EquipItem(Character* ch, ITEM_ID it, char slot)
 
     (*ch).items[slot] = InitItem(it);
 
-    (*ch).itemStats.armor += (*ch).items[slot].statBonuses.armor;
-    (*ch).itemStats.critMultiplier += (*ch).items[slot].statBonuses.critMultiplier;
-    (*ch).itemStats.critRate += (*ch).items[slot].statBonuses.critRate;
-    (*ch).itemStats.damageMultiplier += (*ch).items[slot].statBonuses.damageMultiplier;
-    (*ch).itemStats.defense += (*ch).items[slot].statBonuses.defense;
-    (*ch).itemStats.health += (*ch).items[slot].statBonuses.health;
-    (*ch).itemStats.mastery += (*ch).items[slot].statBonuses.mastery;
-    (*ch).itemStats.speed += (*ch).items[slot].statBonuses.speed;
-    (*ch).itemStats.stamina += (*ch).items[slot].statBonuses.stamina;
-    (*ch).itemStats.staminaRegen += (*ch).items[slot].statBonuses.staminaRegen;
-    (*ch).itemStats.targetPriority += (*ch).items[slot].statBonuses.targetPriority;
+    (*ch).stats.itemStats.armor += (*ch).items[slot].statBonuses.armor;
+    (*ch).stats.itemStats.critMultiplier += (*ch).items[slot].statBonuses.critMultiplier;
+    (*ch).stats.itemStats.critRate += (*ch).items[slot].statBonuses.critRate;
+    (*ch).stats.itemStats.damageMultiplier += (*ch).items[slot].statBonuses.damageMultiplier;
+    (*ch).stats.itemStats.defense += (*ch).items[slot].statBonuses.defense;
+    (*ch).stats.itemStats.health += (*ch).items[slot].statBonuses.health;
+    (*ch).stats.itemStats.mastery += (*ch).items[slot].statBonuses.mastery;
+    (*ch).stats.itemStats.speed += (*ch).items[slot].statBonuses.speed;
+    (*ch).stats.itemStats.stamina += (*ch).items[slot].statBonuses.stamina;
+    (*ch).stats.itemStats.staminaRegen += (*ch).items[slot].statBonuses.staminaRegen;
+    (*ch).stats.itemStats.targetPriority += (*ch).items[slot].statBonuses.targetPriority;
 
-    if((*ch).stats.baseStats.currentHealth > (*ch).itemStats.health + (*ch).stats.baseStats.maxHealth)
+    if((*ch).stats.baseStats.currentHealth > (*ch).stats.itemStats.health + (*ch).stats.baseStats.maxHealth)
     {
-        (*ch).stats.baseStats.currentHealth = (*ch).itemStats.health + (*ch).stats.baseStats.maxHealth;
+        (*ch).stats.baseStats.currentHealth = (*ch).stats.itemStats.health + (*ch).stats.baseStats.maxHealth;
     }
 }
 
 void UnequipItem(Character* ch, char slot)
 {
-    (*ch).itemStats.armor -= (*ch).items[slot].statBonuses.armor;
-    (*ch).itemStats.critMultiplier -= (*ch).items[slot].statBonuses.critMultiplier;
-    (*ch).itemStats.critRate -= (*ch).items[slot].statBonuses.critRate;
-    (*ch).itemStats.damageMultiplier -= (*ch).items[slot].statBonuses.damageMultiplier;
-    (*ch).itemStats.defense -= (*ch).items[slot].statBonuses.defense;
-    (*ch).itemStats.health -= (*ch).items[slot].statBonuses.health;
-    (*ch).itemStats.mastery -= (*ch).items[slot].statBonuses.mastery;
-    (*ch).itemStats.speed -= (*ch).items[slot].statBonuses.speed;
-    (*ch).itemStats.stamina -= (*ch).items[slot].statBonuses.stamina;
-    (*ch).itemStats.staminaRegen -= (*ch).items[slot].statBonuses.staminaRegen;
-    (*ch).itemStats.targetPriority -= (*ch).items[slot].statBonuses.targetPriority;
+    (*ch).stats.itemStats.armor -= (*ch).items[slot].statBonuses.armor;
+    (*ch).stats.itemStats.critMultiplier -= (*ch).items[slot].statBonuses.critMultiplier;
+    (*ch).stats.itemStats.critRate -= (*ch).items[slot].statBonuses.critRate;
+    (*ch).stats.itemStats.damageMultiplier -= (*ch).items[slot].statBonuses.damageMultiplier;
+    (*ch).stats.itemStats.defense -= (*ch).items[slot].statBonuses.defense;
+    (*ch).stats.itemStats.health -= (*ch).items[slot].statBonuses.health;
+    (*ch).stats.itemStats.mastery -= (*ch).items[slot].statBonuses.mastery;
+    (*ch).stats.itemStats.speed -= (*ch).items[slot].statBonuses.speed;
+    (*ch).stats.itemStats.stamina -= (*ch).items[slot].statBonuses.stamina;
+    (*ch).stats.itemStats.staminaRegen -= (*ch).items[slot].statBonuses.staminaRegen;
+    (*ch).stats.itemStats.targetPriority -= (*ch).items[slot].statBonuses.targetPriority;
 
-    if((*ch).stats.baseStats.currentHealth > (*ch).itemStats.health + (*ch).stats.baseStats.maxHealth)
+    if((*ch).stats.baseStats.currentHealth > (*ch).stats.itemStats.health + (*ch).stats.baseStats.maxHealth)
     {
-        (*ch).stats.baseStats.currentHealth = (*ch).itemStats.health + (*ch).stats.baseStats.maxHealth;
+        (*ch).stats.baseStats.currentHealth = (*ch).stats.itemStats.health + (*ch).stats.baseStats.maxHealth;
     }
 
     (*ch).items[slot] = InitItem(ITEM_NONE);
@@ -270,40 +265,40 @@ char* GetCharacterStatsRundown(Character ch)
      sprintf(str_num, "%d", ch.stats.baseStats.currentHealth);
     result = CombineStrings(result, str_num);
      result = CombineStrings(result, "/");
-     sprintf(str_num, "%d", ch.stats.baseStats.maxHealth + ch.itemStats.health);
+     sprintf(str_num, "%d", ch.stats.baseStats.maxHealth + ch.stats.itemStats.health);
     result = CombineStrings(result, str_num);
 
      result = CombineStrings(result, "\nStamina: ");
-     sprintf(str_num, "%d", ch.stats.baseStats.maxStamina + ch.itemStats.stamina);
+     sprintf(str_num, "%d", ch.stats.baseStats.maxStamina + ch.stats.itemStats.stamina);
     result = CombineStrings(result, str_num);
 
      result = CombineStrings(result, "\nSpeed: ");
-     sprintf(str_num, "%d", ch.stats.baseStats.speed + ch.itemStats.speed);
+     sprintf(str_num, "%d", ch.stats.baseStats.speed + ch.stats.itemStats.speed);
     result = CombineStrings(result, str_num);
 
      result = CombineStrings(result, "\nDefense: ");
-     sprintf(str_num, "%d", ch.stats.baseStats.defense + ch.itemStats.defense);
+     sprintf(str_num, "%d", ch.stats.baseStats.defense + ch.stats.itemStats.defense);
     result = CombineStrings(result, str_num);
 
      result = CombineStrings(result, "\nArmour: ");
-     sprintf(str_num, "%d", ch.stats.baseStats.armor + ch.itemStats.armor);
+     sprintf(str_num, "%d", ch.stats.baseStats.armor + ch.stats.itemStats.armor);
     result = CombineStrings(result, str_num);
 
      result = CombineStrings(result, "\nCrit Rate: ");
-     sprintf(str_num, "%d", ch.stats.baseStats.critRate + ch.itemStats.critRate);
+     sprintf(str_num, "%d", ch.stats.baseStats.critRate + ch.stats.itemStats.critRate);
     result = CombineStrings(result, str_num);
      result = CombineStrings(result, "%");
 
      result = CombineStrings(result, "\nCrit Bonus: ");
-     sprintf(str_num, "%.0f", ch.stats.baseStats.critMultiplier + ch.itemStats.critMultiplier);
+     sprintf(str_num, "%.0f", ch.stats.baseStats.critMultiplier + ch.stats.itemStats.critMultiplier);
     result = CombineStrings(result, str_num);
 
      result = CombineStrings(result, "\nMastery: ");
-     sprintf(str_num, "%d", ch.stats.baseStats.mastery + ch.itemStats.mastery);
+     sprintf(str_num, "%d", ch.stats.baseStats.mastery + ch.stats.itemStats.mastery);
     result = CombineStrings(result, str_num);
 
      result = CombineStrings(result, "\nTarget Priority: ");
-     sprintf(str_num, "%d", ch.targetPriority + ch.itemStats.targetPriority);
+     sprintf(str_num, "%d", ch.stats.baseStats.targetPriority + ch.stats.itemStats.targetPriority);
     result = CombineStrings(result, str_num);
 
      return result;
