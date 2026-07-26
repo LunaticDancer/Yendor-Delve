@@ -26,6 +26,7 @@ typedef struct Enemy
     ENEMY_ID enemyId;
     CreatureStats stats;
     TARGETTING_TYPE targettingBehavior;
+    ABILITY lastUsedAbility;
 } Enemy;
 
 Enemy InitEnemyData(ENEMY_ID id);

@@ -1,5 +1,6 @@
 #ifndef ability
 #define ability
+#include "raylib.h"
 
 typedef enum ABILITY
 {
@@ -18,12 +19,12 @@ enum ABILITY_FLAGS
 typedef struct Ability
 {
     ABILITY abilityId;
+    char* name;
     short staminaCost;
-    short cooldown;
-    short cooldownTimer;
     char abilityFlags;
 } Ability;
 
+Ability InitAbility(ABILITY id);
 
 
 #endif

@@ -38,6 +38,7 @@ Enemy InitEnemyData(ENEMY_ID id)
                 0,
             },
             TG_TRUE_RANDOM,
+            AB_WAIT,
         };
         break;
         
@@ -73,6 +74,7 @@ Enemy InitEnemyData(ENEMY_ID id)
                 0,
             },
             TG_WEIGHTED_RANDOM,
+            AB_WAIT,
         };
         break;
         
@@ -108,6 +110,7 @@ Enemy InitEnemyData(ENEMY_ID id)
                 0,
             },
             TG_WEIGHTED_RANDOM,
+            AB_WAIT,
         };
         break;
         
@@ -143,6 +146,7 @@ Enemy InitEnemyData(ENEMY_ID id)
                 0,
             },
             TG_WEIGHTED_RANDOM,
+            AB_WAIT,
         };
         break;
     }
