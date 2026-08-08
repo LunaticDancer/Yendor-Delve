@@ -76,9 +76,8 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
     }
 }
 
-Ability* InitAbilities(ABILITY abilities[])
+Ability* InitAbilities(ABILITY abilities[], short count)
 {
-    char count = sizeof(abilities) /  sizeof(ABILITY);
     Ability* result = malloc(count * sizeof(Ability));
 
     for(int i = 0; i<count;i++)

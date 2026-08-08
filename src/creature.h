@@ -77,7 +77,7 @@ void ResetTurnClock(CreatureStats*, short);
 short CalculateDamage(short baseDamage, CreatureStats* target);
 void DealDamage(short damage, CreatureStats* target, bool trueDamage);
 char* GetAbilityDescription(ABILITY id, CreatureStats* caster);
-Ability* InitAbilities(ABILITY abilities[]);
+Ability* InitAbilities(ABILITY abilities[], short count);
 void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats* targets, short numberOfTargets);
 
 #endif

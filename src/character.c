@@ -35,7 +35,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                (Ability*)malloc(0),
+                InitAbilities((ABILITY[]){AB_WAIT}, 1),
                 0,
             },
             {
@@ -75,7 +75,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                (Ability*)malloc(0),
+                InitAbilities((ABILITY[]){AB_WAIT}, 1),
                 0,
             },
             {
@@ -115,7 +115,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                (Ability*)malloc(0),
+                InitAbilities((ABILITY[]){AB_WAIT}, 1),
                 0,
             },
             {
@@ -155,7 +155,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                (Ability*)malloc(0),
+                InitAbilities((ABILITY[]){AB_WAIT}, 1),
                 0,
             },
             {
@@ -195,7 +195,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                (Ability*)malloc(0),
+                InitAbilities((ABILITY[]){AB_WAIT}, 1),
                 0,
             },
             {
