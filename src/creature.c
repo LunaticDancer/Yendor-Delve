@@ -88,24 +88,24 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         return "Inaction. Let the opportunity pass.";
         break;
         case AB_MONK_MEDITATE:
-        sprintf(strnum, "%.0f", (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * 
+        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * 
             1 +  caster->baseStats.critCounter / CRIT_PROGRESS_MAX);
-        result = CombineStrings("Gain ", strnum);
-        result = CombineStrings(result,  " mastery.");
+        result = CombineStrings("Gain 10 + ", strnum);
+        result = CombineStrings(result,  " (10% Mastery) mastery.");
         return result;
         break;
         case AB_MONK_TRUE_STRIKE:
-        sprintf(strnum, "%.0f", (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * 
+        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * 
             1 +  caster->baseStats.critCounter / CRIT_PROGRESS_MAX);
-        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings("Deal 100 + ", strnum);
         result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?
-            " unavoidable damage to all enemies." : " unavoidable damage to target enemy.");
+            " (80% Mastery) unavoidable damage to all enemies." : " (80% Mastery) unavoidable damage to target enemy.");
         return result;
         case AB_MONK_ATTUNEMENT:
-        sprintf(strnum, "%.0f", (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9) * 
+        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9) * 
             1 +  caster->baseStats.critCounter / CRIT_PROGRESS_MAX);
-        result = CombineStrings((caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?  "Shield all allies for " : " Shield a target ally for ", strnum);
-        result = CombineStrings(result, " health points.");
+        result = CombineStrings((caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?  "Shield all allies for 10 + " : " Shield a target ally for 10 + ", strnum);
+        result = CombineStrings(result, " (90% Mastery) health points.");
         return result;
         case AB_MONK_CLEANSE:
         result = (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?
