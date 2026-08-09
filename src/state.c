@@ -76,14 +76,25 @@ void TransitionToBattle()
 	appState.stateData.gameState.stateData.battleState.enemies[1] = InitEnemyData(encounter.enemies[1]);
 	appState.stateData.gameState.stateData.battleState.enemies[2] = InitEnemyData(encounter.enemies[2]);
 
-	ResetTurnClock(&appState.stateData.gameState.playerTeam[0].stats, appState.stateData.gameState.playerTeam[0].itemStats.speed);
-	ResetTurnClock(&appState.stateData.gameState.playerTeam[1].stats, appState.stateData.gameState.playerTeam[1].itemStats.speed);
-	ResetTurnClock(&appState.stateData.gameState.playerTeam[2].stats, appState.stateData.gameState.playerTeam[2].itemStats.speed);
-	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, 0);
-	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[1].stats, 0);
-	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[2].stats, 0);
+	ResetTurnClock(&appState.stateData.gameState.playerTeam[0].stats);
+	ResetTurnClock(&appState.stateData.gameState.playerTeam[1].stats);
+	ResetTurnClock(&appState.stateData.gameState.playerTeam[2].stats);
+	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[0].stats);
+	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[1].stats);
+	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[2].stats);
 
 	PassTurn();
+}
+
+void HandleAbilityTargetInit()
+{
+	Ability ab = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection];
+	if(DoesAbilityHaveFlag(ab, AF_TARGETS_SELF))
+	{
+		CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, malloc(0), 0);
+		ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
+		PassTurn();
+	}
 }
 
 void PassTurn()

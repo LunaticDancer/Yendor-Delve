@@ -87,6 +87,7 @@ struct AppState
 void InitAppState(enum APP_STATE);
 void InitGameState(enum GAME_STATE);
 void TransitionToBattle();
+void HandleAbilityTargetInit();
 void AddMessageToFeed(char*);
 void AddItemToInventory(Item);
 void HandleItemEquip();

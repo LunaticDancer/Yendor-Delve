@@ -29,6 +29,7 @@ typedef struct Ability
 } Ability;
 
 Ability InitAbility(ABILITY id);
+bool DoesAbilityHaveFlag(Ability ab, enum ABILITY_FLAGS flag);
 
 
 #endif

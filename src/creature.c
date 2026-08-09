@@ -19,9 +19,9 @@ void CreateEmptyStatusEffects(int statusEffects[])
     }
 }
 
-void ResetTurnClock(CreatureStats* _creature, short itemSpeedBonus)
+void ResetTurnClock(CreatureStats* _creature)
 {
-    float value = 100.0 / (100 + (*_creature).baseStats.speed + (*_creature).encounterStats.speed + itemSpeedBonus);
+    float value = 100.0 / (100 + (*_creature).baseStats.speed + (*_creature).encounterStats.speed + (*_creature).itemStats.speed);
     (*_creature).baseStats.ticksUntilNextTurn = (short)(value*1000);
 }
 
@@ -64,6 +64,12 @@ void DealDamage(short damage, CreatureStats* target, bool trueDamage)
         char* message = CombineStrings((*target).baseStats.name, " was slain!");
         AddMessageToFeed(message);
     }
+}
+
+float CalculateCritInfluence(CreatureStats* caster)
+{
+    return 1 +  (caster->baseStats.critCounter / CRIT_PROGRESS_MAX)
+            *(((*caster).baseStats.critMultiplier + (*caster).itemStats.critMultiplier + (*caster).encounterStats.critMultiplier)*0.01);
 }
 
 Ability* InitAbilities(ABILITY abilities[], short count)
@@ -116,10 +122,29 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
 
 void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats* targets, short numberOfTargets)
 {
+    char* message;
+    char strnum[6];
+    short primaryEffectValue;
+
     switch(id)
     {
         case AB_WAIT:
         AddMessageToFeed(CombineStrings(caster->baseStats.name, " does nothing."));
         break;
+        case AB_MONK_MEDITATE:
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateCritInfluence(caster);
+        (*caster).encounterStats.mastery += primaryEffectValue;
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " meditates, gaining ");
+        message = CombineStrings(message, strnum);
+        sprintf(strnum, "%d", (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery));
+        message = CombineStrings(message, " Mastery, for the total of ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, ".");
+        AddMessageToFeed(message);
+        break;
     }
+    
+    (*caster).baseStats.critCounter = (*caster).baseStats.critCounter % CRIT_PROGRESS_MAX;
+    (*caster).baseStats.critCounter += (*caster).baseStats.critRate + (*caster).itemStats.critRate + (*caster).encounterStats.critRate;
 }

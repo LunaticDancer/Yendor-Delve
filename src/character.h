@@ -21,7 +21,6 @@ typedef struct Character
     char* description;
     CreatureStats stats;
     Item items[ITEM_SLOTS]; 
-    StatBonuses itemStats;
 } Character;
 
 Character InitCharacterData(CHARACTER_ID);

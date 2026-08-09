@@ -131,7 +131,7 @@ void DrawBattleAbilitySelection()
     char* abilityDesc = GetAbilityDescription(caster->abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].abilityId, caster);
 
     DrawRectangle(160, 128, 480 - LAYOUT_SPACING, 224, BLACK);
-    DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ 160, 128, 480 - LAYOUT_SPACING, 224}, (Vector2){0,0}, 0, GRAY);
+    DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ 160, 128, 480 - LAYOUT_SPACING, 224}, (Vector2){0,0}, 0, DARKGRAY);
 
     Vector2 textSize = MeasureTextEx(basicFontLarger, caster->abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].name, 32, 0);
     Vector2 textPosition = {400 - textSize.x / 2, 140};
@@ -155,7 +155,7 @@ void DrawBattleScreenPartyMember(char index)
     short creatureBoxSize = 128;
     DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + creatureBoxSize * index, SCREEN_HEIGHT - creatureBoxSize + LAYOUT_SPACING,
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.battleState.currentActingEntity == index) ? RED : GRAY);
+        (appState.stateData.gameState.stateData.battleState.currentActingEntity == index) ? WHITE : DARKGRAY);
 
     DrawTexturePro(
             GetTileset(appState.stateData.gameState.playerTeam[index].stats.baseStats.tileset),
@@ -183,13 +183,13 @@ void DrawBattleScreenPartyMember(char index)
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 441, creatureBoxSize-40, 2, DARKGRAY);
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 440, 
         (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
-        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].itemStats.health))), 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health))), 
         4, RED);
 
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 449, creatureBoxSize-40, 2, DARKGRAY);
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 448, 
         (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentStamina / 
-        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxStamina + (float)appState.stateData.gameState.playerTeam[index].itemStats.stamina))), 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxStamina + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.stamina))), 
         4, DARKGREEN);
 
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 457, creatureBoxSize-40, 2, DARKGRAY);
@@ -204,9 +204,9 @@ void DrawBattleScreenEnemy(char index)
     short creatureBoxSize = 128;
     DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1), LAYOUT_SPACING,
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.battleState.currentActingEntity == index+3 ||
-            (appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT 
-                && appState.stateData.gameState.stateData.battleState.horizontalSelection == index)) ? RED : GRAY);
+        (appState.stateData.gameState.stateData.battleState.currentActingEntity == index+3) ? WHITE :
+            ((appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT 
+                && appState.stateData.gameState.stateData.battleState.horizontalSelection == index)) ? RED : DARKGRAY);
 
     DrawTexturePro(
             GetTileset(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset),
@@ -570,7 +570,7 @@ void DrawDungeonScreenPartyMemberBars(char index)
     DrawRectangle(104 + index * 160, 449, 112, 2, DARKGRAY);
     DrawRectangle(104 + index * 160, 448, 
         (int)(112 * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
-        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].itemStats.health))), 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health))), 
         4, RED);
 
     DrawRectangle(104 + index * 160, 457, 112, 2, DARKGRAY);
