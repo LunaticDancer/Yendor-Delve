@@ -36,7 +36,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 InitAbilities((ABILITY[]){AB_WAIT}, 1),
-                0,
+                1,
             },
             {
                 InitItem(ITEM_NONE),
@@ -76,7 +76,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 InitAbilities((ABILITY[]){AB_WAIT}, 1),
-                0,
+                1,
             },
             {
                 InitItem(ITEM_NONE),
@@ -116,7 +116,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 InitAbilities((ABILITY[]){AB_WAIT}, 1),
-                0,
+                1,
             },
             {
                 InitItem(ITEM_NONE),
@@ -155,8 +155,8 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                InitAbilities((ABILITY[]){AB_WAIT}, 1),
-                0,
+                InitAbilities((ABILITY[]){AB_MONK_MEDITATE, AB_MONK_TRUE_STRIKE, AB_MONK_ATTUNEMENT, AB_MONK_CLEANSE, AB_WAIT}, 5),
+                5,
             },
             {
                 InitItem(ITEM_NONE),
@@ -196,7 +196,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
                 InitAbilities((ABILITY[]){AB_WAIT}, 1),
-                0,
+                1,
             },
             {
                 InitItem(ITEM_NONE),

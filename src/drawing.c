@@ -27,6 +27,7 @@ extern struct AppState appState;
 
 NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATCH};
 
+void DrawBattleAbilitySelection();
 void DrawBattleScreenPartyMember(char);
 void DrawBattleScreenEnemy(char);
 void DrawBattleScreenMessageFeed();
@@ -114,9 +115,39 @@ void DrawBattle()
     DrawBattleScreenEnemy(1);
     DrawBattleScreenEnemy(2);
 
+    if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT)
+    {
+        DrawBattleAbilitySelection();
+    }
+
     EndMode2D();
     EndTextureMode();
     return;
+}
+
+void DrawBattleAbilitySelection()
+{
+    CreatureStats* caster = &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats;
+    char* abilityDesc = GetAbilityDescription(caster->abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].abilityId, caster);
+
+    DrawRectangle(160, 128, 480 - LAYOUT_SPACING, 224, BLACK);
+    DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ 160, 128, 480 - LAYOUT_SPACING, 224}, (Vector2){0,0}, 0, GRAY);
+
+    Vector2 textSize = MeasureTextEx(basicFontLarger, caster->abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].name, 32, 0);
+    Vector2 textPosition = {400 - textSize.x / 2, 140};
+    DrawTextEx(basicFontLarger, caster->abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].name, textPosition, 32, 0, LIGHTGRAY);
+
+    DrawTextBoxed(basicFont, abilityDesc, (Rectangle){192, 176, 416-LAYOUT_SPACING, 224},16,0,true, GRAY);
+
+    short height = (*caster).abilityCount * 18;
+    DrawRectangle(390, 443 - height, 230, height+32, BLACK);
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){ 390, 443 - height, 230, height+32}, (Vector2){0,0}, 0, WHITE);
+
+    for (int i = 0; i < (*caster).abilityCount; i++)
+    {
+        DrawTextEx(basicFont, caster->abilities[i].name, (Vector2){406, 460 - height + (i * 18)}, 16, 0, 
+            (appState.stateData.gameState.stateData.battleState.verticalSelection == i) ? WHITE : GRAY);
+    }
 }
 
 void DrawBattleScreenPartyMember(char index)
@@ -173,7 +204,9 @@ void DrawBattleScreenEnemy(char index)
     short creatureBoxSize = 128;
     DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1), LAYOUT_SPACING,
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.battleState.currentActingEntity == index+3) ? RED : GRAY);
+        (appState.stateData.gameState.stateData.battleState.currentActingEntity == index+3 ||
+            (appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT 
+                && appState.stateData.gameState.stateData.battleState.horizontalSelection == index)) ? RED : GRAY);
 
     DrawTexturePro(
             GetTileset(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset),

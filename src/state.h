@@ -43,8 +43,8 @@ struct BattleState
 	Enemy enemies[3];
 	Item reward;
 	char currentActingEntity;
-	char abilitySelection;
-	char targetSelection;
+	char verticalSelection;
+	char horizontalSelection;
 	struct TurnIndicator turnIndicators[6];
 	char* messages[6];
 	float statePauseTimer;
@@ -91,6 +91,7 @@ void AddMessageToFeed(char*);
 void AddItemToInventory(Item);
 void HandleItemEquip();
 short DetermineCurrentActingEntity();
+void PassTurn();
 void ProgressTime(short ticks);
 void PrepareListOfSlotAppropriateItems(EQUIPMENT_SLOT slot);
 bool CheckIfHeroInParty(CHARACTER_ID);

@@ -66,16 +66,6 @@ void DealDamage(short damage, CreatureStats* target, bool trueDamage)
     }
 }
 
-char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
-{
-    switch(id)
-    {
-        case AB_WAIT:
-        return "Inaction. Let the opportunity pass.";
-        break;
-    }
-}
-
 Ability* InitAbilities(ABILITY abilities[], short count)
 {
     Ability* result = malloc(count * sizeof(Ability));
@@ -88,11 +78,48 @@ Ability* InitAbilities(ABILITY abilities[], short count)
     return result;
 }
 
+char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
+{
+    char strnum[6];
+    char* result;
+    switch(id)
+    {
+        case AB_WAIT:
+        return "Inaction. Let the opportunity pass.";
+        break;
+        case AB_MONK_MEDITATE:
+        sprintf(strnum, "%.0f", (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * 
+            1 +  caster->baseStats.critCounter / CRIT_PROGRESS_MAX);
+        result = CombineStrings("Gain ", strnum);
+        result = CombineStrings(result,  " mastery.");
+        return result;
+        break;
+        case AB_MONK_TRUE_STRIKE:
+        sprintf(strnum, "%.0f", (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * 
+            1 +  caster->baseStats.critCounter / CRIT_PROGRESS_MAX);
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?
+            " unavoidable damage to all enemies." : " unavoidable damage to target enemy.");
+        return result;
+        case AB_MONK_ATTUNEMENT:
+        sprintf(strnum, "%.0f", (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9) * 
+            1 +  caster->baseStats.critCounter / CRIT_PROGRESS_MAX);
+        result = CombineStrings((caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?  "Shield all allies for " : " Shield a target ally for ", strnum);
+        result = CombineStrings(result, " health points.");
+        return result;
+        case AB_MONK_CLEANSE:
+        result = (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?
+            "Cleanse all status effects from target team." : "Cleanse all status effects from target creature.";
+        return result;
+    }
+}
+
 void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats* targets, short numberOfTargets)
 {
     switch(id)
     {
         case AB_WAIT:
+        AddMessageToFeed(CombineStrings(caster->baseStats.name, " does nothing."));
         break;
     }
 }

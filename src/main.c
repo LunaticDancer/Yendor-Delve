@@ -295,9 +295,63 @@ void HandleCharacterSelectInput()
 
 void HandleBattleInput()
 {
-	if(IsPressed(VK_BACK))
+	if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW)
 	{
-		InitGameState(GS_DUNGEON);
+		if(IsPressed(VK_BACK))
+		{
+			InitGameState(GS_DUNGEON);
+		}
+		if(IsPressed(VK_CONFIRM))
+		{
+			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;		
+		}
+	}
+	else if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT)
+	{
+		if(IsPressed(VK_BACK))
+		{
+			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_OVERVIEW;		
+		}
+		if(IsPressed(VK_CONFIRM))
+		{
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = 1;
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_TARGET_SELECT;		
+		}
+		if(IsPressed(VK_UP))
+		{
+			appState.stateData.gameState.stateData.battleState.verticalSelection = (appState.stateData.gameState.stateData.battleState.verticalSelection 
+				+ appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilityCount - 1) 
+				% appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilityCount;
+		}
+		if(IsPressed(VK_DOWN))
+		{
+			appState.stateData.gameState.stateData.battleState.verticalSelection = (appState.stateData.gameState.stateData.battleState.verticalSelection + 1) 
+				% appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilityCount;
+		}
+	}
+	else if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT)
+	{
+		
+		if(IsPressed(VK_BACK))
+		{
+			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;		
+		}
+		if(IsPressed(VK_CONFIRM))
+		{
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = 1;
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_TARGET_SELECT;		
+		}
+		if(IsPressed(VK_LEFT))
+		{
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 1) % 3;
+		}
+		if(IsPressed(VK_RIGHT))
+		{
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 2) % 3;	
+		}
 	}
 }
 

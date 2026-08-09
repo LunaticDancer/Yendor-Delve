@@ -15,8 +15,8 @@ void InitAppState(enum APP_STATE _state)
 			appState.stateData.mainMenuState.currentSelection = MS_PLAY;
 			break;
 		case AS_GAMEPLAY:
-			appState.stateData.gameState.teamCompMask = 7;
-			appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_BERSERKER);
+			appState.stateData.gameState.teamCompMask = 14;
+			appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_MONK);
 			appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_ASSASSIN);
 			appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_DUELIST);
 			appState.stateData.gameState.floor = 1;
@@ -36,6 +36,7 @@ void InitGameState(enum GAME_STATE _state)
         break;
 
 		case GS_DUNGEON:
+		appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment = false;
 		appState.stateData.gameState.stateData.dungeonState.selectionX = 0;
 		appState.stateData.gameState.stateData.dungeonState.selectionY = 0;
 		ENCOUNTER_ID* encounterSelection = SelectRandomEncounters(appState.stateData.gameState.floor);
@@ -48,8 +49,8 @@ void InitGameState(enum GAME_STATE _state)
 		break;
 
 		case GS_BATTLE:
-		appState.stateData.gameState.stateData.battleState.abilitySelection = 0;
-		appState.stateData.gameState.stateData.battleState.targetSelection = 0;
+		appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
+		appState.stateData.gameState.stateData.battleState.horizontalSelection = 0;
 		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
 		appState.stateData.gameState.stateData.battleState.messages[0] = "The battle has begun!";
 		appState.stateData.gameState.stateData.battleState.messages[1] = "";
@@ -82,6 +83,11 @@ void TransitionToBattle()
 	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[1].stats, 0);
 	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[2].stats, 0);
 
+	PassTurn();
+}
+
+void PassTurn()
+{
 	short timeToProgress = DetermineCurrentActingEntity();
 	ProgressTime(timeToProgress);
 }
@@ -142,6 +148,7 @@ short DetermineCurrentActingEntity()
 {
 	char result = 0;
 	short minTicks = appState.stateData.gameState.playerTeam[0].stats.baseStats.ticksUntilNextTurn;
+	appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;
 
 	// no point in turning something this trivial into a loop
 	if (appState.stateData.gameState.playerTeam[1].stats.baseStats.ticksUntilNextTurn < minTicks)
@@ -156,16 +163,19 @@ short DetermineCurrentActingEntity()
 	}
 	if (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn < minTicks)
 	{
+		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn;
 		result = 3;
 	}
 	if (appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn < minTicks)
 	{
+		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn;
 		result = 4;
 	}
 	if (appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn < minTicks)
 	{
+		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn;
 		result = 5;
 	}
