@@ -120,7 +120,7 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
     }
 }
 
-void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats* targets, short numberOfTargets)
+void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats** targets, short numberOfTargets)
 {
     char* message;
     char strnum[6];

@@ -45,6 +45,8 @@ struct BattleState
 	char currentActingEntity;
 	char verticalSelection;
 	char horizontalSelection;
+	bool abilityTargetsAllies;
+	bool abilityTargetsEnemies;
 	struct TurnIndicator turnIndicators[6];
 	char* messages[6];
 	float statePauseTimer;

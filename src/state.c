@@ -89,7 +89,27 @@ void TransitionToBattle()
 void HandleAbilityTargetInit()
 {
 	Ability ab = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection];
-	if(DoesAbilityHaveFlag(ab, AF_TARGETS_SELF))
+	appState.stateData.gameState.stateData.battleState.abilityTargetsAllies = DoesAbilityHaveFlag(ab, AF_TARGETS_ALLIES);
+	appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies = DoesAbilityHaveFlag(ab, AF_TARGETS_ENEMIES);
+	appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies) ? 4 : 1;
+	if(DoesAbilityHaveFlag(ab, AF_AOE))
+	{
+		if(appState.stateData.gameState.stateData.battleState.abilityTargetsAllies)
+		{
+			CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
+				(CreatureStats*[3]){&appState.stateData.gameState.playerTeam[0].stats, &appState.stateData.gameState.playerTeam[1].stats, 
+					&appState.stateData.gameState.playerTeam[2].stats}, 3);
+		}
+		if(appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
+		{
+			CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
+				(CreatureStats*[3]){&appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
+				&appState.stateData.gameState.stateData.battleState.enemies[2].stats}, 3);
+		}
+		ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
+		PassTurn();
+	}
+	else if(DoesAbilityHaveFlag(ab, AF_TARGETS_SELF))
 	{
 		CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, malloc(0), 0);
 		ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);

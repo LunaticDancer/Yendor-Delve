@@ -155,7 +155,9 @@ void DrawBattleScreenPartyMember(char index)
     short creatureBoxSize = 128;
     DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + creatureBoxSize * index, SCREEN_HEIGHT - creatureBoxSize + LAYOUT_SPACING,
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
-        (appState.stateData.gameState.stateData.battleState.currentActingEntity == index) ? WHITE : DARKGRAY);
+            ((appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT 
+                && appState.stateData.gameState.stateData.battleState.horizontalSelection == index)) ? RED : 
+                (appState.stateData.gameState.stateData.battleState.currentActingEntity == index) ? WHITE : DARKGRAY);
 
     DrawTexturePro(
             GetTileset(appState.stateData.gameState.playerTeam[index].stats.baseStats.tileset),
@@ -206,7 +208,7 @@ void DrawBattleScreenEnemy(char index)
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
         (appState.stateData.gameState.stateData.battleState.currentActingEntity == index+3) ? WHITE :
             ((appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT 
-                && appState.stateData.gameState.stateData.battleState.horizontalSelection == index)) ? RED : DARKGRAY);
+                && appState.stateData.gameState.stateData.battleState.horizontalSelection == index+3)) ? RED : DARKGRAY);
 
     DrawTexturePro(
             GetTileset(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset),

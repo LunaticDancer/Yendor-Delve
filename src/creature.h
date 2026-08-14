@@ -79,6 +79,6 @@ void DealDamage(short damage, CreatureStats* target, bool trueDamage);
 float CalculateCritInfluence(CreatureStats*);
 char* GetAbilityDescription(ABILITY id, CreatureStats* caster);
 Ability* InitAbilities(ABILITY abilities[], short count);
-void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats* targets, short numberOfTargets);
+void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats** targets, short numberOfTargets);
 
 #endif

@@ -347,11 +347,50 @@ void HandleBattleInput()
 		}
 		if(IsPressed(VK_LEFT))
 		{
-			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 1) % 3;
+			if(appState.stateData.gameState.stateData.battleState.horizontalSelection < 3)
+			{
+				appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 2) % 3;
+			}
+			else{
+				appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 1) % 3 + 3;
+			}
 		}
 		if(IsPressed(VK_RIGHT))
 		{
-			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 2) % 3;	
+			if(appState.stateData.gameState.stateData.battleState.horizontalSelection < 3)
+			{
+				appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 1) % 3;
+			}
+			else{
+				appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 2) % 3 + 3;
+			}
+		}
+		if(IsPressed(VK_DOWN) || IsPressed(VK_UP))
+		{
+			if(appState.stateData.gameState.stateData.battleState.abilityTargetsAllies && appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
+			{
+				switch(appState.stateData.gameState.stateData.battleState.horizontalSelection)
+				{
+					case 0:
+					appState.stateData.gameState.stateData.battleState.horizontalSelection = 5;
+					break;
+					case 1:
+					appState.stateData.gameState.stateData.battleState.horizontalSelection = 4;
+					break;
+					case 2:
+					appState.stateData.gameState.stateData.battleState.horizontalSelection = 3;
+					break;
+					case 3:
+					appState.stateData.gameState.stateData.battleState.horizontalSelection = 2;
+					break;
+					case 4:
+					appState.stateData.gameState.stateData.battleState.horizontalSelection = 1;
+					break;
+					case 5:
+					appState.stateData.gameState.stateData.battleState.horizontalSelection = 0;
+					break;
+				}
+			}
 		}
 	}
 }
