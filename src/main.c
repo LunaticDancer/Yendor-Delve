@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 #include "raylib.h"
 
@@ -342,8 +343,20 @@ void HandleBattleInput()
 		}
 		if(IsPressed(VK_CONFIRM))
 		{
-			appState.stateData.gameState.stateData.battleState.horizontalSelection = 1;
-			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_TARGET_SELECT;		
+			Ability ab = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection];
+			if(appState.stateData.gameState.stateData.battleState.horizontalSelection < 3)
+			{
+				CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
+				(CreatureStats*[1]){&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.horizontalSelection].stats}, 1);
+			}
+			else
+			{
+				printf(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection-3].stats.baseStats.name);
+				CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
+				(CreatureStats*[1]){&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection-3].stats}, 1);
+			}
+			ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
+			PassTurn();
 		}
 		if(IsPressed(VK_LEFT))
 		{

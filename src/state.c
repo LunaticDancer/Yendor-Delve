@@ -119,6 +119,7 @@ void HandleAbilityTargetInit()
 
 void PassTurn()
 {
+	appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
 	short timeToProgress = DetermineCurrentActingEntity();
 	ProgressTime(timeToProgress);
 }

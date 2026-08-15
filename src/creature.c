@@ -143,6 +143,39 @@ void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats** targets, sho
         message = CombineStrings(message, ".");
         AddMessageToFeed(message);
         break;
+        case AB_MONK_TRUE_STRIKE:
+        primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateCritInfluence(caster);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " uses True Strike, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " unavoidable damage to ");
+        for(int i = 0; i < numberOfTargets; i++)
+        {
+            if(i == numberOfTargets - 1)
+            {
+                //printf("%d", targets[i]->abilityCount);
+                if(i != 0)
+                {
+                    message = CombineStrings(message, " and ");
+                }
+                message = CombineStrings(message, targets[i]->baseStats.name);
+                message = CombineStrings(message, ".");
+            }
+            else
+            {
+                if(i != 0)
+                {
+                    message = CombineStrings(message, ", ");
+                }
+                message = CombineStrings(message, targets[i]->baseStats.name);
+            }
+        }
+        AddMessageToFeed(message);
+        for(int i = 0; i < numberOfTargets; i++)
+        {
+            DealDamage(primaryEffectValue, targets[i], true);
+        }
+        break;
     }
     
     (*caster).baseStats.critCounter = (*caster).baseStats.critCounter % CRIT_PROGRESS_MAX;
