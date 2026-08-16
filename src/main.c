@@ -64,20 +64,20 @@ int main()
 	Rectangle destRec = {wMargin, 0, displayWidth, GetScreenHeight()};
 	Vector2 origin = {0.0f, 0.0f};
 
-	titleFont = LoadFontEx("fonts/KAISG.TTF", 120, 0, 0);
+	titleFont = LoadFontEx("assets/fonts/KAISG.TTF", 120, 0, 0);
 	SetTextureFilter(titleFont.texture, 0);
-	basicFont = LoadFontEx("fonts/alagard.ttf", 16, 0, 0);
+	basicFont = LoadFontEx("assets/fonts/alagard.ttf", 16, 0, 0);
 	SetTextureFilter(basicFont.texture, 0);
-	basicFontLarger = LoadFontEx("fonts/alagard.ttf", 32, 0, 0);
+	basicFontLarger = LoadFontEx("assets/fonts/alagard.ttf", 32, 0, 0);
 	SetTextureFilter(basicFontLarger.texture, 0);
 
-	creatureAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/creatures_transparent.png");
-	itemAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/items_transparent.png");
-	generalAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/general_transparent.png");
-	dungeonAtlas = LoadTexture("hexanys_roguelike_tiles/Tilesheets/Transparent/autotile_transparent.png");
-	boneFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/bone_breakers.png");
-	spikeFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/thorny_growth.png");
-	ornateFrame = LoadTexture("hexanys_1bit_ui/Panels/Transparent/polis_sanctuary.png");
+	creatureAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/creatures_transparent.png");
+	itemAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/items_transparent.png");
+	generalAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/general_transparent.png");
+	dungeonAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/autotile_transparent.png");
+	boneFrame = LoadTexture("assets/hexanys_1bit_ui/Panels/Transparent/bone_breakers.png");
+	spikeFrame = LoadTexture("assets/hexanys_1bit_ui/Panels/Transparent/thorny_growth.png");
+	ornateFrame = LoadTexture("assets/hexanys_1bit_ui/Panels/Transparent/polis_sanctuary.png");
 
 	srand(time(NULL));
 	InitEncounterPools();
