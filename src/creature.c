@@ -135,7 +135,7 @@ void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats** targets, sho
         message = CombineStrings((*caster).baseStats.name, " meditates, gaining ");
         message = CombineStrings(message, strnum);
         sprintf(strnum, "%d", (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery));
-        message = CombineStrings(message, " Mastery, for the total of ");
+        message = CombineStrings(message, " Mastery, for a total of ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, ".");
         AddMessageToFeed(message);
