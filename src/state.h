@@ -48,7 +48,7 @@ struct BattleState
 	bool abilityTargetsAllies;
 	bool abilityTargetsEnemies;
 	struct TurnIndicator turnIndicators[6];
-	char* messages[6];
+	char* messages[12];
 	float statePauseTimer;
 	enum BATTLE_STATE battleState;
 };

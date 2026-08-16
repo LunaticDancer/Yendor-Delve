@@ -153,6 +153,8 @@ void DrawBattleAbilitySelection()
 void DrawBattleScreenPartyMember(char index)
 {
     short creatureBoxSize = 128;
+    DrawRectangle(LAYOUT_SPACING + creatureBoxSize * index, SCREEN_HEIGHT - creatureBoxSize + LAYOUT_SPACING,
+        creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING, BLACK);
     DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + creatureBoxSize * index, SCREEN_HEIGHT - creatureBoxSize + LAYOUT_SPACING,
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
             ((appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT 
@@ -253,6 +255,18 @@ void DrawBattleScreenMessageFeed()
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[4]);
     result = CombineStrings(result, "\n");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[5]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[6]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[7]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[8]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[9]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[10]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[11]);
 
     DrawTextBoxed(basicFontLarger, result, (Rectangle){272, 128+LAYOUT_SPACING, 368-LAYOUT_SPACING, 360}, 16, 0, true, LIGHTGRAY);
 }

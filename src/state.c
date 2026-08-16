@@ -58,6 +58,12 @@ void InitGameState(enum GAME_STATE _state)
 		appState.stateData.gameState.stateData.battleState.messages[3] = "";
 		appState.stateData.gameState.stateData.battleState.messages[4] = "";
 		appState.stateData.gameState.stateData.battleState.messages[5] = "";
+		appState.stateData.gameState.stateData.battleState.messages[6] = "";
+		appState.stateData.gameState.stateData.battleState.messages[7] = "";
+		appState.stateData.gameState.stateData.battleState.messages[8] = "";
+		appState.stateData.gameState.stateData.battleState.messages[9] = "";
+		appState.stateData.gameState.stateData.battleState.messages[10] = "";
+		appState.stateData.gameState.stateData.battleState.messages[11] = "";
     }
 	appState.stateData.gameState.gameState = _state;
 }
@@ -94,13 +100,20 @@ void HandleAbilityTargetInit()
 	appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies) ? 4 : 1;
 	if(DoesAbilityHaveFlag(ab, AF_AOE))
 	{
-		if(appState.stateData.gameState.stateData.battleState.abilityTargetsAllies)
+		if (appState.stateData.gameState.stateData.battleState.abilityTargetsAllies && appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
+		{
+			CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
+				(CreatureStats*[6]){&appState.stateData.gameState.playerTeam[0].stats, &appState.stateData.gameState.playerTeam[1].stats, 
+					&appState.stateData.gameState.playerTeam[2].stats,&appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
+					&appState.stateData.gameState.stateData.battleState.enemies[2].stats}, 6);
+		}
+		else if(appState.stateData.gameState.stateData.battleState.abilityTargetsAllies)
 		{
 			CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
 				(CreatureStats*[3]){&appState.stateData.gameState.playerTeam[0].stats, &appState.stateData.gameState.playerTeam[1].stats, 
 					&appState.stateData.gameState.playerTeam[2].stats}, 3);
 		}
-		if(appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
+		else if(appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
 		{
 			CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
 				(CreatureStats*[3]){&appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
@@ -126,6 +139,12 @@ void PassTurn()
 
 void AddMessageToFeed(char* msg)
 {
+		appState.stateData.gameState.stateData.battleState.messages[11] = appState.stateData.gameState.stateData.battleState.messages[10];
+		appState.stateData.gameState.stateData.battleState.messages[10] = appState.stateData.gameState.stateData.battleState.messages[9];
+		appState.stateData.gameState.stateData.battleState.messages[9] = appState.stateData.gameState.stateData.battleState.messages[8];
+		appState.stateData.gameState.stateData.battleState.messages[8] = appState.stateData.gameState.stateData.battleState.messages[7];
+		appState.stateData.gameState.stateData.battleState.messages[7] = appState.stateData.gameState.stateData.battleState.messages[6];
+		appState.stateData.gameState.stateData.battleState.messages[6] = appState.stateData.gameState.stateData.battleState.messages[5];
 		appState.stateData.gameState.stateData.battleState.messages[5] = appState.stateData.gameState.stateData.battleState.messages[4];
 		appState.stateData.gameState.stateData.battleState.messages[4] = appState.stateData.gameState.stateData.battleState.messages[3];
 		appState.stateData.gameState.stateData.battleState.messages[3] = appState.stateData.gameState.stateData.battleState.messages[2];
