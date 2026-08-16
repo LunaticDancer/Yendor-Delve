@@ -180,7 +180,8 @@ short DetermineCurrentActingEntity()
 {
 	char result = 0;
 	short minTicks = appState.stateData.gameState.playerTeam[0].stats.baseStats.ticksUntilNextTurn;
-	appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;
+	appState.stateData.gameState.stateData.battleState.battleState = BS_SHOW_ABILITY_VFX;
+	appState.stateData.gameState.stateData.battleState.statePauseTimer = TURN_ACTION_DURATION;
 
 	// no point in turning something this trivial into a loop
 	if (appState.stateData.gameState.playerTeam[1].stats.baseStats.ticksUntilNextTurn < minTicks)
@@ -195,19 +196,16 @@ short DetermineCurrentActingEntity()
 	}
 	if (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn < minTicks)
 	{
-		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn;
 		result = 3;
 	}
 	if (appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn < minTicks)
 	{
-		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn;
 		result = 4;
 	}
 	if (appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn < minTicks)
 	{
-		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn;
 		result = 5;
 	}
@@ -224,6 +222,43 @@ void ProgressTime(short ticks)
 	appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn -= ticks;
+}
+
+void HandleEnemyTurn()
+{
+	if(appState.appState != AS_GAMEPLAY) return;
+	if(appState.stateData.gameState.gameState != GS_BATTLE) return;
+	if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT) return;
+	if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW) return;
+	if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT) return;
+
+	if(appState.stateData.gameState.stateData.battleState.battleState == BS_SHOW_ABILITY_VFX)
+	{
+		appState.stateData.gameState.stateData.battleState.statePauseTimer -= GetFrameTime();
+		if(appState.stateData.gameState.stateData.battleState.statePauseTimer <= 0)
+		{
+			appState.stateData.gameState.stateData.battleState.battleState = appState.stateData.gameState.stateData.battleState.currentActingEntity < 3 ? 
+				BS_PLAYER_ABILITY_SELECT : BS_ENEMY_TURN;
+		}
+	}
+
+	if(appState.stateData.gameState.stateData.battleState.battleState == BS_ENEMY_TURN)
+	{
+		TakeAutonomousTurn(&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3]);
+	}
+}
+
+void TakeAutonomousTurn(Enemy* actor)
+{
+	switch(actor->enemyId)
+	{
+		default:
+		CastAbility(actor->stats.abilities[0].abilityId, 
+			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, malloc(0), 0);
+		break;
+	}
+	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats);
+	PassTurn();
 }
 
 void PrepareListOfSlotAppropriateItems(EQUIPMENT_SLOT slot)

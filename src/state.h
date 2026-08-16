@@ -96,6 +96,8 @@ void HandleItemEquip();
 short DetermineCurrentActingEntity();
 void PassTurn();
 void ProgressTime(short ticks);
+void HandleEnemyTurn();
+void TakeAutonomousTurn(Enemy* actor);
 void PrepareListOfSlotAppropriateItems(EQUIPMENT_SLOT slot);
 bool CheckIfHeroInParty(CHARACTER_ID);
 void HandleRealTimePopups();

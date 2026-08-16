@@ -90,6 +90,7 @@ int main()
 		HandleRealTimePopups();
 		ReadInput();
 		HandleInput();
+		HandleEnemyTurn();
 
 		HandleDrawing(sourceRec, destRec, origin);
 	}

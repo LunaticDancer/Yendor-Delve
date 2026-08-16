@@ -94,22 +94,19 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         return "Inaction. Let the opportunity pass.";
         break;
         case AB_MONK_MEDITATE:
-        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * 
-            1 +  caster->baseStats.critCounter / CRIT_PROGRESS_MAX);
+        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateCritInfluence(caster));
         result = CombineStrings("Gain 10 + ", strnum);
         result = CombineStrings(result,  " (10% Mastery) mastery.");
         return result;
         break;
         case AB_MONK_TRUE_STRIKE:
-        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * 
-            1 +  caster->baseStats.critCounter / CRIT_PROGRESS_MAX);
+        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateCritInfluence(caster));
         result = CombineStrings("Deal 100 + ", strnum);
         result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?
             " (80% Mastery) unavoidable damage to all enemies." : " (80% Mastery) unavoidable damage to target enemy.");
         return result;
         case AB_MONK_ATTUNEMENT:
-        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9) * 
-            1 +  caster->baseStats.critCounter / CRIT_PROGRESS_MAX);
+        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9) * CalculateCritInfluence(caster));
         result = CombineStrings((caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?  "Shield all allies for 10 + " : " Shield a target ally for 10 + ", strnum);
         result = CombineStrings(result, " (90% Mastery) health points.");
         return result;
