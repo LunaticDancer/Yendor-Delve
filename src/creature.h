@@ -72,7 +72,7 @@ typedef struct CreatureStats
 } CreatureStats;
 
 StatBonuses CreateEmptyStatBonuses();
-void CreateEmptyStatusEffects(int[]);
+void EmptyStatusEffects(CreatureStats*);
 void ResetTurnClock(CreatureStats*);
 short CalculateDamage(short baseDamage, CreatureStats* target);
 void DealDamage(short damage, CreatureStats* target, bool trueDamage);

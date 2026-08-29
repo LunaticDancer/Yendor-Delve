@@ -11,11 +11,11 @@ StatBonuses CreateEmptyStatBonuses()
     };
 }
 
-void CreateEmptyStatusEffects(int statusEffects[])
+void EmptyStatusEffects(CreatureStats* _creature)
 {
     for (int i = 0; i < SE_LENGTH; i++)
     {
-        statusEffects[i] = 0;
+        _creature->statusEffects[i] = 0;
     }
 }
 

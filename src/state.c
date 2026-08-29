@@ -82,6 +82,13 @@ void TransitionToBattle()
 	appState.stateData.gameState.stateData.battleState.enemies[1] = InitEnemyData(encounter.enemies[1]);
 	appState.stateData.gameState.stateData.battleState.enemies[2] = InitEnemyData(encounter.enemies[2]);
 
+	appState.stateData.gameState.playerTeam[0].stats.encounterStats = CreateEmptyStatBonuses();
+	appState.stateData.gameState.playerTeam[1].stats.encounterStats = CreateEmptyStatBonuses();
+	appState.stateData.gameState.playerTeam[2].stats.encounterStats = CreateEmptyStatBonuses();
+	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[0].stats);
+	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[1].stats);
+	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[2].stats);
+
 	ResetTurnClock(&appState.stateData.gameState.playerTeam[0].stats);
 	ResetTurnClock(&appState.stateData.gameState.playerTeam[1].stats);
 	ResetTurnClock(&appState.stateData.gameState.playerTeam[2].stats);
