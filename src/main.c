@@ -327,7 +327,6 @@ void HandleBattleInput()
 		}
 		if(IsPressed(VK_CONFIRM))
 		{
-			appState.stateData.gameState.stateData.battleState.horizontalSelection = 1;
 			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_TARGET_SELECT;
 			HandleAbilityTargetInit();
 		}

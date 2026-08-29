@@ -97,7 +97,9 @@ void HandleAbilityTargetInit()
 	Ability ab = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection];
 	appState.stateData.gameState.stateData.battleState.abilityTargetsAllies = DoesAbilityHaveFlag(ab, AF_TARGETS_ALLIES);
 	appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies = DoesAbilityHaveFlag(ab, AF_TARGETS_ENEMIES);
-	appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies) ? 4 : 1;
+	appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies) ?
+	 ((appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0) ? 4 : (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0) ? 3 : 5) : 
+	 ((appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0)?1:(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0)?0:2);
 	if(DoesAbilityHaveFlag(ab, AF_AOE))
 	{
 		if (appState.stateData.gameState.stateData.battleState.abilityTargetsAllies && appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)

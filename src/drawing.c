@@ -175,7 +175,7 @@ void DrawBattleScreenPartyMember(char index)
             },
             (Vector2){0,0},
             0,
-            appState.stateData.gameState.playerTeam[index].stats.baseStats.color
+            (appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth > 0) ? appState.stateData.gameState.playerTeam[index].stats.baseStats.color : DARKGRAY
         );
     
         //                                                              DEBUG INFO SETUP
@@ -226,7 +226,8 @@ void DrawBattleScreenEnemy(char index)
             },
             (Vector2){0,0},
             0,
-            appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.color
+            (appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth > 0) ? 
+                appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.color : DARKGRAY
         );
     
     if(appState.stateData.gameState.stateData.battleState.enemies[index].enemyId != EN_NONE)
