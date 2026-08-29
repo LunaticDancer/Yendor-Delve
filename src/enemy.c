@@ -17,8 +17,8 @@ Enemy InitEnemyData(ENEMY_ID id)
                     GRAY,
 
                     0,
-                    1000,
-                    1000,
+                    0,
+                    0,
                     1000,
                     1000,
                     100,
@@ -89,8 +89,8 @@ Enemy InitEnemyData(ENEMY_ID id)
                     RED,
 
                     0,
-                    1000,
-                    1000,
+                    150,
+                    150,
                     1000,
                     1000,
                     100,
@@ -125,8 +125,8 @@ Enemy InitEnemyData(ENEMY_ID id)
                     RED,
 
                     0,
-                    1000,
-                    1000,
+                    100,
+                    100,
                     1000,
                     1000,
                     100,

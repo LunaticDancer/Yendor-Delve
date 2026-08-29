@@ -132,6 +132,28 @@ void HandleAbilityTargetInit()
 
 void PassTurn()
 {
+	if(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth <= 0 
+		&& appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth <= 0 
+		&& appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth <= 0)
+	{
+		InitGameState(GS_GAME_OVER);
+		return;
+	}
+	if(appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth <= 0 
+		&& appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth <= 0 
+		&& appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth <= 0)
+	{
+		char* message = malloc(1);
+     	message[0] =  '\0'; 
+		message = CombineStrings("Victory! You've slain your foes and\nobtained ", appState.stateData.gameState.stateData.battleState.reward.name);
+		message = CombineStrings(message, ".");
+		ShowPopupMessage(message);
+		AddItemToInventory(appState.stateData.gameState.stateData.battleState.reward);
+		appState.stateData.gameState.floor++;
+		InitGameState(GS_DUNGEON);
+		return;
+	}
+
 	appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
 	short timeToProgress = DetermineCurrentActingEntity();
 	ProgressTime(timeToProgress);
@@ -203,27 +225,30 @@ short DetermineCurrentActingEntity()
 	appState.stateData.gameState.stateData.battleState.statePauseTimer = TURN_ACTION_DURATION;
 
 	// no point in turning something this trivial into a loop
-	if (appState.stateData.gameState.playerTeam[1].stats.baseStats.ticksUntilNextTurn < minTicks)
+	if (appState.stateData.gameState.playerTeam[1].stats.baseStats.ticksUntilNextTurn < minTicks && appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0)
 	{
 		minTicks = appState.stateData.gameState.playerTeam[1].stats.baseStats.ticksUntilNextTurn;
 		result = 1;
 	}
-	if (appState.stateData.gameState.playerTeam[2].stats.baseStats.ticksUntilNextTurn < minTicks)
+	if (appState.stateData.gameState.playerTeam[2].stats.baseStats.ticksUntilNextTurn < minTicks && appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0)
 	{
 		minTicks = appState.stateData.gameState.playerTeam[2].stats.baseStats.ticksUntilNextTurn;
 		result = 2;
 	}
-	if (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn < minTicks)
+	if (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn < minTicks 
+		&& appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0)
 	{
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn;
 		result = 3;
 	}
-	if (appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn < minTicks)
+	if (appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn < minTicks
+		&& appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0)
 	{
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn;
 		result = 4;
 	}
-	if (appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn < minTicks)
+	if (appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn < minTicks
+		&& appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth > 0)
 	{
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn;
 		result = 5;

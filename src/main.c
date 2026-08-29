@@ -35,6 +35,7 @@ void HandleDrawing(Rectangle, Rectangle, Vector2);
 bool IsPressed(enum CONTROLS);
 void HandleInput();
 void HandleMainMenuInput();
+void HandleGameOverInput();
 void HandleCharacterSelectInput();
 void HandleBattleInput();
 void HandleDungeonInput();
@@ -238,6 +239,14 @@ void HandleMainMenuInput()
 		{
 			InitAppState(AS_GAMEPLAY);
 		}
+	}
+}
+
+void HandleGameOverInput()
+{
+	if(IsPressed(VK_CONFIRM))
+	{
+		InitAppState(AS_MAIN_MENU);
 	}
 }
 
