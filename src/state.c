@@ -88,6 +88,12 @@ void TransitionToBattle()
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[0].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[1].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[2].stats);
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina
+		+ appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina
+		+ appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina
+		+ appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina;
 
 	ResetTurnClock(&appState.stateData.gameState.playerTeam[0].stats);
 	ResetTurnClock(&appState.stateData.gameState.playerTeam[1].stats);
@@ -275,6 +281,28 @@ void ProgressTime(short ticks)
 	appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn -= ticks;
+
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[0].stats.baseStats.staminaRegen
+		+ appState.stateData.gameState.playerTeam[0].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[0].stats.encounterStats.staminaRegen)
+		* ((float)ticks / 1000.0);
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[1].stats.baseStats.staminaRegen
+		+ appState.stateData.gameState.playerTeam[1].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[1].stats.encounterStats.staminaRegen)
+		* ((float)ticks / 1000.0);
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[2].stats.baseStats.staminaRegen
+		+ appState.stateData.gameState.playerTeam[2].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[2].stats.encounterStats.staminaRegen)
+		* ((float)ticks / 1000.0);
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina 
+		> appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina
+		+ appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina
+		+ appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina 
+		> appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina
+		+ appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina
+		+ appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina 
+		> appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina
+		+ appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina
+		+ appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina;
 }
 
 void HandleEnemyTurn()
