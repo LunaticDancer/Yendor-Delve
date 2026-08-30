@@ -186,9 +186,13 @@ void DrawBattleScreenPartyMember(char index)
 
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 441, creatureBoxSize-40, 2, DARKGRAY);
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 440, 
-        (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
-        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health))), 
+        (int)((creatureBoxSize-40) * ClampFloat((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health), 0, 1)), 
         4, RED);
+        DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 440, 
+        (int)((creatureBoxSize-40) * ClampFloat((float)appState.stateData.gameState.playerTeam[index].stats.encounterStats.shield / 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health), 0, 1)), 
+        4,SKYBLUE);
 
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 449, creatureBoxSize-40, 2, DARKGRAY);
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 448, 
@@ -198,9 +202,17 @@ void DrawBattleScreenPartyMember(char index)
 
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 457, creatureBoxSize-40, 2, DARKGRAY);
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 456, 
-        (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.critCounter / 
-        (float)CRIT_PROGRESS_MAX)), 
+        (int)((creatureBoxSize-40) * ClampFloat((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.critCounter / 
+        (float)CRIT_PROGRESS_MAX, 0, 1)), 
         4, YELLOW);
+    DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 456, 
+        (int)((creatureBoxSize-40) * ClampFloat((float)(appState.stateData.gameState.playerTeam[index].stats.baseStats.critCounter-CRIT_PROGRESS_MAX) / 
+        (float)CRIT_PROGRESS_MAX, 0, 1)), 
+        4, ORANGE);
+    DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 456, 
+        (int)((creatureBoxSize-40) * ClampFloat((float)(appState.stateData.gameState.playerTeam[index].stats.baseStats.critCounter - CRIT_PROGRESS_MAX - CRIT_PROGRESS_MAX) / 
+        (float)CRIT_PROGRESS_MAX, 0, 1)), 
+        4, RED);
 }
 
 void DrawBattleScreenEnemy(char index)

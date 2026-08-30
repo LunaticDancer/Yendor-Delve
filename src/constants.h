@@ -62,5 +62,6 @@ enum CONTROLS
 
 // UTILITY FUNCTIONS
 char* CombineStrings(char* str1, char* str2);
+float ClampFloat(float num, float min, float max);
 
 #endif

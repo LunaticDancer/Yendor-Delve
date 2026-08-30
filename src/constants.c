@@ -8,7 +8,7 @@ const int TILE_SIZE = 16;
 const char *GAME_TITLE = "Yendor Delve";
 const int PAUSE_MENU_OPTION_COUNT = 2;
 const char CRIT_PROGRESS_MAX = 100;
-const float TURN_ACTION_DURATION = 0.4;
+const float TURN_ACTION_DURATION = 0.6;
 const float GAME_MESSAGE_DISPLAY_TIME = 1.0;
 const float GAME_MESSAGE_DISPLAY_TIME_PER_CHARACTER = 0.05;
 
@@ -24,4 +24,9 @@ char* CombineStrings(char* str1, char* str2)
         fprintf(stderr,"malloc failed!\n");
         // exit?
     }
+}
+
+float ClampFloat(float d, float min, float max) {
+  const float t = d < min ? min : d;
+  return t > max ? max : t;
 }

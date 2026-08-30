@@ -111,20 +111,20 @@ void HandleAbilityTargetInit()
 	{
 		if (appState.stateData.gameState.stateData.battleState.abilityTargetsAllies && appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
 		{
-			CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
+			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
 				(CreatureStats*[6]){&appState.stateData.gameState.playerTeam[0].stats, &appState.stateData.gameState.playerTeam[1].stats, 
 					&appState.stateData.gameState.playerTeam[2].stats,&appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
 					&appState.stateData.gameState.stateData.battleState.enemies[2].stats}, 6);
 		}
 		else if(appState.stateData.gameState.stateData.battleState.abilityTargetsAllies)
 		{
-			CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
+			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
 				(CreatureStats*[3]){&appState.stateData.gameState.playerTeam[0].stats, &appState.stateData.gameState.playerTeam[1].stats, 
 					&appState.stateData.gameState.playerTeam[2].stats}, 3);
 		}
 		else if(appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
 		{
-			CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
+			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
 				(CreatureStats*[3]){&appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
 				&appState.stateData.gameState.stateData.battleState.enemies[2].stats}, 3);
 		}
@@ -133,7 +133,7 @@ void HandleAbilityTargetInit()
 	}
 	else if(DoesAbilityHaveFlag(ab, AF_TARGETS_SELF))
 	{
-		CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, malloc(0), 0);
+		CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, malloc(0), 0);
 		ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
 		PassTurn();
 	}
@@ -306,7 +306,7 @@ void TakeAutonomousTurn(Enemy* actor)
 	switch(actor->enemyId)
 	{
 		default:
-		CastAbility(actor->stats.abilities[0].abilityId, 
+		CastAbility(actor->stats.abilities[0].abilityId, 0, 
 			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, malloc(0), 0);
 		break;
 	}

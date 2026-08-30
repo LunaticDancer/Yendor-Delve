@@ -94,34 +94,37 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         return "Inaction. Let the opportunity pass.";
         break;
         case AB_MONK_MEDITATE:
-        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateCritInfluence(caster));
-        result = CombineStrings("Gain 10 + ", strnum);
-        result = CombineStrings(result,  " (10% Mastery) mastery.");
+        sprintf(strnum, "%.0f", (10 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster));
+        result = CombineStrings("Gain ", strnum);
+        result = CombineStrings(result,  " (10 + 10% Mastery) mastery.");
         return result;
         break;
         case AB_MONK_TRUE_STRIKE:
-        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateCritInfluence(caster));
-        result = CombineStrings("Deal 100 + ", strnum);
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateCritInfluence(caster));
+        result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?
-            " (80% Mastery) unavoidable damage to all enemies." : " (80% Mastery) unavoidable damage to target enemy.");
+            " (100 + 80% Mastery) unavoidable damage to all enemies." : " (100 + 80% Mastery) unavoidable damage to target enemy.");
         return result;
         case AB_MONK_ATTUNEMENT:
-        sprintf(strnum, "%.0f", ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9) * CalculateCritInfluence(caster));
-        result = CombineStrings((caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?  "Shield all allies for 10 + " : " Shield a target ally for 10 + ", strnum);
-        result = CombineStrings(result, " (90% Mastery) health points.");
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9)) * CalculateCritInfluence(caster));
+        result = CombineStrings((caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?  "Shield all allies for " : " Shield a target ally for ", strnum);
+        result = CombineStrings(result, " (10 + 90% Mastery) health points.");
         return result;
         case AB_MONK_CLEANSE:
         result = (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?
-            "Cleanse all status effects from target team." : "Cleanse all status effects from target creature.";
+            "Cleanse all status effects from all creatures and entities." : "Cleanse all status effects from target creature.";
         return result;
     }
 }
 
-void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats** targets, short numberOfTargets)
+void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** targets, short numberOfTargets)
 {
     char* message;
     char strnum[6];
     short primaryEffectValue;
+    bool isCrit = (*caster).baseStats.critCounter >= CRIT_PROGRESS_MAX;
+
+    caster->baseStats.currentStamina -= cost;
 
     switch(id)
     {
@@ -150,7 +153,6 @@ void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats** targets, sho
         {
             if(i == numberOfTargets - 1)
             {
-                //printf("%d", targets[i]->abilityCount);
                 if(i != 0)
                 {
                     message = CombineStrings(message, " and ");
@@ -172,6 +174,46 @@ void CastAbility(ABILITY id, CreatureStats* caster, CreatureStats** targets, sho
         {
             DealDamage(primaryEffectValue, targets[i], true);
         }
+        break;
+        case AB_MONK_ATTUNEMENT:
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9) * CalculateCritInfluence(caster);
+        for(int i = 0; i < numberOfTargets; i++)
+        {
+            targets[i]->encounterStats.shield += primaryEffectValue;
+        }
+        sprintf(strnum, "%d", primaryEffectValue);
+        if(isCrit)
+        {
+            message = CombineStrings((*caster).baseStats.name, " shields their team for ");
+            message = CombineStrings(message, strnum);
+            message = CombineStrings(message, " hit points.");
+        }
+        else
+        {
+            message = CombineStrings((*caster).baseStats.name, " shields ");
+            message = CombineStrings(message, targets[0]->baseStats.name);
+            message = CombineStrings(message, " for ");
+            message = CombineStrings(message, strnum);
+            message = CombineStrings(message, " hit points.");
+        }
+        AddMessageToFeed(message);
+        break;
+        case AB_MONK_CLEANSE:
+        for(int i = 0; i < numberOfTargets; i++)
+        {
+            EmptyStatusEffects(targets[i]);
+        }
+        if(isCrit)
+        {
+            message = CombineStrings((*caster).baseStats.name, " cleanses all ailments from every creature on the battlefield.");
+        }
+        else
+        {
+            message = CombineStrings((*caster).baseStats.name, " cleanses all ailments from ");
+            message = CombineStrings(message, targets[0]->baseStats.name);
+            message = CombineStrings(message, ".");
+        }
+        AddMessageToFeed(message);
         break;
     }
     

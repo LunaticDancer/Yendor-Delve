@@ -355,13 +355,12 @@ void HandleBattleInput()
 			Ability ab = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection];
 			if(appState.stateData.gameState.stateData.battleState.horizontalSelection < 3)
 			{
-				CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
+				CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
 				(CreatureStats*[1]){&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.horizontalSelection].stats}, 1);
 			}
 			else
 			{
-				printf(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection-3].stats.baseStats.name);
-				CastAbility(ab.abilityId, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
+				CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
 				(CreatureStats*[1]){&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection-3].stats}, 1);
 			}
 			ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
