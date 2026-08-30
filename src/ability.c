@@ -50,6 +50,24 @@ Ability InitAbility(ABILITY id)
             AF_TARGETS_ALLIES + AF_TARGETS_ENEMIES,
         };
         break;
+        case AB_SHAPESHIFTER_SCRATCH:
+        return (Ability)
+        {
+            id,
+            "Scratch",
+            10,
+            AF_TARGETS_ENEMIES,
+        };
+        break;
+        case AB_SHAPESHIFTER_TRANSFORM:
+        return (Ability)
+        {
+            id,
+            "Transform",
+            10,
+            AF_TARGETS_ENEMIES,
+        };
+        break;
     }
 }
 

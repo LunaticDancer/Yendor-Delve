@@ -92,13 +92,11 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
     {
         case AB_WAIT:
         return "Inaction. Let the opportunity pass.";
-        break;
         case AB_MONK_MEDITATE:
         sprintf(strnum, "%.0f", (10 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster));
         result = CombineStrings("Gain ", strnum);
         result = CombineStrings(result,  " (10 + 10% Mastery) mastery.");
         return result;
-        break;
         case AB_MONK_TRUE_STRIKE:
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateCritInfluence(caster));
         result = CombineStrings("Deal ", strnum);
@@ -114,6 +112,13 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         result = (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?
             "Cleanse all status effects from all creatures and entities." : "Cleanse all status effects from target creature.";
         return result;
+        case AB_SHAPESHIFTER_SCRATCH:
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateCritInfluence(caster));
+        result = CombineStrings("Scratch an enemy for ", strnum);
+        result = CombineStrings(result, " (10 + 100% Mastery) damage.");
+        return result;
+        case AB_SHAPESHIFTER_TRANSFORM:
+        return "Become an exact copy of target enemy, retaining your ability to change shapes.";
     }
 }
 
@@ -214,6 +219,34 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
             message = CombineStrings(message, ".");
         }
         AddMessageToFeed(message);
+        break;
+        case AB_SHAPESHIFTER_SCRATCH:
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateCritInfluence(caster);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " scratches ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " for ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        DealDamage(primaryEffectValue, targets[0], false);
+        break;
+        case AB_SHAPESHIFTER_TRANSFORM:
+        message = CombineStrings((*caster).baseStats.name, " becomes ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ".");
+        AddMessageToFeed(message);
+        char abCount = targets[0]->abilityCount + 1;
+        ABILITY* abilities = malloc(abCount * sizeof(int));
+        for(int i= 0; i<targets[0]->abilityCount-1; i++)
+        {
+            abilities[i] = targets[0]->abilities[i].abilityId;
+        }
+        abilities[abCount-2] = AB_SHAPESHIFTER_TRANSFORM;
+        abilities[abCount-1] = AB_WAIT;
+        caster->baseStats = targets[0]->baseStats;
+        caster->abilities = InitAbilities(abilities, abCount);
+        caster->abilityCount = abCount;
         break;
     }
     

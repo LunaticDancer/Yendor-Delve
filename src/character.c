@@ -166,6 +166,46 @@ Character InitCharacterData(CHARACTER_ID id)
             },
         };
         break;
+        case CHAR_SHAPESHIFTER:
+        return (Character){
+            id,
+            "Blessed to share a shape with all of creation. Cursed to lose its sense of self.",
+            (CreatureStats){
+                (CreatureBaseStats){
+                    "Shapeshifter",
+                    TL_CREATURES,
+                    (Vector2){8, 0},
+                    BEIGE,
+
+                    0,
+                    400,
+                    400,
+                    100,
+                    100,
+                    150,
+                    200,
+                    100,
+                    1,
+                    100,
+                    5,
+                    0,
+                    0,
+                    500,
+                },
+                {},
+                CreateEmptyStatBonuses(),
+                CreateEmptyStatBonuses(),
+                InitAbilities((ABILITY[]){AB_SHAPESHIFTER_SCRATCH, AB_SHAPESHIFTER_TRANSFORM, AB_WAIT}, 3),
+                3,
+            },
+            {
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+            },
+        };
+        break;
         case CHAR_FLESH_GOLEM:
         return (Character){
             id,

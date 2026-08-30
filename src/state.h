@@ -51,6 +51,11 @@ struct BattleState
 	char* messages[12];
 	float statePauseTimer;
 	enum BATTLE_STATE battleState;
+
+	// unique effects
+	char opportunitySkillCountdown;
+	float opportunityMult;
+	char fleshGolemSkillMask;
 };
 
 union GameStateData
