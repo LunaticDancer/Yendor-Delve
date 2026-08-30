@@ -119,6 +119,8 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         return result;
         case AB_SHAPESHIFTER_TRANSFORM:
         return "Become an exact copy of target enemy, retaining your ability to change shapes.";
+        default:
+        return "Ability description missing, oopsie!";
     }
 }
 
@@ -247,6 +249,10 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         caster->baseStats = targets[0]->baseStats;
         caster->abilities = InitAbilities(abilities, abCount);
         caster->abilityCount = abCount;
+        break;
+        default:
+        message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
+        AddMessageToFeed(message);
         break;
     }
     

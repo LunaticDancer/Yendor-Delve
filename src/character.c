@@ -9,7 +9,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_BERSERKER:
         return (Character){
             id,
-            "As reckless as he is effective, the Berserker dominates his opponents through sheer force and rage, endangering himself beyond reason just to chase the thrill of murder.",
+            "As reckless as he is effective, the Berserker dominates his opponents through sheer force and rage, endangering himself beyond reason just to chase the thrill of murder.\nThe Berserker is all about calculated risks, enraging himself which amplifies both outgoing and incoming damage. His brute strength is capable of incapacitating his enemies or killing them outright, but is held back by his lack of speed.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Berserker",
@@ -35,8 +35,8 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                InitAbilities((ABILITY[]){AB_WAIT}, 1),
-                1,
+                InitAbilities((ABILITY[]){AB_BERSERKER_SWING,AB_BERSERKER_BASH,AB_BERSERKER_BASH,AB_BERSERKER_BATTLECRY,AB_BERSERKER_BRACE,AB_WAIT}, 5),
+                5,
             },
             {
                 InitItem(ITEM_NONE),
@@ -49,7 +49,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_ASSASSIN:
         return (Character){
             id,
-            "Mysterious and elusive, the Assassin is a frail but tactical fighter, waiting for the right opportunity to deal a decisive strike.",
+            "Mysterious and elusive, the Assassin is a frail but tactical fighter, waiting for the right opportunity to deal a decisive strike.\nThe Assassin is a tricky character, specializing in stealth, capitalizing on critical opportunities and bleeding the opponent to death.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Assassin",
@@ -75,8 +75,8 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                InitAbilities((ABILITY[]){AB_WAIT}, 1),
-                1,
+                InitAbilities((ABILITY[]){AB_ASSASSIN_SLASH, AB_ASSASSIN_PREPARE, AB_ASSASSIN_CONCEAL, AB_ASSASSIN_REND,AB_WAIT}, 5),
+                5,
             },
             {
                 InitItem(ITEM_NONE),
@@ -89,7 +89,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_DUELIST:
         return (Character){
             id,
-            "Speed and precission is what the Duelist is known for. This highly trained fighter becomes more deadly the longer the fight lasts.",
+            "Speed and precission is what the Duelist is known for. This highly trained fighter becomes more deadly the longer the fight lasts.\nThe Duelist focuses on abilities bolstering her own speed, letting her take more turns between enemy actions.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Duelist",
@@ -115,8 +115,8 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                InitAbilities((ABILITY[]){AB_WAIT}, 1),
-                1,
+                InitAbilities((ABILITY[]){AB_DUELIST_LUNGE,AB_DUELIST_OPPORTUNITY, AB_DUELIST_PARRY, AB_DUELIST_BREATH,AB_WAIT}, 5),
+                5,
             },
             {
                 InitItem(ITEM_NONE),
@@ -129,7 +129,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_MONK:
         return (Character){
             id,
-            "The Monk is a practitioner of wisdom and restraint. Less is more.",
+            "The Monk is a practitioner of wisdom and restraint. Less is more.\nThis higly strategic character boasts very expensive but also extremely potent abilities, which also become area effects upon critical activation.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Monk",
@@ -169,7 +169,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_SHAPESHIFTER:
         return (Character){
             id,
-            "Blessed to share a shape with all of creation. Cursed to lose its sense of self.",
+            "Blessed to share a shape with all of creation. Cursed to lose its sense of self.\nThis character can freely transform into enemies, giving you access to their unique abilities.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Shapeshifter",
@@ -187,7 +187,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     100,
                     1,
                     100,
-                    5,
+                    15,
                     0,
                     0,
                     500,
@@ -209,7 +209,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_FLESH_GOLEM:
         return (Character){
             id,
-            "A newly born abominaton, an unlikely aliance. The Flesh Golem is weak, but it absorbs every creature it kills, growing with limitless potential.",
+            "A newly born abominaton, an unlikely aliance. The Flesh Golem is weak, but inaction allows it to grow with limitless potential.\nIt gains permanent health upgrades for each unique skill not used during combat.",
             (CreatureStats){
                 (CreatureBaseStats){
                     "Flesh Golem",
@@ -235,8 +235,8 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                InitAbilities((ABILITY[]){AB_WAIT}, 1),
-                1,
+                InitAbilities((ABILITY[]){AB_FOLEM_STRIKE,AB_FOLEM_EXPUNGE, AB_FOLEM_EPIDERMIZE,AB_FOLEM_CRIPPLE,AB_WAIT}, 5),
+                5,
             },
             {
                 InitItem(ITEM_NONE),
