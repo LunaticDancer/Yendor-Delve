@@ -35,7 +35,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 {},
                 CreateEmptyStatBonuses(),
                 CreateEmptyStatBonuses(),
-                InitAbilities((ABILITY[]){AB_BERSERKER_SWING,AB_BERSERKER_BASH,AB_BERSERKER_BASH,AB_BERSERKER_BATTLECRY,AB_BERSERKER_BRACE,AB_WAIT}, 5),
+                InitAbilities((ABILITY[]){AB_BERSERKER_SWING,AB_BERSERKER_BASH,AB_BERSERKER_BATTLECRY,AB_BERSERKER_BRACE,AB_WAIT}, 5),
                 5,
             },
             {

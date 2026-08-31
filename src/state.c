@@ -15,10 +15,10 @@ void InitAppState(enum APP_STATE _state)
 			appState.stateData.mainMenuState.currentSelection = MS_PLAY;
 			break;
 		case AS_GAMEPLAY:
-			appState.stateData.gameState.teamCompMask = 14;
+			appState.stateData.gameState.teamCompMask = 56;
 			appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_MONK);
-			appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_ASSASSIN);
-			appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_DUELIST);
+			appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_SHAPESHIFTER);
+			appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_FLESH_GOLEM);
 			appState.stateData.gameState.floor = 1;
 			appState.stateData.gameState.isPaused = 0;
             InitGameState(GS_CHARACTER_SELECT);

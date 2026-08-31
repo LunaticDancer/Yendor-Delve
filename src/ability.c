@@ -141,6 +141,38 @@ Ability InitAbility(ABILITY id)
             600,
             AF_TARGETS_ALLIES + AF_TARGETS_ENEMIES,
         };
+        case AB_FOLEM_STRIKE:
+        return (Ability)
+        {
+            id,
+            "Slam",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_FOLEM_EXPUNGE:
+        return (Ability)
+        {
+            id,
+            "Expunge",
+            0,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_FOLEM_EPIDERMIZE:
+        return (Ability)
+        {
+            id,
+            "Epidermize",
+            200,
+            AF_TARGETS_SELF,
+        };
+        case AB_FOLEM_CRIPPLE:
+        return (Ability)
+        {
+            id,
+            "Cripple",
+            300,
+            AF_TARGETS_ENEMIES,
+        };
         case AB_SHAPESHIFTER_SCRATCH:
         return (Ability)
         {
