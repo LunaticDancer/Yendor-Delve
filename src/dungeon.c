@@ -2,9 +2,6 @@
 #include "enemy.h"
 #include "dungeon.h"
 
-#define ARR_SIZE(arr) ( sizeof((arr)) / sizeof((arr[0])) )
-
-
 ENCOUNTER_ID encounterPoolTier1[8];
 ENCOUNTER_ID encounterPoolTier2[4];
 ENCOUNTER_ID encounterPoolTier3[4];
@@ -55,9 +52,9 @@ void InitEncounterPools()
     encounterPoolTier1[1] = ENC_MIMIC;
     encounterPoolTier1[2] = ENC_CHEST;
     encounterPoolTier1[3] = ENC_NONE;
-    encounterPoolTier1[4] = ENC_BLOOD_FAERIES;
-    encounterPoolTier1[5] = ENC_BLOOD_FAERIES;
-    encounterPoolTier1[6] = ENC_BLOOD_FAERIES;
+    encounterPoolTier1[4] = ENC_CAUSTIC_CUBE;
+    encounterPoolTier1[5] = ENC_TOOTH_FAERIES;
+    encounterPoolTier1[6] = ENC_GHOSTS_EASY;
     encounterPoolTier1[7] = ENC_BLOOD_FAERIES;
 }
 
@@ -135,6 +132,42 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 RED,
                 "A group of quick and tiny pests. While their scratches are barely enough to draw blood, the tiny wounds add up.",
                 {EN_BLOOD_FAE_WARRIOR, EN_BLOOD_FAE_MYSTIC, EN_BLOOD_FAE_WARRIOR},
+                false,
+            };
+        case ENC_CAUSTIC_CUBE:
+            return (Encounter)
+            {
+                id,
+                "Caustic Cube",
+                TL_CREATURES,
+                (Vector2){6, 14},
+                GREEN,
+                "A large and durable monster, capable of splitting into lesser copies of itself and dulling your weapons with its acid.",
+                {EN_NONE, EN_NONE, EN_NONE},
+                false,
+            };
+        case ENC_TOOTH_FAERIES:
+            return (Encounter)
+            {
+                id,
+                "Tooth Fae",
+                TL_CREATURES,
+                (Vector2){12, 3},
+                RAYWHITE,
+                "Where are they getting all these teeth from, and what do they plan to do with them?",
+                {EN_BLOOD_FAE_WARRIOR, EN_BLOOD_FAE_MYSTIC, EN_BLOOD_FAE_WARRIOR},
+                false,
+            };
+        case ENC_GHOSTS_EASY:
+            return (Encounter)
+            {
+                id,
+                "Revenant Souls",
+                TL_CREATURES,
+                (Vector2){4,6},
+                SKYBLUE,
+                "Sorrowful dead, intangible and cold. Stay too long in their presence and you'll become motionless as well.",
+                {EN_NONE, EN_NONE, EN_NONE},
                 false,
             };
         default:

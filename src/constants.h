@@ -1,6 +1,8 @@
 #ifndef constants
 #define constants
 
+#define ARR_SIZE(arr) ( sizeof((arr)) / sizeof((arr[0])) )
+
 #define ITEM_SLOTS 4
 #define INVENTORY_SIZE 32
 extern const int SCREEN_WIDTH;
