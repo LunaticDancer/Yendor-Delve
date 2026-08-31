@@ -336,6 +336,17 @@ void TakeAutonomousTurn(Enemy* actor)
 {
 	switch(actor->enemyId)
 	{
+		case EN_BLOOD_FAE_MYSTIC:
+		CastAbility(actor->stats.abilities[0].abilityId, 0, 
+			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, 
+			(CreatureStats*[3]){&appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
+				&appState.stateData.gameState.stateData.battleState.enemies[2].stats}, 3);
+		break;
+		case EN_BLOOD_FAE_WARRIOR:
+		CastAbility(actor->stats.abilities[0].abilityId, 0, 
+			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, 
+			(CreatureStats*[1]){&appState.stateData.gameState.playerTeam[rand()%3].stats}, 1);
+		break;
 		default:
 		CastAbility(actor->stats.abilities[0].abilityId, 0, 
 			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, malloc(0), 0);

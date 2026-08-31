@@ -225,6 +225,13 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         return result;
         case AB_SHAPESHIFTER_TRANSFORM:
         return "Become an exact copy of target enemy, retaining your ability to change shapes.";
+        case AB_BLOFAEWAR_CUT:
+        sprintf(strnum, "%.0f", ((1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster));
+        result = CombineStrings("Attack an enemy for ", strnum);
+        result = CombineStrings(result, " (1 + 10% Mastery) damage, then apply the unmitigated damage as Bleed points.");
+        return result;
+        case AB_BLOFAEMYS_INSPIRE:
+        return "Give 10 Mastery to every ally.";
         default:
         return "Ability description missing, oopsie!";
     }
@@ -410,6 +417,24 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         caster->abilities = InitAbilities(abilities, abCount);
         caster->abilityCount = abCount;
         break;
+        case AB_BLOFAEWAR_CUT:
+        primaryEffectValue = CalculateDamage( ((1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster), targets[0]);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " cuts ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", applying ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Bleed.");
+        AddMessageToFeed(message);
+        targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
+        case AB_BLOFAEMYS_INSPIRE:
+        for(int i = 0; i < numberOfTargets; i++)
+        {
+            targets[i]->encounterStats.mastery += 10;
+        }
+        message = CombineStrings((*caster).baseStats.name, " sings an ancient fae hymn, increasing Mastery by 10 for each team member.");
+        AddMessageToFeed(message);
+        return;
         default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
         AddMessageToFeed(message);

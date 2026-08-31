@@ -189,6 +189,22 @@ Ability InitAbility(ABILITY id)
             10,
             AF_TARGETS_ENEMIES,
         };
+        case AB_BLOFAEWAR_CUT:
+        return (Ability)
+        {
+            id,
+            "Cut",
+            40,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_BLOFAEMYS_INSPIRE:
+        return (Ability)
+        {
+            id,
+            "Inspire",
+            10,
+            AF_TARGETS_ALLIES + AF_AOE,
+        };
     }
 }
 
