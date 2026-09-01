@@ -332,6 +332,7 @@ char* GetCharacterStatsRundown(Character ch)
      result = CombineStrings(result, "\nCrit Bonus: ");
      sprintf(str_num, "%.0f", ch.stats.baseStats.critMultiplier + ch.stats.itemStats.critMultiplier);
     result = CombineStrings(result, str_num);
+     result = CombineStrings(result, "%");
 
      result = CombineStrings(result, "\nMastery: ");
      sprintf(str_num, "%d", ch.stats.baseStats.mastery + ch.stats.itemStats.mastery);

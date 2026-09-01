@@ -434,15 +434,15 @@ void HandleDungeonInput()
 	{
 		appState.stateData.gameState.stateData.dungeonState.selectionX = 
 			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ?
-			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 2) % 3 :
-			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 5) % 6;
+			(appState.stateData.gameState.stateData.dungeonState.selectionX + 2) % 3 :
+			(appState.stateData.gameState.stateData.dungeonState.selectionX + 5) % 6;
 	}
 	if(IsPressed(VK_RIGHT))
 	{
 		appState.stateData.gameState.stateData.dungeonState.selectionX = 
 			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ?
-			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 1) % 3 :
-			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 1) % 6;
+			(appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 3 :
+			(appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 6;
 	}
 	if(IsPressed(VK_DOWN) || IsPressed(VK_UP))
 	{
@@ -558,6 +558,20 @@ void HandleEquipmentInput()
 		return;
 	}
 
+	if(IsPressed(VK_LEFT))
+	{
+		appState.stateData.gameState.stateData.dungeonState.selectionX = 
+			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ?
+			(appState.stateData.gameState.stateData.dungeonState.selectionX + 2) % 3 :
+			(appState.stateData.gameState.stateData.dungeonState.selectionX + 5) % 6;
+	}
+	if(IsPressed(VK_RIGHT))
+	{
+		appState.stateData.gameState.stateData.dungeonState.selectionX = 
+			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ?
+			(appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 3 :
+			(appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 6;
+	}
 	if(IsPressed(VK_UP))
 	{
 		appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot =

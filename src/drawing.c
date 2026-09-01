@@ -442,7 +442,7 @@ void DrawEquipmentPanel()
 {
     DrawRectangle(LAYOUT_SPACING + 5, 48 + LAYOUT_SPACING,
         (630) - 2 * LAYOUT_SPACING, (312) - 2 * LAYOUT_SPACING, BLACK);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + 5, 48 + LAYOUT_SPACING, 224, 256}, (Vector2){0,0}, 0,
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + 5, 48 + LAYOUT_SPACING, 256, 256}, (Vector2){0,0}, 0,
     appState.stateData.gameState.stateData.dungeonState.isSelectingItem ? GRAY : WHITE);
 
     Vector2 textSize = MeasureTextEx(basicFont, "Equipment", 16, 0);
