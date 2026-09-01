@@ -52,11 +52,21 @@ void DealDamage(short damage, CreatureStats* target, bool trueDamage)
 {
     if(trueDamage)
     {
-        (*target).baseStats.currentHealth -= damage;
+        (*target).encounterStats.shield -= damage;
+        if((*target).encounterStats.shield < 0)
+        {
+            (*target).baseStats.currentHealth += (*target).encounterStats.shield;
+            (*target).encounterStats.shield = 0;
+        }
     }
     else
     {
-        (*target).baseStats.currentHealth -= CalculateDamage(damage, target);
+        (*target).encounterStats.shield -= CalculateDamage(damage, target);
+        if((*target).encounterStats.shield < 0)
+        {
+            (*target).baseStats.currentHealth += (*target).encounterStats.shield;
+            (*target).encounterStats.shield = 0;
+        }
     }
 
     if((*target).baseStats.currentHealth <= 0)
