@@ -100,6 +100,7 @@ void AddItemToInventory(Item);
 void HandleItemEquip();
 short DetermineCurrentActingEntity();
 void PassTurn();
+void HandleStartOfTurnProcs();
 void ProgressTime(short ticks);
 void HandleEnemyTurn();
 void TakeAutonomousTurn(Enemy* actor);

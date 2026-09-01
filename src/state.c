@@ -174,7 +174,34 @@ void PassTurn()
 
 	appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
 	short timeToProgress = DetermineCurrentActingEntity();
+	HandleStartOfTurnProcs();
 	ProgressTime(timeToProgress);
+}
+
+void HandleStartOfTurnProcs()
+{
+	CreatureStats* _creature;
+    char* message;
+    char strnum[6];
+
+	if (appState.stateData.gameState.stateData.battleState.currentActingEntity < 3)
+	{
+		_creature = &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats;
+	}
+	else
+	{
+		_creature = &appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats;
+	}
+
+	if(_creature->statusEffects[SE_BLEED] > 0)
+	{
+		sprintf(strnum, "%d", _creature->statusEffects[SE_BLEED]);
+        message = CombineStrings((*_creature).baseStats.name, " bleeds for ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+		AddMessageToFeed(message);
+		DealDamage(_creature->statusEffects[SE_BLEED], _creature, true);
+	}
 }
 
 void AddMessageToFeed(char* msg)

@@ -449,7 +449,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
     (*caster).baseStats.critCounter += (*caster).baseStats.critRate + (*caster).itemStats.critRate + (*caster).encounterStats.critRate;
 
     // Monk's quirk
-    if(caster->baseStats.name = "Monk")
+    if(caster->baseStats.name == "Monk")
     {
         if((*caster).baseStats.critCounter >= CRIT_PROGRESS_MAX)
         {
