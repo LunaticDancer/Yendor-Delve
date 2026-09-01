@@ -489,6 +489,32 @@ void HandleEncounterSelection()
 		InitGameState(GS_DUNGEON);
 		break;
 
+		case ENC_BONFIRE:
+		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth 
+			+ appState.stateData.gameState.playerTeam[0].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth 
+			+ appState.stateData.gameState.playerTeam[1].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth 
+			+ appState.stateData.gameState.playerTeam[2].stats.itemStats.health) * 0.3;
+
+			appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 
+				(appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) ? 
+				(appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) :
+				appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth;
+			appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 
+				(appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) ? 
+				(appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) :
+				appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth;
+			appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 
+				(appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) ? 
+				(appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) :
+				appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth;
+		
+		ShowPopupMessage("The party has rested at the safe place,\nregaining much of its strength.");
+		appState.stateData.gameState.floor++;
+		InitGameState(GS_DUNGEON);
+		break;
+
 		case ENC_CHEST:
 		Item reward = appState.stateData.gameState.stateData.dungeonState.rewards[
 			appState.stateData.gameState.stateData.dungeonState.selectionX / 2];

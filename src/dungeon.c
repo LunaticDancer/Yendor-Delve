@@ -19,6 +19,10 @@ ENCOUNTER_ID* SelectRandomEncounters(char floor)
     {
         result[i] = encounterPoolTier1[rand() % ARR_SIZE(encounterPoolTier1)];
     }
+    if(floor % 8 == 5)
+    {
+        result[1] = ENC_BONFIRE;
+    }
 
     return result;
 }
