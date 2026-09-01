@@ -419,6 +419,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         break;
         case AB_BLOFAEWAR_CUT:
         primaryEffectValue = CalculateDamage( ((1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster), targets[0]);
+        primaryEffectValue = primaryEffectValue < 0 ? 0 : primaryEffectValue;
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " cuts ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -427,6 +428,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, " Bleed.");
         AddMessageToFeed(message);
         targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
+        break;
         case AB_BLOFAEMYS_INSPIRE:
         for(int i = 0; i < numberOfTargets; i++)
         {
@@ -434,7 +436,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         }
         message = CombineStrings((*caster).baseStats.name, " sings an ancient fae hymn, increasing Mastery by 10 for each team member.");
         AddMessageToFeed(message);
-        return;
+        break;
         default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
         AddMessageToFeed(message);
