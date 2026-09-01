@@ -447,4 +447,27 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         (*caster).baseStats.critCounter = (*caster).baseStats.critCounter % CRIT_PROGRESS_MAX;
     }
     (*caster).baseStats.critCounter += (*caster).baseStats.critRate + (*caster).itemStats.critRate + (*caster).encounterStats.critRate;
+
+    // Monk's quirk
+    if(caster->baseStats.name = "Monk")
+    {
+        if((*caster).baseStats.critCounter >= CRIT_PROGRESS_MAX)
+        {
+            if(!DoesAbilityHaveFlag(caster->abilities[1], AF_AOE))
+            {
+                caster->abilities[1].abilityFlags += AF_AOE;
+                caster->abilities[2].abilityFlags += AF_AOE;
+                caster->abilities[3].abilityFlags += AF_AOE;
+            }
+        }
+        else
+        {
+            if(DoesAbilityHaveFlag(caster->abilities[1], AF_AOE))
+            {
+                caster->abilities[1].abilityFlags -= AF_AOE;
+                caster->abilities[2].abilityFlags -= AF_AOE;
+                caster->abilities[3].abilityFlags -= AF_AOE;
+            }
+        }
+    }
 }
