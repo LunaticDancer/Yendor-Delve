@@ -168,6 +168,7 @@ void PassTurn()
 		ShowPopupMessage(message);
 		AddItemToInventory(appState.stateData.gameState.stateData.battleState.reward);
 		appState.stateData.gameState.floor++;
+		HandleFleshGolemUpgrade();
 		InitGameState(GS_DUNGEON);
 		return;
 	}
@@ -176,6 +177,46 @@ void PassTurn()
 	short timeToProgress = DetermineCurrentActingEntity();
 	HandleStartOfTurnProcs();
 	ProgressTime(timeToProgress);
+}
+
+void HandleFleshGolemUpgrade()
+{
+	short hpGain = 0;
+	char skills = 0;
+	for(int i = 0; i < 4; i++)
+	{
+		if(appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << i))
+		{
+			skills++;
+		}
+	}
+	switch(skills)
+	{
+		case 0:
+		hpGain = 150;
+		break;
+		case 1:
+		hpGain = 100;
+		break;
+		case 2:
+		hpGain = 50;
+		break;
+		case 3:
+		hpGain = 25;
+		break;
+		case 4:
+		hpGain = 0;
+		break;
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		if(appState.stateData.gameState.playerTeam[i].characterId == CHAR_FLESH_GOLEM)
+		{
+			appState.stateData.gameState.playerTeam[i].stats.baseStats.currentHealth += hpGain;
+			appState.stateData.gameState.playerTeam[i].stats.baseStats.maxHealth += hpGain;
+		}
+	}
 }
 
 void HandleStartOfTurnProcs()

@@ -4,6 +4,8 @@
 #include "creature.h"
 #include "state.h"
 
+extern struct AppState appState;
+
 StatBonuses CreateEmptyStatBonuses()
 {
     return (StatBonuses)
@@ -348,6 +350,10 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         break;
         case AB_FOLEM_STRIKE:
+        if(appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 0) == false)
+        {
+            appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 1;
+        }
         primaryEffectValue = ((10 + (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1 
             + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * CalculateCritInfluence(caster);
         sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
@@ -360,6 +366,10 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         DealDamage(primaryEffectValue, targets[0], false);
         break;
         case AB_FOLEM_EXPUNGE:
+        if(appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 1) == false)
+        {
+            appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 2;
+        }
         primaryEffectValue = (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.5)) * CalculateCritInfluence(caster);
         sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
         short folemExpungeValue = (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1)) * CalculateCritInfluence(caster);
@@ -376,6 +386,10 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         DealDamage(folemExpungeValue, caster, false);
         break;
         case AB_FOLEM_EPIDERMIZE:
+        if(appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 2) == false)
+        {
+            appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 4;
+        }
         primaryEffectValue = ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9)) * CalculateCritInfluence(caster);
         sprintf(strnum, "%d", primaryEffectValue);
         short folemEpidermizeShield = (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1)) * CalculateCritInfluence(caster);
@@ -390,6 +404,10 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         caster->encounterStats.shield += folemEpidermizeShield;
         break;
         case AB_FOLEM_CRIPPLE:
+        if(appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 3) == false)
+        {
+            appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 8;
+        }
         primaryEffectValue = (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health - caster->baseStats.currentHealth) * 0.1)) * CalculateCritInfluence(caster);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " mauls ");
