@@ -30,6 +30,7 @@ NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATC
 void DrawBattleAbilitySelection();
 void DrawBattleScreenPartyMember(char);
 void DrawBattleScreenEnemy(char);
+void DrawStatusEffects(Vector2 position, CreatureStats* creature);
 void DrawBattleScreenMessageFeed();
 void DrawPauseMenu();
 void DrawCharacterStats();
@@ -213,6 +214,8 @@ void DrawBattleScreenPartyMember(char index)
         (int)((creatureBoxSize-40) * ClampFloat((float)(appState.stateData.gameState.playerTeam[index].stats.baseStats.critCounter - CRIT_PROGRESS_MAX - CRIT_PROGRESS_MAX) / 
         (float)CRIT_PROGRESS_MAX, 0, 1)), 
         4, RED);
+    
+    DrawStatusEffects((Vector2){LAYOUT_SPACING + creatureBoxSize * index + 16, SCREEN_HEIGHT - creatureBoxSize + LAYOUT_SPACING + 16}, &appState.stateData.gameState.playerTeam[index].stats);
 }
 
 void DrawBattleScreenEnemy(char index)
@@ -253,6 +256,72 @@ void DrawBattleScreenEnemy(char index)
     sprintf(strnum, "%d", appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth);
     Vector2 str_size = MeasureTextEx(basicFontLarger, strnum, 16,0);
     DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2, 103-str_size.y/2}, 16,0,WHITE);
+    }
+    DrawStatusEffects((Vector2){SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1) + 16, LAYOUT_SPACING + 16}, &appState.stateData.gameState.stateData.battleState.enemies[index].stats);
+}
+
+void DrawStatusEffects(Vector2 position, CreatureStats* _creature)
+{
+    char strnum[6];
+    int hOffset = 0;
+    for(int i = 0; i < SE_LENGTH; i++)
+    {
+        if (_creature->statusEffects[i] == 0) continue;
+
+        sprintf(strnum, "%d", _creature->statusEffects[i]);
+        DrawTextEx(basicFontLarger, strnum, (Vector2){position.x+20, position.y+hOffset}, 16,0, WHITE);
+        switch(i)
+        {
+            case SE_BERSERK:
+            DrawTexturePro(
+                GetTileset(TL_CREATURES),
+                (Rectangle){
+                    13 * TILE_SIZE,
+                    6 * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Rectangle){position.x, position.y+hOffset, TILE_SIZE, TILE_SIZE, },
+                (Vector2){0,0}, 0, MAROON
+            );
+            break;
+            case SE_BLEED:
+            DrawTexturePro(
+                GetTileset(TL_ITEMS),
+                (Rectangle){
+                    3 * TILE_SIZE,
+                    3 * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Rectangle){position.x, position.y+hOffset, TILE_SIZE, TILE_SIZE, },
+                (Vector2){0,0}, 0, RED
+            );
+            break;
+            case SE_EXHAUSTION:
+            DrawTexturePro(
+                GetTileset(TL_ITEMS),
+                (Rectangle){
+                    20 * TILE_SIZE,
+                    3 * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Rectangle){position.x, position.y+hOffset, TILE_SIZE, TILE_SIZE, },
+                (Vector2){0,0}, 0, GRAY
+            );
+            break;
+            case SE_UNTARGETTABLE:
+            DrawTexturePro(
+                GetTileset(TL_CREATURES),
+                (Rectangle){
+                    4 * TILE_SIZE,
+                    6 * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Rectangle){position.x, position.y+hOffset, TILE_SIZE, TILE_SIZE, },
+                (Vector2){0,0}, 0, DARKGRAY
+            );
+            break;
+        }
+        hOffset += 18;
     }
 }
 
