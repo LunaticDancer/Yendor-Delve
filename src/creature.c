@@ -350,7 +350,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         break;
         case AB_FOLEM_STRIKE:
-        if(appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 0) == false)
+        if((appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 0)) == false)
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 1;
         }
@@ -366,7 +366,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         DealDamage(primaryEffectValue, targets[0], false);
         break;
         case AB_FOLEM_EXPUNGE:
-        if(appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 1) == false)
+        if((appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 1)) == false)
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 2;
         }
@@ -386,7 +386,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         DealDamage(folemExpungeValue, caster, false);
         break;
         case AB_FOLEM_EPIDERMIZE:
-        if(appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 2) == false)
+        if((appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 2)) == false)
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 4;
         }
@@ -404,7 +404,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         caster->encounterStats.shield += folemEpidermizeShield;
         break;
         case AB_FOLEM_CRIPPLE:
-        if(appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 3) == false)
+        if((appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 3)) == false)
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 8;
         }
