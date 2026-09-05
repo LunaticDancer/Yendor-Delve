@@ -312,6 +312,10 @@ char* GetCharacterStatsRundown(Character ch)
      sprintf(str_num, "%d", ch.stats.baseStats.maxStamina + ch.stats.itemStats.stamina);
     result = CombineStrings(result, str_num);
 
+     result = CombineStrings(result, "\nStamina regeneration: ");
+     sprintf(str_num, "%d", ch.stats.baseStats.staminaRegen + ch.stats.itemStats.staminaRegen);
+    result = CombineStrings(result, str_num);
+
      result = CombineStrings(result, "\nSpeed: ");
      sprintf(str_num, "%d", ch.stats.baseStats.speed + ch.stats.itemStats.speed);
     result = CombineStrings(result, str_num);
