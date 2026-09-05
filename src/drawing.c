@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "raylib.h"
 #include "constants.h"
 #include "state.h"
@@ -162,6 +163,10 @@ void DrawBattleScreenPartyMember(char index)
                 && appState.stateData.gameState.stateData.battleState.horizontalSelection == index)) ? RED : 
                 (appState.stateData.gameState.stateData.battleState.currentActingEntity == index) ? WHITE : DARKGRAY);
 
+    if(!(appState.stateData.gameState.stateData.battleState.battleState == BS_SHOW_ABILITY_VFX 
+        && (appState.stateData.gameState.stateData.battleState.flickeringMask & (1<<index)) 
+        && ((fmodf(appState.stateData.gameState.stateData.battleState.statePauseTimer, CHARACTER_BLINK_INTERVAL)) < (CHARACTER_BLINK_INTERVAL/2))))
+    {
     DrawTexturePro(
             GetTileset(appState.stateData.gameState.playerTeam[index].stats.baseStats.tileset),
             (Rectangle){
@@ -178,6 +183,7 @@ void DrawBattleScreenPartyMember(char index)
             0,
             (appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth > 0) ? appState.stateData.gameState.playerTeam[index].stats.baseStats.color : DARKGRAY
         );
+    }
     
         //                                                              DEBUG INFO SETUP
         // char str_num[6];
@@ -227,6 +233,10 @@ void DrawBattleScreenEnemy(char index)
             ((appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT 
                 && appState.stateData.gameState.stateData.battleState.horizontalSelection == index+3)) ? RED : DARKGRAY);
 
+        if(!(appState.stateData.gameState.stateData.battleState.battleState == BS_SHOW_ABILITY_VFX 
+        && (appState.stateData.gameState.stateData.battleState.flickeringMask & (1<<(index+3))) 
+        && ((fmodf(appState.stateData.gameState.stateData.battleState.statePauseTimer, CHARACTER_BLINK_INTERVAL)) < (CHARACTER_BLINK_INTERVAL/2))))
+        {
     DrawTexturePro(
             GetTileset(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset),
             (Rectangle){
@@ -244,6 +254,7 @@ void DrawBattleScreenEnemy(char index)
             (appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth > 0) ? 
                 appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.color : DARKGRAY
         );
+    }
     
     if(appState.stateData.gameState.stateData.battleState.enemies[index].enemyId != EN_NONE)
     {

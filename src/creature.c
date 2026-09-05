@@ -306,6 +306,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         for(int i = 0; i < numberOfTargets; i++)
         {
+            AddCreatureToFlicker(targets[i]);
             DealDamage(primaryEffectValue, targets[i], true);
         }
         break;
@@ -314,6 +315,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         for(int i = 0; i < numberOfTargets; i++)
         {
             targets[i]->encounterStats.shield += primaryEffectValue;
+            AddCreatureToFlicker(targets[i]);
         }
         sprintf(strnum, "%d", primaryEffectValue);
         if(isCrit)
@@ -335,6 +337,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         case AB_MONK_CLEANSE:
         for(int i = 0; i < numberOfTargets; i++)
         {
+            AddCreatureToFlicker(targets[i]);
             EmptyStatusEffects(targets[i]);
         }
         if(isCrit)
@@ -362,6 +365,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, " with a mass of chaotic flesh, dealing ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " damage.");
+        AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
         DealDamage(primaryEffectValue, targets[0], false);
         break;
@@ -381,6 +385,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, " and ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " damage to self.");
+        AddCreatureToFlicker(caster);
+        AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
         DealDamage(primaryEffectValue, targets[0], false);
         DealDamage(folemExpungeValue, caster, false);
@@ -399,6 +405,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, " Defense and ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Shield points.");
+        AddCreatureToFlicker(caster);
         AddMessageToFeed(message);
         caster->encounterStats.defense += primaryEffectValue;
         caster->encounterStats.shield += folemEpidermizeShield;
@@ -415,6 +422,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, " with its exposed endoskeleton, applying ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Bleed.");
+        AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
         targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
         break;
@@ -427,6 +435,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " damage.");
         AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
         DealDamage(primaryEffectValue, targets[0], false);
         break;
         case AB_SHAPESHIFTER_TRANSFORM:
@@ -445,6 +454,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         caster->baseStats = targets[0]->baseStats;
         caster->abilities = InitAbilities(abilities, abCount);
         caster->abilityCount = abCount;
+        AddCreatureToFlicker(caster);
+        AddCreatureToFlicker(targets[0]);
         break;
         case AB_BLOFAEWAR_CUT:
         primaryEffectValue = CalculateDamage( ((1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster), targets[0]);
@@ -456,6 +467,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Bleed.");
         AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
         targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
         break;
         case AB_BLOFAEMYS_INSPIRE:

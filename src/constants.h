@@ -12,6 +12,7 @@ extern const char *GAME_TITLE;
 extern const int PAUSE_MENU_OPTION_COUNT;
 extern const char CRIT_PROGRESS_MAX;
 extern const float TURN_ACTION_DURATION;
+extern const float CHARACTER_BLINK_INTERVAL;
 extern const float GAME_MESSAGE_DISPLAY_TIME;
 extern const float GAME_MESSAGE_DISPLAY_TIME_PER_CHARACTER;
 

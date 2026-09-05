@@ -303,6 +303,21 @@ void HandleItemEquip()
 	appState.stateData.gameState.stateData.dungeonState.isSelectingItem = false;
 }
 
+void AddCreatureToFlicker(CreatureStats* c)
+{
+	for(int i=0; i < 3; i++)
+	{
+		if(c == &appState.stateData.gameState.playerTeam[i].stats)
+		{
+			appState.stateData.gameState.stateData.battleState.flickeringMask += 1 << i;
+		}
+		if(c == &appState.stateData.gameState.stateData.battleState.enemies[i].stats)
+		{
+			appState.stateData.gameState.stateData.battleState.flickeringMask += 1 << (i+3);
+		}
+	}
+}
+
 short DetermineCurrentActingEntity()
 {
 	char result = 0;
@@ -389,6 +404,7 @@ void HandleEnemyTurn()
 		appState.stateData.gameState.stateData.battleState.statePauseTimer -= GetFrameTime();
 		if(appState.stateData.gameState.stateData.battleState.statePauseTimer <= 0)
 		{
+			appState.stateData.gameState.stateData.battleState.flickeringMask = 0;
 			appState.stateData.gameState.stateData.battleState.battleState = appState.stateData.gameState.stateData.battleState.currentActingEntity < 3 ? 
 				BS_PLAYER_ABILITY_SELECT : BS_ENEMY_TURN;
 		}

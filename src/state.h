@@ -49,6 +49,7 @@ struct BattleState
 	bool abilityTargetsEnemies;
 	struct TurnIndicator turnIndicators[6];
 	char* messages[12];
+	char flickeringMask;
 	float statePauseTimer;
 	enum BATTLE_STATE battleState;
 
@@ -98,6 +99,7 @@ void HandleAbilityTargetInit();
 void AddMessageToFeed(char*);
 void AddItemToInventory(Item);
 void HandleItemEquip();
+void AddCreatureToFlicker(CreatureStats* c);
 short DetermineCurrentActingEntity();
 void PassTurn();
 void HandleFleshGolemUpgrade();
