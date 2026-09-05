@@ -327,8 +327,23 @@ void HandleBattleInput()
 		}
 		if(IsPressed(VK_CONFIRM))
 		{
-			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_TARGET_SELECT;
-			HandleAbilityTargetInit();
+			if(appState.stateData.gameState.playerTeam[
+				appState.stateData.gameState.stateData.battleState.currentActingEntity
+			].stats.abilities[
+				appState.stateData.gameState.stateData.battleState.verticalSelection
+			].staminaCost + appState.stateData.gameState.playerTeam[
+				appState.stateData.gameState.stateData.battleState.currentActingEntity
+			].stats.statusEffects[SE_EXHAUSTION] <= appState.stateData.gameState.playerTeam[
+				appState.stateData.gameState.stateData.battleState.currentActingEntity
+			].stats.baseStats.currentStamina)
+			{
+				appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_TARGET_SELECT;
+				HandleAbilityTargetInit();
+			}
+			else
+			{
+				ShowPopupMessage("Not enough stamina to use this ability.");
+			}
 		}
 		if(IsPressed(VK_UP))
 		{
