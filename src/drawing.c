@@ -142,12 +142,12 @@ void DrawBattleAbilitySelection()
     DrawTextBoxed(basicFont, abilityDesc, (Rectangle){192, 176, 416-LAYOUT_SPACING, 224},16,0,true, GRAY);
 
     short height = (*caster).abilityCount * 18;
-    DrawRectangle(390, 443 - height, 230, height+32, BLACK);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){ 390, 443 - height, 230, height+32}, (Vector2){0,0}, 0, WHITE);
+    DrawRectangle(390, 446 - height, 230, height+29, BLACK);
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){ 390, 446 - height, 230, height+30}, (Vector2){0,0}, 0, WHITE);
 
     for (int i = 0; i < (*caster).abilityCount; i++)
     {
-        DrawTextEx(basicFont, caster->abilities[i].name, (Vector2){406, 460 - height + (i * 18)}, 16, 0, 
+        DrawTextEx(basicFont, caster->abilities[i].name, (Vector2){406, 463 - height + (i * 18)}, 16, 0, 
             (appState.stateData.gameState.stateData.battleState.verticalSelection == i) ? WHITE : GRAY);
     }
 }
