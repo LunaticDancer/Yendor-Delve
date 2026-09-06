@@ -67,11 +67,13 @@ typedef struct CreatureStats
     int statusEffects[SE_LENGTH];       // stores intensity values for each status effect
     StatBonuses encounterStats;         // resets after each encounter
     StatBonuses itemStats;
+    StatDebuff temporaryStats[STAT_DEBUFFS];
     Ability* abilities;
     char abilityCount;
 } CreatureStats;
 
 StatBonuses CreateEmptyStatBonuses();
+StatDebuff* CreateEmptyStatDebuffs();
 void EmptyStatusEffects(CreatureStats*);
 void ResetTurnClock(CreatureStats*);
 short CalculateDamage(short baseDamage, CreatureStats* target);

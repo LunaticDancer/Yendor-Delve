@@ -14,6 +14,21 @@ StatBonuses CreateEmptyStatBonuses()
     };
 }
 
+StatDebuff* CreateEmptyStatDebuffs()
+{
+    StatDebuff* result = malloc(sizeof(StatDebuff) * STAT_DEBUFFS);
+
+    for(int i = 0; i < STAT_DEBUFFS; i++)
+    {
+        result[i] = (StatDebuff){
+            0,
+            CreateEmptyStatBonuses(),
+        };
+    }
+
+    return result;
+}
+
 void EmptyStatusEffects(CreatureStats* _creature)
 {
     for (int i = 0; i < SE_LENGTH; i++)
