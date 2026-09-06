@@ -146,12 +146,12 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
         result = CombineStrings(result, " (improved by Crit Rate and Mastery) Crit Progress and ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (10 + 30% Mastery) Crit Multiplier. This ability cannot crit.");
+        result = CombineStrings(result, "% (10 + 30% Mastery) Crit Bonus. This ability cannot crit.");
         return result;
         case AB_ASSASSIN_CONCEAL:
-        sprintf(strnum, "%.0f", ((500 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1)) * CalculateCritInfluence(caster));
         result = CombineStrings("Target ally becomes untargettable for ", strnum);
-        result = CombineStrings(result, " (500 + 100% Mastery) ticks of time.");
+        result = CombineStrings(result, " (300 + 100% Mastery) ticks of time.");
         return result;
         case AB_ASSASSIN_REND:
         result = "Performs a brutal finisher, dealing four times the amount of Bleed points the target enemy has as unavoidable damage.";
@@ -264,6 +264,63 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
     {
         case AB_WAIT:
         AddMessageToFeed(CombineStrings(caster->baseStats.name, " does nothing."));
+        break;
+        case AB_ASSASSIN_SLASH:
+        primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateCritInfluence(caster);
+        short assassinSlashBleed = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateCritInfluence(caster);
+        sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " slashes ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and applying ");
+        sprintf(strnum, "%d", assassinSlashBleed);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Bleed.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->statusEffects[SE_BLEED] += assassinSlashBleed;
+        DealDamage(primaryEffectValue, targets[0], false);
+        break;
+        case AB_ASSASSIN_PREPARE:
+        primaryEffectValue = (((caster->baseStats.critRate + caster->encounterStats.critRate + caster->itemStats.critRate) 
+            * (1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.01)));
+        short assassinPrepareCritMult = ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3));
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " prepares in the shadows, gaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Crit Progress and  ");
+        sprintf(strnum, "%d", assassinPrepareCritMult);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, "% Crit Bonus.");
+        caster->baseStats.critCounter += primaryEffectValue;
+        caster->encounterStats.critMultiplier += assassinPrepareCritMult;
+        dontResetCritProgress = true;
+        AddMessageToFeed(message);
+        break;
+        case AB_ASSASSIN_CONCEAL:
+        primaryEffectValue = (300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1) * CalculateCritInfluence(caster);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " applies a concealing hex to ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " for ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " ticks, making them untargettable.");
+        targets[0]->statusEffects[SE_UNTARGETTABLE] = primaryEffectValue;
+        AddCreatureToFlicker(targets[0]);
+        AddMessageToFeed(message);
+        break;
+        case AB_ASSASSIN_REND:
+        primaryEffectValue = (4 * targets[0]->statusEffects[SE_BLEED]) * CalculateCritInfluence(caster);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " rends ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " apart from the inside, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " unavoidable damage.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        DealDamage(primaryEffectValue, targets[0], true);
         break;
         case AB_MONK_MEDITATE:
         primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateCritInfluence(caster);

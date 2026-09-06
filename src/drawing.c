@@ -277,7 +277,7 @@ void DrawStatusEffects(Vector2 position, CreatureStats* _creature)
     int hOffset = 0;
     for(int i = 0; i < SE_LENGTH; i++)
     {
-        if (_creature->statusEffects[i] == 0) continue;
+        if (_creature->statusEffects[i] <= 0) continue;
 
         sprintf(strnum, "%d", _creature->statusEffects[i]);
         DrawTextEx(basicFontLarger, strnum, (Vector2){position.x+20, position.y+hOffset}, 16,0, WHITE);
