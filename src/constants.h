@@ -5,10 +5,12 @@
 
 #define ITEM_SLOTS 4
 #define INVENTORY_SIZE 32
+#define STAT_DEBUFFS 8
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 extern const int TILE_SIZE;
 extern const char *GAME_TITLE;
+extern const char *GAME_VERSION_FOOTER;
 extern const int PAUSE_MENU_OPTION_COUNT;
 extern const char CRIT_PROGRESS_MAX;
 extern const float TURN_ACTION_DURATION;

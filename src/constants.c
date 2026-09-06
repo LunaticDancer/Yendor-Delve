@@ -6,6 +6,7 @@ const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 const int TILE_SIZE = 16;
 const char *GAME_TITLE = "Yendor Delve";
+const char *GAME_VERSION_FOOTER = "v0.0.1, made with C and Raylib";
 const int PAUSE_MENU_OPTION_COUNT = 2;
 const char CRIT_PROGRESS_MAX = 100;
 const float TURN_ACTION_DURATION = 0.8;

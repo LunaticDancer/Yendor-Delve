@@ -74,10 +74,10 @@ void DrawMainMenu()
     textPosition.x = 0;
     textPosition.y = SCREEN_HEIGHT - textSize.y;
     DrawTextEx(basicFontLarger, "LunaticDancer, 2026", textPosition, 16, 0, GRAY);
-    textSize = MeasureTextEx(basicFontLarger, "v0.0.1, made with C and Raylib", 16, 0);
+    textSize = MeasureTextEx(basicFontLarger, GAME_VERSION_FOOTER, 16, 0);
     textPosition.x = SCREEN_WIDTH - textSize.x;
     textPosition.y = SCREEN_HEIGHT - textSize.y;
-    DrawTextEx(basicFontLarger, "v0.0.1, made with C and Raylib", textPosition, 16, 0, GRAY);
+    DrawTextEx(basicFontLarger, GAME_VERSION_FOOTER, textPosition, 16, 0, GRAY);
 
     EndMode2D();
     EndTextureMode();
