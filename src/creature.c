@@ -261,6 +261,11 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         return result;
         case AB_BLOFAEMYS_INSPIRE:
         return "Give 10 Mastery to every ally.";
+        case AB_BLOFAEMYS_HASTE:
+        sprintf(strnum, "%.0f", ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * CalculateEffectAmplification(caster, false));
+        result = CombineStrings("Give an entity ", strnum);
+        result = CombineStrings(result, " (30 + 30% Mastery) Speed.");
+        return result;
         default:
         return "Ability description missing, oopsie!";
     }
@@ -592,14 +597,27 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         break;
         case AB_BLOFAEMYS_INSPIRE:
         primaryEffectValue = 10 * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
         for(int i = 0; i < numberOfTargets; i++)
         {
             targets[i]->encounterStats.mastery += primaryEffectValue;
         }
         message = CombineStrings((*caster).baseStats.name, " sings an ancient fae hymn, increasing Mastery by ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " for each team member..");
+        message = CombineStrings(message, " for each team member.");
         AddMessageToFeed(message);
+        break;
+        case AB_BLOFAEMYS_HASTE:
+        primaryEffectValue = (30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3) * CalculateEffectAmplification(caster, false);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " spurs ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " on, granting ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Speed.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->encounterStats.speed += primaryEffectValue;
         break;
         default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");

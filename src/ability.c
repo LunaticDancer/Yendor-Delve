@@ -205,6 +205,14 @@ Ability InitAbility(ABILITY id)
             10,
             AF_TARGETS_ALLIES + AF_AOE,
         };
+        case AB_BLOFAEMYS_HASTE:
+        return (Ability)
+        {
+            id,
+            "Hasten",
+            20,
+            AF_TARGETS_ALLIES,
+        };
     }
 }
 
