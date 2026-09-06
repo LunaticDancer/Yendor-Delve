@@ -76,7 +76,7 @@ void EmptyStatusEffects(CreatureStats*);
 void ResetTurnClock(CreatureStats*);
 short CalculateDamage(short baseDamage, CreatureStats* target);
 void DealDamage(short damage, CreatureStats* target, bool trueDamage);
-float CalculateCritInfluence(CreatureStats*);
+float CalculateEffectAmplification(CreatureStats*, bool);
 char* GetAbilityDescription(ABILITY id, CreatureStats* caster);
 Ability* InitAbilities(ABILITY abilities[], short count);
 void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** targets, short numberOfTargets);

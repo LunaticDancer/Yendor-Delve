@@ -33,7 +33,7 @@ short CalculateDamage(short baseDamage, CreatureStats* target)
 {
     short result = 0;
 
-    short effectiveDef = (*target).baseStats.defense + (*target).encounterStats.defense + (*target).itemStats.defense - (short)((float)(*target).statusEffects[SE_BERSERK]/100);
+    short effectiveDef = (*target).baseStats.defense + (*target).encounterStats.defense + (*target).itemStats.defense - (*target).statusEffects[SE_BERSERK];
     short effectiveArmor = (*target).baseStats.armor + (*target).encounterStats.armor + (*target).itemStats.armor;
 
    if(effectiveDef>0)
@@ -79,10 +79,12 @@ void DealDamage(short damage, CreatureStats* target, bool trueDamage)
     }
 }
 
-float CalculateCritInfluence(CreatureStats* caster)
+float CalculateEffectAmplification(CreatureStats* caster, bool affectedByBerserk)
 {
-    return 1 +  (caster->baseStats.critCounter / CRIT_PROGRESS_MAX)
-            *(((*caster).baseStats.critMultiplier + (*caster).itemStats.critMultiplier + (*caster).encounterStats.critMultiplier)*0.01);
+    return 1 + ((caster->baseStats.critCounter / CRIT_PROGRESS_MAX)
+            *(((*caster).baseStats.critMultiplier + (*caster).itemStats.critMultiplier + (*caster).encounterStats.critMultiplier)*0.01)) 
+            + (affectedByBerserk ? caster->statusEffects[SE_BERSERK] * 0.01 : 0)
+            + ((appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown == 0) ? appState.stateData.gameState.stateData.battleState.opportunityMult : 0);
 }
 
 Ability* InitAbilities(ABILITY abilities[], short count)
@@ -106,35 +108,35 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         case AB_WAIT:
         return "Inaction. Let the opportunity pass.";
         case AB_BERSERKER_SWING:
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Bring the battle axe down in a wild swing, gaining ", strnum);
-        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (10 + 10% Mastery) Berserk and dealing ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (50 + 80% Mastery) damage.");
         return result;
         case AB_BERSERKER_BASH:
-        sprintf(strnum, "%.0f", (((caster->baseStats.armor + caster->encounterStats.armor + caster->itemStats.armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", (((caster->baseStats.armor + caster->encounterStats.armor + caster->itemStats.armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Stun an enemy with a powerful shield strike, delaying their next turn by ", strnum);
         result = CombineStrings(result, " (Armour x Berserk) ticks of time.");
         return result;
         case AB_BERSERKER_BATTLECRY:
-        sprintf(strnum, "%.0f", (((caster->baseStats.currentStamina) * 0.25)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", (((caster->baseStats.currentStamina) * 0.25)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Perform a mighty cry, expending half of your current Stamina, gaining ", strnum);
         result = CombineStrings(result, " (50% of expended Stamina) Berserk and Target Priority.");
         return result;
         case AB_BERSERKER_BRACE:
-        sprintf(strnum, "%.0f", ((1 + (caster->statusEffects[SE_BERSERK]) * 0.05)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((1 + (caster->statusEffects[SE_BERSERK]) * 0.05)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Raise the shield in a defensive stance, gaining ", strnum);
         result = CombineStrings(result, " (1 + 5% Berserk) Armour and ");
-        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (20 + 40% Mastery) Defense until next turn.");
         return result;
         case AB_ASSASSIN_SLASH:
-        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Wound the enemy, dealing ", strnum);
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (20 + 20% Mastery) damage and applying ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (10 + 10% Mastery) Bleed.");
@@ -149,7 +151,7 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         result = CombineStrings(result, "% (10 + 30% Mastery) Crit Bonus. This ability cannot crit.");
         return result;
         case AB_ASSASSIN_CONCEAL:
-        sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Target ally becomes untargettable for ", strnum);
         result = CombineStrings(result, " (300 + 100% Mastery) ticks of time.");
         return result;
@@ -157,44 +159,44 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         result = "Performs a brutal finisher, dealing four times the amount of Bleed points the target enemy has as unavoidable damage.";
         return result;
         case AB_DUELIST_LUNGE:
-        sprintf(strnum, "%.0f", ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, " (30 + 50% Mastery) damage and gain ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (10 + 20% Mastery) Speed.");
         return result;
         case AB_DUELIST_OPPORTUNITY:
-        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Amplify the effectiveness of abilities by ", strnum);
         result = CombineStrings(result, "% (100 + 80% Mastery) a select number of turns from now (can also benefit enemies).");
         return result;
         case AB_DUELIST_PARRY:
-        sprintf(strnum, "%.0f", ((5 + (caster->baseStats.speed + caster->encounterStats.speed + caster->itemStats.speed) * 0.05)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((5 + (caster->baseStats.speed + caster->encounterStats.speed + caster->itemStats.speed) * 0.05)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Gain ", strnum);
-        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (5 + 5% Speed) Armour until next turn. Each time you get hit within that time, gain ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (20 + 50% Mastery) Speed.");
         return result;
         case AB_DUELIST_BREATH:
-        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Regain ", strnum);
         result = CombineStrings(result, " (50 + 100% Mastery) stamina.");
         return result;
         case AB_MONK_MEDITATE:
-        sprintf(strnum, "%.0f", (10 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", (10 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Gain ", strnum);
         result = CombineStrings(result,  " (10 + 10% Mastery) mastery.");
         return result;
         case AB_MONK_TRUE_STRIKE:
-        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?
             " (100 + 80% Mastery) unavoidable damage to all enemies." : " (100 + 80% Mastery) unavoidable damage to target enemy. Becomes an area ability upon crit.");
         return result;
         case AB_MONK_ATTUNEMENT:
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings((caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?  "Shield all allies for " : " Shield a target ally for ", strnum);
         result = CombineStrings(result, " (10 + 90% Mastery) health points.");
         result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ?  " " : " Becomes an area ability upon crit. ");
@@ -205,41 +207,40 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         return result;
         case AB_FOLEM_STRIKE:
         sprintf(strnum, "%.0f", ((10 + (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1 
-            + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * CalculateCritInfluence(caster));
+            + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (10 + 10% Health + 30% Mastery) damage.");
         return result;
         case AB_FOLEM_EXPUNGE:
-        sprintf(strnum, "%.0f", (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.5)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.5)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        sprintf(strnum, "%.0f", (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.2)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (50% Health) damage to an enemy and ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (10% Health) damage to self.");
+        result = CombineStrings(result, " (20% Health) damage to self.");
         return result;
         case AB_FOLEM_EPIDERMIZE:
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Gain ", strnum);
-        sprintf(strnum, "%.0f", (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, " (10 + 90% Mastery) Defense and ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (10% Health) Shield points.");
         return result;
         case AB_FOLEM_CRIPPLE:
-        sprintf(strnum, "%.0f", (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health - caster->baseStats.currentHealth) * 0.1)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health - caster->baseStats.currentHealth) * 0.1)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Apply ", strnum);
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateCritInfluence(caster));
         result = CombineStrings(result, " (10% missing Health) Bleed to an enemy.");
         return result;
         case AB_SHAPESHIFTER_SCRATCH:
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Scratch an enemy for ", strnum);
         result = CombineStrings(result, " (10 + 100% Mastery) damage.");
         return result;
         case AB_SHAPESHIFTER_TRANSFORM:
         return "Become an exact copy of target enemy, retaining your ability to change shapes.";
         case AB_BLOFAEWAR_CUT:
-        sprintf(strnum, "%.0f", ((1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster));
+        sprintf(strnum, "%.0f", ((1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Attack an enemy for ", strnum);
         result = CombineStrings(result, " (1 + 10% Mastery) damage, then apply the unmitigated damage as Bleed points.");
         return result;
@@ -266,8 +267,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(CombineStrings(caster->baseStats.name, " does nothing."));
         break;
         case AB_BERSERKER_SWING:
-        short berserkerSwingRageGain = ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster);
-        primaryEffectValue = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateCritInfluence(caster);
+        short berserkerSwingRageGain = ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, false);
+        primaryEffectValue = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " hacks at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -283,7 +284,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         DealDamage(primaryEffectValue, targets[0], false);
         break;
         case AB_BERSERKER_BASH:
-        primaryEffectValue = CalculateDamage( (((caster->baseStats.armor + caster->encounterStats.armor + caster->itemStats.armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateCritInfluence(caster), targets[0]);
+        primaryEffectValue = CalculateDamage( (((caster->baseStats.armor + caster->encounterStats.armor + caster->itemStats.armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateEffectAmplification(caster, false), targets[0]);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " slams ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -295,7 +296,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         targets[0]->baseStats.ticksUntilNextTurn += primaryEffectValue;
         break;
         case AB_BERSERKER_BATTLECRY:
-        primaryEffectValue = (((caster->baseStats.currentStamina) * 0.25)) * CalculateCritInfluence(caster);
+        primaryEffectValue = (((caster->baseStats.currentStamina) * 0.25)) * CalculateEffectAmplification(caster, false);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " roars a mighty battlecry, gaining ");
         message = CombineStrings(message, strnum);
@@ -309,12 +310,12 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         caster->baseStats.currentStamina /= 2;
         break;
         case AB_BERSERKER_BRACE:
-       short berserkerBraceArmorGain = ((1 + (caster->statusEffects[SE_BERSERK]) * 0.05)) * CalculateCritInfluence(caster);
-        primaryEffectValue = ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateCritInfluence(caster);
+       short berserkerBraceArmorGain = ((1 + (caster->statusEffects[SE_BERSERK]) * 0.05)) * CalculateEffectAmplification(caster, false);
+        primaryEffectValue = ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, false);
         break;
         case AB_ASSASSIN_SLASH:
-        primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateCritInfluence(caster);
-        short assassinSlashBleed = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateCritInfluence(caster);
+        primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateEffectAmplification(caster, true);
+        short assassinSlashBleed = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " slashes ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -346,7 +347,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         break;
         case AB_ASSASSIN_CONCEAL:
-        primaryEffectValue = (300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1) * CalculateCritInfluence(caster);
+        primaryEffectValue = (300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1) * CalculateEffectAmplification(caster, false);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " applies a concealing hex to ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -358,7 +359,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         break;
         case AB_ASSASSIN_REND:
-        primaryEffectValue = (4 * targets[0]->statusEffects[SE_BLEED]) * CalculateCritInfluence(caster);
+        primaryEffectValue = (4 * targets[0]->statusEffects[SE_BLEED]) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " rends ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -370,7 +371,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         DealDamage(primaryEffectValue, targets[0], true);
         break;
         case AB_MONK_MEDITATE:
-        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateCritInfluence(caster);
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateEffectAmplification(caster, false);
         (*caster).encounterStats.mastery += primaryEffectValue;
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " meditates, gaining ");
@@ -382,7 +383,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         break;
         case AB_MONK_TRUE_STRIKE:
-        primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateCritInfluence(caster);
+        primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " uses True Strike, dealing ");
         message = CombineStrings(message, strnum);
@@ -415,7 +416,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         }
         break;
         case AB_MONK_ATTUNEMENT:
-        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9) * CalculateCritInfluence(caster);
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9) * CalculateEffectAmplification(caster, false);
         for(int i = 0; i < numberOfTargets; i++)
         {
             targets[i]->encounterStats.shield += primaryEffectValue;
@@ -462,7 +463,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 1;
         }
         primaryEffectValue = ((10 + (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1 
-            + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * CalculateCritInfluence(caster);
+            + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " slams ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -478,9 +479,9 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 2;
         }
-        primaryEffectValue = (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.5)) * CalculateCritInfluence(caster);
+        primaryEffectValue = (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.5)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
-        short folemExpungeValue = (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1)) * CalculateCritInfluence(caster);
+        short folemExpungeValue = (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.2)) * CalculateEffectAmplification(caster, true);
         message = CombineStrings((*caster).baseStats.name, " explodes violently with viscera, dealing ");
         message = CombineStrings(message, strnum);
         sprintf(strnum, "%d", CalculateDamage( folemExpungeValue, caster));
@@ -500,9 +501,9 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 4;
         }
-        primaryEffectValue = ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9)) * CalculateCritInfluence(caster);
+        primaryEffectValue = ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9)) * CalculateEffectAmplification(caster, false);
         sprintf(strnum, "%d", primaryEffectValue);
-        short folemEpidermizeShield = (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1)) * CalculateCritInfluence(caster);
+        short folemEpidermizeShield = (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1)) * CalculateEffectAmplification(caster, false);
         message = CombineStrings((*caster).baseStats.name, " rapidly hardens its epidermis into a carapace, gaining ");
         message = CombineStrings(message, strnum);
         sprintf(strnum, "%d", folemEpidermizeShield);
@@ -519,7 +520,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 8;
         }
-        primaryEffectValue = (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health - caster->baseStats.currentHealth) * 0.1)) * CalculateCritInfluence(caster);
+        primaryEffectValue = (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health - caster->baseStats.currentHealth) * 0.1)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " mauls ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -531,7 +532,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
         break;
         case AB_SHAPESHIFTER_SCRATCH:
-        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateCritInfluence(caster);
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " scratches ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -562,7 +563,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddCreatureToFlicker(targets[0]);
         break;
         case AB_BLOFAEWAR_CUT:
-        primaryEffectValue = CalculateDamage( ((1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster), targets[0]);
+        primaryEffectValue = CalculateDamage( ((1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true), targets[0]);
         primaryEffectValue = primaryEffectValue < 0 ? 0 : primaryEffectValue;
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " cuts ");
@@ -575,11 +576,14 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
         break;
         case AB_BLOFAEMYS_INSPIRE:
+        primaryEffectValue = 10 * CalculateEffectAmplification(caster, true);
         for(int i = 0; i < numberOfTargets; i++)
         {
-            targets[i]->encounterStats.mastery += 10;
+            targets[i]->encounterStats.mastery += primaryEffectValue;
         }
-        message = CombineStrings((*caster).baseStats.name, " sings an ancient fae hymn, increasing Mastery by 10 for each team member.");
+        message = CombineStrings((*caster).baseStats.name, " sings an ancient fae hymn, increasing Mastery by ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " for each team member..");
         AddMessageToFeed(message);
         break;
         default:
