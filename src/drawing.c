@@ -266,6 +266,8 @@ void DrawBattleScreenEnemy(char index)
     char strnum[6];
     sprintf(strnum, "%d", appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth);
     Vector2 str_size = MeasureTextEx(basicFontLarger, strnum, 16,0);
+    DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2 + 1, 103-str_size.y/2 + 1}, 16,0,BLACK);
+    DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2 - 1, 103-str_size.y/2 - 1}, 16,0,BLACK);
     DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2, 103-str_size.y/2}, 16,0,WHITE);
     }
     DrawStatusEffects((Vector2){SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1) + 16, LAYOUT_SPACING + 16}, &appState.stateData.gameState.stateData.battleState.enemies[index].stats);

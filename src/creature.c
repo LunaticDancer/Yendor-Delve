@@ -265,6 +265,53 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         case AB_WAIT:
         AddMessageToFeed(CombineStrings(caster->baseStats.name, " does nothing."));
         break;
+        case AB_BERSERKER_SWING:
+        short berserkerSwingRageGain = ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateCritInfluence(caster);
+        primaryEffectValue = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateCritInfluence(caster);
+        sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " hacks at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and gaining ");
+        sprintf(strnum, "%d", berserkerSwingRageGain);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Berserk.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        caster->statusEffects[SE_BERSERK] += berserkerSwingRageGain;
+        DealDamage(primaryEffectValue, targets[0], false);
+        break;
+        case AB_BERSERKER_BASH:
+        primaryEffectValue = CalculateDamage( (((caster->baseStats.armor + caster->encounterStats.armor + caster->itemStats.armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateCritInfluence(caster), targets[0]);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " slams ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " with a shield, delaying their turn by ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " ticks.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->baseStats.ticksUntilNextTurn += primaryEffectValue;
+        break;
+        case AB_BERSERKER_BATTLECRY:
+        primaryEffectValue = (((caster->baseStats.currentStamina) * 0.25)) * CalculateCritInfluence(caster);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " roars a mighty battlecry, gaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Target Priority and ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Berserk.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(caster);
+        caster->statusEffects[SE_BERSERK] += primaryEffectValue;
+        caster->encounterStats.targetPriority += primaryEffectValue;
+        caster->baseStats.currentStamina /= 2;
+        break;
+        case AB_BERSERKER_BRACE:
+       short berserkerBraceArmorGain = ((1 + (caster->statusEffects[SE_BERSERK]) * 0.05)) * CalculateCritInfluence(caster);
+        primaryEffectValue = ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateCritInfluence(caster);
+        break;
         case AB_ASSASSIN_SLASH:
         primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateCritInfluence(caster);
         short assassinSlashBleed = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateCritInfluence(caster);
