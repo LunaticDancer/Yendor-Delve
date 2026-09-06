@@ -234,7 +234,7 @@ Item InitItem(ITEM_ID id)
         case ITEM_JUGGERNAUT_GREATHAMMER:
         result = (Item){
             id,
-            "Juggernaut Greathammer",
+            "Juggernaut Hammer",
             TL_ITEMS,
             (Vector2){5,0},
             DARKGRAY,
