@@ -14,19 +14,41 @@ StatBonuses CreateEmptyStatBonuses()
     };
 }
 
-StatDebuff* CreateEmptyStatDebuffs()
+void EmptyStatDebuffs(CreatureStats* _creature)
 {
-    StatDebuff* result = malloc(sizeof(StatDebuff) * STAT_DEBUFFS);
-
     for(int i = 0; i < STAT_DEBUFFS; i++)
     {
-        result[i] = (StatDebuff){
+        _creature->temporaryStats[i] = (StatDebuff){
             0,
             CreateEmptyStatBonuses(),
         };
     }
+}
 
-    return result;
+void ApplyStatDebuff(CreatureStats* c, StatDebuff d)
+{
+    char index = -1;
+    short lowestDuration = d.tickDuration;
+    for(int i = 0; i < STAT_DEBUFFS; i++)
+    {
+        if(c->temporaryStats[i].tickDuration > lowestDuration) continue;
+        index = i;
+        lowestDuration = c->temporaryStats[i].tickDuration;
+    }
+    if(index == -1) return;
+    c->temporaryStats[index] = d;
+    c->encounterStats.armor += d.debuff.armor;
+    c->encounterStats.critMultiplier += d.debuff.critMultiplier;
+    c->encounterStats.critRate += d.debuff.critRate;
+    c->encounterStats.damageMultiplier += d.debuff.damageMultiplier;
+    c->encounterStats.defense += d.debuff.defense;
+    c->encounterStats.health += d.debuff.health;
+    c->encounterStats.mastery += d.debuff.mastery;
+    c->encounterStats.shield += d.debuff.shield;
+    c->encounterStats.speed += d.debuff.speed;
+    c->encounterStats.stamina += d.debuff.stamina;
+    c->encounterStats.staminaRegen += d.debuff.staminaRegen;
+    c->encounterStats.targetPriority += d.debuff.targetPriority;
 }
 
 void EmptyStatusEffects(CreatureStats* _creature)
@@ -39,8 +61,13 @@ void EmptyStatusEffects(CreatureStats* _creature)
 
 void ResetTurnClock(CreatureStats* _creature)
 {
-    float value = 100.0 / (100 + (*_creature).baseStats.speed + (*_creature).encounterStats.speed + (*_creature).itemStats.speed);
-    (*_creature).baseStats.ticksUntilNextTurn = (short)(value*1000);
+    (*_creature).baseStats.ticksUntilNextTurn = CalculateNextTurnTicks(_creature);
+}
+
+short CalculateNextTurnTicks(CreatureStats* _creature)
+{
+    float value = 100.0 / (100 + (*_creature).baseStats.speed + (*_creature).encounterStats.speed + (*_creature).itemStats.speed - (*_creature).statusEffects[SE_EXHAUSTION]);
+    return (short)(value*1000);
 }
 
 
@@ -332,6 +359,18 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         case AB_BERSERKER_BRACE:
        short berserkerBraceArmorGain = ((1 + (caster->statusEffects[SE_BERSERK]) * 0.05)) * CalculateEffectAmplification(caster, false);
         primaryEffectValue = ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, false);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " raises his shield, gaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Armor and ");
+        sprintf(strnum, "%d", berserkerBraceArmorGain);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Defense until next turn.");
+        StatBonuses b = CreateEmptyStatBonuses();
+        b.armor = berserkerBraceArmorGain;
+        b.defense = primaryEffectValue;
+        StatDebuff d = (StatDebuff){CalculateNextTurnTicks(caster), b};
+        ApplyStatDebuff(caster, d);
         break;
         case AB_ASSASSIN_SLASH:
         primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateEffectAmplification(caster, true);

@@ -73,9 +73,11 @@ typedef struct CreatureStats
 } CreatureStats;
 
 StatBonuses CreateEmptyStatBonuses();
-StatDebuff* CreateEmptyStatDebuffs();
+void EmptyStatDebuffs(CreatureStats*);
+void ApplyStatDebuff(CreatureStats*, StatDebuff);
 void EmptyStatusEffects(CreatureStats*);
 void ResetTurnClock(CreatureStats*);
+short CalculateNextTurnTicks(CreatureStats* _creature);
 short CalculateDamage(short baseDamage, CreatureStats* target);
 void DealDamage(short damage, CreatureStats* target, bool trueDamage);
 float CalculateEffectAmplification(CreatureStats*, bool);

@@ -105,6 +105,7 @@ void PassTurn();
 void HandleFleshGolemUpgrade();
 void HandleStartOfTurnProcs();
 void ProgressTime(short ticks);
+void HandleTemporaryStats(CreatureStats* c, short ticks);
 void HandleEnemyTurn();
 void TakeAutonomousTurn(Enemy* actor);
 void PrepareListOfSlotAppropriateItems(EQUIPMENT_SLOT slot);

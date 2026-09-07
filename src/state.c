@@ -88,6 +88,9 @@ void TransitionToBattle()
 	appState.stateData.gameState.playerTeam[0].stats.encounterStats = CreateEmptyStatBonuses();
 	appState.stateData.gameState.playerTeam[1].stats.encounterStats = CreateEmptyStatBonuses();
 	appState.stateData.gameState.playerTeam[2].stats.encounterStats = CreateEmptyStatBonuses();
+	EmptyStatDebuffs(&appState.stateData.gameState.playerTeam[0].stats);
+	EmptyStatDebuffs(&appState.stateData.gameState.playerTeam[1].stats);
+	EmptyStatDebuffs(&appState.stateData.gameState.playerTeam[2].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[0].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[1].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[2].stats);
@@ -396,6 +399,35 @@ void ProgressTime(short ticks)
 	appState.stateData.gameState.stateData.battleState.enemies[0].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[0].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[0].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
+
+	HandleTemporaryStats(&appState.stateData.gameState.playerTeam[0].stats, ticks);
+	HandleTemporaryStats(&appState.stateData.gameState.playerTeam[1].stats, ticks);
+	HandleTemporaryStats(&appState.stateData.gameState.playerTeam[2].stats, ticks);
+	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
+	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
+	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
+}
+
+void HandleTemporaryStats(CreatureStats* c, short ticks)
+{
+	for (int i = 0; i < STAT_DEBUFFS; i++)
+	{
+		if(c->temporaryStats[i].tickDuration <= 0) continue;
+		c->temporaryStats[i].tickDuration -= ticks;
+		if(c->temporaryStats[i].tickDuration > 0) continue;
+		c->encounterStats.armor -= c->temporaryStats[i].debuff.armor;
+		c->encounterStats.critMultiplier -= c->temporaryStats[i].debuff.critMultiplier;
+		c->encounterStats.critRate -= c->temporaryStats[i].debuff.critRate;
+		c->encounterStats.damageMultiplier -= c->temporaryStats[i].debuff.damageMultiplier;
+		c->encounterStats.defense -= c->temporaryStats[i].debuff.defense;
+		c->encounterStats.health -= c->temporaryStats[i].debuff.health;
+		c->encounterStats.mastery -= c->temporaryStats[i].debuff.mastery;
+		c->encounterStats.shield -= c->temporaryStats[i].debuff.shield;
+		c->encounterStats.speed -= c->temporaryStats[i].debuff.speed;
+		c->encounterStats.stamina -= c->temporaryStats[i].debuff.stamina;
+		c->encounterStats.staminaRegen -= c->temporaryStats[i].debuff.staminaRegen;
+		c->encounterStats.targetPriority -= c->temporaryStats[i].debuff.targetPriority;
+	}
 }
 
 void HandleEnemyTurn()
