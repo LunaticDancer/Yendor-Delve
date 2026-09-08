@@ -366,11 +366,11 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         sprintf(strnum, "%d", berserkerBraceArmorGain);
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Defense until next turn.");
-        StatBonuses b = CreateEmptyStatBonuses();
-        b.armor = berserkerBraceArmorGain;
-        b.defense = primaryEffectValue;
-        StatDebuff d = (StatDebuff){CalculateNextTurnTicks(caster), b};
-        ApplyStatDebuff(caster, d);
+        StatBonuses berserkerBraceStatBonus = CreateEmptyStatBonuses();
+        berserkerBraceStatBonus.armor = berserkerBraceArmorGain;
+        berserkerBraceStatBonus.defense = primaryEffectValue;
+        StatDebuff berserkerBraceStatBuff = (StatDebuff){CalculateNextTurnTicks(caster), berserkerBraceStatBonus};
+        ApplyStatDebuff(caster, berserkerBraceStatBuff);
         break;
         case AB_ASSASSIN_SLASH:
         primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateEffectAmplification(caster, true);
@@ -428,6 +428,57 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         DealDamage(primaryEffectValue, targets[0], true);
+        break;
+        case AB_DUELIST_LUNGE:
+        primaryEffectValue =  ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
+        short duelistLungeSpeed = ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, false);
+        message = CombineStrings((*caster).baseStats.name, " lunges at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and gaining ");
+        sprintf(strnum, "%d", duelistLungeSpeed);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Speed.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        caster->encounterStats.speed += duelistLungeSpeed;
+        DealDamage(primaryEffectValue, targets[0], false);
+        break;
+        case AB_DUELIST_OPPORTUNITY:
+        primaryEffectValue = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, false);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " creates an opening, amplifying the potency of skills by ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, "%, ");
+        sprintf(strnum, "%d", appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " turns from now.");
+        AddMessageToFeed(message);
+        appState.stateData.gameState.stateData.battleState.opportunityMult = (float)primaryEffectValue / 100.0;
+        break;
+        case AB_DUELIST_PARRY:
+        primaryEffectValue = ((5 + (caster->baseStats.speed + caster->encounterStats.speed + caster->itemStats.speed) * 0.05)) * CalculateEffectAmplification(caster, false);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " assumes a defensive stance, gaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Armor until next turn.");
+        AddMessageToFeed(message);
+        StatBonuses duelistParryStatBonus = CreateEmptyStatBonuses();
+        duelistParryStatBonus.armor = primaryEffectValue;
+        StatDebuff duelistParryStatBuff = (StatDebuff){CalculateNextTurnTicks(caster), duelistParryStatBonus};
+        ApplyStatDebuff(caster, duelistParryStatBuff);
+        AddCreatureToFlicker(caster);
+        break;
+        case AB_DUELIST_BREATH:
+        primaryEffectValue = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, false);
+        sprintf(strnum, "%d", primaryEffectValue);
+        caster->baseStats.currentStamina += primaryEffectValue;
+        message = CombineStrings((*caster).baseStats.name, " takes a steady breath, regaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Stamina.");
+        AddMessageToFeed(message);
         break;
         case AB_MONK_MEDITATE:
         primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateEffectAmplification(caster, false);
