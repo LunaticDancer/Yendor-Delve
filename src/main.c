@@ -318,6 +318,31 @@ void HandleBattleInput()
 			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;		
 		}
 	}
+	else if(appState.stateData.gameState.stateData.battleState.battleState == BS_OPPORTUNITY_CHOICE)
+	{
+		if(IsPressed(VK_BACK))
+		{
+			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;		
+		}
+		if(IsPressed(VK_CONFIRM))
+		{
+			appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown = appState.stateData.gameState.stateData.battleState.horizontalSelection + 1;
+			Ability ab = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection];
+			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats,
+				(CreatureStats*[0]){}, 0);
+			ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
+			PassTurn();
+		}
+		if(IsPressed(VK_UP))
+		{
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + (OPPORTUNITY_MAX_TURNS-1)) % OPPORTUNITY_MAX_TURNS;
+		}
+		if(IsPressed(VK_DOWN))
+		{
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 1) % OPPORTUNITY_MAX_TURNS;
+		}
+	}
 	else if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT)
 	{
 		if(IsPressed(VK_BACK))
@@ -359,7 +384,6 @@ void HandleBattleInput()
 	}
 	else if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT)
 	{
-		
 		if(IsPressed(VK_BACK))
 		{
 			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;

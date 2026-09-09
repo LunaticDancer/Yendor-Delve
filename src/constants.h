@@ -6,6 +6,7 @@
 #define ITEM_SLOTS 4
 #define INVENTORY_SIZE 32
 #define STAT_DEBUFFS 8
+#define OPPORTUNITY_MAX_TURNS 6
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 extern const int TILE_SIZE;

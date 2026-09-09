@@ -119,6 +119,11 @@ void HandleAbilityTargetInit()
 	appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies) ?
 	 ((appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0) ? 4 : (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0) ? 3 : 5) : 
 	 ((appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0)?1:(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0)?0:2);
+	 if(ab.abilityId == AB_DUELIST_OPPORTUNITY)
+	 {
+		appState.stateData.gameState.stateData.battleState.battleState = BS_OPPORTUNITY_CHOICE;
+		appState.stateData.gameState.stateData.battleState.horizontalSelection = 1;
+	 }
 	if(DoesAbilityHaveFlag(ab, AF_AOE))
 	{
 		if (appState.stateData.gameState.stateData.battleState.abilityTargetsAllies && appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
@@ -177,6 +182,7 @@ void PassTurn()
 	}
 
 	appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
+	appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown--;
 	short timeToProgress = DetermineCurrentActingEntity();
 	HandleStartOfTurnProcs();
 	ProgressTime(timeToProgress);
