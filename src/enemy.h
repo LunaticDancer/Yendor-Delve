@@ -1,5 +1,5 @@
-#ifndef enemy
-#define enemy
+#ifndef enemy_h
+#define enemy_h
 
 #include "creature.h"
 #include "item.h"

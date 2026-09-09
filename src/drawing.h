@@ -1,5 +1,5 @@
-#ifndef drawing
-#define drawing
+#ifndef drawing_h
+#define drawing_h
 #include "raylib.h"
 #include "constants.h"
 

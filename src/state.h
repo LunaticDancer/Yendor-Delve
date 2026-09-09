@@ -1,5 +1,5 @@
-#ifndef state
-#define state
+#ifndef state_h
+#define state_h
 
 #include "constants.h"
 #include "character.h"
@@ -52,6 +52,7 @@ struct BattleState
 	char flickeringMask;
 	float statePauseTimer;
 	enum BATTLE_STATE battleState;
+	RNG battleRng;
 
 	// unique effects
 	char opportunitySkillCountdown;
@@ -78,6 +79,7 @@ struct GameState
 	union GameStateData stateData;
 	char* message;
 	float messageTimer;
+	RNG runRng;
 };
 
 union AppStateData

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
+#include "constants.h"
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -14,6 +16,18 @@ const float CHARACTER_BLINK_INTERVAL = 0.15;
 const float GAME_MESSAGE_DISPLAY_TIME = 1.0;
 const float GAME_MESSAGE_DISPLAY_TIME_PER_CHARACTER = 0.05;
 
+void rng_init(RNG* rng, uint32_t seed) {
+    rng->state = seed ? seed : 0x9E3779B9UL;  // Prevent zero state
+}
+
+uint32_t rng_next_u32(RNG* rng) {
+    uint32_t x = rng->state;
+    x ^= x << 13;
+    x ^= x >> 17;
+    x ^= x << 5;
+    rng->state = x;
+    return x;
+}
 
 char* CombineStrings(char* str1, char* str2)
 {

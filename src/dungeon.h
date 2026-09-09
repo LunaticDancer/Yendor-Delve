@@ -1,5 +1,5 @@
-#ifndef dungeon
-#define dungeon
+#ifndef dungeon_h
+#define dungeon_h
 
 #include "enemy.h"
 #include "item.h"

@@ -1,5 +1,5 @@
-#ifndef ability
-#define ability
+#ifndef ability_h
+#define ability_h
 #include "raylib.h"
 
 typedef enum ABILITY

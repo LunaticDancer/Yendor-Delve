@@ -1,5 +1,7 @@
-#ifndef constants
-#define constants
+#ifndef constants_h
+#define constants_h
+
+#include <stdint.h>
 
 #define ARR_SIZE(arr) ( sizeof((arr)) / sizeof((arr[0])) )
 
@@ -18,6 +20,10 @@ extern const float TURN_ACTION_DURATION;
 extern const float CHARACTER_BLINK_INTERVAL;
 extern const float GAME_MESSAGE_DISPLAY_TIME;
 extern const float GAME_MESSAGE_DISPLAY_TIME_PER_CHARACTER;
+
+typedef struct RNG {
+    uint32_t state;
+} RNG;
 
 enum TILESET
 {
@@ -68,6 +74,8 @@ enum CONTROLS
 };
 
 // UTILITY FUNCTIONS
+void rng_init(RNG* rng, uint32_t seed);
+uint32_t rng_next_u32(RNG* rng) ;
 char* CombineStrings(char* str1, char* str2);
 float ClampFloat(float num, float min, float max);
 

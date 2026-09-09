@@ -1,5 +1,5 @@
-#ifndef creature
-#define creature
+#ifndef creature_h
+#define creature_h
 
 #include "constants.h"
 #include "raylib.h"

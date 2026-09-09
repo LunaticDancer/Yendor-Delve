@@ -1,5 +1,5 @@
-#ifndef character
-#define character
+#ifndef character_h
+#define character_h
 
 #include "creature.h"
 #include "item.h"

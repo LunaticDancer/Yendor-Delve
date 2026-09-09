@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "state.h"
 #include "dungeon.h"
 #include "item.h"
@@ -15,10 +16,11 @@ void InitAppState(enum APP_STATE _state)
 			appState.stateData.mainMenuState.currentSelection = MS_PLAY;
 			break;
 		case AS_GAMEPLAY:
-			appState.stateData.gameState.teamCompMask = 56;
-			appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_MONK);
-			appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_SHAPESHIFTER);
-			appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_FLESH_GOLEM);
+			rng_init(&appState.stateData.gameState.runRng, time(NULL));
+			appState.stateData.gameState.teamCompMask = 7;
+			appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_BERSERKER);
+			appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_ASSASSIN);
+			appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_DUELIST);
 			appState.stateData.gameState.floor = 1;
 			appState.stateData.gameState.isPaused = 0;
             InitGameState(GS_CHARACTER_SELECT);
@@ -49,6 +51,7 @@ void InitGameState(enum GAME_STATE _state)
 		break;
 
 		case GS_BATTLE:
+		rng_init(&appState.stateData.gameState.stateData.battleState.battleRng, time(NULL));
 		appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
 		appState.stateData.gameState.stateData.battleState.horizontalSelection = 0;
 		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
@@ -67,6 +70,7 @@ void InitGameState(enum GAME_STATE _state)
 
 		appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown = -1;
 		appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask = 0;
+		appState.stateData.gameState.stateData.battleState.flickeringMask = 0;
     }
 	appState.stateData.gameState.gameState = _state;
 }
@@ -466,7 +470,7 @@ void TakeAutonomousTurn(Enemy* actor)
 	switch(actor->enemyId)
 	{
 		case EN_BLOOD_FAE_MYSTIC:
-		if(rand()%2==0)
+		if(rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng) %2==0)
 		{
 		CastAbility(actor->stats.abilities[0].abilityId, 0, 
 			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, 
@@ -477,13 +481,13 @@ void TakeAutonomousTurn(Enemy* actor)
 		{
 			CastAbility(actor->stats.abilities[1].abilityId, 0, 
 			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, 
-			(CreatureStats*[1]){&appState.stateData.gameState.stateData.battleState.enemies[rand()%3].stats}, 1);
+			(CreatureStats*[1]){&appState.stateData.gameState.stateData.battleState.enemies[rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng)%3].stats}, 1);
 		}
 		break;
 		case EN_BLOOD_FAE_WARRIOR:
 		CastAbility(actor->stats.abilities[0].abilityId, 0, 
 			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, 
-			(CreatureStats*[1]){&appState.stateData.gameState.playerTeam[rand()%3].stats}, 1);
+			(CreatureStats*[1]){&appState.stateData.gameState.playerTeam[rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng)%3].stats}, 1);
 		break;
 		default:
 		CastAbility(actor->stats.abilities[0].abilityId, 0, 

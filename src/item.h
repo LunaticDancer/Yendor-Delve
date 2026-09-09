@@ -1,5 +1,5 @@
-#ifndef item
-#define item
+#ifndef item_h
+#define item_h
 
 #include "raylib.h"
 #include "constants.h"

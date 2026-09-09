@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include "enemy.h"
 #include "dungeon.h"
+#include "state.h"
+
+extern struct AppState appState;
 
 ENCOUNTER_ID encounterPoolTier1[8];
 ENCOUNTER_ID encounterPoolTier2[4];
@@ -17,7 +20,7 @@ ENCOUNTER_ID* SelectRandomEncounters(char floor)
 
     for(int i = 0; i < 3; i++)
     {
-        result[i] = encounterPoolTier1[rand() % ARR_SIZE(encounterPoolTier1)];
+        result[i] = encounterPoolTier1[rng_next_u32(&appState.stateData.gameState.runRng) % ARR_SIZE(encounterPoolTier1)];
     }
     if(floor % 8 == 5)
     {
@@ -41,7 +44,7 @@ ITEM_ID MatchRewardToEncounter(ENCOUNTER_ID enc, char floor)
                 break;
 
                 default:
-                result  = itemPoolTier1[rand() % ARR_SIZE(itemPoolTier1)];
+                result  = itemPoolTier1[rng_next_u32(&appState.stateData.gameState.runRng) % ARR_SIZE(itemPoolTier1)];
                 break;
             }
             break;
