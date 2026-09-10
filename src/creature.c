@@ -248,10 +248,10 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
             "Cleanse all status effects from all creatures and entities." : "Cleanse all status effects from target creature. Becomes an area ability upon crit.";
         return result;
         case AB_FOLEM_STRIKE:
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1 
+        sprintf(strnum, "%.0f", (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1 
             + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (10 + 10% Health + 30% Mastery) damage.");
+        result = CombineStrings(result, " (10% Health + 30% Mastery) damage.");
         return result;
         case AB_FOLEM_EXPUNGE:
         sprintf(strnum, "%.0f", (( (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.5)) * CalculateEffectAmplification(caster, true));
@@ -572,7 +572,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 1;
         }
-        primaryEffectValue = ((10 + (caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1 
+        primaryEffectValue = (((caster->baseStats.maxHealth + caster->encounterStats.health + caster->itemStats.health) * 0.1 
             + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " slams ");

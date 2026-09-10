@@ -173,8 +173,8 @@ Item InitItem(ITEM_ID id)
             ES_LEGS,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.mastery = 30;
-        result.statBonuses.speed = 20;
+        result.statBonuses.mastery = 60;
+        result.statBonuses.speed = 40;
         return result;
         case ITEM_APPRENTICE_ROBE:
         result = (Item){
@@ -186,8 +186,8 @@ Item InitItem(ITEM_ID id)
             ES_TORSO,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.mastery = 20;
-        result.statBonuses.stamina = 100;
+        result.statBonuses.mastery = 40;
+        result.statBonuses.stamina = 200;
         result.statBonuses.staminaRegen = 100;
         return result;
         case ITEM_APPRENTICE_STAFF:
@@ -200,7 +200,7 @@ Item InitItem(ITEM_ID id)
             ES_WEAPON,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.mastery = 20;
+        result.statBonuses.mastery = 80;
         result.statBonuses.targetPriority = -50;
         return result;
         case ITEM_APPRENTICE_TIARA:
@@ -213,7 +213,7 @@ Item InitItem(ITEM_ID id)
             ES_HEAD,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.mastery = 40;
+        result.statBonuses.mastery = 60;
         result.statBonuses.armor = 1;
         return result;
         case ITEM_JUGGERNAUT_ARMOR:
@@ -229,7 +229,7 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.health = 200;
         result.statBonuses.armor = 5;
         result.statBonuses.defense = 100;
-        result.statBonuses.speed = -40;
+        result.statBonuses.speed = -30;
         return result;
         case ITEM_JUGGERNAUT_GREATHAMMER:
         result = (Item){
@@ -258,7 +258,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.armor = 3;
         result.statBonuses.defense = 60;
-        result.statBonuses.speed = -20;
+        result.statBonuses.speed = -15;
         return result;
         case ITEM_JUGGERNAUT_LEGGINS:
         result = (Item){
@@ -273,7 +273,7 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.health = 100;
         result.statBonuses.armor = 3;
         result.statBonuses.defense = 60;
-        result.statBonuses.speed = -20;
+        result.statBonuses.speed = -15;
         return result;
         case ITEM_MERCENARY_AXE:
         result = (Item){
@@ -300,8 +300,8 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
         };
         result.statBonuses.armor = 1;
-        result.statBonuses.defense = 40;
-        result.statBonuses.staminaRegen = 40;
+        result.statBonuses.defense = 50;
+        result.statBonuses.staminaRegen = 50;
         return result;
         case ITEM_MERCENARY_GREAVES:
         result = (Item){
@@ -313,7 +313,7 @@ Item InitItem(ITEM_ID id)
             ES_LEGS,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.armor = 1;
+        result.statBonuses.armor = 2;
         result.statBonuses.defense = 30;
         result.statBonuses.speed = 30;
         return result;
@@ -328,7 +328,7 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
         };
         result.statBonuses.armor = 1;
-        result.statBonuses.defense = 20;
+        result.statBonuses.defense = 30;
         result.statBonuses.staminaRegen = 50;
         return result;
         case ITEM_THIEF_CAPE:
@@ -342,7 +342,8 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
         };
         result.statBonuses.targetPriority = -200;
-        result.statBonuses.defense = 20;
+        result.statBonuses.defense = 40;
+        result.statBonuses.speed = 20;
         return result;
         case ITEM_THIEF_DAGGER:
         result = (Item){
@@ -369,8 +370,8 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
         };
         result.statBonuses.targetPriority  = -50;
-        result.statBonuses.defense = 10;
-        result.statBonuses.mastery = 10;
+        result.statBonuses.defense = 30;
+        result.statBonuses.mastery = 30;
         return result;
         case ITEM_THIEF_PANTS:
         result = (Item){
@@ -382,7 +383,7 @@ Item InitItem(ITEM_ID id)
             ES_LEGS,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.speed = 40;
+        result.statBonuses.speed = 50;
         result.statBonuses.staminaRegen = 100;
         return result;
         case ITEM_SOFUS_HAT:
@@ -395,7 +396,7 @@ Item InitItem(ITEM_ID id)
             ES_HEAD,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.mastery = 100;
+        result.statBonuses.mastery = 250;
         result.statBonuses.health = -150;
         result.statBonuses.targetPriority = 60;
         return result;
@@ -409,7 +410,7 @@ Item InitItem(ITEM_ID id)
             ES_LEGS,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.speed = 100;
+        result.statBonuses.speed = 180;
         result.statBonuses.defense = -60;
         result.statBonuses.targetPriority = 60;
         return result;
@@ -423,7 +424,7 @@ Item InitItem(ITEM_ID id)
             ES_TORSO,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.stamina = 300;
+        result.statBonuses.stamina = 1000;
         result.statBonuses.armor = -10;
         result.statBonuses.targetPriority = 60;
         return result;
@@ -437,10 +438,10 @@ Item InitItem(ITEM_ID id)
             ES_WEAPON,
             CreateEmptyStatBonuses(),
         };
-        result.statBonuses.defense = 80;
-        result.statBonuses.armor = 4;
+        result.statBonuses.defense = 100;
+        result.statBonuses.armor = 5;
         result.statBonuses.targetPriority = 100;
-        result.statBonuses.speed = -20;
+        result.statBonuses.speed = -25;
         return result;
     }
 }

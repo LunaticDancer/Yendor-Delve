@@ -223,8 +223,8 @@ Character InitCharacterData(CHARACTER_ID id)
                     MAROON,
 
                     0,
-                    400,
-                    400,
+                    200,
+                    200,
                     1000,
                     1000,
                     150,
