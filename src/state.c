@@ -467,6 +467,12 @@ void HandleEnemyTurn()
 
 void TakeAutonomousTurn(Enemy* actor)
 {
+		if(actor->stats.baseStats.currentHealth <= 0)
+		{
+			PassTurn();
+			return;
+		}
+		
 	switch(actor->enemyId)
 	{
 		case EN_BLOOD_FAE_MYSTIC:
