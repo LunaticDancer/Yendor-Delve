@@ -582,6 +582,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, " damage.");
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
+        // >:3
         DealDamage(primaryEffectValue, targets[0], false);
         break;
         case AB_FOLEM_EXPUNGE:
