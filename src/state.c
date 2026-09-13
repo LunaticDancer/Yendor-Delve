@@ -126,7 +126,7 @@ void HandleAbilityTargetInit()
 	 if(ab.abilityId == AB_DUELIST_OPPORTUNITY)
 	 {
 		appState.stateData.gameState.stateData.battleState.battleState = BS_OPPORTUNITY_CHOICE;
-		appState.stateData.gameState.stateData.battleState.horizontalSelection = 1;
+		appState.stateData.gameState.stateData.battleState.horizontalSelection = 2;
 	 }
 	if(DoesAbilityHaveFlag(ab, AF_AOE))
 	{
@@ -472,7 +472,7 @@ void TakeAutonomousTurn(Enemy* actor)
 			PassTurn();
 			return;
 		}
-		
+
 	switch(actor->enemyId)
 	{
 		case EN_BLOOD_FAE_MYSTIC:

@@ -31,6 +31,7 @@ NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATC
 void DrawBattleAbilitySelection();
 void DrawBattleScreenPartyMember(char);
 void DrawBattleScreenEnemy(char);
+void DrawDuelistOpportunitySelection();
 void DrawStatusEffects(Vector2 position, CreatureStats* creature);
 void DrawBattleScreenMessageFeed();
 void DrawPauseMenu();
@@ -120,6 +121,10 @@ void DrawBattle()
     if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT)
     {
         DrawBattleAbilitySelection();
+    }
+    if(appState.stateData.gameState.stateData.battleState.battleState == BS_OPPORTUNITY_CHOICE)
+    {
+        DrawDuelistOpportunitySelection();
     }
 
     EndMode2D();
@@ -271,6 +276,21 @@ void DrawBattleScreenEnemy(char index)
     DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2, 103-str_size.y/2}, 16,0,WHITE);
     }
     DrawStatusEffects((Vector2){SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1) + 16, LAYOUT_SPACING + 16}, &appState.stateData.gameState.stateData.battleState.enemies[index].stats);
+}
+
+void DrawDuelistOpportunitySelection()
+{
+    char strnum[6];
+    short height = OPPORTUNITY_MAX_TURNS * 18 + 16;
+    DrawRectangle(300, 240 - height/2, 40, height, BLACK);
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){300, 240 - height/2, 40, height}, (Vector2){0,0}, 0, WHITE);
+
+    for (int i = 0; i < OPPORTUNITY_MAX_TURNS; i++)
+    {
+        sprintf(strnum, "%d", i+1);
+        DrawTextEx(basicFont, strnum, (Vector2){316, 240 - height/2 + 8 + (i * 18)}, 16, 0, 
+            (appState.stateData.gameState.stateData.battleState.horizontalSelection == i) ? WHITE : GRAY);
+    }
 }
 
 void DrawStatusEffects(Vector2 position, CreatureStats* _creature)
