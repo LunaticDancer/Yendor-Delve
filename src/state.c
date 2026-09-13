@@ -254,7 +254,7 @@ void HandleStartOfTurnProcs()
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " damage.");
 		AddMessageToFeed(message);
-		DealDamage(_creature->statusEffects[SE_BLEED], _creature, true);
+		DealDamage(_creature->statusEffects[SE_BLEED], _creature, true, NULL);
 	}
 }
 
@@ -416,6 +416,13 @@ void ProgressTime(short ticks)
 	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
 	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
 	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
+
+	ProgressLingeringEffects(&appState.stateData.gameState.playerTeam[0].stats, ticks);
+	ProgressLingeringEffects(&appState.stateData.gameState.playerTeam[1].stats, ticks);
+	ProgressLingeringEffects(&appState.stateData.gameState.playerTeam[2].stats, ticks);
+	ProgressLingeringEffects(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
+	ProgressLingeringEffects(&appState.stateData.gameState.stateData.battleState.enemies[1].stats, ticks);
+	ProgressLingeringEffects(&appState.stateData.gameState.stateData.battleState.enemies[2].stats, ticks);
 }
 
 void HandleTemporaryStats(CreatureStats* c, short ticks)

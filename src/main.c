@@ -67,9 +67,9 @@ int main()
 
 	titleFont = LoadFontEx("assets/fonts/KAISG.TTF", 120, 0, 0);
 	SetTextureFilter(titleFont.texture, 0);
-	basicFont = LoadFontEx("assets/fonts/alagard.ttf", 16, 0, 0);
+	basicFont = LoadFontEx("assets/fonts/alagard.ttf", 64, 0, 0);
 	SetTextureFilter(basicFont.texture, 0);
-	basicFontLarger = LoadFontEx("assets/fonts/alagard.ttf", 32, 0, 0);
+	basicFontLarger = LoadFontEx("assets/fonts/alagard.ttf", 128, 0, 0);
 	SetTextureFilter(basicFontLarger.texture, 0);
 
 	creatureAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/creatures_transparent.png");

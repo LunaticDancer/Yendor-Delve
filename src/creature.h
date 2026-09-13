@@ -14,6 +14,12 @@ typedef enum STATUS_EFFECT
     SE_LENGTH,
 } STATUS_EFFECT;
 
+typedef enum LINGERING_EFFECT
+{
+    LE_NONE,
+    LE_ONHIT_DUELIST_PARRY,
+} LINGERING_EFFECT;
+
 // diminishing stat influence formula: 100 / (100 + stat)
 
 typedef struct CreatureBaseStats
@@ -61,6 +67,13 @@ typedef struct StatDebuff
     StatBonuses debuff;
 } StatDebuff;
 
+typedef struct LingeringEffect
+{
+    LINGERING_EFFECT effectId;
+    short tickDuration;
+    short triggerLimit;
+} LingeringEffect;
+
 typedef struct CreatureStats
 {
     CreatureBaseStats baseStats;
@@ -68,6 +81,7 @@ typedef struct CreatureStats
     StatBonuses encounterStats;         // resets after each encounter
     StatBonuses itemStats;
     StatDebuff temporaryStats[STAT_DEBUFFS];
+    LingeringEffect lingeringEffects[LINGERING_EFFECTS];
     Ability* abilities;
     char abilityCount;
 } CreatureStats;
@@ -75,11 +89,17 @@ typedef struct CreatureStats
 StatBonuses CreateEmptyStatBonuses();
 void EmptyStatDebuffs(CreatureStats*);
 void ApplyStatDebuff(CreatureStats*, StatDebuff);
+void EmptyLingeringEffects(CreatureStats*);
+void ApplyLingeringEffect(CreatureStats*, LingeringEffect);
+void ProgressLingeringEffects(CreatureStats*, short);
+void HandleOnHitEffects(CreatureStats*, short, CreatureStats*);
+void HandleOnDeathEffects(CreatureStats*);
+void HandleOnAbilityEffects(CreatureStats*, ABILITY);
 void EmptyStatusEffects(CreatureStats*);
 void ResetTurnClock(CreatureStats*);
 short CalculateNextTurnTicks(CreatureStats* _creature);
 short CalculateDamage(short baseDamage, CreatureStats* target);
-void DealDamage(short damage, CreatureStats* target, bool trueDamage);
+void DealDamage(short damage, CreatureStats* target, bool trueDamage, CreatureStats* dealer);
 float CalculateEffectAmplification(CreatureStats*, bool);
 char* GetAbilityDescription(ABILITY id, CreatureStats* caster);
 Ability* InitAbilities(ABILITY abilities[], short count);

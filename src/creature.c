@@ -51,6 +51,92 @@ void ApplyStatDebuff(CreatureStats* c, StatDebuff d)
     c->encounterStats.targetPriority += d.debuff.targetPriority;
 }
 
+void EmptyLingeringEffects(CreatureStats* c)
+{
+    for (int i=0; i<LINGERING_EFFECTS; i++)
+    {
+        c->lingeringEffects[i].effectId = LE_NONE;
+        c->lingeringEffects[i].triggerLimit = 0;
+        c->lingeringEffects[i].tickDuration = 0;
+    }
+}
+
+void ApplyLingeringEffect(CreatureStats* c, LingeringEffect l)
+{
+    short shortestTicks = 9999;
+    char shortestIndex = 0;
+    char matchingIndex = -1;
+
+    for (int i=0; i<LINGERING_EFFECTS; i++)
+    {
+        if(c->lingeringEffects[i].effectId == l.effectId)
+        {
+            matchingIndex = i;
+        }
+        if(c->lingeringEffects[i].tickDuration < shortestTicks)
+        {
+            shortestTicks = c->lingeringEffects[i].tickDuration;
+            shortestIndex = i;
+        }
+    }
+
+    if(matchingIndex != -1)
+    {
+        c->lingeringEffects[matchingIndex] = l;
+    }
+    else
+    {
+        c->lingeringEffects[shortestIndex] = l;
+    }
+}
+
+void ProgressLingeringEffects(CreatureStats* c, short t)
+{
+    for (int i=0; i<LINGERING_EFFECTS; i++)
+    {
+        if(c->lingeringEffects[i].effectId == LE_NONE) continue;
+
+        c->lingeringEffects[i].tickDuration -= t;
+        if (c->lingeringEffects[i].tickDuration < 1 && c->lingeringEffects[i].triggerLimit < 1)
+        {
+            c->lingeringEffects[i].effectId = LE_NONE;
+        }
+    }
+}
+
+void HandleOnHitEffects(CreatureStats* c, short damage, CreatureStats* caster)
+{
+    char strnum[6];
+    char* message;
+    short primaryValue;
+    for(int i = 0; i<LINGERING_EFFECTS; i++)
+    {
+        if(c->lingeringEffects[i].effectId == LE_NONE) continue;
+        switch(c->lingeringEffects[i].effectId)
+        {
+            case LE_ONHIT_DUELIST_PARRY:
+            primaryValue = ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true);
+            sprintf(strnum, "%d", primaryValue);
+            message = CombineStrings((*c).baseStats.name, " parries the attack, gaining ");
+            message = CombineStrings(message, strnum);
+            message = CombineStrings(message, " Speed.");
+            AddMessageToFeed(message);
+            c->encounterStats.speed += primaryValue;
+            break;
+        }
+    }
+}
+
+void HandleOnDeathEffects(CreatureStats* c)
+{
+
+}
+
+void HandleOnAbilityEffects(CreatureStats* c, ABILITY a)
+{
+
+}
+
 void EmptyStatusEffects(CreatureStats* _creature)
 {
     for (int i = 0; i < SE_LENGTH; i++)
@@ -92,10 +178,12 @@ short CalculateDamage(short baseDamage, CreatureStats* target)
 }
 
 
-void DealDamage(short damage, CreatureStats* target, bool trueDamage)
+void DealDamage(short damage, CreatureStats* target, bool trueDamage, CreatureStats* dealer)
 {
+    short finalValue = 0;
     if(trueDamage)
     {
+        finalValue = damage;
         (*target).encounterStats.shield -= damage;
         if((*target).encounterStats.shield < 0)
         {
@@ -105,19 +193,22 @@ void DealDamage(short damage, CreatureStats* target, bool trueDamage)
     }
     else
     {
-        (*target).encounterStats.shield -= CalculateDamage(damage, target);
+        finalValue = CalculateDamage(damage, target);
+        (*target).encounterStats.shield -= finalValue;
         if((*target).encounterStats.shield < 0)
         {
             (*target).baseStats.currentHealth += (*target).encounterStats.shield;
             (*target).encounterStats.shield = 0;
         }
     }
+    HandleOnHitEffects(target, finalValue, dealer);
 
     if((*target).baseStats.currentHealth <= 0)
     {
         (*target).baseStats.currentHealth = 0;
         char* message = CombineStrings((*target).baseStats.name, " was slain!");
         AddMessageToFeed(message);
+        HandleOnDeathEffects(target);
     }
 }
 
@@ -328,7 +419,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         caster->statusEffects[SE_BERSERK] += berserkerSwingRageGain;
-        DealDamage(primaryEffectValue, targets[0], false);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
         case AB_BERSERKER_BASH:
         primaryEffectValue = CalculateDamage( (((caster->baseStats.armor + caster->encounterStats.armor + caster->itemStats.armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateEffectAmplification(caster, false), targets[0]);
@@ -387,7 +478,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         targets[0]->statusEffects[SE_BLEED] += assassinSlashBleed;
-        DealDamage(primaryEffectValue, targets[0], false);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
         case AB_ASSASSIN_PREPARE:
         primaryEffectValue = (((caster->baseStats.critRate + caster->encounterStats.critRate + caster->itemStats.critRate) 
@@ -427,7 +518,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, " unavoidable damage.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        DealDamage(primaryEffectValue, targets[0], true);
+        DealDamage(primaryEffectValue, targets[0], true, caster);
         break;
         case AB_DUELIST_LUNGE:
         primaryEffectValue =  ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true);
@@ -444,7 +535,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         caster->encounterStats.speed += duelistLungeSpeed;
-        DealDamage(primaryEffectValue, targets[0], false);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
         case AB_DUELIST_OPPORTUNITY:
         primaryEffectValue = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, false);
@@ -468,6 +559,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         StatBonuses duelistParryStatBonus = CreateEmptyStatBonuses();
         duelistParryStatBonus.armor = primaryEffectValue;
         StatDebuff duelistParryStatBuff = (StatDebuff){CalculateNextTurnTicks(caster), duelistParryStatBonus};
+        LingeringEffect duelistParryEffect = (LingeringEffect){LE_ONHIT_DUELIST_PARRY, CalculateNextTurnTicks(caster), 0};
+        ApplyLingeringEffect(caster, duelistParryEffect);
         ApplyStatDebuff(caster, duelistParryStatBuff);
         AddCreatureToFlicker(caster);
         break;
@@ -522,7 +615,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         for(int i = 0; i < numberOfTargets; i++)
         {
             AddCreatureToFlicker(targets[i]);
-            DealDamage(primaryEffectValue, targets[i], true);
+            DealDamage(primaryEffectValue, targets[i], true, caster);
         }
         break;
         case AB_MONK_ATTUNEMENT:
@@ -583,7 +676,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
         // >:3
-        DealDamage(primaryEffectValue, targets[0], false);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
         case AB_FOLEM_EXPUNGE:
         if((appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 1)) == false)
@@ -604,8 +697,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddCreatureToFlicker(caster);
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
-        DealDamage(primaryEffectValue, targets[0], false);
-        DealDamage(folemExpungeValue, caster, false);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        DealDamage(folemExpungeValue, caster, false, caster);
         break;
         case AB_FOLEM_EPIDERMIZE:
         if((appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 2)) == false)
@@ -652,7 +745,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, " damage.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        DealDamage(primaryEffectValue, targets[0], false);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
         case AB_SHAPESHIFTER_TRANSFORM:
         message = CombineStrings((*caster).baseStats.name, " becomes ");
@@ -684,6 +777,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, " Bleed.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
+        DealDamage(0, targets[0], true, caster);        // 0 damage proc to cause on-hit reactions
         targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
         break;
         case AB_BLOFAEMYS_INSPIRE:
