@@ -30,13 +30,13 @@ struct DungeonState
 	char itemIndexListLength;
 };
 
-struct TurnIndicator
+typedef struct TurnIndicator
 {
-	bool isPlayer;
 	char senderId;
 	bool isAttack;
 	char receiverMask;
-};
+	ABILITY abilityId;
+}TurnIndicator;
 
 struct BattleState
 {
@@ -47,7 +47,7 @@ struct BattleState
 	char horizontalSelection;
 	bool abilityTargetsAllies;
 	bool abilityTargetsEnemies;
-	struct TurnIndicator turnIndicators[6];
+	TurnIndicator turnIndicators[6];
 	char* messages[12];
 	char flickeringMask;
 	float statePauseTimer;
@@ -108,6 +108,8 @@ void HandleFleshGolemUpgrade();
 void HandleStartOfTurnProcs();
 void ProgressTime(short ticks);
 void HandleTemporaryStats(CreatureStats* c, short ticks);
+void CreatePrognoses();
+TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng);
 void HandleEnemyTurn();
 void TakeAutonomousTurn(Enemy* actor);
 void PrepareListOfSlotAppropriateItems(EQUIPMENT_SLOT slot);

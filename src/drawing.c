@@ -29,6 +29,7 @@ extern struct AppState appState;
 NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATCH};
 
 void DrawBattleAbilitySelection();
+void DrawPrognoses();
 void DrawBattleScreenPartyMember(char);
 void DrawBattleScreenEnemy(char);
 void DrawDuelistOpportunitySelection();
@@ -109,6 +110,7 @@ void DrawBattle()
     BeginMode2D(worldSpaceCamera);
 
     DrawBattleScreenMessageFeed();
+    DrawPrognoses();
 
     DrawBattleScreenPartyMember(0);
     DrawBattleScreenPartyMember(1);
@@ -147,13 +149,62 @@ void DrawBattleAbilitySelection()
     DrawTextBoxed(basicFont, abilityDesc, (Rectangle){192, 176, 416-LAYOUT_SPACING, 224},16,0,true, GRAY);
 
     short height = (*caster).abilityCount * 18;
-    DrawRectangle(390, 446 - height, 230, height+29, BLACK);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){ 390, 446 - height, 230, height+30}, (Vector2){0,0}, 0, WHITE);
+    DrawRectangle(390, 446 - height, 245, height+29, BLACK);
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){ 390, 446 - height, 245, height+30}, (Vector2){0,0}, 0, WHITE);
 
     for (int i = 0; i < (*caster).abilityCount; i++)
     {
         DrawTextEx(basicFont, caster->abilities[i].name, (Vector2){406, 463 - height + (i * 18)}, 16, 0, 
             (appState.stateData.gameState.stateData.battleState.verticalSelection == i) ? WHITE : GRAY);
+    }
+}
+
+void DrawPrognoses()
+{
+    Vector2 boxSize = (Vector2){144, 48};
+    for (int i = 0; i < 6; i++)
+    {
+        Vector2 position = (Vector2){LAYOUT_SPACING, 355 - ((i+1)*(LAYOUT_SPACING+boxSize.y))};
+        DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){ position.x, position.y, boxSize.x, boxSize.y}, 
+        (Vector2){0,0}, 0, (i == 0) ? WHITE : GRAY);
+        if(appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId < 3)
+        {
+            DrawTexturePro(
+                GetTileset(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId].stats.baseStats.tileset),
+                (Rectangle){
+                    appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
+                    appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Rectangle){
+                    position.x + boxSize.x/2 - TILE_SIZE/2,
+                    position.y + boxSize.y/2 - TILE_SIZE/2,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Vector2){0,0},
+                0,
+                appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId].stats.baseStats.color
+            );
+        }
+        else
+        {
+            DrawTexturePro(
+                GetTileset(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset),
+                (Rectangle){
+                    appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
+                    appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Rectangle){
+                    position.x + boxSize.x/2 - TILE_SIZE/2,
+                    position.y + boxSize.y/2 - TILE_SIZE/2,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Vector2){0,0},
+                0,
+                appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.color
+            );
+        }
     }
 }
 
@@ -260,6 +311,11 @@ void DrawBattleScreenEnemy(char index)
                 appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.color : DARKGRAY
         );
     }
+
+        //                                                              DEBUG INFO SETUP
+        // char str_num[6];
+        // sprintf(str_num, "%d", appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.ticksUntilNextTurn);
+        // DrawText(str_num, SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1) + 16, LAYOUT_SPACING + 16, 16, PINK);
     
     if(appState.stateData.gameState.stateData.battleState.enemies[index].enemyId != EN_NONE)
     {

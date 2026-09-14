@@ -189,6 +189,7 @@ void PassTurn()
 	appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown--;
 	short timeToProgress = DetermineCurrentActingEntity();
 	HandleStartOfTurnProcs();
+	CreatePrognoses();
 	ProgressTime(timeToProgress);
 }
 
@@ -445,6 +446,72 @@ void HandleTemporaryStats(CreatureStats* c, short ticks)
 		c->encounterStats.staminaRegen -= c->temporaryStats[i].debuff.staminaRegen;
 		c->encounterStats.targetPriority -= c->temporaryStats[i].debuff.targetPriority;
 	}
+}
+
+void CreatePrognoses()
+{
+	RNG prognosisRng;
+	rng_init(&prognosisRng, appState.stateData.gameState.stateData.battleState.battleRng.state);
+	int actingEntity = appState.stateData.gameState.stateData.battleState.currentActingEntity;
+	short tickTimers[6];
+	Enemy enemyState[3];
+
+	for (int i = 0; i < 6; i++)
+	{
+		if(i<3)
+		{
+			tickTimers[i] = appState.stateData.gameState.playerTeam[i].stats.baseStats.ticksUntilNextTurn;
+		}
+		else
+		{
+			tickTimers[i] = appState.stateData.gameState.stateData.battleState.enemies[i-3].stats.baseStats.ticksUntilNextTurn;
+			enemyState[i-3] = appState.stateData.gameState.stateData.battleState.enemies[i-3];
+		}
+	}
+
+	for (int i = 0; i < 6; i++)
+	{
+		if(actingEntity < 3)
+		{
+			appState.stateData.gameState.stateData.battleState.turnIndicators[i] = 
+				(TurnIndicator){actingEntity, false, 0, AB_WAIT};
+			tickTimers[actingEntity] = CalculateNextTurnTicks(&appState.stateData.gameState.playerTeam[actingEntity].stats);
+		}
+		else
+		{
+			appState.stateData.gameState.stateData.battleState.turnIndicators[i] = 
+			CreateEnemyPrognosis(actingEntity, &enemyState[actingEntity-3], &prognosisRng);
+			tickTimers[actingEntity] = CalculateNextTurnTicks(&appState.stateData.gameState.stateData.battleState.enemies[actingEntity-3].stats);
+		}
+
+		short shortest = 9999;
+		actingEntity = 0;
+		for (int j = 0; j < 6; j++)
+		{
+			if(j < 3)
+			{
+				if(appState.stateData.gameState.playerTeam[j].stats.baseStats.currentHealth <= 0) continue;
+			}
+			else
+			{
+				if(appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.currentHealth <= 0) continue;
+			}
+			if(tickTimers[j] >= shortest) continue;
+			actingEntity = j;
+			shortest = tickTimers[j];
+		}
+		for (int j = 0; j < 6; j++)
+		{
+			tickTimers[j] -= shortest;
+		}
+	}
+}
+
+TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng)
+{
+	TurnIndicator result = (TurnIndicator){id, true, 1, AB_WAIT};
+
+	return result;
 }
 
 void HandleEnemyTurn()
