@@ -47,7 +47,7 @@ struct BattleState
 	char horizontalSelection;
 	bool abilityTargetsAllies;
 	bool abilityTargetsEnemies;
-	TurnIndicator turnIndicators[6];
+	TurnIndicator turnIndicators[TURN_PROGNOSES];
 	char* messages[12];
 	char flickeringMask;
 	float statePauseTimer;

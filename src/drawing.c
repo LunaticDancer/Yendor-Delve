@@ -161,12 +161,12 @@ void DrawBattleAbilitySelection()
 
 void DrawPrognoses()
 {
-    Vector2 boxSize = (Vector2){144, 48};
-    for (int i = 0; i < 6; i++)
+    Vector2 boxSize = (Vector2){144, 34};
+    for (int i = 0; i < TURN_PROGNOSES; i++)
     {
         Vector2 position = (Vector2){LAYOUT_SPACING, 355 - ((i+1)*(LAYOUT_SPACING+boxSize.y))};
         DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){ position.x, position.y, boxSize.x, boxSize.y}, 
-        (Vector2){0,0}, 0, (i == 0) ? WHITE : GRAY);
+        (Vector2){0,0}, 0, (i == 0) ? LIGHTGRAY : DARKGRAY);
         if(appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId < 3)
         {
             DrawTexturePro(

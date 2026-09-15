@@ -9,6 +9,7 @@
 #define INVENTORY_SIZE 32
 #define STAT_DEBUFFS 8
 #define LINGERING_EFFECTS 8
+#define TURN_PROGNOSES 9
 #define OPPORTUNITY_MAX_TURNS 6
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;

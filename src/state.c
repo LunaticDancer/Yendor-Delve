@@ -469,7 +469,7 @@ void CreatePrognoses()
 		}
 	}
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < TURN_PROGNOSES; i++)
 	{
 		if(actingEntity < 3)
 		{
