@@ -835,8 +835,8 @@ void DrawDungeonScreenPartyMemberBars(char index)
 
     DrawRectangle(104 + index * 160, 457, 112, 2, DARKGRAY);
     DrawRectangle(104 + index * 160, 456, 
-        (int)(112 * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.critCounter / 
-        (float)CRIT_PROGRESS_MAX)), 
+        (int)(112 * ClampFloat((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.critCounter / 
+        (float)CRIT_PROGRESS_MAX, 0, 1)), 
         4, YELLOW);
 }
 
