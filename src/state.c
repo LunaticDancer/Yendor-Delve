@@ -529,7 +529,7 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng)
 			result.receiverMask = 0;
 			if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_SELF))
 			{
-				result.receiverMask = result.receiverMask | (1 << id);
+				// result.receiverMask = result.receiverMask | (1 << id);
 			}
 			else if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_AOE))
 			{
@@ -579,35 +579,32 @@ void TakeAutonomousTurn(Enemy* actor)
 			return;
 		}
 
+	// dummy call to sync RNG
 	CreateEnemyPrognosis(appState.stateData.gameState.stateData.battleState.currentActingEntity, actor, &appState.stateData.gameState.stateData.battleState.battleRng);
 
-	switch(actor->enemyId)
-	{
-		case EN_BLOOD_FAE_MYSTIC:
-		if(rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng) %2==0)
+    char numberOfTargets = 0;
+    for(int j = 0; j < 6; j++)
+    {
+        if((appState.stateData.gameState.stateData.battleState.turnIndicators[0].receiverMask & (1 << j))) numberOfTargets++;
+    }
+	CreatureStats** targets = malloc(sizeof(CreatureStats*) * numberOfTargets);
+	char i = 0;
+    for(int j = 0; j < 6; j++)
+    {
+        if(!(appState.stateData.gameState.stateData.battleState.turnIndicators[0].receiverMask & (1 << j))) continue;
+		if(j<3)
 		{
-		CastAbility(actor->stats.abilities[0].abilityId, 0, 
-			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, 
-			(CreatureStats*[3]){&appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
-				&appState.stateData.gameState.stateData.battleState.enemies[2].stats}, 3);
+			targets[i] = &appState.stateData.gameState.playerTeam[j].stats;
 		}
 		else
 		{
-			CastAbility(actor->stats.abilities[1].abilityId, 0, 
-			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, 
-			(CreatureStats*[1]){&appState.stateData.gameState.stateData.battleState.enemies[rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng)%3].stats}, 1);
+			targets[i] = &appState.stateData.gameState.stateData.battleState.enemies[j-3].stats;
 		}
-		break;
-		case EN_BLOOD_FAE_WARRIOR:
-		CastAbility(actor->stats.abilities[0].abilityId, 0, 
-			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, 
-			(CreatureStats*[1]){&appState.stateData.gameState.playerTeam[rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng)%3].stats}, 1);
-		break;
-		default:
-		CastAbility(actor->stats.abilities[0].abilityId, 0, 
-			&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats, malloc(0), 0);
-		break;
-	}
+		i++;
+    }
+	
+	CastAbility(appState.stateData.gameState.stateData.battleState.turnIndicators[0].abilityId, 0, &actor->stats, targets, numberOfTargets);
+	
 	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats);
 	PassTurn();
 }
