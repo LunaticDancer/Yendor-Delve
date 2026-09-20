@@ -510,6 +510,38 @@ void CreatePrognoses()
 TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng)
 {
 	TurnIndicator result = (TurnIndicator){id, true, 1, AB_WAIT};
+	short abilitySelected = 0;
+
+	switch(c->enemyId)
+	{
+		default:		// generic enemy AI for universal use
+		{
+			if(c->stats.abilityCount > 2)
+			{
+				abilitySelected = rng_next_u32(rng) % (c->stats.abilityCount-2);
+				if(c->stats.abilities[abilitySelected].abilityId == c->lastUsedAbility) abilitySelected = c->stats.abilityCount-2;
+			}
+			result.abilityId = c->stats.abilities[abilitySelected].abilityId;
+			c->lastUsedAbility = result.abilityId;
+			result.isAttack = !(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ALLIES) || DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_SELF));
+
+			// targetting time
+			result.receiverMask = 0;
+			if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_SELF))
+			{
+				result.receiverMask = result.receiverMask | (1 << id);
+			}
+			else if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_AOE))
+			{
+				if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES)) result.receiverMask += 7;
+				if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ALLIES)) result.receiverMask += 56;
+			}
+			else
+			{
+				result.receiverMask = result.receiverMask | (1 << ((rng_next_u32(rng) % 3) + (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES) ? 0: 3)));
+			}
+		}
+	}
 
 	return result;
 }
@@ -546,6 +578,8 @@ void TakeAutonomousTurn(Enemy* actor)
 			PassTurn();
 			return;
 		}
+
+	CreateEnemyPrognosis(appState.stateData.gameState.stateData.battleState.currentActingEntity, actor, &appState.stateData.gameState.stateData.battleState.battleRng);
 
 	switch(actor->enemyId)
 	{

@@ -188,7 +188,14 @@ void DrawPrognoses()
         }
         else
         {
-            DrawTexturePro(
+            char numberOfTargets = 0;
+            char offset = -12;
+            for(int j = 0; j < 6; j++)
+            {
+                if((appState.stateData.gameState.stateData.battleState.turnIndicators[i].receiverMask & (1 << j))) numberOfTargets++;
+            }
+            offset += -8 * numberOfTargets;
+            DrawTexturePro(         // draw caster
                 GetTileset(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset),
                 (Rectangle){
                     appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
@@ -196,7 +203,7 @@ void DrawPrognoses()
                     TILE_SIZE, TILE_SIZE,
                 },
                 (Rectangle){
-                    position.x + boxSize.x/2 - TILE_SIZE/2,
+                    position.x + boxSize.x/2 + offset - TILE_SIZE/2,
                     position.y + boxSize.y/2 - TILE_SIZE/2,
                     TILE_SIZE, TILE_SIZE,
                 },
@@ -204,6 +211,68 @@ void DrawPrognoses()
                 0,
                 appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.color
             );
+            offset += 20;
+            DrawTexturePro(         // draw action icon
+                GetTileset(TL_ITEMS),
+                (Rectangle){
+                    appState.stateData.gameState.stateData.battleState.turnIndicators[i].isAttack ? 0 : 2 * TILE_SIZE,
+                    appState.stateData.gameState.stateData.battleState.turnIndicators[i].isAttack ? 1 : 3 * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Rectangle){
+                    position.x + boxSize.x/2 + offset - TILE_SIZE/2,
+                    position.y + boxSize.y/2 - TILE_SIZE/2,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Vector2){0,0},
+                0,
+                appState.stateData.gameState.stateData.battleState.turnIndicators[i].isAttack ? RED : GREEN
+            );
+            offset += 20;
+
+            for(int j = 0; j < 6; j++)
+            {
+                if(!(appState.stateData.gameState.stateData.battleState.turnIndicators[i].receiverMask & (1 << j))) continue;
+                if(j<3)
+                {
+                    DrawTexturePro(
+                        GetTileset(appState.stateData.gameState.playerTeam[j].stats.baseStats.tileset),
+                        (Rectangle){
+                            appState.stateData.gameState.playerTeam[j].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
+                            appState.stateData.gameState.playerTeam[j].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
+                            TILE_SIZE, TILE_SIZE,
+                        },
+                        (Rectangle){
+                            position.x + boxSize.x/2 + offset - TILE_SIZE/2,
+                            position.y + boxSize.y/2 - TILE_SIZE/2,
+                            TILE_SIZE, TILE_SIZE,
+                        },
+                        (Vector2){0,0},
+                        0,
+                        appState.stateData.gameState.playerTeam[j].stats.baseStats.color
+                    );
+                }
+                else
+                {
+                    DrawTexturePro(
+                        GetTileset(appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileset),
+                        (Rectangle){
+                            appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileLookupPosition.x * TILE_SIZE,
+                            appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileLookupPosition.y * TILE_SIZE,
+                            TILE_SIZE, TILE_SIZE,
+                        },
+                        (Rectangle){
+                            position.x + boxSize.x/2 + offset - TILE_SIZE/2,
+                            position.y + boxSize.y/2 - TILE_SIZE/2,
+                            TILE_SIZE, TILE_SIZE,
+                        },
+                        (Vector2){0,0},
+                        0,
+                        appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.color
+                    );
+                }
+                offset += 16;
+            }
         }
     }
 }
