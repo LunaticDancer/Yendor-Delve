@@ -158,8 +158,8 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Tooth Fae",
-                TL_CREATURES,
-                (Vector2){12, 3},
+                TL_COMMUNITY,
+                (Vector2){4, 4},
                 RAYWHITE,
                 "Where are they getting all these teeth from, and what do they plan to do with them?",
                 {EN_BLOOD_FAE_WARRIOR, EN_BLOOD_FAE_MYSTIC, EN_BLOOD_FAE_WARRIOR},

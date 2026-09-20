@@ -21,6 +21,7 @@ Font basicFontLarger;
 Texture creatureAtlas;
 Texture itemAtlas;
 Texture generalAtlas;
+Texture communityAtlas;
 Texture dungeonAtlas;
 Texture boneFrame;
 Texture spikeFrame;
@@ -75,6 +76,7 @@ int main()
 	creatureAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/creatures_transparent.png");
 	itemAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/items_transparent.png");
 	generalAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/general_transparent.png");
+	communityAtlas = LoadTexture("assets/community_sprites.png");
 	dungeonAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/autotile_transparent.png");
 	boneFrame = LoadTexture("assets/hexanys_1bit_ui/Panels/Transparent/bone_breakers.png");
 	spikeFrame = LoadTexture("assets/hexanys_1bit_ui/Panels/Transparent/thorny_growth.png");

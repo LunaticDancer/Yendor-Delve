@@ -21,6 +21,7 @@ extern RenderTexture2D renderTexture;
 extern Texture creatureAtlas;
 extern Texture itemAtlas;
 extern Texture generalAtlas;
+extern Texture communityAtlas;
 extern Texture boneFrame;
 extern Texture spikeFrame;
 extern Texture ornateFrame;
@@ -978,6 +979,9 @@ Texture GetTileset(enum TILESET ts)
             break;
         case TL_GENERAL:
             return generalAtlas;
+            break;
+        case TL_COMMUNITY:
+            return communityAtlas;
             break;
     }
 }
