@@ -115,7 +115,7 @@ void HandleOnHitEffects(CreatureStats* c, short damage, CreatureStats* caster)
         switch(c->lingeringEffects[i].effectId)
         {
             case LE_ONHIT_DUELIST_PARRY:
-            primaryValue = ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true);
+            primaryValue = ((20 + (c->baseStats.mastery + c->encounterStats.mastery + c->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(c, true);
             sprintf(strnum, "%d", primaryValue);
             message = CombineStrings((*c).baseStats.name, " parries the attack, gaining ");
             message = CombineStrings(message, strnum);
