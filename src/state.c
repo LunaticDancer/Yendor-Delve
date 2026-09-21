@@ -189,8 +189,8 @@ void PassTurn()
 	appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown--;
 	short timeToProgress = DetermineCurrentActingEntity();
 	HandleStartOfTurnProcs();
-	CreatePrognoses();
 	ProgressTime(timeToProgress);
+	CreatePrognoses();
 }
 
 void HandleFleshGolemUpgrade()
