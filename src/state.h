@@ -110,6 +110,7 @@ void ProgressTime(short ticks);
 void HandleTemporaryStats(CreatureStats* c, short ticks);
 void CreatePrognoses();
 TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng);
+char PickSingularTarget(Enemy*, RNG*);
 void HandleEnemyTurn();
 void TakeAutonomousTurn(Enemy* actor);
 void PrepareListOfSlotAppropriateItems(EQUIPMENT_SLOT slot);

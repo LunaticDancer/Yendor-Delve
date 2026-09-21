@@ -538,12 +538,67 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng)
 			}
 			else
 			{
-				result.receiverMask = result.receiverMask | (1 << ((rng_next_u32(rng) % 3) + (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES) ? 0: 3)));
+				if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES))
+				{
+					result.receiverMask = result.receiverMask | (1 << PickSingularTarget(c, rng));
+				}
+				else
+				{
+					result.receiverMask = result.receiverMask | (1 << ((rng_next_u32(rng) % 3) + 3));
+				}
 			}
 		}
 	}
 
 	return result;
+}
+
+char PickSingularTarget(Enemy* c, RNG* rng)
+{
+	char pick = 0;
+	switch(c->targettingBehavior)
+	{
+		case TG_TRUE_RANDOM:
+		return (rng_next_u32(rng) % 3);
+		case TG_FRONT:
+		short highestPriority = 0;
+		for(int i = 0; i < 3; i++)
+		{
+			if(highestPriority > appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority + 
+				appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority)
+			{
+				pick = i;
+				highestPriority = appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority;
+			}
+		}
+		return pick;
+		case TG_BACK:
+		short lowestPriority = 9999;
+		for(int i = 0; i < 3; i++)
+		{
+			if(lowestPriority < appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority + 
+				appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority)
+			{
+				pick = i;
+				lowestPriority = appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority;
+			}
+		}
+		return pick;
+		case TG_WEIGHTED_RANDOM:
+		{
+			short  priorities[] = {
+				appState.stateData.gameState.playerTeam[0].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.encounterStats.targetPriority,
+				appState.stateData.gameState.playerTeam[1].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.encounterStats.targetPriority,
+				appState.stateData.gameState.playerTeam[2].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.encounterStats.targetPriority,
+			}; 
+			short roll = rng_next_u32(rng) % (priorities[0] + priorities[1] + priorities[2]);
+			for(int i = 0; i<3; i++)
+			{
+				if(roll <= priorities[i]) return i;
+				roll -= priorities[i];
+			}
+		}
+	}
 }
 
 void HandleEnemyTurn()
