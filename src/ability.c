@@ -213,6 +213,14 @@ Ability InitAbility(ABILITY id)
             20,
             AF_TARGETS_ALLIES,
         };
+        case AB_BLOFAEMYS_MOCK:
+        return (Ability)
+        {
+            id,
+            "Mock",
+            5,
+            AF_TARGETS_ENEMIES,
+        };
     }
 }
 

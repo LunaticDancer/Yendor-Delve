@@ -384,6 +384,11 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         result = CombineStrings("Give an entity ", strnum);
         result = CombineStrings(result, " (30 + 30% Mastery) Speed.");
         return result;
+        case AB_BLOFAEMYS_MOCK:
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Mock an enemy, delaying their turn by ", strnum);
+        result = CombineStrings(result, " (100 + 200% Mastery) ticks.");
+        return result;
         default:
         return "Ability description missing, oopsie!";
     }
@@ -803,6 +808,18 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         targets[0]->encounterStats.speed += primaryEffectValue;
+        break;
+        case AB_BLOFAEMYS_MOCK:
+        primaryEffectValue =  ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " giggles at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", delaying their turn by ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " ticks out of shyness.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->baseStats.critCounter -= primaryEffectValue;
         break;
         default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
