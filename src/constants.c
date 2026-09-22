@@ -31,15 +31,15 @@ uint32_t rng_next_u32(RNG* rng) {
 
 char* CombineStrings(char* str1, char* str2)
 {
-    char* new_str;
-    if((new_str = malloc(strlen(str1)+strlen(str2)+1)) != NULL){
-        new_str[0] = '\0';   // ensures the memory is an empty string
-        strcat(new_str,str1);
-        strcat(new_str,str2);
-    } else {
-        fprintf(stderr,"malloc failed!\n");
-        // exit?
+    char* new_str = malloc(strlen(str1) + strlen(str2) + 1);
+    if (new_str == NULL) {
+        fprintf(stderr, "malloc failed!\n");
+        return NULL;   // or exit(1), or a static empty string
     }
+    new_str[0] = '\0';
+    strcat(new_str, str1);
+    strcat(new_str, str2);
+    return new_str;
 }
 
 float ClampFloat(float d, float min, float max) {
