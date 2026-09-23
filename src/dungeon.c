@@ -150,7 +150,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 (Vector2){6, 14},
                 GREEN,
                 "A large and durable monster, capable of splitting into lesser copies of itself and dulling your weapons with its acid.",
-                {EN_NONE, EN_NONE, EN_NONE},
+                {EN_NONE, EN_CAUSTIC_CUBE, EN_NONE},
                 false,
             };
         case ENC_TOOTH_FAERIES:
@@ -162,7 +162,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 (Vector2){4, 4},
                 RAYWHITE,
                 "Where are they getting all these teeth from, and what do they plan to do with them?",
-                {EN_BLOOD_FAE_WARRIOR, EN_BLOOD_FAE_MYSTIC, EN_BLOOD_FAE_WARRIOR},
+                {EN_TOOTH_FAIRY, EN_NONE, EN_TOOTH_FAIRY},
                 false,
             };
         case ENC_GHOSTS_EASY:
@@ -174,7 +174,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 (Vector2){4,6},
                 SKYBLUE,
                 "Sorrowful dead, intangible and cold. Stay too long in their presence and you'll become motionless as well.",
-                {EN_NONE, EN_NONE, EN_NONE},
+                {EN_STARVING_REVENANT, EN_NONE, EN_STARVING_REVENANT},
                 false,
             };
         default:
