@@ -766,6 +766,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         abilities[abCount-2] = AB_SHAPESHIFTER_TRANSFORM;
         abilities[abCount-1] = AB_WAIT;
         caster->baseStats = targets[0]->baseStats;
+        caster->baseStats.color = BEIGE;
         caster->abilities = InitAbilities(abilities, abCount);
         caster->abilityCount = abCount;
         AddCreatureToFlicker(caster);

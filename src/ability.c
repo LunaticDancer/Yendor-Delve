@@ -189,6 +189,30 @@ Ability InitAbility(ABILITY id)
             10,
             AF_TARGETS_ENEMIES,
         };
+        case AB_MIMIC_CHOMP:
+        return (Ability)
+        {
+            id,
+            "Chomp",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_MIMIC_IMPALE:
+        return (Ability)
+        {
+            id,
+            "Impale",
+            120,
+            AF_TARGETS_ENEMIES+AF_AOE,
+        };
+        case AB_MIMIC_PETRIFY:
+        return (Ability)
+        {
+            id,
+            "Petrify",
+            80,
+            AF_TARGETS_ENEMIES,
+        };
         case AB_BLOFAEWAR_CUT:
         return (Ability)
         {
@@ -220,6 +244,102 @@ Ability InitAbility(ABILITY id)
             "Mock",
             5,
             AF_TARGETS_ENEMIES,
+        };
+        case AB_CAUCUBE_NIBBLE:
+        return (Ability)
+        {
+            id,
+            "Nibble",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_CAUCUBE_SPLIT:
+        return (Ability)
+        {
+            id,
+            "Split",
+            200,
+            AF_TARGETS_SELF,
+        };
+        case AB_CAUCUBE_METABOLIZE:
+        return (Ability)
+        {
+            id,
+            "Metabolize",
+            50,
+            AF_TARGETS_SELF,
+        };
+        case AB_TOOFAIRY_SUMMON:
+        return (Ability)
+        {
+            id,
+            "Summon",
+            80,
+            AF_TARGETS_SELF,
+        };
+        case AB_TOOFAIRY_CALCINIZE:
+        return (Ability)
+        {
+            id,
+            "Calcinize",
+            250,
+            AF_TARGETS_ENEMIES+AF_AOE,
+        };
+        case AB_TOOFAIRY_BONEDUST:
+        return (Ability)
+        {
+            id,
+            "Bonedust",
+            50,
+            AF_TARGETS_ALLIES,
+        };
+        case AB_TOOTHOLEM_STRIKE:
+        return (Ability)
+        {
+            id,
+            "Strike",
+            50,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_TOOTHOLEM_HARDEN:
+        return (Ability)
+        {
+            id,
+            "Harden",
+            50,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_TOOTHOLEM_PROTECT:
+        return (Ability)
+        {
+            id,
+            "Protect",
+            200,
+            AF_TARGETS_ALLIES+AF_AOE,
+        };
+        case AB_STEVENANT_SIPHON:
+        return (Ability)
+        {
+            id,
+            "Siphon",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_STEVENANT_PHASING_STRIKE:
+        return (Ability)
+        {
+            id,
+            "Phasing Strike",
+            80,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_STEVENANT_ECTOPLASMIC_MANIFESTATION:
+        return (Ability)
+        {
+            id,
+            "Ectoplasmic Manifestation",
+            100,
+            AF_TARGETS_SELF,
         };
     }
 }
