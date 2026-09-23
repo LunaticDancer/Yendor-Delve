@@ -188,8 +188,8 @@ void PassTurn()
 	appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
 	appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown--;
 	short timeToProgress = DetermineCurrentActingEntity();
-	HandleStartOfTurnProcs();
 	ProgressTime(timeToProgress);
+	HandleStartOfTurnProcs();
 	CreatePrognoses();
 }
 

@@ -407,6 +407,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
     switch(id)
     {
         case AB_WAIT:
+        dontResetCritProgress = true;
         AddMessageToFeed(CombineStrings(caster->baseStats.name, " does nothing."));
         break;
         case AB_BERSERKER_SWING:
