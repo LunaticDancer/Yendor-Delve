@@ -24,7 +24,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .maxStamina = 1000,
                     .staminaRegen = 150,
                     .speed = 100,
-                    .defense = 10,
+                    .defense = 60,
                     .armor = 1,
                     .critMultiplier = 100,
                     .critRate = 5,

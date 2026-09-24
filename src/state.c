@@ -544,7 +544,23 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng)
 				}
 				else
 				{
-					result.receiverMask = result.receiverMask | (1 << ((rng_next_u32(rng) % 3) + 3));
+					bool targets[] = {
+						(appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0),
+						(appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0),
+						(appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth > 0),
+					};
+					char numberOfLivingTargets = 
+						targets[0] ? 1 : 0 +
+						targets[1] ? 1 : 0 +
+						targets[2] ? 1 : 0;
+					char tr = (rng_next_u32(rng) % numberOfLivingTargets); 
+					char pick = 0;
+					for(int i = 0; i < 3; i++)
+					{
+						if(!targets[i]) continue;
+						if(tr == pick) result.receiverMask = result.receiverMask | (1 << (i + 3));
+						pick++;
+					}
 				}
 			}
 		}
@@ -556,14 +572,31 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng)
 char PickSingularTarget(Enemy* c, RNG* rng)
 {
 	char pick = 0;
+	char numberOfLivingTargets = 
+		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0) ? 1 : 0 +
+		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0) ? 1 : 0 +
+		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0) ? 1 : 0;
+	bool targets[] = {
+		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0),
+		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0),
+		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0),
+	};
 	switch(c->targettingBehavior)
 	{
 		case TG_TRUE_RANDOM:
-		return (rng_next_u32(rng) % 3);
+		char tr = (rng_next_u32(rng) % numberOfLivingTargets); 
+		for(int i = 0; i < 3; i++)
+		{
+			if(!targets[i]) continue;
+			if(tr == pick) return i;
+			pick++;
+		}
+		break;
 		case TG_FRONT:
 		short highestPriority = 0;
 		for(int i = 0; i < 3; i++)
 		{
+			if(!targets[i]) continue;
 			if(highestPriority > appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority + 
 				appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority)
 			{
@@ -576,6 +609,7 @@ char PickSingularTarget(Enemy* c, RNG* rng)
 		short lowestPriority = 9999;
 		for(int i = 0; i < 3; i++)
 		{
+			if(!targets[i]) continue;
 			if(lowestPriority < appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority + 
 				appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority)
 			{
@@ -591,14 +625,15 @@ char PickSingularTarget(Enemy* c, RNG* rng)
 				appState.stateData.gameState.playerTeam[1].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.encounterStats.targetPriority,
 				appState.stateData.gameState.playerTeam[2].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.encounterStats.targetPriority,
 			}; 
-			short roll = rng_next_u32(rng) % (priorities[0] + priorities[1] + priorities[2]);
+			short roll = rng_next_u32(rng) % ((targets[0] ?  priorities[0] : 0) + (targets[1] ?  priorities[1] : 0) + (targets[2] ?  priorities[2] : 0));
 			for(int i = 0; i<3; i++)
 			{
-				if(roll <= priorities[i]) return i;
+				if(roll <= priorities[i] && targets[i]) return i;
 				roll -= priorities[i];
 			}
 		}
 	}
+	return pick;
 }
 
 void HandleEnemyTurn()
