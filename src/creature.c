@@ -372,6 +372,24 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         return result;
         case AB_SHAPESHIFTER_TRANSFORM:
         return "Become an exact copy of target enemy, retaining your ability to change shapes.";
+        case AB_MIMIC_CHOMP:
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Attack an enemy for ", strnum);
+        result = CombineStrings(result, " (100 + 20% Mastery) damage, and remove ");
+        sprintf(strnum, "%.0f", ((150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (150 + 80% Mastery) of their Stamina.");
+        return result;
+        case AB_MIMIC_IMPALE:
+        sprintf(strnum, "%.0f", ((150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.2)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (150 + 120% Mastery) damage to all enemies.");
+        return result;
+        case AB_MIMIC_PETRIFY:
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Give an enemy ", strnum);
+        result = CombineStrings(result, " (50 + 100% Mastery) Defense, and remove the same amount of Speed.");
+        return result;
         case AB_BLOFAEWAR_CUT:
         sprintf(strnum, "%.0f", ((1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Attack an enemy for ", strnum);
@@ -771,6 +789,53 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         caster->abilities = InitAbilities(abilities, abCount);
         caster->abilityCount = abCount;
         AddCreatureToFlicker(caster);
+        AddCreatureToFlicker(targets[0]);
+        break;
+        case AB_MIMIC_CHOMP:
+        primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, true);
+        short mimicChompStaminaLoss = (150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " bites down on ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage. ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " expends ");
+        sprintf(strnum, "%d", mimicChompStaminaLoss);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Stamina in their struggle to get free.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->baseStats.currentStamina -= mimicChompStaminaLoss;
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break;
+        case AB_MIMIC_IMPALE:
+        primaryEffectValue = (150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.2) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " opens its maw in an explosion of sharp spikes, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage to all enemies.");
+        AddMessageToFeed(message);
+        for(int i=0;i<numberOfTargets;i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        break;
+        case AB_MIMIC_PETRIFY:
+        primaryEffectValue = (50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d",  primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " stings ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", injecting them with a petrifying toxin. They gain ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Defense, and lose ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Speed.");
+        AddMessageToFeed(message);
+        targets[0]->encounterStats.defense += primaryEffectValue;
+        targets[0]->encounterStats.speed -= primaryEffectValue;
         AddCreatureToFlicker(targets[0]);
         break;
         case AB_BLOFAEWAR_CUT:
