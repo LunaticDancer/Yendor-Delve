@@ -407,14 +407,14 @@ void DrawBattleScreenEnemy(char index)
 void DrawDuelistOpportunitySelection()
 {
     char strnum[6];
-    short height = OPPORTUNITY_MAX_TURNS * 18 + 16;
-    DrawRectangle(300, 240 - height/2, 40, height, BLACK);
-    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){300, 240 - height/2, 40, height}, (Vector2){0,0}, 0, WHITE);
+    short height = OPPORTUNITY_MAX_TURNS * 18 + 48;
+    DrawRectangle(284, 240 - height/2, 72, height, BLACK);
+    DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){284, 240 - height/2, 72, height}, (Vector2){0,0}, 0, WHITE);
 
     for (int i = 0; i < OPPORTUNITY_MAX_TURNS; i++)
     {
         sprintf(strnum, "%d", i+1);
-        DrawTextEx(basicFont, strnum, (Vector2){316, 240 - height/2 + 8 + (i * 18)}, 16, 0, 
+        DrawTextEx(basicFont, strnum, (Vector2){316, 240 - height/2 + 24 + (i * 18)}, 16, 0, 
             (appState.stateData.gameState.stateData.battleState.horizontalSelection == i) ? WHITE : GRAY);
     }
 }
