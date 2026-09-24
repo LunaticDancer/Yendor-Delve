@@ -401,6 +401,11 @@ void HandleBattleInput()
 			}
 			else
 			{
+				if(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection-3].stats.statusEffects[SE_UNTARGETTABLE]>0)
+				{
+					ShowPopupMessage("This enemy is untagettable.");
+					return;
+				}
 				CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
 				(CreatureStats*[1]){&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection-3].stats}, 1);
 			}

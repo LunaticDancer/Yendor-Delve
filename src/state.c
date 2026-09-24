@@ -572,15 +572,18 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng)
 char PickSingularTarget(Enemy* c, RNG* rng)
 {
 	char pick = 0;
-	char numberOfLivingTargets = 
-		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0) ? 1 : 0 +
-		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0) ? 1 : 0 +
-		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0) ? 1 : 0;
 	bool targets[] = {
-		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0),
-		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0),
-		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0),
+		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0 
+			&& appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
+		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0 
+			&& appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
+		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0 
+			&& appState.stateData.gameState.playerTeam[2].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
 	};
+	char numberOfLivingTargets = 
+		targets[0] ? 1 : 0 +
+		targets[1] ? 1 : 0 +
+		targets[2] ? 1 : 0;
 	switch(c->targettingBehavior)
 	{
 		case TG_TRUE_RANDOM:
