@@ -828,6 +828,26 @@ void DrawDungeonScreenPartyMember(char index)
 
 void DrawDungeonScreenPartyMemberBars(char index)
 {
+    for(int i = 0; i < 4; i++)
+    {
+    DrawTexturePro(
+            GetTileset(appState.stateData.gameState.playerTeam[index].items[i].tileset),
+            (Rectangle){
+                appState.stateData.gameState.playerTeam[index].items[i].tileLookupPosition.x * TILE_SIZE,
+                appState.stateData.gameState.playerTeam[index].items[i].tileLookupPosition.y * TILE_SIZE,
+                TILE_SIZE, TILE_SIZE,
+            },
+            (Rectangle){
+                108 + index * 160 + i * 28,
+                 380,
+                16, 16,
+            },
+            (Vector2){0,0},
+            0,
+            appState.stateData.gameState.playerTeam[index].items[i].color
+        );
+    }
+
     DrawRectangle(104 + index * 160, 449, 112, 2, DARKGRAY);
     DrawRectangle(104 + index * 160, 448, 
         (int)(112 * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
