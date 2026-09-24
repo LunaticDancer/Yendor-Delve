@@ -53,6 +53,7 @@ struct BattleState
 	float statePauseTimer;
 	enum BATTLE_STATE battleState;
 	RNG battleRng;
+	bool takeAnotherTurn;
 
 	// unique effects
 	char opportunitySkillCountdown;
@@ -70,7 +71,7 @@ union GameStateData
 struct GameState
 {
 	enum GAME_STATE gameState;
-	char teamCompMask;
+	short teamCompMask;
 	Character playerTeam[3];
 	char floor;
 	Item inventory[INVENTORY_SIZE];

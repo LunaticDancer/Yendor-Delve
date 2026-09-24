@@ -18,7 +18,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "Wild Swing",
-            10,
+            100,
             AF_TARGETS_ENEMIES,
         };
         case AB_BERSERKER_BASH:
@@ -26,7 +26,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "Shield Bash",
-            100,
+            200,
             AF_TARGETS_ENEMIES,
         };
         case AB_BERSERKER_BATTLECRY:
@@ -42,7 +42,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "Brace",
-            150,
+            250,
             AF_TARGETS_SELF,
         };
         case AB_ASSASSIN_SLASH:

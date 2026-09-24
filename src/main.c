@@ -3,10 +3,10 @@
 #include <time.h>
 #include "raylib.h"
 
-//#ifndef resource_dir
-//#define resource_dir
-//#include "resource_dir.h" // utility header for SearchAndSetResourceDir
-//#endif
+// #ifndef resource_dir
+// #define resource_dir
+// #include "resource_dir.h" // utility header for SearchAndSetResourceDir
+// #endif
 
 #include "drawing.h"
 #include "constants.h"
@@ -29,7 +29,7 @@ Texture ornateFrame;
 
 bool markedToClose;
 struct AppState appState;
-char inputThisFrame;		// bitmask of possible inputs, see enum CONTROLS in constants.h
+char inputThisFrame; // bitmask of possible inputs, see enum CONTROLS in constants.h
 
 void ReadInput();
 void HandleDrawing(Rectangle, Rectangle, Vector2);
@@ -53,7 +53,7 @@ int main()
 	InitWindow(GetScreenWidth(), GetScreenHeight(), GAME_TITLE);
 
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
-	//SearchAndSetResourceDir("resources");
+	// SearchAndSetResourceDir("resources");
 
 	worldSpaceCamera.zoom = 1.0f;
 	screenSpaceCamera.zoom = 1.0f;
@@ -122,33 +122,27 @@ void ReadInput()
 		markedToClose = true;
 	}
 
-	if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_Z) || IsKeyPressed(KEY_COMMA) 
-		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_UP))
+	if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_Z) || IsKeyPressed(KEY_COMMA) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_UP))
 	{
 		inputThisFrame = inputThisFrame | VK_UP;
 	}
-	if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_O) 
-		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN))
+	if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_O) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN))
 	{
 		inputThisFrame = inputThisFrame | VK_DOWN;
 	}
-	if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_Q) 
-		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT))
+	if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_Q) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT))
 	{
 		inputThisFrame = inputThisFrame | VK_LEFT;
 	}
-	if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_E) || IsKeyPressed(KEY_D) 
-		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT))
+	if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_E) || IsKeyPressed(KEY_D) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT))
 	{
 		inputThisFrame = inputThisFrame | VK_RIGHT;
 	}
-	if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE) 
-		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
+	if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
 	{
 		inputThisFrame = inputThisFrame | VK_CONFIRM;
 	}
-	if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_TAB) || IsKeyPressed(KEY_BACKSPACE) 
-		|| IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
+	if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_TAB) || IsKeyPressed(KEY_BACKSPACE) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
 	{
 		inputThisFrame = inputThisFrame | VK_BACK;
 	}
@@ -156,22 +150,22 @@ void ReadInput()
 
 void HandleDrawing(Rectangle s, Rectangle d, Vector2 o)
 {
-		switch (appState.appState)
-		{
-		case AS_MAIN_MENU:
-			DrawMainMenu();
-			break;
-		case AS_GAMEPLAY:
-			DrawGameplay();
-			break;
-		}
+	switch (appState.appState)
+	{
+	case AS_MAIN_MENU:
+		DrawMainMenu();
+		break;
+	case AS_GAMEPLAY:
+		DrawGameplay();
+		break;
+	}
 
-		BeginDrawing();
-		ClearBackground(BLACK);
-		BeginMode2D(screenSpaceCamera);
-		DrawTexturePro(renderTexture.texture, s, d, o, 0.0f, WHITE);
-		EndMode2D();
-		EndDrawing();
+	BeginDrawing();
+	ClearBackground(BLACK);
+	BeginMode2D(screenSpaceCamera);
+	DrawTexturePro(renderTexture.texture, s, d, o, 0.0f, WHITE);
+	EndMode2D();
+	EndDrawing();
 }
 
 bool IsPressed(enum CONTROLS input)
@@ -181,33 +175,33 @@ bool IsPressed(enum CONTROLS input)
 
 void HandleInput()
 {
-	switch(appState.appState)
+	switch (appState.appState)
 	{
-		case AS_MAIN_MENU:
-			HandleMainMenuInput();
+	case AS_MAIN_MENU:
+		HandleMainMenuInput();
+		break;
+	case AS_GAMEPLAY:
+		switch (appState.stateData.gameState.gameState)
+		{
+		case GS_CHARACTER_SELECT:
+			HandleCharacterSelectInput();
 			break;
-		case AS_GAMEPLAY:
-			switch(appState.stateData.gameState.gameState)
-			{
-				case GS_CHARACTER_SELECT:
-					HandleCharacterSelectInput();
-					break;
-				case GS_DUNGEON:
-					HandleDungeonInput();
-					break;
-				case GS_BATTLE:
-					HandleBattleInput();
-					break;
-			}
+		case GS_DUNGEON:
+			HandleDungeonInput();
+			break;
+		case GS_BATTLE:
+			HandleBattleInput();
+			break;
+		}
 		break;
 	}
 }
 
 void HandleMainMenuInput()
 {
-	if(IsPressed(VK_UP))
+	if (IsPressed(VK_UP))
 	{
-		if(appState.stateData.mainMenuState.currentSelection == 0)
+		if (appState.stateData.mainMenuState.currentSelection == 0)
 		{
 			appState.stateData.mainMenuState.currentSelection = MS_LENGTH - 1;
 		}
@@ -216,9 +210,9 @@ void HandleMainMenuInput()
 			appState.stateData.mainMenuState.currentSelection--;
 		}
 	}
-	if(IsPressed(VK_DOWN))
+	if (IsPressed(VK_DOWN))
 	{
-		if(appState.stateData.mainMenuState.currentSelection + 1 == MS_LENGTH)
+		if (appState.stateData.mainMenuState.currentSelection + 1 == MS_LENGTH)
 		{
 			appState.stateData.mainMenuState.currentSelection = 0;
 		}
@@ -227,11 +221,11 @@ void HandleMainMenuInput()
 			appState.stateData.mainMenuState.currentSelection++;
 		}
 	}
-	if(IsPressed(VK_BACK))
+	if (IsPressed(VK_BACK))
 	{
 		appState.stateData.mainMenuState.currentSelection = MS_QUIT;
 	}
-	if(IsPressed(VK_CONFIRM))
+	if (IsPressed(VK_CONFIRM))
 	{
 		if (appState.stateData.mainMenuState.currentSelection == MS_QUIT)
 		{
@@ -246,7 +240,7 @@ void HandleMainMenuInput()
 
 void HandleGameOverInput()
 {
-	if(IsPressed(VK_CONFIRM))
+	if (IsPressed(VK_CONFIRM))
 	{
 		InitAppState(AS_MAIN_MENU);
 	}
@@ -254,51 +248,45 @@ void HandleGameOverInput()
 
 void HandleCharacterSelectInput()
 {
-	if(IsPressed(VK_LEFT))
+	if (IsPressed(VK_LEFT))
 	{
-		appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected = 
+		appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected =
 			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 3) % 4;
 	}
-	if(IsPressed(VK_RIGHT))
+	if (IsPressed(VK_RIGHT))
 	{
-		appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected = 
+		appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected =
 			(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected + 1) % 4;
 	}
-	if(IsPressed(VK_UP))
+	if (IsPressed(VK_UP))
 	{
-		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask & ~(1 <<
-			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
+		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask & ~(1 << appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
 		do
 		{
-			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected] = 
-				InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId
-				- 1 + CHAR_LENGTH) % CHAR_LENGTH);
-		}while (CheckIfHeroInParty(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId));
-		
-		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask | (1 <<
-			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
+			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected] =
+				InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId - 1 + CHAR_LENGTH) % CHAR_LENGTH);
+		} while (CheckIfHeroInParty(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId));
+
+		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask | (1 << appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
 	}
-	if(IsPressed(VK_DOWN))
+	if (IsPressed(VK_DOWN))
 	{
-		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask & ~(1 <<
-			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
+		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask & ~(1 << appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
 		do
 		{
-			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected] = 
-				InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId
-				+ 1) % CHAR_LENGTH);
-		}while (CheckIfHeroInParty(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId));
-		
-		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask | (1 <<
-			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
+			appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected] =
+				InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId + 1) % CHAR_LENGTH);
+		} while (CheckIfHeroInParty(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId));
+
+		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask | (1 << appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
 	}
-	if(IsPressed(VK_BACK))
+	if (IsPressed(VK_BACK))
 	{
 		appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected = 3;
 	}
-	if(IsPressed(VK_CONFIRM))
+	if (IsPressed(VK_CONFIRM))
 	{
-		if(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3)
+		if (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3)
 		{
 			InitGameState(GS_DUNGEON);
 			ShowPopupMessage("Seek the amulet of Yendor in\nthe depths of the dungeon.");
@@ -308,69 +296,68 @@ void HandleCharacterSelectInput()
 
 void HandleBattleInput()
 {
-	if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW)
+	if (appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW)
 	{
-		if(IsPressed(VK_BACK))
+		if (IsPressed(VK_BACK))
 		{
 			InitGameState(GS_DUNGEON);
 		}
-		if(IsPressed(VK_CONFIRM))
+		if (IsPressed(VK_CONFIRM))
 		{
 			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
-			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;		
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;
 		}
-		if(IsPressed(VK_DOWN))
+		if (IsPressed(VK_DOWN))
 		{
-			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + (TURN_PROGNOSES-1)) % TURN_PROGNOSES;
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + (TURN_PROGNOSES - 1)) % TURN_PROGNOSES;
 		}
-		if(IsPressed(VK_UP))
+		if (IsPressed(VK_UP))
 		{
 			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 1) % TURN_PROGNOSES;
 		}
 	}
-	else if(appState.stateData.gameState.stateData.battleState.battleState == BS_OPPORTUNITY_CHOICE)
+	else if (appState.stateData.gameState.stateData.battleState.battleState == BS_OPPORTUNITY_CHOICE)
 	{
-		if(IsPressed(VK_BACK))
+		if (IsPressed(VK_BACK))
 		{
 			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
-			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;		
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;
 		}
-		if(IsPressed(VK_CONFIRM))
+		if (IsPressed(VK_CONFIRM))
 		{
 			appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown = appState.stateData.gameState.stateData.battleState.horizontalSelection + 1;
 			Ability ab = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection];
 			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats,
-				(CreatureStats*[0]){}, 0);
-			ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
-			PassTurn();
+						(CreatureStats *[0]){}, 0);
+			if (!appState.stateData.gameState.stateData.battleState.takeAnotherTurn)
+			{
+				ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
+				PassTurn();
+			}
+			else
+			{
+				appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;
+			}
 		}
-		if(IsPressed(VK_UP))
+		if (IsPressed(VK_UP))
 		{
-			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + (OPPORTUNITY_MAX_TURNS-1)) % OPPORTUNITY_MAX_TURNS;
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + (OPPORTUNITY_MAX_TURNS - 1)) % OPPORTUNITY_MAX_TURNS;
 		}
-		if(IsPressed(VK_DOWN))
+		if (IsPressed(VK_DOWN))
 		{
 			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 1) % OPPORTUNITY_MAX_TURNS;
 		}
 	}
-	else if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT)
+	else if (appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT)
 	{
-		if(IsPressed(VK_BACK))
+		if (IsPressed(VK_BACK))
 		{
 			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
-			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_OVERVIEW;		
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_OVERVIEW;
 		}
-		if(IsPressed(VK_CONFIRM))
+		if (IsPressed(VK_CONFIRM))
 		{
-			if(appState.stateData.gameState.playerTeam[
-				appState.stateData.gameState.stateData.battleState.currentActingEntity
-			].stats.abilities[
-				appState.stateData.gameState.stateData.battleState.verticalSelection
-			].staminaCost + appState.stateData.gameState.playerTeam[
-				appState.stateData.gameState.stateData.battleState.currentActingEntity
-			].stats.statusEffects[SE_EXHAUSTION] <= appState.stateData.gameState.playerTeam[
-				appState.stateData.gameState.stateData.battleState.currentActingEntity
-			].stats.baseStats.currentStamina)
+			if (appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].staminaCost + ((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].abilityId == AB_WAIT) ? 0 : appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.statusEffects[SE_EXHAUSTION]) <= appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.baseStats.currentStamina)
 			{
 				appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_TARGET_SELECT;
 				HandleAbilityTargetInit();
@@ -380,88 +367,94 @@ void HandleBattleInput()
 				ShowPopupMessage("Not enough stamina to use this ability.");
 			}
 		}
-		if(IsPressed(VK_UP))
+		if (IsPressed(VK_UP))
 		{
-			appState.stateData.gameState.stateData.battleState.verticalSelection = (appState.stateData.gameState.stateData.battleState.verticalSelection 
-				+ appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilityCount - 1) 
-				% appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilityCount;
+			appState.stateData.gameState.stateData.battleState.verticalSelection = (appState.stateData.gameState.stateData.battleState.verticalSelection + appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilityCount - 1) % appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilityCount;
 		}
-		if(IsPressed(VK_DOWN))
+		if (IsPressed(VK_DOWN))
 		{
-			appState.stateData.gameState.stateData.battleState.verticalSelection = (appState.stateData.gameState.stateData.battleState.verticalSelection + 1) 
-				% appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilityCount;
+			appState.stateData.gameState.stateData.battleState.verticalSelection = (appState.stateData.gameState.stateData.battleState.verticalSelection + 1) % appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilityCount;
 		}
 	}
-	else if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT)
+	else if (appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT)
 	{
-		if(IsPressed(VK_BACK))
+		if (IsPressed(VK_BACK))
 		{
 			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
-			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;		
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;
 		}
-		if(IsPressed(VK_CONFIRM))
+		if (IsPressed(VK_CONFIRM))
 		{
 			Ability ab = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection];
-			if(appState.stateData.gameState.stateData.battleState.horizontalSelection < 3)
+			if (appState.stateData.gameState.stateData.battleState.horizontalSelection < 3)
 			{
-				CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
-				(CreatureStats*[1]){&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.horizontalSelection].stats}, 1);
+				CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats,
+							(CreatureStats *[1]){&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.horizontalSelection].stats}, 1);
 			}
 			else
 			{
-				if(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection-3].stats.statusEffects[SE_UNTARGETTABLE]>0)
+				if (appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection - 3].stats.statusEffects[SE_UNTARGETTABLE] > 0)
 				{
 					ShowPopupMessage("This enemy is untargettable.");
 					return;
 				}
-				CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
-				(CreatureStats*[1]){&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection-3].stats}, 1);
+				CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats,
+							(CreatureStats *[1]){&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection - 3].stats}, 1);
 			}
-			ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
-			PassTurn();
+			if (!appState.stateData.gameState.stateData.battleState.takeAnotherTurn)
+			{
+				ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
+				PassTurn();
+			}
+			else
+			{
+				appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;
+			}
 		}
-		if(IsPressed(VK_LEFT))
+		if (IsPressed(VK_LEFT))
 		{
-			if(appState.stateData.gameState.stateData.battleState.horizontalSelection < 3)
+			if (appState.stateData.gameState.stateData.battleState.horizontalSelection < 3)
 			{
 				appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 2) % 3;
 			}
-			else{
+			else
+			{
 				appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 1) % 3 + 3;
 			}
 		}
-		if(IsPressed(VK_RIGHT))
+		if (IsPressed(VK_RIGHT))
 		{
-			if(appState.stateData.gameState.stateData.battleState.horizontalSelection < 3)
+			if (appState.stateData.gameState.stateData.battleState.horizontalSelection < 3)
 			{
 				appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 1) % 3;
 			}
-			else{
+			else
+			{
 				appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 2) % 3 + 3;
 			}
 		}
-		if(IsPressed(VK_DOWN) || IsPressed(VK_UP))
+		if (IsPressed(VK_DOWN) || IsPressed(VK_UP))
 		{
-			if(appState.stateData.gameState.stateData.battleState.abilityTargetsAllies && appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
+			if (appState.stateData.gameState.stateData.battleState.abilityTargetsAllies && appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
 			{
-				switch(appState.stateData.gameState.stateData.battleState.horizontalSelection)
+				switch (appState.stateData.gameState.stateData.battleState.horizontalSelection)
 				{
-					case 0:
+				case 0:
 					appState.stateData.gameState.stateData.battleState.horizontalSelection = 5;
 					break;
-					case 1:
+				case 1:
 					appState.stateData.gameState.stateData.battleState.horizontalSelection = 4;
 					break;
-					case 2:
+				case 2:
 					appState.stateData.gameState.stateData.battleState.horizontalSelection = 3;
 					break;
-					case 3:
+				case 3:
 					appState.stateData.gameState.stateData.battleState.horizontalSelection = 2;
 					break;
-					case 4:
+				case 4:
 					appState.stateData.gameState.stateData.battleState.horizontalSelection = 1;
 					break;
-					case 5:
+				case 5:
 					appState.stateData.gameState.stateData.battleState.horizontalSelection = 0;
 					break;
 				}
@@ -472,48 +465,44 @@ void HandleBattleInput()
 
 void HandleDungeonInput()
 {
-	if(appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment)
+	if (appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment)
 	{
 		HandleEquipmentInput();
 		return;
 	}
 
-	if(appState.stateData.gameState.isPaused)
+	if (appState.stateData.gameState.isPaused)
 	{
 		HandlePauseMenuInput();
 		return;
 	}
 
-	if(IsPressed(VK_LEFT))
+	if (IsPressed(VK_LEFT))
 	{
-		appState.stateData.gameState.stateData.dungeonState.selectionX = 
-			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ?
-			(appState.stateData.gameState.stateData.dungeonState.selectionX + 2) % 3 :
-			(appState.stateData.gameState.stateData.dungeonState.selectionX + 5) % 6;
+		appState.stateData.gameState.stateData.dungeonState.selectionX =
+			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ? (appState.stateData.gameState.stateData.dungeonState.selectionX + 2) % 3 : (appState.stateData.gameState.stateData.dungeonState.selectionX + 5) % 6;
 	}
-	if(IsPressed(VK_RIGHT))
+	if (IsPressed(VK_RIGHT))
 	{
-		appState.stateData.gameState.stateData.dungeonState.selectionX = 
-			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ?
-			(appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 3 :
-			(appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 6;
+		appState.stateData.gameState.stateData.dungeonState.selectionX =
+			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ? (appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 3 : (appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 6;
 	}
-	if(IsPressed(VK_DOWN) || IsPressed(VK_UP))
+	if (IsPressed(VK_DOWN) || IsPressed(VK_UP))
 	{
 		appState.stateData.gameState.stateData.dungeonState.selectionY = (appState.stateData.gameState.stateData.dungeonState.selectionY + 1) % 2;
-		switch(appState.stateData.gameState.stateData.dungeonState.selectionY)
+		switch (appState.stateData.gameState.stateData.dungeonState.selectionY)
 		{
-			case 0:
-				appState.stateData.gameState.stateData.dungeonState.selectionX *= 2;
-				break;
-			case 1:
-				appState.stateData.gameState.stateData.dungeonState.selectionX /= 2;
-				break;
+		case 0:
+			appState.stateData.gameState.stateData.dungeonState.selectionX *= 2;
+			break;
+		case 1:
+			appState.stateData.gameState.stateData.dungeonState.selectionX /= 2;
+			break;
 		}
 	}
-	if(IsPressed(VK_CONFIRM))
+	if (IsPressed(VK_CONFIRM))
 	{
-		if(appState.stateData.gameState.stateData.dungeonState.selectionY == 1)
+		if (appState.stateData.gameState.stateData.dungeonState.selectionY == 1)
 		{
 			appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment = true;
 			appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot = 0;
@@ -523,7 +512,7 @@ void HandleDungeonInput()
 			HandleEncounterSelection();
 		}
 	}
-	if(IsPressed(VK_BACK))
+	if (IsPressed(VK_BACK))
 	{
 		appState.stateData.gameState.isPaused = !appState.stateData.gameState.isPaused;
 		appState.stateData.gameState.pauseMenuSelection = 0;
@@ -532,48 +521,43 @@ void HandleDungeonInput()
 
 void HandleEncounterSelection()
 {
-	Encounter encounter = appState.stateData.gameState.stateData.dungeonState.encounters[
-		appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
+	Encounter encounter = appState.stateData.gameState.stateData.dungeonState.encounters[appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
 
-	switch(encounter.id)
+	switch (encounter.id)
 	{
-		case ENC_NONE:
+	case ENC_NONE:
 		ShowPopupMessage("You've safely traversed the empty passage.");
 		appState.stateData.gameState.floor++;
 		InitGameState(GS_DUNGEON);
 		break;
 
-		case ENC_BONFIRE:
-		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth 
-			+ appState.stateData.gameState.playerTeam[0].stats.itemStats.health) * 0.3;
-		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth 
-			+ appState.stateData.gameState.playerTeam[1].stats.itemStats.health) * 0.3;
-		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth 
-			+ appState.stateData.gameState.playerTeam[2].stats.itemStats.health) * 0.3;
+	case ENC_BONFIRE:
+		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) * 0.3;
 
-			appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 
-				(appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) ? 
-				(appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) :
-				appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth;
-			appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 
-				(appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) ? 
-				(appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) :
-				appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth;
-			appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 
-				(appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) ? 
-				(appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) :
-				appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth;
-		
+		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth >
+																						   (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
+																					   ? (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
+																					   : appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth;
+		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth >
+																						   (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health)
+																					   ? (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health)
+																					   : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth;
+		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth >
+																						   (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health)
+																					   ? (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health)
+																					   : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth;
+
 		ShowPopupMessage("The party has rested at the safe place,\nregaining much of its strength.");
 		appState.stateData.gameState.floor++;
 		InitGameState(GS_DUNGEON);
 		break;
 
-		case ENC_CHEST:
-		Item reward = appState.stateData.gameState.stateData.dungeonState.rewards[
-			appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
-		char* message = malloc(1);
-     	message[0] =  '\0'; 
+	case ENC_CHEST:
+		Item reward = appState.stateData.gameState.stateData.dungeonState.rewards[appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
+		char *message = malloc(1);
+		message[0] = '\0';
 		message = CombineStrings("You've opened the chest and found\n", reward.name);
 		message = CombineStrings(message, ".");
 		ShowPopupMessage(message);
@@ -582,7 +566,7 @@ void HandleEncounterSelection()
 		InitGameState(GS_DUNGEON);
 		break;
 
-		default:
+	default:
 		TransitionToBattle();
 		break;
 	}
@@ -590,9 +574,9 @@ void HandleEncounterSelection()
 
 void HandlePauseMenuInput()
 {
-	if(IsPressed(VK_UP))
+	if (IsPressed(VK_UP))
 	{
-		if(appState.stateData.gameState.pauseMenuSelection == 0)
+		if (appState.stateData.gameState.pauseMenuSelection == 0)
 		{
 			appState.stateData.gameState.pauseMenuSelection = PAUSE_MENU_OPTION_COUNT - 1;
 		}
@@ -601,9 +585,9 @@ void HandlePauseMenuInput()
 			appState.stateData.gameState.pauseMenuSelection--;
 		}
 	}
-	if(IsPressed(VK_DOWN))
+	if (IsPressed(VK_DOWN))
 	{
-		if(appState.stateData.gameState.pauseMenuSelection + 1 == PAUSE_MENU_OPTION_COUNT)
+		if (appState.stateData.gameState.pauseMenuSelection + 1 == PAUSE_MENU_OPTION_COUNT)
 		{
 			appState.stateData.gameState.pauseMenuSelection = 0;
 		}
@@ -612,61 +596,57 @@ void HandlePauseMenuInput()
 			appState.stateData.gameState.pauseMenuSelection++;
 		}
 	}
-	if(IsPressed(VK_BACK))
+	if (IsPressed(VK_BACK))
 	{
 		appState.stateData.gameState.isPaused = false;
 	}
-	if(IsPressed(VK_CONFIRM))
+	if (IsPressed(VK_CONFIRM))
 	{
 		switch (appState.stateData.gameState.pauseMenuSelection)
 		{
-			case 0:
-				appState.stateData.gameState.isPaused = false;
-				break;
-			case 1:
-				InitAppState(AS_MAIN_MENU);
-				break;
+		case 0:
+			appState.stateData.gameState.isPaused = false;
+			break;
+		case 1:
+			InitAppState(AS_MAIN_MENU);
+			break;
 		}
 	}
 }
 
 void HandleEquipmentInput()
 {
-	if(appState.stateData.gameState.stateData.dungeonState.isSelectingItem)
+	if (appState.stateData.gameState.stateData.dungeonState.isSelectingItem)
 	{
 		HandleItemSelectInput();
 		return;
 	}
 
-	if(IsPressed(VK_LEFT))
+	if (IsPressed(VK_LEFT))
 	{
-		appState.stateData.gameState.stateData.dungeonState.selectionX = 
-			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ?
-			(appState.stateData.gameState.stateData.dungeonState.selectionX + 2) % 3 :
-			(appState.stateData.gameState.stateData.dungeonState.selectionX + 5) % 6;
+		appState.stateData.gameState.stateData.dungeonState.selectionX =
+			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ? (appState.stateData.gameState.stateData.dungeonState.selectionX + 2) % 3 : (appState.stateData.gameState.stateData.dungeonState.selectionX + 5) % 6;
 	}
-	if(IsPressed(VK_RIGHT))
+	if (IsPressed(VK_RIGHT))
 	{
-		appState.stateData.gameState.stateData.dungeonState.selectionX = 
-			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ?
-			(appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 3 :
-			(appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 6;
+		appState.stateData.gameState.stateData.dungeonState.selectionX =
+			(appState.stateData.gameState.stateData.dungeonState.selectionY == 1) ? (appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 3 : (appState.stateData.gameState.stateData.dungeonState.selectionX + 1) % 6;
 	}
-	if(IsPressed(VK_UP))
+	if (IsPressed(VK_UP))
 	{
 		appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot =
-			(appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot + ITEM_SLOTS -1) % ITEM_SLOTS;
+			(appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot + ITEM_SLOTS - 1) % ITEM_SLOTS;
 	}
-	if(IsPressed(VK_DOWN))
+	if (IsPressed(VK_DOWN))
 	{
 		appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot =
 			(appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot + 1) % ITEM_SLOTS;
 	}
-	if(IsPressed(VK_BACK))
+	if (IsPressed(VK_BACK))
 	{
 		appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment = false;
 	}
-	if(IsPressed(VK_CONFIRM))
+	if (IsPressed(VK_CONFIRM))
 	{
 		appState.stateData.gameState.stateData.dungeonState.isSelectingItem = true;
 		appState.stateData.gameState.stateData.dungeonState.highlightedItem = 0;
@@ -676,21 +656,21 @@ void HandleEquipmentInput()
 
 void HandleItemSelectInput()
 {
-	if(IsPressed(VK_UP))
+	if (IsPressed(VK_UP))
 	{
 		appState.stateData.gameState.stateData.dungeonState.highlightedItem =
-			(appState.stateData.gameState.stateData.dungeonState.highlightedItem + appState.stateData.gameState.stateData.dungeonState.itemIndexListLength) % (appState.stateData.gameState.stateData.dungeonState.itemIndexListLength+1);
+			(appState.stateData.gameState.stateData.dungeonState.highlightedItem + appState.stateData.gameState.stateData.dungeonState.itemIndexListLength) % (appState.stateData.gameState.stateData.dungeonState.itemIndexListLength + 1);
 	}
-	if(IsPressed(VK_DOWN))
+	if (IsPressed(VK_DOWN))
 	{
 		appState.stateData.gameState.stateData.dungeonState.highlightedItem =
-			(appState.stateData.gameState.stateData.dungeonState.highlightedItem + 1) % (appState.stateData.gameState.stateData.dungeonState.itemIndexListLength+1);
+			(appState.stateData.gameState.stateData.dungeonState.highlightedItem + 1) % (appState.stateData.gameState.stateData.dungeonState.itemIndexListLength + 1);
 	}
-	if(IsPressed(VK_BACK))
+	if (IsPressed(VK_BACK))
 	{
 		appState.stateData.gameState.stateData.dungeonState.isSelectingItem = false;
 	}
-	if(IsPressed(VK_CONFIRM))
+	if (IsPressed(VK_CONFIRM))
 	{
 		HandleItemEquip();
 	}

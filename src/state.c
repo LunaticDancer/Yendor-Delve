@@ -10,38 +10,38 @@ extern struct AppState appState;
 
 void InitAppState(enum APP_STATE _state)
 {
-	switch(_state)
+	switch (_state)
 	{
-		case AS_MAIN_MENU:
-			appState.stateData.mainMenuState.currentSelection = MS_PLAY;
-			break;
-		case AS_GAMEPLAY:
-			rng_init(&appState.stateData.gameState.runRng, time(NULL));
-			appState.stateData.gameState.teamCompMask = 7;
-			appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_BERSERKER);
-			appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_ASSASSIN);
-			appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_DUELIST);
-			appState.stateData.gameState.floor = 1;
-			appState.stateData.gameState.isPaused = 0;
-            InitGameState(GS_CHARACTER_SELECT);
-			break;
+	case AS_MAIN_MENU:
+		appState.stateData.mainMenuState.currentSelection = MS_PLAY;
+		break;
+	case AS_GAMEPLAY:
+		rng_init(&appState.stateData.gameState.runRng, time(NULL));
+		appState.stateData.gameState.teamCompMask = 7;
+		appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_BERSERKER);
+		appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_ASSASSIN);
+		appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_DUELIST);
+		appState.stateData.gameState.floor = 1;
+		appState.stateData.gameState.isPaused = 0;
+		InitGameState(GS_CHARACTER_SELECT);
+		break;
 	}
 	appState.appState = _state;
 }
 
 void InitGameState(enum GAME_STATE _state)
 {
-    switch(_state)
-    {
-        case GS_CHARACTER_SELECT:
-        appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected = 0;
-        break;
+	switch (_state)
+	{
+	case GS_CHARACTER_SELECT:
+		appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected = 0;
+		break;
 
-		case GS_DUNGEON:
+	case GS_DUNGEON:
 		appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment = false;
 		appState.stateData.gameState.stateData.dungeonState.selectionX = 0;
 		appState.stateData.gameState.stateData.dungeonState.selectionY = 0;
-		ENCOUNTER_ID* encounterSelection = SelectRandomEncounters(appState.stateData.gameState.floor);
+		ENCOUNTER_ID *encounterSelection = SelectRandomEncounters(appState.stateData.gameState.floor);
 		appState.stateData.gameState.stateData.dungeonState.encounters[0] = GetEncounterData(encounterSelection[0]);
 		appState.stateData.gameState.stateData.dungeonState.encounters[1] = GetEncounterData(encounterSelection[1]);
 		appState.stateData.gameState.stateData.dungeonState.encounters[2] = GetEncounterData(encounterSelection[2]);
@@ -50,7 +50,7 @@ void InitGameState(enum GAME_STATE _state)
 		appState.stateData.gameState.stateData.dungeonState.rewards[2] = InitItem(MatchRewardToEncounter(encounterSelection[2], appState.stateData.gameState.floor));
 		break;
 
-		case GS_BATTLE:
+	case GS_BATTLE:
 		rng_init(&appState.stateData.gameState.stateData.battleState.battleRng, time(NULL));
 		appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
 		appState.stateData.gameState.stateData.battleState.horizontalSelection = 0;
@@ -71,16 +71,14 @@ void InitGameState(enum GAME_STATE _state)
 		appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown = -1;
 		appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask = 0;
 		appState.stateData.gameState.stateData.battleState.flickeringMask = 0;
-    }
+	}
 	appState.stateData.gameState.gameState = _state;
 }
 
 void TransitionToBattle()
 {
-	Item reward = appState.stateData.gameState.stateData.dungeonState.rewards[
-		appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
-	Encounter encounter = appState.stateData.gameState.stateData.dungeonState.encounters[
-		appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
+	Item reward = appState.stateData.gameState.stateData.dungeonState.rewards[appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
+	Encounter encounter = appState.stateData.gameState.stateData.dungeonState.encounters[appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
 
 	InitGameState(GS_BATTLE);
 
@@ -98,12 +96,9 @@ void TransitionToBattle()
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[0].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[1].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[2].stats);
-	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina
-		+ appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina;
-	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina
-		+ appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina;
-	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina
-		+ appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina;
 
 	ResetTurnClock(&appState.stateData.gameState.playerTeam[0].stats);
 	ResetTurnClock(&appState.stateData.gameState.playerTeam[1].stats);
@@ -120,61 +115,75 @@ void HandleAbilityTargetInit()
 	Ability ab = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection];
 	appState.stateData.gameState.stateData.battleState.abilityTargetsAllies = DoesAbilityHaveFlag(ab, AF_TARGETS_ALLIES);
 	appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies = DoesAbilityHaveFlag(ab, AF_TARGETS_ENEMIES);
-	appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies) ?
-	 ((appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0) ? 4 : (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0) ? 3 : 5) : 
-	 ((appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0)?1:(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0)?0:2);
-	 if(ab.abilityId == AB_DUELIST_OPPORTUNITY)
-	 {
+	appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies) ? ((appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0) ? 4 : (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0) ? 3
+																																																																																									 : 5)
+																																						: ((appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0) ? 1 : (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0) ? 0
+																																																																															   : 2);
+	if (ab.abilityId == AB_DUELIST_OPPORTUNITY)
+	{
 		appState.stateData.gameState.stateData.battleState.battleState = BS_OPPORTUNITY_CHOICE;
 		appState.stateData.gameState.stateData.battleState.horizontalSelection = 2;
-	 }
-	if(DoesAbilityHaveFlag(ab, AF_AOE))
+	}
+	if (DoesAbilityHaveFlag(ab, AF_AOE))
 	{
 		if (appState.stateData.gameState.stateData.battleState.abilityTargetsAllies && appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
 		{
-			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
-				(CreatureStats*[6]){&appState.stateData.gameState.playerTeam[0].stats, &appState.stateData.gameState.playerTeam[1].stats, 
-					&appState.stateData.gameState.playerTeam[2].stats,&appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
-					&appState.stateData.gameState.stateData.battleState.enemies[2].stats}, 6);
+			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats,
+						(CreatureStats *[6]){&appState.stateData.gameState.playerTeam[0].stats, &appState.stateData.gameState.playerTeam[1].stats,
+											 &appState.stateData.gameState.playerTeam[2].stats, &appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
+											 &appState.stateData.gameState.stateData.battleState.enemies[2].stats},
+						6);
 		}
-		else if(appState.stateData.gameState.stateData.battleState.abilityTargetsAllies)
+		else if (appState.stateData.gameState.stateData.battleState.abilityTargetsAllies)
 		{
-			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
-				(CreatureStats*[3]){&appState.stateData.gameState.playerTeam[0].stats, &appState.stateData.gameState.playerTeam[1].stats, 
-					&appState.stateData.gameState.playerTeam[2].stats}, 3);
+			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats,
+						(CreatureStats *[3]){&appState.stateData.gameState.playerTeam[0].stats, &appState.stateData.gameState.playerTeam[1].stats,
+											 &appState.stateData.gameState.playerTeam[2].stats},
+						3);
 		}
-		else if(appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
+		else if (appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
 		{
-			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
-				(CreatureStats*[3]){&appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
-				&appState.stateData.gameState.stateData.battleState.enemies[2].stats}, 3);
+			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats,
+						(CreatureStats *[3]){&appState.stateData.gameState.stateData.battleState.enemies[0].stats, &appState.stateData.gameState.stateData.battleState.enemies[1].stats,
+											 &appState.stateData.gameState.stateData.battleState.enemies[2].stats},
+						3);
 		}
-		ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
-		PassTurn();
+		if (!appState.stateData.gameState.stateData.battleState.takeAnotherTurn)
+		{
+			ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
+			PassTurn();
+		}
+		else
+		{
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;
+		}
 	}
-	else if(DoesAbilityHaveFlag(ab, AF_TARGETS_SELF))
+	else if (DoesAbilityHaveFlag(ab, AF_TARGETS_SELF))
 	{
 		CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, malloc(0), 0);
-		ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
-		PassTurn();
+		if (!appState.stateData.gameState.stateData.battleState.takeAnotherTurn)
+		{
+			ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
+			PassTurn();
+		}
+		else
+		{
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;
+		}
 	}
 }
 
 void PassTurn()
 {
-	if(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth <= 0 
-		&& appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth <= 0 
-		&& appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth <= 0)
+	if (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth <= 0)
 	{
 		InitGameState(GS_GAME_OVER);
 		return;
 	}
-	if(appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth <= 0 
-		&& appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth <= 0 
-		&& appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth <= 0)
+	if (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth <= 0)
 	{
-		char* message = malloc(1);
-     	message[0] =  '\0'; 
+		char *message = malloc(1);
+		message[0] = '\0';
 		message = CombineStrings("Victory! You've slain your foes and\nobtained ", appState.stateData.gameState.stateData.battleState.reward.name);
 		message = CombineStrings(message, ".");
 		ShowPopupMessage(message);
@@ -197,35 +206,35 @@ void HandleFleshGolemUpgrade()
 {
 	short hpGain = 0;
 	char skills = 0;
-	for(int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		if(appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << i))
+		if (appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << i))
 		{
 			skills++;
 		}
 	}
-	switch(skills)
+	switch (skills)
 	{
-		case 0:
+	case 0:
 		hpGain = 150;
 		break;
-		case 1:
+	case 1:
 		hpGain = 100;
 		break;
-		case 2:
+	case 2:
 		hpGain = 50;
 		break;
-		case 3:
+	case 3:
 		hpGain = 25;
 		break;
-		case 4:
+	case 4:
 		hpGain = 0;
 		break;
 	}
 
 	for (int i = 0; i < 3; i++)
 	{
-		if(appState.stateData.gameState.playerTeam[i].characterId == CHAR_FLESH_GOLEM)
+		if (appState.stateData.gameState.playerTeam[i].characterId == CHAR_FLESH_GOLEM)
 		{
 			appState.stateData.gameState.playerTeam[i].stats.baseStats.currentHealth += hpGain;
 			appState.stateData.gameState.playerTeam[i].stats.baseStats.maxHealth += hpGain;
@@ -235,9 +244,9 @@ void HandleFleshGolemUpgrade()
 
 void HandleStartOfTurnProcs()
 {
-	CreatureStats* _creature;
-    char* message;
-    char strnum[6];
+	CreatureStats *_creature;
+	char *message;
+	char strnum[6];
 
 	if (appState.stateData.gameState.stateData.battleState.currentActingEntity < 3)
 	{
@@ -245,41 +254,42 @@ void HandleStartOfTurnProcs()
 	}
 	else
 	{
-		_creature = &appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats;
+		_creature = &appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity - 3].stats;
 	}
 
-	if(_creature->statusEffects[SE_BLEED] > 0)
+	if (_creature->statusEffects[SE_BLEED] > 0)
 	{
 		sprintf(strnum, "%d", _creature->statusEffects[SE_BLEED]);
-        message = CombineStrings((*_creature).baseStats.name, " bleeds for ");
-        message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " damage.");
+		message = CombineStrings((*_creature).baseStats.name, " bleeds for ");
+		message = CombineStrings(message, strnum);
+		message = CombineStrings(message, " damage.");
 		AddMessageToFeed(message);
 		DealDamage(_creature->statusEffects[SE_BLEED], _creature, true, NULL);
 	}
 }
 
-void AddMessageToFeed(char* msg)
+void AddMessageToFeed(char *msg)
 {
-		appState.stateData.gameState.stateData.battleState.messages[11] = appState.stateData.gameState.stateData.battleState.messages[10];
-		appState.stateData.gameState.stateData.battleState.messages[10] = appState.stateData.gameState.stateData.battleState.messages[9];
-		appState.stateData.gameState.stateData.battleState.messages[9] = appState.stateData.gameState.stateData.battleState.messages[8];
-		appState.stateData.gameState.stateData.battleState.messages[8] = appState.stateData.gameState.stateData.battleState.messages[7];
-		appState.stateData.gameState.stateData.battleState.messages[7] = appState.stateData.gameState.stateData.battleState.messages[6];
-		appState.stateData.gameState.stateData.battleState.messages[6] = appState.stateData.gameState.stateData.battleState.messages[5];
-		appState.stateData.gameState.stateData.battleState.messages[5] = appState.stateData.gameState.stateData.battleState.messages[4];
-		appState.stateData.gameState.stateData.battleState.messages[4] = appState.stateData.gameState.stateData.battleState.messages[3];
-		appState.stateData.gameState.stateData.battleState.messages[3] = appState.stateData.gameState.stateData.battleState.messages[2];
-		appState.stateData.gameState.stateData.battleState.messages[2] = appState.stateData.gameState.stateData.battleState.messages[1];
-		appState.stateData.gameState.stateData.battleState.messages[1] = appState.stateData.gameState.stateData.battleState.messages[0];
-		appState.stateData.gameState.stateData.battleState.messages[0] = msg;
+	appState.stateData.gameState.stateData.battleState.messages[11] = appState.stateData.gameState.stateData.battleState.messages[10];
+	appState.stateData.gameState.stateData.battleState.messages[10] = appState.stateData.gameState.stateData.battleState.messages[9];
+	appState.stateData.gameState.stateData.battleState.messages[9] = appState.stateData.gameState.stateData.battleState.messages[8];
+	appState.stateData.gameState.stateData.battleState.messages[8] = appState.stateData.gameState.stateData.battleState.messages[7];
+	appState.stateData.gameState.stateData.battleState.messages[7] = appState.stateData.gameState.stateData.battleState.messages[6];
+	appState.stateData.gameState.stateData.battleState.messages[6] = appState.stateData.gameState.stateData.battleState.messages[5];
+	appState.stateData.gameState.stateData.battleState.messages[5] = appState.stateData.gameState.stateData.battleState.messages[4];
+	appState.stateData.gameState.stateData.battleState.messages[4] = appState.stateData.gameState.stateData.battleState.messages[3];
+	appState.stateData.gameState.stateData.battleState.messages[3] = appState.stateData.gameState.stateData.battleState.messages[2];
+	appState.stateData.gameState.stateData.battleState.messages[2] = appState.stateData.gameState.stateData.battleState.messages[1];
+	appState.stateData.gameState.stateData.battleState.messages[1] = appState.stateData.gameState.stateData.battleState.messages[0];
+	appState.stateData.gameState.stateData.battleState.messages[0] = msg;
 }
 
 void AddItemToInventory(Item it)
 {
-	for(int i = 0; i < INVENTORY_SIZE; i++)
+	for (int i = 0; i < INVENTORY_SIZE; i++)
 	{
-		if(appState.stateData.gameState.inventory[i].itemId != ITEM_NONE) continue;
+		if (appState.stateData.gameState.inventory[i].itemId != ITEM_NONE)
+			continue;
 
 		appState.stateData.gameState.inventory[i] = it;
 		return;
@@ -288,46 +298,37 @@ void AddItemToInventory(Item it)
 
 void HandleItemEquip()
 {
-	if (appState.stateData.gameState.playerTeam[
-		appState.stateData.gameState.stateData.dungeonState.selectionX
-	].items[appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot].itemId != ITEM_NONE)
+	if (appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.dungeonState.selectionX].items[appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot].itemId != ITEM_NONE)
 	{
-		AddItemToInventory(appState.stateData.gameState.playerTeam[
-		appState.stateData.gameState.stateData.dungeonState.selectionX
-	].items[appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot]);
+		AddItemToInventory(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.dungeonState.selectionX].items[appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot]);
 	}
 
-	UnequipItem(&appState.stateData.gameState.playerTeam[
-		appState.stateData.gameState.stateData.dungeonState.selectionX], 
-		appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot);
+	UnequipItem(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.dungeonState.selectionX],
+				appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot);
 
-	EquipItem(&appState.stateData.gameState.playerTeam[
-		appState.stateData.gameState.stateData.dungeonState.selectionX], 
-		(appState.stateData.gameState.stateData.dungeonState.highlightedItem == 0) ? ITEM_NONE : 
-		appState.stateData.gameState.inventory[appState.stateData.gameState.stateData.dungeonState.slotItemIndexes[
-			appState.stateData.gameState.stateData.dungeonState.highlightedItem - 1]].itemId,
-		appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot);
+	EquipItem(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.dungeonState.selectionX],
+			  (appState.stateData.gameState.stateData.dungeonState.highlightedItem == 0) ? ITEM_NONE : appState.stateData.gameState.inventory[appState.stateData.gameState.stateData.dungeonState.slotItemIndexes[appState.stateData.gameState.stateData.dungeonState.highlightedItem - 1]].itemId,
+			  appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot);
 
 	if (appState.stateData.gameState.stateData.dungeonState.highlightedItem != 0)
 	{
-	appState.stateData.gameState.inventory[appState.stateData.gameState.stateData.dungeonState.slotItemIndexes[
-		appState.stateData.gameState.stateData.dungeonState.highlightedItem - 1]] = InitItem(ITEM_NONE);
+		appState.stateData.gameState.inventory[appState.stateData.gameState.stateData.dungeonState.slotItemIndexes[appState.stateData.gameState.stateData.dungeonState.highlightedItem - 1]] = InitItem(ITEM_NONE);
 	}
 
 	appState.stateData.gameState.stateData.dungeonState.isSelectingItem = false;
 }
 
-void AddCreatureToFlicker(CreatureStats* c)
+void AddCreatureToFlicker(CreatureStats *c)
 {
-	for(int i=0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		if(c == &appState.stateData.gameState.playerTeam[i].stats)
+		if (c == &appState.stateData.gameState.playerTeam[i].stats)
 		{
 			appState.stateData.gameState.stateData.battleState.flickeringMask += 1 << i;
 		}
-		if(c == &appState.stateData.gameState.stateData.battleState.enemies[i].stats)
+		if (c == &appState.stateData.gameState.stateData.battleState.enemies[i].stats)
 		{
-			appState.stateData.gameState.stateData.battleState.flickeringMask += 1 << (i+3);
+			appState.stateData.gameState.stateData.battleState.flickeringMask += 1 << (i + 3);
 		}
 	}
 }
@@ -350,20 +351,17 @@ short DetermineCurrentActingEntity()
 		minTicks = appState.stateData.gameState.playerTeam[2].stats.baseStats.ticksUntilNextTurn;
 		result = 2;
 	}
-	if (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn < minTicks 
-		&& appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0)
+	if (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn < minTicks && appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0)
 	{
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.ticksUntilNextTurn;
 		result = 3;
 	}
-	if (appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn < minTicks
-		&& appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0)
+	if (appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn < minTicks && appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0)
 	{
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn;
 		result = 4;
 	}
-	if (appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn < minTicks
-		&& appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth > 0)
+	if (appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn < minTicks && appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth > 0)
 	{
 		minTicks = appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn;
 		result = 5;
@@ -382,27 +380,12 @@ void ProgressTime(short ticks)
 	appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn -= ticks;
 
-	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[0].stats.baseStats.staminaRegen
-		+ appState.stateData.gameState.playerTeam[0].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[0].stats.encounterStats.staminaRegen)
-		* ((float)ticks / 1000.0);
-	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[1].stats.baseStats.staminaRegen
-		+ appState.stateData.gameState.playerTeam[1].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[1].stats.encounterStats.staminaRegen)
-		* ((float)ticks / 1000.0);
-	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[2].stats.baseStats.staminaRegen
-		+ appState.stateData.gameState.playerTeam[2].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[2].stats.encounterStats.staminaRegen)
-		* ((float)ticks / 1000.0);
-	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina 
-		> appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina
-		+ appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina
-		+ appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina;
-	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina 
-		> appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina
-		+ appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina
-		+ appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina;
-	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina 
-		> appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina
-		+ appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina
-		+ appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[0].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[0].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[0].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[1].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[1].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[1].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[2].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[2].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[2].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina;
 
 	appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
 	appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
@@ -426,13 +409,15 @@ void ProgressTime(short ticks)
 	ProgressLingeringEffects(&appState.stateData.gameState.stateData.battleState.enemies[2].stats, ticks);
 }
 
-void HandleTemporaryStats(CreatureStats* c, short ticks)
+void HandleTemporaryStats(CreatureStats *c, short ticks)
 {
 	for (int i = 0; i < STAT_DEBUFFS; i++)
 	{
-		if(c->temporaryStats[i].tickDuration <= 0) continue;
+		if (c->temporaryStats[i].tickDuration <= 0)
+			continue;
 		c->temporaryStats[i].tickDuration -= ticks;
-		if(c->temporaryStats[i].tickDuration > 0) continue;
+		if (c->temporaryStats[i].tickDuration > 0)
+			continue;
 		c->encounterStats.armor -= c->temporaryStats[i].debuff.armor;
 		c->encounterStats.critMultiplier -= c->temporaryStats[i].debuff.critMultiplier;
 		c->encounterStats.critRate -= c->temporaryStats[i].debuff.critRate;
@@ -458,45 +443,48 @@ void CreatePrognoses()
 
 	for (int i = 0; i < 6; i++)
 	{
-		if(i<3)
+		if (i < 3)
 		{
 			tickTimers[i] = appState.stateData.gameState.playerTeam[i].stats.baseStats.ticksUntilNextTurn;
 		}
 		else
 		{
-			tickTimers[i] = appState.stateData.gameState.stateData.battleState.enemies[i-3].stats.baseStats.ticksUntilNextTurn;
-			enemyState[i-3] = appState.stateData.gameState.stateData.battleState.enemies[i-3];
+			tickTimers[i] = appState.stateData.gameState.stateData.battleState.enemies[i - 3].stats.baseStats.ticksUntilNextTurn;
+			enemyState[i - 3] = appState.stateData.gameState.stateData.battleState.enemies[i - 3];
 		}
 	}
 
 	for (int i = 0; i < TURN_PROGNOSES; i++)
 	{
-		if(actingEntity < 3)
+		if (actingEntity < 3)
 		{
-			appState.stateData.gameState.stateData.battleState.turnIndicators[i] = 
+			appState.stateData.gameState.stateData.battleState.turnIndicators[i] =
 				(TurnIndicator){actingEntity, false, 0, AB_WAIT};
 			tickTimers[actingEntity] = CalculateNextTurnTicks(&appState.stateData.gameState.playerTeam[actingEntity].stats);
 		}
 		else
 		{
-			appState.stateData.gameState.stateData.battleState.turnIndicators[i] = 
-			CreateEnemyPrognosis(actingEntity, &enemyState[actingEntity-3], &prognosisRng);
-			tickTimers[actingEntity] = CalculateNextTurnTicks(&appState.stateData.gameState.stateData.battleState.enemies[actingEntity-3].stats);
+			appState.stateData.gameState.stateData.battleState.turnIndicators[i] =
+				CreateEnemyPrognosis(actingEntity, &enemyState[actingEntity - 3], &prognosisRng);
+			tickTimers[actingEntity] = CalculateNextTurnTicks(&appState.stateData.gameState.stateData.battleState.enemies[actingEntity - 3].stats);
 		}
 
 		short shortest = 9999;
 		actingEntity = 0;
 		for (int j = 0; j < 6; j++)
 		{
-			if(j < 3)
+			if (j < 3)
 			{
-				if(appState.stateData.gameState.playerTeam[j].stats.baseStats.currentHealth <= 0) continue;
+				if (appState.stateData.gameState.playerTeam[j].stats.baseStats.currentHealth <= 0)
+					continue;
 			}
 			else
 			{
-				if(appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.currentHealth <= 0) continue;
+				if (appState.stateData.gameState.stateData.battleState.enemies[j - 3].stats.baseStats.currentHealth <= 0)
+					continue;
 			}
-			if(tickTimers[j] >= shortest) continue;
+			if (tickTimers[j] >= shortest)
+				continue;
 			actingEntity = j;
 			shortest = tickTimers[j];
 		}
@@ -507,215 +495,231 @@ void CreatePrognoses()
 	}
 }
 
-TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng)
+TurnIndicator CreateEnemyPrognosis(char id, Enemy *c, RNG *rng)
 {
 	TurnIndicator result = (TurnIndicator){id, true, 1, AB_WAIT};
 	short abilitySelected = 0;
 
-	switch(c->enemyId)
+	switch (c->enemyId)
 	{
-		default:		// generic enemy AI for universal use
+	default: // generic enemy AI for universal use
+	{
+		if (c->stats.abilityCount > 2)
 		{
-			if(c->stats.abilityCount > 2)
-			{
-				abilitySelected = rng_next_u32(rng) % (c->stats.abilityCount-2);
-				if(c->stats.abilities[abilitySelected].abilityId == c->lastUsedAbility) abilitySelected = c->stats.abilityCount-2;
-			}
-			result.abilityId = c->stats.abilities[abilitySelected].abilityId;
-			c->lastUsedAbility = result.abilityId;
-			result.isAttack = !(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ALLIES) || DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_SELF));
+			abilitySelected = rng_next_u32(rng) % (c->stats.abilityCount - 2);
+			if (c->stats.abilities[abilitySelected].abilityId == c->lastUsedAbility)
+				abilitySelected = c->stats.abilityCount - 2;
+		}
+		result.abilityId = c->stats.abilities[abilitySelected].abilityId;
+		c->lastUsedAbility = result.abilityId;
+		result.isAttack = !(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ALLIES) || DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_SELF));
 
-			// targetting time
-			result.receiverMask = 0;
-			if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_SELF))
+		// targetting time
+		result.receiverMask = 0;
+		if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_SELF))
+		{
+			// result.receiverMask = result.receiverMask | (1 << id);
+		}
+		else if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_AOE))
+		{
+			if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES))
+				result.receiverMask += 7;
+			if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ALLIES))
+				result.receiverMask += 56;
+		}
+		else
+		{
+			if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES))
 			{
-				// result.receiverMask = result.receiverMask | (1 << id);
-			}
-			else if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_AOE))
-			{
-				if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES)) result.receiverMask += 7;
-				if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ALLIES)) result.receiverMask += 56;
+				result.receiverMask = result.receiverMask | (1 << PickSingularTarget(c, rng));
 			}
 			else
 			{
-				if(DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES))
+				bool targets[] = {
+					(appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0),
+					(appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0),
+					(appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth > 0),
+				};
+				char numberOfLivingTargets =
+					(targets[0] ? 1 : 0) +
+					(targets[1] ? 1 : 0) +
+					(targets[2] ? 1 : 0);
+				char tr = (rng_next_u32(rng) % numberOfLivingTargets);
+				char pick = 0;
+				for (int i = 0; i < 3; i++)
 				{
-					result.receiverMask = result.receiverMask | (1 << PickSingularTarget(c, rng));
-				}
-				else
-				{
-					bool targets[] = {
-						(appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0),
-						(appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0),
-						(appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth > 0),
-					};
-					char numberOfLivingTargets = 
-						(targets[0] ? 1 : 0) +
-						(targets[1] ? 1 : 0) +
-						(targets[2] ? 1 : 0);
-					char tr = (rng_next_u32(rng) % numberOfLivingTargets); 
-					char pick = 0;
-					for(int i = 0; i < 3; i++)
-					{
-						if(!targets[i]) continue;
-						if(tr == pick) result.receiverMask = result.receiverMask | (1 << (i + 3));
-						pick++;
-					}
+					if (!targets[i])
+						continue;
+					if (tr == pick)
+						result.receiverMask = result.receiverMask | (1 << (i + 3));
+					pick++;
 				}
 			}
 		}
+	}
 	}
 
 	return result;
 }
 
-char PickSingularTarget(Enemy* c, RNG* rng)
+char PickSingularTarget(Enemy *c, RNG *rng)
 {
 	char pick = 0;
 	bool targets[] = {
-		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0 
-			&& appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
-		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0 
-			&& appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
-		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0 
-			&& appState.stateData.gameState.playerTeam[2].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
+		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
+		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
+		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[2].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
 	};
-	char numberOfLivingTargets = 
+	char numberOfLivingTargets =
 		(targets[0] ? 1 : 0) +
 		(targets[1] ? 1 : 0) +
 		(targets[2] ? 1 : 0);
-	switch(c->targettingBehavior)
+	switch (c->targettingBehavior)
 	{
-		case TG_TRUE_RANDOM:
-		char tr = (rng_next_u32(rng) % numberOfLivingTargets); 
-		for(int i = 0; i < 3; i++)
+	case TG_TRUE_RANDOM:
+		char tr = (rng_next_u32(rng) % numberOfLivingTargets);
+		for (int i = 0; i < 3; i++)
 		{
-			if(!targets[i]) continue;
-			if(tr == pick) return i;
+			if (!targets[i])
+				continue;
+			if (tr == pick)
+				return i;
 			pick++;
 		}
 		break;
-		case TG_FRONT:
+	case TG_FRONT:
 		short highestPriority = 0;
-		for(int i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++)
 		{
-			if(!targets[i]) continue;
-			if(highestPriority > appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority + 
-				appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority)
+			if (!targets[i])
+				continue;
+			if (highestPriority > appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority +
+									  appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority)
 			{
 				pick = i;
 				highestPriority = appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority;
 			}
 		}
 		return pick;
-		case TG_BACK:
+	case TG_BACK:
 		short lowestPriority = 9999;
-		for(int i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++)
 		{
-			if(!targets[i]) continue;
-			if(lowestPriority < appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority + 
-				appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority)
+			if (!targets[i])
+				continue;
+			if (lowestPriority < appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority +
+									 appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority)
 			{
 				pick = i;
 				lowestPriority = appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority;
 			}
 		}
 		return pick;
-		case TG_WEIGHTED_RANDOM:
+	case TG_WEIGHTED_RANDOM:
+	{
+		short priorities[] = {
+			appState.stateData.gameState.playerTeam[0].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.encounterStats.targetPriority,
+			appState.stateData.gameState.playerTeam[1].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.encounterStats.targetPriority,
+			appState.stateData.gameState.playerTeam[2].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.encounterStats.targetPriority,
+		};
+		short roll = rng_next_u32(rng) % ((targets[0] ? priorities[0] : 0) + (targets[1] ? priorities[1] : 0) + (targets[2] ? priorities[2] : 0));
+		for (int i = 0; i < 3; i++)
 		{
-			short  priorities[] = {
-				appState.stateData.gameState.playerTeam[0].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.encounterStats.targetPriority,
-				appState.stateData.gameState.playerTeam[1].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.encounterStats.targetPriority,
-				appState.stateData.gameState.playerTeam[2].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.encounterStats.targetPriority,
-			}; 
-			short roll = rng_next_u32(rng) % ((targets[0] ?  priorities[0] : 0) + (targets[1] ?  priorities[1] : 0) + (targets[2] ?  priorities[2] : 0));
-			for(int i = 0; i<3; i++)
-			{
-				if(roll <= priorities[i] && targets[i]) return i;
-				roll -= priorities[i];
-			}
+			if (roll <= priorities[i] && targets[i])
+				return i;
+			roll -= priorities[i];
 		}
+	}
 	}
 	return pick;
 }
 
 void HandleEnemyTurn()
 {
-	if(appState.appState != AS_GAMEPLAY) return;
-	if(appState.stateData.gameState.gameState != GS_BATTLE) return;
-	if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT) return;
-	if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW) return;
-	if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT) return;
+	if (appState.appState != AS_GAMEPLAY)
+		return;
+	if (appState.stateData.gameState.gameState != GS_BATTLE)
+		return;
+	if (appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT)
+		return;
+	if (appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW)
+		return;
+	if (appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT)
+		return;
 
-	if(appState.stateData.gameState.stateData.battleState.battleState == BS_SHOW_ABILITY_VFX)
+	if (appState.stateData.gameState.stateData.battleState.battleState == BS_SHOW_ABILITY_VFX)
 	{
 		appState.stateData.gameState.stateData.battleState.statePauseTimer -= GetFrameTime();
-		if(appState.stateData.gameState.stateData.battleState.statePauseTimer <= 0)
+		if (appState.stateData.gameState.stateData.battleState.statePauseTimer <= 0)
 		{
 			appState.stateData.gameState.stateData.battleState.flickeringMask = 0;
-			appState.stateData.gameState.stateData.battleState.battleState = appState.stateData.gameState.stateData.battleState.currentActingEntity < 3 ? 
-				BS_PLAYER_ABILITY_SELECT : BS_ENEMY_TURN;
+			appState.stateData.gameState.stateData.battleState.battleState = appState.stateData.gameState.stateData.battleState.currentActingEntity < 3 ? BS_PLAYER_ABILITY_SELECT : BS_ENEMY_TURN;
 		}
 	}
 
-	if(appState.stateData.gameState.stateData.battleState.battleState == BS_ENEMY_TURN)
+	if (appState.stateData.gameState.stateData.battleState.battleState == BS_ENEMY_TURN)
 	{
-		TakeAutonomousTurn(&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3]);
+		TakeAutonomousTurn(&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity - 3]);
 	}
 }
 
-void TakeAutonomousTurn(Enemy* actor)
+void TakeAutonomousTurn(Enemy *actor)
 {
-		if(actor->stats.baseStats.currentHealth <= 0)
-		{
-			PassTurn();
-			return;
-		}
+	if (actor->stats.baseStats.currentHealth <= 0)
+	{
+		PassTurn();
+		return;
+	}
 
 	// dummy call to sync RNG
 	CreateEnemyPrognosis(appState.stateData.gameState.stateData.battleState.currentActingEntity, actor, &appState.stateData.gameState.stateData.battleState.battleRng);
 
-    char numberOfTargets = 0;
-    for(int j = 0; j < 6; j++)
-    {
-        if((appState.stateData.gameState.stateData.battleState.turnIndicators[0].receiverMask & (1 << j))) numberOfTargets++;
-    }
-	CreatureStats** targets = malloc(sizeof(CreatureStats*) * numberOfTargets);
+	char numberOfTargets = 0;
+	for (int j = 0; j < 6; j++)
+	{
+		if ((appState.stateData.gameState.stateData.battleState.turnIndicators[0].receiverMask & (1 << j)))
+			numberOfTargets++;
+	}
+	CreatureStats **targets = malloc(sizeof(CreatureStats *) * numberOfTargets);
 	char i = 0;
-    for(int j = 0; j < 6; j++)
-    {
-        if(!(appState.stateData.gameState.stateData.battleState.turnIndicators[0].receiverMask & (1 << j))) continue;
-		if(j<3)
+	for (int j = 0; j < 6; j++)
+	{
+		if (!(appState.stateData.gameState.stateData.battleState.turnIndicators[0].receiverMask & (1 << j)))
+			continue;
+		if (j < 3)
 		{
 			targets[i] = &appState.stateData.gameState.playerTeam[j].stats;
 		}
 		else
 		{
-			targets[i] = &appState.stateData.gameState.stateData.battleState.enemies[j-3].stats;
+			targets[i] = &appState.stateData.gameState.stateData.battleState.enemies[j - 3].stats;
 		}
 		i++;
-    }
-	
+	}
+
 	CastAbility(appState.stateData.gameState.stateData.battleState.turnIndicators[0].abilityId, 0, &actor->stats, targets, numberOfTargets);
-	
-	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats);
-	PassTurn();
+
+	if (!appState.stateData.gameState.stateData.battleState.takeAnotherTurn)
+	{
+		ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity - 3].stats);
+		PassTurn();
+	}
 }
 
 void PrepareListOfSlotAppropriateItems(EQUIPMENT_SLOT slot)
 {
-	char* result = malloc(sizeof(char));
+	char *result = malloc(sizeof(char));
 	char numberOfPositions = 0;
 
 	for (int i = 0; i < INVENTORY_SIZE; i++)
 	{
-		if((appState.stateData.gameState.inventory[i].slot == slot ||
-			appState.stateData.gameState.inventory[i].slot == ES_EVERY)
-		&& appState.stateData.gameState.inventory[i].itemId != ITEM_NONE)
+		if ((appState.stateData.gameState.inventory[i].slot == slot ||
+			 appState.stateData.gameState.inventory[i].slot == ES_EVERY) &&
+			appState.stateData.gameState.inventory[i].itemId != ITEM_NONE)
 		{
 			numberOfPositions++;
 			result = realloc(result, numberOfPositions * sizeof(char));
-			result[numberOfPositions-1] = i;
+			result[numberOfPositions - 1] = i;
 		}
 	}
 
@@ -730,13 +734,13 @@ bool CheckIfHeroInParty(CHARACTER_ID id)
 
 void HandleRealTimePopups()
 {
-	if(appState.appState == AS_GAMEPLAY)
+	if (appState.appState == AS_GAMEPLAY)
 	{
 		appState.stateData.gameState.messageTimer -= GetFrameTime();
 	}
 }
 
-void ShowPopupMessage(char* msg)
+void ShowPopupMessage(char *msg)
 {
 	appState.stateData.gameState.messageTimer = GAME_MESSAGE_DISPLAY_TIME + strlen(msg) * GAME_MESSAGE_DISPLAY_TIME_PER_CHARACTER;
 	appState.stateData.gameState.message = msg;
