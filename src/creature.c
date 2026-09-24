@@ -152,8 +152,16 @@ void ResetTurnClock(CreatureStats* _creature)
 
 short CalculateNextTurnTicks(CreatureStats* _creature)
 {
-    float value = 100.0 / (100 + (*_creature).baseStats.speed + (*_creature).encounterStats.speed + (*_creature).itemStats.speed - (*_creature).statusEffects[SE_EXHAUSTION]);
-    return (short)(value*1000);
+    short speed = (*_creature).baseStats.speed + (*_creature).encounterStats.speed + (*_creature).itemStats.speed - (*_creature).statusEffects[SE_EXHAUSTION];
+    if(speed > 0)
+    {
+        float value = 100.0 / (100 + speed);
+        return (short)(value*1000);
+    }
+    else
+    {
+        return 1000 - speed;
+    }
 }
 
 
@@ -406,6 +414,19 @@ char* GetAbilityDescription(ABILITY id, CreatureStats* caster)
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Mock an enemy, delaying their turn by ", strnum);
         result = CombineStrings(result, " (100 + 200% Mastery) ticks.");
+        return result;
+        case AB_STEVENANT_SIPHON:
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Apply ", strnum);
+        result = CombineStrings(result, " (20 + 100% Mastery) Exhaustion to an enemy and gain that much Speed.");
+        return result;
+        case AB_STEVENANT_PHASING_STRIKE:
+        sprintf(strnum, "%.0f", ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (20 + 100% Mastery) damage to an enemy and become Untargettable for 300 ticks.");
+        return result;
+        case AB_STEVENANT_ECTOPLASMIC_MANIFESTATION:
+        result = "Gain 30 Mastery and Defense.";
         return result;
         default:
         return "Ability description missing, oopsie!";
@@ -887,6 +908,47 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         targets[0]->baseStats.ticksUntilNextTurn += primaryEffectValue;
+        break;
+        case AB_STEVENANT_SIPHON:
+        primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " siphons ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, "'s life force, applying ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Exhaustion and gaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Speed.");
+        AddMessageToFeed(message);
+        targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
+        caster->encounterStats.speed += primaryEffectValue;
+        AddCreatureToFlicker(targets[0]);
+        break;
+        case AB_STEVENANT_PHASING_STRIKE:
+        primaryEffectValue = (30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage( primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " passes through ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " with malice, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and becoming untargettable for 300 ticks.");
+        AddMessageToFeed(message);
+        caster->statusEffects[SE_UNTARGETTABLE] = 300;
+        AddCreatureToFlicker(targets[0]);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break;
+        case AB_STEVENANT_ECTOPLASMIC_MANIFESTATION:
+        primaryEffectValue = 30 * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " stirs its ectoplasm, gaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Mastery and ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Defense.");
+        AddMessageToFeed(message);
+        caster->encounterStats.mastery += primaryEffectValue;
+        caster->encounterStats.defense += primaryEffectValue;
+        AddCreatureToFlicker(caster);
         break;
         default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
