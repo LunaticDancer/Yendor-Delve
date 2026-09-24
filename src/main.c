@@ -319,6 +319,14 @@ void HandleBattleInput()
 			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
 			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;		
 		}
+		if(IsPressed(VK_DOWN))
+		{
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + (TURN_PROGNOSES-1)) % TURN_PROGNOSES;
+		}
+		if(IsPressed(VK_UP))
+		{
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.horizontalSelection + 1) % TURN_PROGNOSES;
+		}
 	}
 	else if(appState.stateData.gameState.stateData.battleState.battleState == BS_OPPORTUNITY_CHOICE)
 	{

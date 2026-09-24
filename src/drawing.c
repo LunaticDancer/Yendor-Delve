@@ -30,6 +30,7 @@ extern struct AppState appState;
 NPatchInfo frameInfo = {(Rectangle){0,0,96,96}, 32, 32, 32, 32, NPATCH_NINE_PATCH};
 
 void DrawBattleAbilitySelection();
+void DrawBattleAbilityDescription(CreatureStats*, ABILITY);
 void DrawPrognoses();
 void DrawBattleScreenPartyMember(char);
 void DrawBattleScreenEnemy(char);
@@ -138,16 +139,7 @@ void DrawBattle()
 void DrawBattleAbilitySelection()
 {
     CreatureStats* caster = &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats;
-    char* abilityDesc = GetAbilityDescription(caster->abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].abilityId, caster);
-
-    DrawRectangle(160, 128, 480 - LAYOUT_SPACING, 224, BLACK);
-    DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ 160, 128, 480 - LAYOUT_SPACING, 224}, (Vector2){0,0}, 0, DARKGRAY);
-
-    Vector2 textSize = MeasureTextEx(basicFontLarger, caster->abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].name, 32, 0);
-    Vector2 textPosition = {400 - textSize.x / 2, 140};
-    DrawTextEx(basicFontLarger, caster->abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].name, textPosition, 32, 0, LIGHTGRAY);
-
-    DrawTextBoxed(basicFont, abilityDesc, (Rectangle){192, 176, 416-LAYOUT_SPACING, 224},16,0,true, GRAY);
+    DrawBattleAbilityDescription(caster, caster->abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].abilityId);
 
     short height = (*caster).abilityCount * 18;
     DrawRectangle(390, 446 - height, 245, height+29, BLACK);
@@ -160,6 +152,20 @@ void DrawBattleAbilitySelection()
     }
 }
 
+void DrawBattleAbilityDescription(CreatureStats* c, ABILITY a)
+{
+    char* abilityDesc = GetAbilityDescription(a, c);
+
+    DrawRectangle(160, 128, 480 - LAYOUT_SPACING, 224, BLACK);
+    DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ 160, 128, 480 - LAYOUT_SPACING, 224}, (Vector2){0,0}, 0, DARKGRAY);
+
+    Vector2 textSize = MeasureTextEx(basicFontLarger, InitAbility(a).name, 32, 0);
+    Vector2 textPosition = {400 - textSize.x / 2, 140};
+    DrawTextEx(basicFontLarger, InitAbility(a).name, textPosition, 32, 0, LIGHTGRAY);
+
+    DrawTextBoxed(basicFont, abilityDesc, (Rectangle){192, 176, 416-LAYOUT_SPACING, 224},16,0,true, GRAY);
+}
+
 void DrawPrognoses()
 {
     Vector2 boxSize = (Vector2){144, 34};
@@ -167,7 +173,9 @@ void DrawPrognoses()
     {
         Vector2 position = (Vector2){LAYOUT_SPACING, 355 - ((i+1)*(LAYOUT_SPACING+boxSize.y))};
         DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){ position.x, position.y, boxSize.x, boxSize.y}, 
-        (Vector2){0,0}, 0, (i == 0) ? LIGHTGRAY : DARKGRAY);
+        (Vector2){0,0}, 0, 
+        (appState.stateData.gameState.stateData.battleState.horizontalSelection == i && appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW) 
+        ? GOLD : ((i == 0) ? LIGHTGRAY : DARKGRAY));
         if(appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId < 3)
         {
             DrawTexturePro(
@@ -189,6 +197,11 @@ void DrawPrognoses()
         }
         else
         {
+            if(appState.stateData.gameState.stateData.battleState.horizontalSelection == i && appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW)
+            {
+                DrawBattleAbilityDescription(&appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats,
+                    appState.stateData.gameState.stateData.battleState.turnIndicators[i].abilityId);
+            }
             char numberOfTargets = 0;
             char offset = -12;
             for(int j = 0; j < 6; j++)
