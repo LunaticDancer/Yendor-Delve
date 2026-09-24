@@ -550,9 +550,9 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng)
 						(appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth > 0),
 					};
 					char numberOfLivingTargets = 
-						targets[0] ? 1 : 0 +
-						targets[1] ? 1 : 0 +
-						targets[2] ? 1 : 0;
+						(targets[0] ? 1 : 0) +
+						(targets[1] ? 1 : 0) +
+						(targets[2] ? 1 : 0);
 					char tr = (rng_next_u32(rng) % numberOfLivingTargets); 
 					char pick = 0;
 					for(int i = 0; i < 3; i++)
@@ -581,9 +581,9 @@ char PickSingularTarget(Enemy* c, RNG* rng)
 			&& appState.stateData.gameState.playerTeam[2].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
 	};
 	char numberOfLivingTargets = 
-		targets[0] ? 1 : 0 +
-		targets[1] ? 1 : 0 +
-		targets[2] ? 1 : 0;
+		(targets[0] ? 1 : 0) +
+		(targets[1] ? 1 : 0) +
+		(targets[2] ? 1 : 0);
 	switch(c->targettingBehavior)
 	{
 		case TG_TRUE_RANDOM:
