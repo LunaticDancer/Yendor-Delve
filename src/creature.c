@@ -821,7 +821,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats* caster, CreatureStats** 
         message = CombineStrings(message, " ticks out of shyness.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        targets[0]->baseStats.critCounter -= primaryEffectValue;
+        targets[0]->baseStats.ticksUntilNextTurn += primaryEffectValue;
         break;
         default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
