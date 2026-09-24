@@ -830,7 +830,7 @@ void DrawDungeonScreenPartyMember(char index)
             },
             (Rectangle){
                 LAYOUT_SPACING + 138 + (160 * index),
-                SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) + 40,
+                SCREEN_HEIGHT - (SCREEN_HEIGHT / 4) + 48,
                 TILE_SIZE * 2, TILE_SIZE * 2,
             },
             (Vector2){0,0},

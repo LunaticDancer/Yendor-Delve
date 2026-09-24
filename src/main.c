@@ -411,7 +411,7 @@ void HandleBattleInput()
 			{
 				if(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection-3].stats.statusEffects[SE_UNTARGETTABLE]>0)
 				{
-					ShowPopupMessage("This enemy is untagettable.");
+					ShowPopupMessage("This enemy is untargettable.");
 					return;
 				}
 				CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats, 
