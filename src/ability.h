@@ -2,6 +2,11 @@
 #define ability_h
 #include "raylib.h"
 
+#define MAGUS_DISINTEGRATE_COST 300
+#define MAGUS_ARCANE_BLAST_COST 350
+#define MAGUS_TUTOR_COST 300
+#define MAGUS_SARCOPHAGUS_COST 50
+
 typedef enum ABILITY
 {
     AB_WAIT,
@@ -27,6 +32,10 @@ typedef enum ABILITY
     AB_FOLEM_CRIPPLE,
     AB_SHAPESHIFTER_SCRATCH,
     AB_SHAPESHIFTER_TRANSFORM,
+    AB_MAGUS_DISINTEGRATE,      // stupidly strong single target attack
+    AB_MAGUS_ARCANE_BLAST,      // aoe attack
+    AB_MAGUS_TUTOR,                 // give ally mastery and stamina
+    AB_MAGUS_SARCOPHAGUS,   // give an ally a massive boost of defense but considerably delay their next turn
     AB_MIMIC_PETRIFY,
     AB_MIMIC_CHOMP,
     AB_MIMIC_IMPALE,

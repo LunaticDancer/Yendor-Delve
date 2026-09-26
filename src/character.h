@@ -13,6 +13,7 @@ typedef enum CHARACTER_ID
     CHAR_MONK,          // high stamina costs, great mastery scaling
     CHAR_SHAPESHIFTER,  // can turn into enemies
     CHAR_FLESH_GOLEM,   // starts off weak but gets stronger with each combat encounter
+    CHAR_MAGUS,         // one HP but uniquely uses stamina as a shield
     CHAR_LENGTH,
 } CHARACTER_ID;
 

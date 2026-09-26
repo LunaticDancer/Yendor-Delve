@@ -153,7 +153,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .defense = 60,
                     .armor = 0,
                     .critMultiplier = 100,
-                    .critRate = 5,
+                    .critRate = 10,
                     .critCounter = 0,
                     .mastery = 0,
                     .targetPriority = 500,
@@ -248,6 +248,48 @@ Character InitCharacterData(CHARACTER_ID id)
                 .temporaryStats = {},
                 .lingeringEffects = {},
                 .abilities = InitAbilities((ABILITY[]){AB_FOLEM_STRIKE,AB_FOLEM_EXPUNGE, AB_FOLEM_EPIDERMIZE,AB_FOLEM_CRIPPLE,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            {
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+            },
+        };
+        break;
+        case CHAR_MAGUS:
+        return (Character){
+            id,
+            "Master of the arcane, ascendant beyond mortal limits.\nMagus is an extremely potent but frail spellcaster, using their Stamina as a makeshift shield.",
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Magus",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){10, 6},
+                    .color = PURPLE,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 1,
+                    .maxHealth = 1,
+                    .currentStamina = 500,
+                    .maxStamina = 500,
+                    .staminaRegen = 150,
+                    .speed = 100,
+                    .defense = 0,
+                    .armor = 0,
+                    .critMultiplier = 100,
+                    .critRate = 10,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 400,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_MAGUS_DISINTEGRATE,AB_MAGUS_ARCANE_BLAST,AB_MAGUS_TUTOR,AB_MAGUS_SARCOPHAGUS,AB_WAIT}, 5),
                 .abilityCount = 5,
             },
             {

@@ -34,7 +34,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "Battlecry",
-            0,
+            1,
             AF_TARGETS_SELF,
         };
         case AB_BERSERKER_BRACE:
@@ -122,7 +122,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "True Strike",
-            600,
+            500,
             AF_TARGETS_ENEMIES,
         };
         case AB_MONK_ATTUNEMENT:
@@ -130,7 +130,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "Attunement",
-            600,
+            500,
             AF_TARGETS_ALLIES,
         };
         case AB_MONK_CLEANSE:
@@ -188,6 +188,38 @@ Ability InitAbility(ABILITY id)
             "Transform",
             10,
             AF_TARGETS_ENEMIES,
+        };
+        case AB_MAGUS_DISINTEGRATE:
+        return (Ability)
+        {
+            id,
+            "Disintegrate",
+            MAGUS_DISINTEGRATE_COST,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_MAGUS_ARCANE_BLAST:
+        return (Ability)
+        {
+            id,
+            "Arcane Blast",
+            MAGUS_ARCANE_BLAST_COST,
+            AF_TARGETS_ENEMIES+AF_AOE,
+        };
+        case AB_MAGUS_TUTOR:
+        return (Ability)
+        {
+            id,
+            "Tutor",
+            MAGUS_TUTOR_COST,
+            AF_TARGETS_ALLIES,
+        };
+        case AB_MAGUS_SARCOPHAGUS:
+        return (Ability)
+        {
+            id,
+            "Sarcophagus",
+            MAGUS_SARCOPHAGUS_COST,
+            AF_TARGETS_ALLIES,
         };
         case AB_MIMIC_CHOMP:
         return (Ability)
