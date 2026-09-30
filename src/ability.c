@@ -221,6 +221,38 @@ Ability InitAbility(ABILITY id)
             MAGUS_SARCOPHAGUS_COST,
             AF_TARGETS_ALLIES,
         };
+        case AB_RIPPER_EVISCERATE:
+        return (Ability)
+        {
+            id,
+            "Eviscerate",
+            200,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_RIPPER_MARK:
+        return (Ability)
+        {
+            id,
+            "Mark Prey",
+            80,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_RIPPER_CHASE:
+        return (Ability)
+        {
+            id,
+            "Chase",
+            150,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_RIPPER_TRANSFUSION:
+        return (Ability)
+        {
+            id,
+            "Dubious Transfusion",
+            100,
+            AF_TARGETS_ALLIES,
+        };
         case AB_MIMIC_CHOMP:
         return (Ability)
         {

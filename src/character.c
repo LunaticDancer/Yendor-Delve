@@ -300,6 +300,48 @@ Character InitCharacterData(CHARACTER_ID id)
             },
         };
         break;
+        case CHAR_RIPPER:
+        return (Character){
+            id,
+            "Surgical freak in exile, obsessed with cutting and molding flesh.\nThe Ripper takes a turn immediately after something dies, friend or foe.",
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Ripper",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){4,7},
+                    .color = DARKGREEN,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 800,
+                    .maxHealth = 800,
+                    .currentStamina = 800,
+                    .maxStamina = 800,
+                    .staminaRegen = 150,
+                    .speed = 100,
+                    .defense = 40,
+                    .armor = 0,
+                    .critMultiplier = 40,
+                    .critRate = 20,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_RIPPER_EVISCERATE,AB_RIPPER_MARK,AB_RIPPER_CHASE,AB_RIPPER_TRANSFUSION,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            {
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+            },
+        };
+        break;
     }
 }
 

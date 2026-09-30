@@ -283,9 +283,9 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (20 + 40% Mastery) Defense until next turn. Take an additional turn immediately after.");
         return result;
     case AB_ASSASSIN_SLASH:
-        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.6)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Wound the enemy, dealing ", strnum);
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((15 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (20 + 20% Mastery) damage and applying ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (10 + 10% Mastery) Bleed.");
@@ -418,6 +418,29 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (100% Mastery + 100% missing Stamina) Defense and ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (5% Mastery + 10% missing Stamina) Armor until their next turn, while delaying it by another turn.");
+        return result;
+    case AB_RIPPER_EVISCERATE:
+        sprintf(strnum, "%.0f", (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (100 + 50% Mastery) damage to an enemy, further amplified by negative status effects they carry.");
+        return result;
+    case AB_RIPPER_MARK:
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Remove ", strnum);
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (10 + 10% Mastery) Armour from an enemy and apply ");
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (10 + 40% Mastery) Bleed.");
+        return result;
+    case AB_RIPPER_CHASE:
+        sprintf(strnum, "%.0f", (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Apply ", strnum);
+        result = CombineStrings(result, " (60 + 100% Mastery) Exhaustion to an enemy, and gain as much Speed for 1000 ticks of time.");
+        return result;
+    case AB_RIPPER_TRANSFUSION:
+        sprintf(strnum, "%.0f", (((caster->baseStats.currentHealth) * 0.5)));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (50% current Health) damage to yourself. Heal an ally by 60% of the damage dealt. Permanently raise your Mastery by 20% of the damage dealt.");
         return result;
     case AB_MIMIC_CHOMP:
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
@@ -555,8 +578,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
         break;
     case AB_ASSASSIN_SLASH:
-        primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateEffectAmplification(caster, true);
-        short assassinSlashBleed = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.6) * CalculateEffectAmplification(caster, true);
+        short assassinSlashBleed = (15 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " slashes ");
         message = CombineStrings(message, targets[0]->baseStats.name);

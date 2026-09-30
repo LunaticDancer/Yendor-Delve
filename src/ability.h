@@ -34,8 +34,12 @@ typedef enum ABILITY
     AB_SHAPESHIFTER_TRANSFORM,
     AB_MAGUS_DISINTEGRATE,      // stupidly strong single target attack
     AB_MAGUS_ARCANE_BLAST,      // aoe attack
-    AB_MAGUS_TUTOR,                 // give ally mastery and stamina
+    AB_MAGUS_TUTOR,                 // give ally mastery and crit
     AB_MAGUS_SARCOPHAGUS,   // give an ally a massive boost of defense but considerably delay their next turn
+    AB_RIPPER_EVISCERATE,
+    AB_RIPPER_MARK,
+    AB_RIPPER_CHASE,
+    AB_RIPPER_TRANSFUSION,
     AB_MIMIC_PETRIFY,
     AB_MIMIC_CHOMP,
     AB_MIMIC_IMPALE,
