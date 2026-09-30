@@ -353,6 +353,7 @@ void HandleBattleInput()
 		if (IsPressed(VK_BACK))
 		{
 			appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
+			appState.stateData.gameState.stateData.battleState.horizontalSelection = 0;
 			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_OVERVIEW;
 		}
 		if (IsPressed(VK_CONFIRM))
