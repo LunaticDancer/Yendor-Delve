@@ -265,8 +265,8 @@ Character InitCharacterData(CHARACTER_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Magus",
-                    .tileset = TL_CREATURES,
-                    .tileLookupPosition = (Vector2){10, 6},
+                    .tileset = TL_GENERAL,
+                    .tileLookupPosition = (Vector2){21, 1},
                     .color = PURPLE,
 
                     .ticksUntilNextTurn = 0,

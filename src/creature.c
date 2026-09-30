@@ -229,6 +229,19 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
     }
 }
 
+void HandlePain(CreatureStats* c)
+{
+    if(c->statusEffects[SE_PAIN] <= 0) return;
+
+    char* message = CombineStrings(c->baseStats.name, " winces in pain, receiving ");
+    char strnum[6];
+    sprintf(strnum, "%d", CalculateDamage(c->statusEffects[SE_PAIN], c));
+    message = CombineStrings(message, strnum);
+    message = CombineStrings(message, " damage from their wounds.");
+    AddMessageToFeed(message);
+    DealDamage(c->statusEffects[SE_PAIN], c, false, NULL);
+}
+
 float CalculateEffectAmplification(CreatureStats *caster, bool affectedByBerserk)
 {
     return 1 + ((caster->baseStats.critCounter / CRIT_PROGRESS_MAX) * (((*caster).baseStats.critBonus + (*caster).itemStats.critBonus + (*caster).encounterStats.critBonus) * 0.01)) + (affectedByBerserk ? caster->statusEffects[SE_BERSERK] * 0.01 : 0) + ((appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown == 0) ? appState.stateData.gameState.stateData.battleState.opportunityMult : 0);
@@ -952,6 +965,40 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         StatDebuff magusSarcophagusBuff = (StatDebuff){CalculateNextTurnTicks(caster), magusSarcophagusBonus};
         ApplyStatDebuff(caster, magusSarcophagusBuff);
         break;
+    case AB_RIPPER_REND:
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, true);
+        short ripperRendShred = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateEffectAmplification(caster, true);
+        short ripperRendPain = (ripperRendShred > targets[0]->baseStats.armor + targets[0]->encounterStats.armor + targets[0]->itemStats.armor) ? 
+        ripperRendShred - (targets[0]->baseStats.armor + targets[0]->encounterStats.armor + targets[0]->itemStats.armor) : 0;
+        sprintf(strnum, "%d", primaryEffectValue, targets[0]);
+        message = CombineStrings((*caster).baseStats.name, " hacks at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", applying ");
+        message = CombineStrings(message, strnum);
+        if(ripperRendPain != 0)
+        {
+            message = CombineStrings(message, " Bleed, removing ");
+            sprintf(strnum, "%d", targets[0]->baseStats.armor + targets[0]->encounterStats.armor + targets[0]->itemStats.armor);
+            message = CombineStrings(message, strnum);
+            message = CombineStrings(message, " Armour and applying ");
+            sprintf(strnum, "%d", ripperRendPain);
+            message = CombineStrings(message, strnum);
+            message = CombineStrings(message, " Pain.");
+        }
+        else
+        {
+            message = CombineStrings(message, " Bleed and removing ");
+            sprintf(strnum, "%d", ripperRendShred);
+            message = CombineStrings(message, strnum);
+            message = CombineStrings(message, " Armour.");
+        }
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
+        targets[0]->encounterStats.armor -= ripperRendShred - ripperRendPain;
+        targets[0]->statusEffects[SE_PAIN] += ripperRendPain;
+        DealDamage(0, targets[0], true, caster);
+        break;
     case AB_MIMIC_CHOMP:
         primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, true);
         short mimicChompStaminaLoss = (150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true);
@@ -1095,6 +1142,12 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         break;
     }
+
+    for(int i = 0; i<numberOfTargets;i++)
+    {
+        HandlePain(targets[i]);
+    }
+
     if (!dontResetCritProgress)
     {
         (*caster).baseStats.critCounter = (*caster).baseStats.critCounter % CRIT_PROGRESS_MAX;
