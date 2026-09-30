@@ -229,21 +229,21 @@ Ability InitAbility(ABILITY id)
             200,
             AF_TARGETS_ENEMIES,
         };
-        case AB_RIPPER_MARK:
+        case AB_RIPPER_REND:
         return (Ability)
         {
             id,
-            "Mark Prey",
-            80,
+            "Rend",
+            100,
             AF_TARGETS_ENEMIES,
         };
-        case AB_RIPPER_CHASE:
+        case AB_RIPPER_PREPARE:
         return (Ability)
         {
             id,
-            "Chase",
+            "Stalk",
             150,
-            AF_TARGETS_ENEMIES,
+            AF_TARGETS_ENEMIES + AF_TARGETS_ALLIES,
         };
         case AB_RIPPER_TRANSFUSION:
         return (Ability)

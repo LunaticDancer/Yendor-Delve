@@ -69,9 +69,13 @@ void DrawMainMenu()
     textPosition.x = SCREEN_WIDTH / 2 - textSize.x / 2;
     textPosition.y = 272;
     DrawTextEx(basicFontLarger, "Play", textPosition, 32, 0, (appState.stateData.mainMenuState.currentSelection == MS_PLAY) ? WHITE : GRAY);
-    textSize = MeasureTextEx(basicFontLarger, "Quit", 32, 0);
+    textSize = MeasureTextEx(basicFontLarger, "Settings", 32, 0);
     textPosition.x = SCREEN_WIDTH / 2 - textSize.x / 2;
     textPosition.y = 272 + MENU_BUTTON_SPACING;
+    DrawTextEx(basicFontLarger, "Settings", textPosition, 32, 0, (appState.stateData.mainMenuState.currentSelection == MS_SETTINGS) ? WHITE : GRAY);
+    textSize = MeasureTextEx(basicFontLarger, "Quit", 32, 0);
+    textPosition.x = SCREEN_WIDTH / 2 - textSize.x / 2;
+    textPosition.y = 272 + MENU_BUTTON_SPACING * 2;
     DrawTextEx(basicFontLarger, "Quit", textPosition, 32, 0, (appState.stateData.mainMenuState.currentSelection == MS_QUIT) ? WHITE : GRAY);
 
     textSize = MeasureTextEx(basicFontLarger, "LunaticDancer, 2026", 16, 0);

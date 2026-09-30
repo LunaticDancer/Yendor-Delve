@@ -11,6 +11,7 @@ typedef enum STATUS_EFFECT
     SE_BERSERK,         // remove X Def, add X% damage output
     SE_EXHAUSTION,      // remove X speed, abilities cost X more stamina
     SE_UNTARGETTABLE,   // can't be targetted by enemy abilities for X ticks
+    SE_PAIN,                    // deal X damage each time the creature becomes a target of ability
     SE_LENGTH,
 } STATUS_EFFECT;
 
@@ -38,7 +39,7 @@ typedef struct CreatureBaseStats
     short speed;                      // diminishing formula, at speed 0 the wait time is 1000 ticks
     short defense;                      // diminishing formula
     short armor;                        // flat damage reduction
-    float critMultiplier;             // damage amplification percent on top of baseline 100%
+    float critBonus;             // damage amplification percent on top of baseline 100%
     short critRate;                     // crit can exceed 100%, making it proc mustiple times, applying the multiplier each time
     short critCounter;                  // crit occurence accumulation, persists between battles
     short mastery;                      // ability scaling
@@ -53,7 +54,7 @@ typedef struct StatBonuses
     short speed;
     short defense;
     short armor;
-    float critMultiplier;
+    float critBonus;
     short critRate;
     short mastery;
     float damageMultiplier;

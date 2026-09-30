@@ -26,7 +26,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 60,
                     .armor = 1,
-                    .critMultiplier = 100,
+                    .critBonus = 100,
                     .critRate = 5,
                     .critCounter = 0,
                     .mastery = 0,
@@ -48,7 +48,7 @@ Character InitCharacterData(CHARACTER_ID id)
             },
         };
         break;
-        case CHAR_ASSASSIN:
+        /*case CHAR_ASSASSIN:
         return (Character){
             id,
             "Mysterious and elusive, the Assassin is a frail but tactical fighter, waiting for the right opportunity to deal a decisive strike.\nThe Assassin is a tricky character, specializing in stealth, capitalizing on critical opportunities and bleeding the opponent to death.",
@@ -68,7 +68,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 110,
                     .defense = 40,
                     .armor = 0,
-                    .critMultiplier = 125,
+                    .critBonus = 125,
                     .critRate = 25,
                     .critCounter = 0,
                     .mastery = 0,
@@ -89,7 +89,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 InitItem(ITEM_NONE),
             },
         };
-        break;
+        break;*/
         case CHAR_DUELIST:
         return (Character){
             id,
@@ -110,7 +110,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 20,
                     .armor = 0,
-                    .critMultiplier = 100,
+                    .critBonus = 100,
                     .critRate = 5,
                     .critCounter = 0,
                     .mastery = 0,
@@ -152,7 +152,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 60,
                     .armor = 0,
-                    .critMultiplier = 100,
+                    .critBonus = 100,
                     .critRate = 10,
                     .critCounter = 0,
                     .mastery = 0,
@@ -194,7 +194,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 200,
                     .defense = 100,
                     .armor = 1,
-                    .critMultiplier = 100,
+                    .critBonus = 100,
                     .critRate = 15,
                     .critCounter = 0,
                     .mastery = 0,
@@ -236,7 +236,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 90,
                     .defense = 10,
                     .armor = 0,
-                    .critMultiplier = 100,
+                    .critBonus = 100,
                     .critRate = 5,
                     .critCounter = 0,
                     .mastery = 0,
@@ -278,7 +278,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 0,
                     .armor = 0,
-                    .critMultiplier = 100,
+                    .critBonus = 100,
                     .critRate = 10,
                     .critCounter = 0,
                     .mastery = 0,
@@ -303,7 +303,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_RIPPER:
         return (Character){
             id,
-            "Surgical freak in exile, obsessed with cutting and molding flesh.\nThe Ripper takes a turn immediately after something dies, friend or foe.",
+            "Surgical freak in exile, obsessed with cutting and molding flesh. She is the reason why you look over the shoulder in a dark alleyway.\nThe Ripper takes a turn immediately after something dies, friend or foe, also gaining a guaranteed crit.",
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Ripper",
@@ -317,10 +317,10 @@ Character InitCharacterData(CHARACTER_ID id)
                     .currentStamina = 800,
                     .maxStamina = 800,
                     .staminaRegen = 150,
-                    .speed = 100,
+                    .speed = 80,
                     .defense = 40,
                     .armor = 0,
-                    .critMultiplier = 40,
+                    .critBonus = 100,
                     .critRate = 20,
                     .critCounter = 0,
                     .mastery = 0,
@@ -331,7 +331,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 .itemStats = CreateEmptyStatBonuses(),
                 .temporaryStats = {},
                 .lingeringEffects = {},
-                .abilities = InitAbilities((ABILITY[]){AB_RIPPER_EVISCERATE,AB_RIPPER_MARK,AB_RIPPER_CHASE,AB_RIPPER_TRANSFUSION,AB_WAIT}, 5),
+                .abilities = InitAbilities((ABILITY[]){AB_RIPPER_REND,AB_RIPPER_EVISCERATE,AB_RIPPER_PREPARE,AB_RIPPER_TRANSFUSION,AB_WAIT}, 5),
                 .abilityCount = 5,
             },
             {
@@ -352,7 +352,7 @@ void EquipItem(Character* ch, ITEM_ID it, char slot)
     (*ch).items[slot] = InitItem(it);
 
     (*ch).stats.itemStats.armor += (*ch).items[slot].statBonuses.armor;
-    (*ch).stats.itemStats.critMultiplier += (*ch).items[slot].statBonuses.critMultiplier;
+    (*ch).stats.itemStats.critBonus += (*ch).items[slot].statBonuses.critBonus;
     (*ch).stats.itemStats.critRate += (*ch).items[slot].statBonuses.critRate;
     (*ch).stats.itemStats.damageMultiplier += (*ch).items[slot].statBonuses.damageMultiplier;
     (*ch).stats.itemStats.defense += (*ch).items[slot].statBonuses.defense;
@@ -372,7 +372,7 @@ void EquipItem(Character* ch, ITEM_ID it, char slot)
 void UnequipItem(Character* ch, char slot)
 {
     (*ch).stats.itemStats.armor -= (*ch).items[slot].statBonuses.armor;
-    (*ch).stats.itemStats.critMultiplier -= (*ch).items[slot].statBonuses.critMultiplier;
+    (*ch).stats.itemStats.critBonus -= (*ch).items[slot].statBonuses.critBonus;
     (*ch).stats.itemStats.critRate -= (*ch).items[slot].statBonuses.critRate;
     (*ch).stats.itemStats.damageMultiplier -= (*ch).items[slot].statBonuses.damageMultiplier;
     (*ch).stats.itemStats.defense -= (*ch).items[slot].statBonuses.defense;
@@ -430,7 +430,7 @@ char* GetCharacterStatsRundown(Character ch)
      result = CombineStrings(result, "%");
 
      result = CombineStrings(result, "\nCrit Bonus: ");
-     sprintf(str_num, "%.0f", ch.stats.baseStats.critMultiplier + ch.stats.itemStats.critMultiplier);
+     sprintf(str_num, "%.0f", ch.stats.baseStats.critBonus + ch.stats.itemStats.critBonus);
     result = CombineStrings(result, str_num);
      result = CombineStrings(result, "%");
 

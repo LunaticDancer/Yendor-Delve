@@ -19,8 +19,8 @@ void InitAppState(enum APP_STATE _state)
 		rng_init(&appState.stateData.gameState.runRng, time(NULL));
 		appState.stateData.gameState.teamCompMask = 7;
 		appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_BERSERKER);
-		appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_ASSASSIN);
-		appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_DUELIST);
+		appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_DUELIST);
+		appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_MONK);
 		appState.stateData.gameState.floor = 1;
 		appState.stateData.gameState.isPaused = 0;
 		InitGameState(GS_CHARACTER_SELECT);
@@ -419,7 +419,7 @@ void HandleTemporaryStats(CreatureStats *c, short ticks)
 		if (c->temporaryStats[i].tickDuration > 0)
 			continue;
 		c->encounterStats.armor -= c->temporaryStats[i].debuff.armor;
-		c->encounterStats.critMultiplier -= c->temporaryStats[i].debuff.critMultiplier;
+		c->encounterStats.critBonus -= c->temporaryStats[i].debuff.critBonus;
 		c->encounterStats.critRate -= c->temporaryStats[i].debuff.critRate;
 		c->encounterStats.damageMultiplier -= c->temporaryStats[i].debuff.damageMultiplier;
 		c->encounterStats.defense -= c->temporaryStats[i].debuff.defense;

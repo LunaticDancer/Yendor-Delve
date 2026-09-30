@@ -50,7 +50,7 @@ void ApplyStatDebuff(CreatureStats *c, StatDebuff d)
         return;
     c->temporaryStats[index] = d;
     c->encounterStats.armor += d.debuff.armor;
-    c->encounterStats.critMultiplier += d.debuff.critMultiplier;
+    c->encounterStats.critBonus += d.debuff.critBonus;
     c->encounterStats.critRate += d.debuff.critRate;
     c->encounterStats.damageMultiplier += d.debuff.damageMultiplier;
     c->encounterStats.defense += d.debuff.defense;
@@ -231,7 +231,7 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
 
 float CalculateEffectAmplification(CreatureStats *caster, bool affectedByBerserk)
 {
-    return 1 + ((caster->baseStats.critCounter / CRIT_PROGRESS_MAX) * (((*caster).baseStats.critMultiplier + (*caster).itemStats.critMultiplier + (*caster).encounterStats.critMultiplier) * 0.01)) + (affectedByBerserk ? caster->statusEffects[SE_BERSERK] * 0.01 : 0) + ((appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown == 0) ? appState.stateData.gameState.stateData.battleState.opportunityMult : 0);
+    return 1 + ((caster->baseStats.critCounter / CRIT_PROGRESS_MAX) * (((*caster).baseStats.critBonus + (*caster).itemStats.critBonus + (*caster).encounterStats.critBonus) * 0.01)) + (affectedByBerserk ? caster->statusEffects[SE_BERSERK] * 0.01 : 0) + ((appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown == 0) ? appState.stateData.gameState.stateData.battleState.opportunityMult : 0);
 }
 
 Ability *InitAbilities(ABILITY abilities[], short count)
@@ -419,28 +419,28 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (5% Mastery + 10% missing Stamina) Armor until their next turn, while delaying it by another turn.");
         return result;
-    case AB_RIPPER_EVISCERATE:
-        sprintf(strnum, "%.0f", (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (100 + 50% Mastery) damage to an enemy, further amplified by negative status effects they carry.");
-        return result;
-    case AB_RIPPER_MARK:
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings("Remove ", strnum);
+    case AB_RIPPER_REND:
         sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (10 + 10% Mastery) Armour from an enemy and apply ");
-        result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (10 + 40% Mastery) Bleed.");
-        return result;
-    case AB_RIPPER_CHASE:
-        sprintf(strnum, "%.0f", (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Apply ", strnum);
-        result = CombineStrings(result, " (60 + 100% Mastery) Exhaustion to an enemy, and gain as much Speed for 1000 ticks of time.");
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (10 + 40% Mastery) Bleed to an enemy and remove ");
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (10 + 10% Mastery) of their Armour. If there's no more Armour to remove, apply Pain instead.");
+        return result;
+    case AB_RIPPER_EVISCERATE:
+        result = "Deal unavoidable damage to an enemy equal to four times the sum of negative effects they carry.";
+        return result;
+    case AB_RIPPER_PREPARE:
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
+        result = CombineStrings("Give an ally ", strnum);
+        sprintf(strnum, "%.0f", (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (10 + 30% Mastery) Crit Bonus and make them Untargettable for 500 ticks OR apply ");
+        result = CombineStrings(result, " (60 + 100% Mastery) Exhaustion to an enemy.");
         return result;
     case AB_RIPPER_TRANSFUSION:
         sprintf(strnum, "%.0f", (((caster->baseStats.currentHealth) * 0.5)));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (50% current Health) damage to yourself. Heal an ally by 60% of the damage dealt. Permanently raise your Mastery by 20% of the damage dealt.");
+        result = CombineStrings(result, " (50% current Health) damage to yourself. Heal an ally by 60% of the damage dealt and cleanse their status effects. Permanently raise your Mastery by 20% of the damage dealt.");
         return result;
     case AB_MIMIC_CHOMP:
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
@@ -605,7 +605,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, "% Crit Bonus.");
         caster->baseStats.critCounter += primaryEffectValue;
-        caster->encounterStats.critMultiplier += assassinPrepareCritMult;
+        caster->encounterStats.critBonus += assassinPrepareCritMult;
         dontResetCritProgress = true;
         AddMessageToFeed(message);
         break;
@@ -927,7 +927,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
         targets[0]->encounterStats.mastery += primaryEffectValue;
-        targets[0]->encounterStats.critMultiplier += magusTutorCM;
+        targets[0]->encounterStats.critBonus += magusTutorCM;
         break;
     case AB_MAGUS_SARCOPHAGUS:
         primaryEffectValue = (((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) + 

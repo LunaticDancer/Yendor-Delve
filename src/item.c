@@ -75,14 +75,14 @@ char* GetItemStatSpread(Item it)    // what do you mean "item" is a keyword
         result = CombineStrings(result, str_num);
         result = CombineStrings(result, " Armour\n");
      }
-     if(it.statBonuses.critMultiplier != 0)
+     if(it.statBonuses.critBonus != 0)
      {
-        if (it.statBonuses.critMultiplier > 0)
+        if (it.statBonuses.critBonus > 0)
         {
             result = CombineStrings(result, "+");
         }
         char str_num[6];
-        sprintf(str_num, "%.0f", it.statBonuses.critMultiplier);
+        sprintf(str_num, "%.0f", it.statBonuses.critBonus);
         result = CombineStrings(result, str_num);
         result = CombineStrings(result, "% Crit Bonus\n");
      }
@@ -242,7 +242,7 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
         };
         result.statBonuses.critRate =15;
-        result.statBonuses.critMultiplier = 80;
+        result.statBonuses.critBonus = 80;
         result.statBonuses.mastery = 60;
         result.statBonuses.speed = - 30;
         return result;
@@ -356,7 +356,7 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
         };
         result.statBonuses.critRate = 25;
-        result.statBonuses.critMultiplier = 40;
+        result.statBonuses.critBonus = 40;
         result.statBonuses.speed = 50;
         return result;
         case ITEM_THIEF_HOOD:
