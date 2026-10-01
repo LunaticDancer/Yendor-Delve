@@ -999,6 +999,71 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         targets[0]->statusEffects[SE_PAIN] += ripperRendPain;
         DealDamage(0, targets[0], true, caster);
         break;
+    case AB_RIPPER_EVISCERATE:
+        primaryEffectValue = (4 * (targets[0]->statusEffects[SE_BLEED] + targets[0]->statusEffects[SE_BERSERK] + targets[0]->statusEffects[SE_EXHAUSTION] 
+            + targets[0]->statusEffects[SE_PAIN])) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " tears ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " apart from the inside, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " unavoidable damage.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        DealDamage(primaryEffectValue, targets[0], true, caster);
+        break;
+    case AB_RIPPER_PREPARE:
+        if(appState.stateData.gameState.stateData.battleState.horizontalSelection <3)
+        {
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " conceals ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", making them Untargettable for 500 ticks and giving them ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, "% Crit Bonus.");
+        targets[0]->statusEffects[SE_UNTARGETTABLE] = 500;
+        targets[0]->encounterStats.critBonus += primaryEffectValue;
+        }
+        else
+        {
+        primaryEffectValue = (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " tires ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", out in a manic chase, applying ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Exhaustion.");
+        targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
+        }
+        AddCreatureToFlicker(targets[0]);
+        AddMessageToFeed(message);
+        break;
+    case AB_RIPPER_TRANSFUSION:
+        primaryEffectValue = CalculateDamage(caster->baseStats.currentHealth/2, caster);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " deals ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage to self and heals ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " for ");
+        sprintf(strnum, "%d", (short)(primaryEffectValue * 0.6));
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Health, while gaining ");
+        sprintf(strnum, "%d", (short)(primaryEffectValue * 0.2));
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " permanent Mastery.");
+        AddCreatureToFlicker(targets[0]);
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(caster);
+        DealDamage(primaryEffectValue, caster, true, caster);
+        targets[0]->baseStats.currentHealth += (short)(primaryEffectValue * 0.6);
+        if(targets[0]->baseStats.currentHealth > targets[0]->baseStats.maxHealth + targets[0]->itemStats.health + targets[0]->encounterStats.health)
+        {
+            targets[0]->baseStats.currentHealth = targets[0]->baseStats.maxHealth + targets[0]->itemStats.health + targets[0]->encounterStats.health;
+        }
+        caster->baseStats.mastery += (short)(primaryEffectValue * 0.2);
+    break;
     case AB_MIMIC_CHOMP:
         primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, true);
         short mimicChompStaminaLoss = (150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true);

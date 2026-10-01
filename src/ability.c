@@ -138,7 +138,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "Cleanse",
-            300,
+            200,
             AF_TARGETS_ALLIES + AF_TARGETS_ENEMIES,
         };
         case AB_FOLEM_STRIKE:
