@@ -267,6 +267,20 @@ void HandleCharacterSelectInput()
 				InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId - 1 + CHAR_LENGTH) % CHAR_LENGTH);
 		} while (CheckIfHeroInParty(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId));
 
+		switch(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected)
+		{
+			case 0:
+			appState.settings.character1 = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId;
+			break;
+			case 1:
+			appState.settings.character2 = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId;
+			break;
+			case 2:
+			appState.settings.character3 = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId;
+			break;
+		}
+		SaveConfig();
+
 		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask | (1 << appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
 	}
 	if (IsPressed(VK_DOWN))
@@ -278,6 +292,20 @@ void HandleCharacterSelectInput()
 				InitCharacterData((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId + 1) % CHAR_LENGTH);
 		} while (CheckIfHeroInParty(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId));
 
+		switch(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected)
+		{
+			case 0:
+			appState.settings.character1 = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId;
+			break;
+			case 1:
+			appState.settings.character2 = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId;
+			break;
+			case 2:
+			appState.settings.character3 = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId;
+			break;
+		}
+		SaveConfig();
+
 		appState.stateData.gameState.teamCompMask = appState.stateData.gameState.teamCompMask | (1 << appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected].characterId);
 	}
 	if (IsPressed(VK_BACK))
@@ -288,6 +316,7 @@ void HandleCharacterSelectInput()
 	{
 		if (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == 3)
 		{
+			SaveConfig();
 			InitGameState(GS_DUNGEON);
 			ShowPopupMessage("Seek the amulet of Yendor in\nthe depths of the dungeon.");
 		}

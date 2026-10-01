@@ -7,26 +7,105 @@
 #include "item.h"
 
 extern struct AppState appState;
+extern Rectangle destRect;
 
 void InitAppState(enum APP_STATE _state)
 {
 	switch (_state)
 	{
 	case AS_MAIN_MENU:
+		LoadConfig();
+		SetWindowSize(appState.settings.windowed?SCREEN_WIDTH:GetScreenWidth(),appState.settings.windowed?SCREEN_HEIGHT:GetScreenHeight());
 		appState.stateData.mainMenuState.currentSelection = MS_PLAY;
 		break;
 	case AS_GAMEPLAY:
 		rng_init(&appState.stateData.gameState.runRng, time(NULL));
-		appState.stateData.gameState.teamCompMask = 7;
-		appState.stateData.gameState.playerTeam[0] = InitCharacterData(CHAR_BERSERKER);
-		appState.stateData.gameState.playerTeam[1] = InitCharacterData(CHAR_DUELIST);
-		appState.stateData.gameState.playerTeam[2] = InitCharacterData(CHAR_MONK);
+		appState.stateData.gameState.playerTeam[0] = InitCharacterData((enum CHARACTER_ID)appState.settings.character1);
+		appState.stateData.gameState.playerTeam[1] = InitCharacterData((enum CHARACTER_ID)appState.settings.character2);
+		appState.stateData.gameState.playerTeam[2] = InitCharacterData((enum CHARACTER_ID)appState.settings.character3);
+		appState.stateData.gameState.teamCompMask = (1 << appState.settings.character1) | (1 << appState.settings.character2) | (1 << appState.settings.character3);
 		appState.stateData.gameState.floor = 1;
 		appState.stateData.gameState.isPaused = 0;
 		InitGameState(GS_CHARACTER_SELECT);
 		break;
 	}
 	appState.appState = _state;
+}
+
+void SaveConfig()
+{
+	FILE* f = fopen(CONFIG_FILE, "w");
+    if (!f) return;   // or log a warning
+
+    fprintf(f, "# Yendor Delve configuration\n");
+    fprintf(f, "sfx_volume=%d\n", appState.settings.sfxVolume);
+    fprintf(f, "music_volume=%d\n",  appState.settings.musicVolume);
+    fprintf(f, "windowed=%d\n", appState.settings.windowed);
+    fprintf(f, "font=%d\n", appState.settings.font);
+    fprintf(f, "action_speed=%d\n",  appState.settings.actionSpeed);
+    fprintf(f, "character_1=%d\n", appState.settings.character1);
+    fprintf(f, "character_2=%d\n", appState.settings.character2);
+    fprintf(f, "character_3=%d\n", appState.settings.character3);
+
+    fclose(f);
+}
+
+void LoadConfig()
+{
+	FILE* f = fopen(CONFIG_FILE, "r");
+	if (!f)
+	{
+		appState.settings = GetDefaultConfig();
+		return;
+	}
+
+	char line[256];
+    while (fgets(line, sizeof line, f)) 
+	{
+        // strip comment
+        char* hash = strchr(line, '#');
+        if (hash) *hash = '\0';
+
+        // strip newline and trim
+        line[strcspn(line, "\r\n")] = '\0';
+        TrimString(line);
+        if (line[0] == '\0') continue;
+
+        char* eq = strchr(line, '=');
+        if (!eq) continue;         // malformed line -> skip
+        *eq = '\0';
+        char* key = line;
+        char* val = eq + 1;
+        TrimString(key);
+        TrimString(val);
+
+        if      (strcmp(key, "sfx_volume") == 0) appState.settings.sfxVolume = atoi(val) % 10;
+        else if (strcmp(key, "music_volume") == 0) appState.settings.musicVolume  = atoi(val) % 10;
+        else if (strcmp(key, "windowed")  == 0) appState.settings.windowed   = atoi(val);
+        else if (strcmp(key, "font")  == 0) appState.settings.font  = atoi(val) % 2;
+        else if (strcmp(key, "action_speed") == 0) appState.settings.actionSpeed = atoi(val) % 4;
+        else if (strcmp(key, "character_1") == 0) appState.settings.character1 = atoi(val) % CHAR_LENGTH;
+        else if (strcmp(key, "character_2") == 0) appState.settings.character2    = atoi(val) % CHAR_LENGTH;
+        else if (strcmp(key, "character_3") == 0) appState.settings.character3   = atoi(val) % CHAR_LENGTH;
+        // unknown keys are silently ignored -> forward compatibility
+    }
+
+    fclose(f);
+}
+
+struct Settings GetDefaultConfig()
+{
+	return (struct Settings)
+	{
+		.actionSpeed = ACT_REGULAR,
+		.font = FS_FANCY,
+		.musicVolume = 7,
+		.sfxVolume = 6,
+		.windowed = false,
+		.character1 = CHAR_BERSERKER,
+		.character2 = CHAR_DUELIST,
+		.character3 = CHAR_MONK,
+	};
 }
 
 void InitGameState(enum GAME_STATE _state)
@@ -338,7 +417,7 @@ short DetermineCurrentActingEntity()
 	char result = 0;
 	short minTicks = appState.stateData.gameState.playerTeam[0].stats.baseStats.ticksUntilNextTurn;
 	appState.stateData.gameState.stateData.battleState.battleState = BS_SHOW_ABILITY_VFX;
-	appState.stateData.gameState.stateData.battleState.statePauseTimer = TURN_ACTION_DURATION;
+	appState.stateData.gameState.stateData.battleState.statePauseTimer = TURN_ACTION_DURATION[appState.settings.actionSpeed];
 
 	// no point in turning something this trivial into a loop
 	if (appState.stateData.gameState.playerTeam[1].stats.baseStats.ticksUntilNextTurn < minTicks && appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0)

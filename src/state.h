@@ -89,13 +89,29 @@ union AppStateData
 	struct GameState gameState;
 };
 
+struct Settings
+{
+	enum ACTION_SPEED actionSpeed;
+	enum FONT_SELECTION font;
+	char character1;
+	char character2;
+	char character3;
+	bool windowed;
+	char musicVolume;
+	char sfxVolume;
+};
+
 struct AppState
 {
 	enum APP_STATE appState;
 	union AppStateData stateData;
+	struct Settings settings;
 };
 
 void InitAppState(enum APP_STATE);
+void SaveConfig();
+void LoadConfig();
+struct Settings GetDefaultConfig();
 void InitGameState(enum GAME_STATE);
 void TransitionToBattle();
 void HandleAbilityTargetInit();

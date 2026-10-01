@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <stdint.h>
 #include "constants.h"
 
@@ -11,7 +12,6 @@ const char *GAME_TITLE = "Yendor Delve";
 const char *GAME_VERSION_FOOTER = "v0.0.1, made with C and Raylib";
 const int PAUSE_MENU_OPTION_COUNT = 2;
 const char CRIT_PROGRESS_MAX = 100;
-const float TURN_ACTION_DURATION = 0.8;
 const float CHARACTER_BLINK_INTERVAL = 0.15;
 const float GAME_MESSAGE_DISPLAY_TIME = 1.0;
 const float GAME_MESSAGE_DISPLAY_TIME_PER_CHARACTER = 0.05;
@@ -40,6 +40,16 @@ char* CombineStrings(char* str1, char* str2)
     strcat(new_str, str1);
     strcat(new_str, str2);
     return new_str;
+}
+
+void TrimString(char* s) {
+    // trim leading
+    char* p = s;
+    while (*p && isspace((unsigned char)*p)) p++;
+    if (p != s) memmove(s, p, strlen(p) + 1);
+    // trim trailing
+    char* end = s + strlen(s);
+    while (end > s && isspace((unsigned char)end[-1])) *--end = '\0';
 }
 
 float ClampFloat(float d, float min, float max) {

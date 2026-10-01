@@ -5,12 +5,14 @@
 
 #define ARR_SIZE(arr) ( sizeof((arr)) / sizeof((arr[0])) )
 
+#define CONFIG_FILE "yendor-delve.config"
 #define ITEM_SLOTS 4
 #define INVENTORY_SIZE 32
 #define STAT_DEBUFFS 8
 #define LINGERING_EFFECTS 8
 #define TURN_PROGNOSES 9
 #define OPPORTUNITY_MAX_TURNS 6
+#define TURN_ACTION_DURATION (float[]){2.0, 0.9, 0.5, 0.1}
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 extern const int TILE_SIZE;
@@ -18,7 +20,6 @@ extern const char *GAME_TITLE;
 extern const char *GAME_VERSION_FOOTER;
 extern const int PAUSE_MENU_OPTION_COUNT;
 extern const char CRIT_PROGRESS_MAX;
-extern const float TURN_ACTION_DURATION;
 extern const float CHARACTER_BLINK_INTERVAL;
 extern const float GAME_MESSAGE_DISPLAY_TIME;
 extern const float GAME_MESSAGE_DISPLAY_TIME_PER_CHARACTER;
@@ -59,6 +60,20 @@ enum BATTLE_STATE
 	BS_OPPORTUNITY_CHOICE,
 };
 
+enum FONT_SELECTION
+{
+	FS_FANCY,
+	FS_SIMPLE,
+};
+
+enum ACTION_SPEED
+{
+	ACT_SLOW,
+	ACT_REGULAR,
+	ACT_FAST,
+	ACT_INSTANT,
+};
+
 enum MENU_SELECTION
 {
 	MS_PLAY,
@@ -81,6 +96,7 @@ enum CONTROLS
 void rng_init(RNG* rng, uint32_t seed);
 uint32_t rng_next_u32(RNG* rng) ;
 char* CombineStrings(char* str1, char* str2);
+void TrimString(char* s) ;
 float ClampFloat(float num, float min, float max);
 
 #endif
