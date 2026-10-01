@@ -143,6 +143,14 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
 
 void HandleOnDeathEffects(CreatureStats *c)
 {
+    // Ripper reset
+    for(int i = 0; i<3;i++)
+    {
+        if(appState.stateData.gameState.playerTeam[i].characterId != CHAR_RIPPER) continue;
+        appState.stateData.gameState.playerTeam[i].stats.baseStats.ticksUntilNextTurn = 0;
+        appState.stateData.gameState.playerTeam[i].stats.baseStats.critCounter += 100;
+        AddMessageToFeed("The Ripper gets excited and acts out of turn.");
+    }
 }
 
 void HandleOnAbilityEffects(CreatureStats *c, ABILITY a)
