@@ -207,9 +207,9 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Apprentice's Tiara",
-            TL_ITEMS,
-            (Vector2){0,3},
-            GOLD,
+            TL_COMMUNITY,
+            (Vector2){4,1},
+            LIGHTGRAY,
             ES_HEAD,
             CreateEmptyStatBonuses(),
         };
@@ -250,8 +250,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Juggernaut Helm",
-            TL_ITEMS,
-            (Vector2){6,2},
+            TL_COMMUNITY,
+            (Vector2){2,3},
             DARKGRAY,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -363,8 +363,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Thief's Hood",
-            TL_ITEMS,
-            (Vector2){12,4},
+            TL_COMMUNITY,
+            (Vector2){3,3},
             GRAY,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -390,8 +390,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Hatfus",
-            TL_CREATURES,
-            (Vector2){10,9},
+            TL_COMMUNITY,
+            (Vector2){6,0},
             WHITE,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -418,8 +418,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Torsofus",
-            TL_CREATURES,
-            (Vector2){6,9},
+            TL_COMMUNITY,
+            (Vector2){7,0},
             WHITE,
             ES_TORSO,
             CreateEmptyStatBonuses(),
