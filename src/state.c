@@ -16,6 +16,7 @@ void InitAppState(enum APP_STATE _state)
 	case AS_MAIN_MENU:
 		LoadConfig();
 		SetWindowSize(appState.settings.windowed?SCREEN_WIDTH:GetScreenWidth(),appState.settings.windowed?SCREEN_HEIGHT:GetScreenHeight());
+		if(IsWindowFullscreen() == appState.settings.windowed) ToggleFullscreen();
 		appState.stateData.mainMenuState.currentSelection = MS_PLAY;
 		break;
 	case AS_GAMEPLAY:

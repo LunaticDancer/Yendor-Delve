@@ -20,6 +20,8 @@ void DrawDungeonScreen();
 void DrawEquipmentDialog();
 void DrawItemSelection();
 void DrawCharacterSelect();
+void InitViewport();
+void DeinitViewport();
 Texture2D GetTileset(enum TILESET);
 void DrawTextBoxedSelectable(Font font, const char *text, Rectangle rec, float fontSize, float spacing, bool wordWrap, Color tint, int selectStart, int selectLength, Color selectTint, Color selectBackTint);
 void DrawTextBoxed(Font font, const char *text, Rectangle rec, float fontSize, float spacing, bool wordWrap, Color tint);

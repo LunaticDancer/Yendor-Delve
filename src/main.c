@@ -2,19 +2,11 @@
 #include <stdio.h>
 #include <time.h>
 #include "raylib.h"
-
-// #ifndef resource_dir
-// #define resource_dir
-// #include "resource_dir.h" // utility header for SearchAndSetResourceDir
-// #endif
-
 #include "drawing.h"
 #include "constants.h"
 #include "state.h"
 
-Camera2D worldSpaceCamera = {0};
-Camera2D screenSpaceCamera = {0};
-RenderTexture2D renderTexture;
+Camera2D camera = {0};
 Font titleFont;
 Font basicFont;
 Font basicFontLarger;
@@ -32,7 +24,7 @@ struct AppState appState;
 char inputThisFrame; // bitmask of possible inputs, see enum CONTROLS in constants.h
 
 void ReadInput();
-void HandleDrawing(Rectangle, Rectangle, Vector2);
+void HandleDrawing();
 bool IsPressed(enum CONTROLS);
 void HandleInput();
 void HandleMainMenuInput();
@@ -48,30 +40,18 @@ void HandleItemSelectInput();
 int main()
 {
 	// Tell the window to use vsync and work on high DPI displays
-	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
+	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
 
-	InitWindow(GetScreenWidth(), GetScreenHeight(), GAME_TITLE);
+	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE);
 
-	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
-	// SearchAndSetResourceDir("resources");
-
-	worldSpaceCamera.zoom = 1.0f;
-	screenSpaceCamera.zoom = 1.0f;
-
-	// Load render texture to draw all our objects
-	renderTexture = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
-	Rectangle sourceRec = {0.0f, 0.0f, (float)renderTexture.texture.width, -(float)renderTexture.texture.height};
-	int displayWidth = SCREEN_WIDTH * (GetScreenHeight() / SCREEN_HEIGHT);
-	int wMargin = (GetScreenWidth() - displayWidth) / 2;
-	Rectangle destRec = {wMargin, 0, displayWidth, GetScreenHeight()};
-	Vector2 origin = {0.0f, 0.0f};
+	camera.zoom = 1.0f;
 
 	titleFont = LoadFontEx("assets/fonts/KAISG.TTF", 120, 0, 0);
 	SetTextureFilter(titleFont.texture, 0);
 	basicFont = LoadFontEx("assets/fonts/alagard.ttf", 64, 0, 0);
-	SetTextureFilter(basicFont.texture, 0);
+	SetTextureFilter(basicFont.texture, TEXTURE_FILTER_TRILINEAR);
 	basicFontLarger = LoadFontEx("assets/fonts/alagard.ttf", 128, 0, 0);
-	SetTextureFilter(basicFontLarger.texture, 0);
+	SetTextureFilter(basicFontLarger.texture, TEXTURE_FILTER_TRILINEAR);
 
 	creatureAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/creatures_transparent.png");
 	itemAtlas = LoadTexture("assets/hexanys_roguelike_tiles/Tilesheets/Transparent/items_transparent.png");
@@ -95,11 +75,10 @@ int main()
 		HandleInput();
 		HandleEnemyTurn();
 
-		HandleDrawing(sourceRec, destRec, origin);
+		HandleDrawing();
 	}
 
 	// cleanup
-	UnloadRenderTexture(renderTexture);
 	UnloadTexture(itemAtlas);
 	UnloadTexture(creatureAtlas);
 	UnloadTexture(generalAtlas);
@@ -148,8 +127,12 @@ void ReadInput()
 	}
 }
 
-void HandleDrawing(Rectangle s, Rectangle d, Vector2 o)
+void HandleDrawing()
 {
+	BeginDrawing();
+	ClearBackground(BLACK);
+	InitViewport();
+
 	switch (appState.appState)
 	{
 	case AS_MAIN_MENU:
@@ -160,11 +143,7 @@ void HandleDrawing(Rectangle s, Rectangle d, Vector2 o)
 		break;
 	}
 
-	BeginDrawing();
-	ClearBackground(BLACK);
-	BeginMode2D(screenSpaceCamera);
-	DrawTexturePro(renderTexture.texture, s, d, o, 0.0f, WHITE);
-	EndMode2D();
+	DeinitViewport();
 	EndDrawing();
 }
 

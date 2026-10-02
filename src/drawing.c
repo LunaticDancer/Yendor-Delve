@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "raylib.h"
+#include "rlgl.h"
 #include "constants.h"
 #include "state.h"
 #include "drawing.h"
@@ -16,8 +17,7 @@ extern const int SCREEN_HEIGHT;
 extern Font titleFont;
 extern Font basicFont;
 extern Font basicFontLarger;
-extern Camera2D worldSpaceCamera;
-extern RenderTexture2D renderTexture;
+extern Camera2D camera;
 extern Texture creatureAtlas;
 extern Texture itemAtlas;
 extern Texture generalAtlas;
@@ -56,9 +56,7 @@ void DrawPopupMessage();
 
 void DrawMainMenu()
 {
-    BeginTextureMode(renderTexture);
-    ClearBackground(BLACK);
-    BeginMode2D(worldSpaceCamera);
+    BeginMode2D(camera);
 
     Vector2 textSize = MeasureTextEx(titleFont, GAME_TITLE, 120, 0);
     Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 80};
@@ -88,7 +86,6 @@ void DrawMainMenu()
     DrawTextEx(basicFontLarger, GAME_VERSION_FOOTER, textPosition, 16, 0, GRAY);
 
     EndMode2D();
-    EndTextureMode();
     return;
 }
 
@@ -111,9 +108,7 @@ void DrawGameplay()
 
 void DrawBattle()
 {
-    BeginTextureMode(renderTexture);
-    ClearBackground(BLACK);
-    BeginMode2D(worldSpaceCamera);
+    BeginMode2D(camera);
 
     DrawBattleScreenMessageFeed();
     DrawPrognoses();
@@ -136,7 +131,6 @@ void DrawBattle()
     }
 
     EndMode2D();
-    EndTextureMode();
     return;
 }
 
@@ -547,9 +541,7 @@ void DrawBattleScreenMessageFeed()
 
 void DrawDungeonScreen()
 {
-    BeginTextureMode(renderTexture);
-    ClearBackground(BLACK);
-    BeginMode2D(worldSpaceCamera);
+    BeginMode2D(camera);
 
     if(appState.stateData.gameState.isPaused)
     {
@@ -614,7 +606,6 @@ void DrawDungeonScreen()
     }
 
     EndMode2D();
-    EndTextureMode();
     return;
 }
 
@@ -920,9 +911,7 @@ void DrawDungeonScreenSelector()
 
 void DrawCharacterSelect()
 {
-    BeginTextureMode(renderTexture);
-    ClearBackground(BLACK);
-    BeginMode2D(worldSpaceCamera);
+    BeginMode2D(camera);
 
     Vector2 textSize = MeasureTextEx(basicFontLarger, "Create your party:", 32, 0);
     Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 10};
@@ -968,7 +957,6 @@ void DrawCharacterSelect()
         );
 
     EndMode2D();
-    EndTextureMode();
     return;
 }
 
@@ -1003,8 +991,7 @@ void DrawPopupMessage()
 {
     if(appState.stateData.gameState.messageTimer <= 0) return;
 
-    BeginTextureMode(renderTexture);
-    BeginMode2D(worldSpaceCamera);
+    BeginMode2D(camera);
 
     Vector2 textSize = MeasureTextEx(basicFontLarger, appState.stateData.gameState.message, 16, 0);
     Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, SCREEN_HEIGHT / 2 - textSize.y / 2};
@@ -1013,7 +1000,30 @@ void DrawPopupMessage()
     DrawTextEx(basicFontLarger, appState.stateData.gameState.message, textPosition, 16, 0, WHITE);
 
     EndMode2D();
-    EndTextureMode();
+}
+
+
+void InitViewport()
+{
+    int screenW = GetScreenWidth();
+    int screenH = GetScreenHeight();
+
+    float scale = fminf((float)screenW / (float)SCREEN_WIDTH, (float)screenH / (float)SCREEN_HEIGHT);
+    int vpW = (int)(SCREEN_WIDTH * scale);
+    int vpH = (int)(SCREEN_HEIGHT * scale);
+    int vpX = (screenW - vpW) / 2;
+    int vpY = (screenH - vpH) / 2;
+
+    rlViewport(vpX, vpY, vpW, vpH);
+    rlOrtho(0.0, (double)SCREEN_WIDTH, (double)SCREEN_HEIGHT, 0.0, 0.0, 1.0);
+}
+
+void DeinitViewport()
+{
+    int screenW = GetScreenWidth();
+    int screenH = GetScreenHeight();
+    rlViewport(0, 0, screenW, screenH);  // Restore full viewport
+    rlOrtho(0.0, (double)screenW, (double)screenH, 0.0, 0.0, 1.0);  // Restore projection
 }
 
 Texture GetTileset(enum TILESET ts)
