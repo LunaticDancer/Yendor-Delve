@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
 #include "raylib.h"
 #include "drawing.h"
 #include "constants.h"
@@ -129,9 +130,17 @@ void ReadInput()
 
 void HandleDrawing()
 {
+	int screenW = GetScreenWidth();
+    int screenH = GetScreenHeight();
+    float scale = fminf((float)screenW / (float)SCREEN_WIDTH, (float)screenH / (float)SCREEN_HEIGHT);
+    int vpW = (int)(SCREEN_WIDTH * scale);
+    int vpH = (int)(SCREEN_HEIGHT * scale);
+
+    camera.offset = (Vector2){ (screenW - vpW) / 2.0f, (screenH - vpH) / 2.0f };
+    camera.zoom   = scale;
+
 	BeginDrawing();
 	ClearBackground(BLACK);
-	InitViewport();
 
 	switch (appState.appState)
 	{
@@ -143,7 +152,6 @@ void HandleDrawing()
 		break;
 	}
 
-	DeinitViewport();
 	EndDrawing();
 }
 

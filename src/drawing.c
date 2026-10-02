@@ -547,7 +547,6 @@ void DrawDungeonScreen()
     {
         DrawPauseMenu();
         EndMode2D();
-        EndTextureMode();
         return;
     }
 
@@ -1000,30 +999,6 @@ void DrawPopupMessage()
     DrawTextEx(basicFontLarger, appState.stateData.gameState.message, textPosition, 16, 0, WHITE);
 
     EndMode2D();
-}
-
-
-void InitViewport()
-{
-    int screenW = GetScreenWidth();
-    int screenH = GetScreenHeight();
-
-    float scale = fminf((float)screenW / (float)SCREEN_WIDTH, (float)screenH / (float)SCREEN_HEIGHT);
-    int vpW = (int)(SCREEN_WIDTH * scale);
-    int vpH = (int)(SCREEN_HEIGHT * scale);
-    int vpX = (screenW - vpW) / 2;
-    int vpY = (screenH - vpH) / 2;
-
-    rlViewport(vpX, vpY, vpW, vpH);
-    rlOrtho(0.0, (double)SCREEN_WIDTH, (double)SCREEN_HEIGHT, 0.0, 0.0, 1.0);
-}
-
-void DeinitViewport()
-{
-    int screenW = GetScreenWidth();
-    int screenH = GetScreenHeight();
-    rlViewport(0, 0, screenW, screenH);  // Restore full viewport
-    rlOrtho(0.0, (double)screenW, (double)screenH, 0.0, 0.0, 1.0);  // Restore projection
 }
 
 Texture GetTileset(enum TILESET ts)
