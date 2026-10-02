@@ -217,6 +217,9 @@ if (downloadRaylib) then
         flags { "ShadowedVariables"}
         platform_defines()
 
+        buildoptions { "`pkg-config --cflags sdl2`" }
+        linkoptions  { "`pkg-config --libs sdl2`" }
+
         filter "action:vs*"
             defines{"_WINSOCK_DEPRECATED_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS"}
             dependson {"raylib"}

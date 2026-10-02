@@ -84,12 +84,12 @@ enum MENU_SELECTION
 
 enum CONTROLS
 {
-	VK_UP = 1,
-	VK_DOWN = 2,
-	VK_LEFT = 4,
-	VK_RIGHT = 8,
-	VK_CONFIRM = 16,
-	VK_BACK = 32,
+	K_UP = 1,
+	K_DOWN = 2,
+	K_LEFT = 4,
+	K_RIGHT = 8,
+	K_CONFIRM = 16,
+	K_BACK = 32,
 };
 
 // UTILITY FUNCTIONS
