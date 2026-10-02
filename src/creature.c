@@ -441,15 +441,15 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (5% Mastery + 10% missing Stamina) Armor until their next turn, while delaying it by another turn.");
         return result;
     case AB_RIPPER_REND:
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Apply ", strnum);
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (10 + 40% Mastery) Bleed to an enemy and remove ");
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (10 + 20% Mastery) Bleed to an enemy and remove ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (10 + 10% Mastery) of their Armour. If there's no more Armour to remove, apply Pain instead.");
+        result = CombineStrings(result, " (10 + 20% Mastery) of their Armour. If there's no more Armour to remove, apply Pain instead.");
         return result;
     case AB_RIPPER_EVISCERATE:
-        result = "Deal unavoidable damage to an enemy equal to four times the sum of negative effects they carry.";
+        result = "Deal unavoidable damage to an enemy equal to twice the sum of negative effects they carry.";
         return result;
     case AB_RIPPER_PREPARE:
         sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
@@ -974,8 +974,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         ApplyStatDebuff(caster, magusSarcophagusBuff);
         break;
     case AB_RIPPER_REND:
-        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, true);
-        short ripperRendShred = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateEffectAmplification(caster, true);
+        short ripperRendShred = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateEffectAmplification(caster, true);
         short ripperRendPain = (ripperRendShred > targets[0]->baseStats.armor + targets[0]->encounterStats.armor + targets[0]->itemStats.armor) ? 
         ripperRendShred - (targets[0]->baseStats.armor + targets[0]->encounterStats.armor + targets[0]->itemStats.armor) : 0;
         sprintf(strnum, "%d", primaryEffectValue, targets[0]);
@@ -1008,7 +1008,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(0, targets[0], true, caster);
         break;
     case AB_RIPPER_EVISCERATE:
-        primaryEffectValue = (4 * (targets[0]->statusEffects[SE_BLEED] + targets[0]->statusEffects[SE_BERSERK] + targets[0]->statusEffects[SE_EXHAUSTION] 
+        primaryEffectValue = (2 * (targets[0]->statusEffects[SE_BLEED] + targets[0]->statusEffects[SE_BERSERK] + targets[0]->statusEffects[SE_EXHAUSTION] 
             + targets[0]->statusEffects[SE_PAIN])) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " tears ");
