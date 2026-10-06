@@ -11,7 +11,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             id,
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
-                    .name = "None",
+                    .name = "Empty Space",
                     .tileset = TL_GENERAL,
                     .tileLookupPosition = (Vector2){1,0},
                     .color = GRAY,
@@ -40,6 +40,44 @@ Enemy InitEnemyData(ENEMY_ID id)
                 .abilityCount = 0,
             },
             TG_TRUE_RANDOM,
+            AB_WAIT,
+        };
+        break;
+        
+        case EN_CULTIST_SUMMON:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Mindless Spawn",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){10,14},
+                    .color = DARKPURPLE,
+
+                    .ticksUntilNextTurn = 500,
+                    .currentHealth = 300,
+                    .maxHealth = 300,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 200,
+                    .speed = 150,
+                    .defense = 50,
+                    .armor = 0,
+                    .critBonus = 100,
+                    .critRate = 10,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_WAIT}, 1),
+                .abilityCount = 1,
+            },
+            TG_WEIGHTED_RANDOM,
             AB_WAIT,
         };
         break;

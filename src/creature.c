@@ -206,6 +206,7 @@ short CalculateDamage(short baseDamage, CreatureStats *target)
 
 void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureStats *dealer)
 {
+    bool wasAlreadyDead = (*target).baseStats.currentHealth <= 0;
     short finalValue = 0;
     finalValue = (trueDamage ? damage : CalculateDamage(damage, target));
     (*target).encounterStats.shield -= finalValue;
@@ -230,10 +231,22 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
 
     if ((*target).baseStats.currentHealth <= 0)
     {
-        (*target).baseStats.currentHealth = 0;
-        char *message = CombineStrings((*target).baseStats.name, " was slain!");
-        AddMessageToFeed(message);
-        HandleOnDeathEffects(target);
+        if(strcmp(target->baseStats.name, "Empty Space") == 0)
+        {
+            AddMessageToFeed("The empty space has been truly killed dead.");
+        }
+        else if(wasAlreadyDead)
+        {
+            char *message = CombineStrings((*target).baseStats.name, " isn't getting any deader.");
+            AddMessageToFeed(message);
+        }
+        else
+        {
+            (*target).baseStats.currentHealth = 0;
+            char *message = CombineStrings((*target).baseStats.name, " was slain!");
+            AddMessageToFeed(message);
+            HandleOnDeathEffects(target);
+        }
     }
 }
 
@@ -441,12 +454,12 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (5% Mastery + 10% missing Stamina) Armor until their next turn, while delaying it by another turn.");
         return result;
     case AB_RIPPER_REND:
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.15)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Apply ", strnum);
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (10 + 20% Mastery) Bleed to an enemy and remove ");
+        sprintf(strnum, "%.0f", ((2 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.25)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (10 + 15% Mastery) Bleed to an enemy and remove ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (10 + 20% Mastery) of their Armour. If there's no more Armour to remove, apply Pain instead.");
+        result = CombineStrings(result, " (2 + 25% Mastery) of their Armour. If there's no more Armour to remove, apply Pain instead.");
         return result;
     case AB_RIPPER_EVISCERATE:
         result = "Deal unavoidable damage to an enemy equal to twice the sum of negative effects they carry.";
@@ -463,6 +476,26 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (50% current Health) damage to yourself. Heal an ally by 60% of the damage dealt and cleanse their status effects. Permanently raise your Mastery by 20% of the damage dealt.");
         return result;
+    case AB_CULTIST_MADDENING_TOUCH:
+        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        sprintf(strnum, "%.0f", ((200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.2)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (40 + 100% Mastery) Damage and apply Confusion for ");
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (100 + 120% Mastery) ticks to an enemy.");
+        return result;
+    case AB_CULTIST_MANIA:
+        sprintf(strnum, "%.0f", ((150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Give an ally ", strnum);
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (150 + 200% Mastery) Stamina Regen, ");
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (50 + 150% Mastery) Mastery and apply Confusion for 500 ticks.");
+        return result;
+    case AB_CULTIST_SUMMON:
+        return "Create a helpful monster in an empty enemy spot.";
+    case AB_CULTIST_PRAY:
+        return "Re-randomize enemy intent. Sometimes might result in an additional boon.";
     case AB_MIMIC_CHOMP:
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Attack an enemy for ", strnum);
@@ -974,8 +1007,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         ApplyStatDebuff(caster, magusSarcophagusBuff);
         break;
     case AB_RIPPER_REND:
-        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateEffectAmplification(caster, true);
-        short ripperRendShred = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.15) * CalculateEffectAmplification(caster, true);
+        short ripperRendShred = (2 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.25) * CalculateEffectAmplification(caster, true);
         short ripperRendPain = (ripperRendShred > targets[0]->baseStats.armor + targets[0]->encounterStats.armor + targets[0]->itemStats.armor) ? 
         ripperRendShred - (targets[0]->baseStats.armor + targets[0]->encounterStats.armor + targets[0]->itemStats.armor) : 0;
         sprintf(strnum, "%d", primaryEffectValue, targets[0]);
@@ -1072,6 +1105,73 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         caster->baseStats.mastery += (short)(primaryEffectValue * 0.2);
     break;
+    case AB_CULTIST_MADDENING_TOUCH:
+        primaryEffectValue = (40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        short cultistMadTouchConfusion = (200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.2) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " invades ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, "'s mind with incomprehensible visions of the divine, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and applying ");
+        sprintf(strnum, "%d", cultistMadTouchConfusion);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Confusion.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->statusEffects[SE_CONFUSION] = cultistMadTouchConfusion;
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break;
+    case AB_CULTIST_MANIA:
+        primaryEffectValue = (150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0) * CalculateEffectAmplification(caster, true);
+        short cultistManiaMastery = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue, targets[0]);
+        message = CombineStrings((*caster).baseStats.name, " imbues ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " with eldritch euphoria, granting ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Stamina Regen, ");
+        sprintf(strnum, "%d", cultistManiaMastery);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Mastery and inflicts Confusion for 500 ticks.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        StatBonuses cultistManiaBonus = CreateEmptyStatBonuses();
+        cultistManiaBonus.mastery = cultistManiaMastery;
+        cultistManiaBonus.staminaRegen = primaryEffectValue;
+        StatDebuff cultistManiaBuff = (StatDebuff){500, cultistManiaBonus};
+        ApplyStatDebuff(caster, cultistManiaBuff);
+        targets[0]->statusEffects[SE_CONFUSION] = 500;
+        break;
+    case AB_CULTIST_SUMMON:
+        if(targets[0]->baseStats.currentHealth>0)
+        {
+            caster->baseStats.currentStamina += InitAbility(id).staminaCost;
+            appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
+            (*caster).baseStats.critCounter -= (*caster).baseStats.critRate + (*caster).itemStats.critRate + (*caster).encounterStats.critRate;
+            ShowPopupMessage("Can't summon on an occupied space.");
+        }
+        else
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                if(&appState.stateData.gameState.stateData.battleState.enemies[i].stats != targets[0]) continue;
+
+                appState.stateData.gameState.stateData.battleState.enemies[i] = InitEnemyData(EN_CULTIST_SUMMON);
+                message = CombineStrings((*caster).baseStats.name, " summons the spawn of The Mindless One, blessing the earth with its presence.");
+                AddCreatureToFlicker(targets[0]);
+                AddMessageToFeed(message);
+            }
+        }
+        break;
+    case AB_CULTIST_PRAY:
+        message = CombineStrings((*caster).baseStats.name, " prays to The Mindless One, causing fate to change.");
+        AddMessageToFeed(message);
+        if(rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng) % 1000 < 100)
+        {
+            AddMessageToFeed("The Mindless One doesn't have its random boons implemented yet, but at least you rolled one!");
+        }
+        break;
     case AB_MIMIC_CHOMP:
         primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, true);
         short mimicChompStaminaLoss = (150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true);

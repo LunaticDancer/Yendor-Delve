@@ -12,6 +12,7 @@ typedef enum STATUS_EFFECT
     SE_EXHAUSTION,      // remove X speed, abilities cost X more stamina
     SE_UNTARGETTABLE,   // can't be targetted by enemy abilities for X ticks
     SE_PAIN,                    // deal X damage each time the creature becomes a target of ability
+    SE_CONFUSION,       // confused creatures cast spells at random targets
     SE_LENGTH,
 } STATUS_EFFECT;
 

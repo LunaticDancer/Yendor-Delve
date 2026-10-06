@@ -8,6 +8,7 @@
 typedef enum ENEMY_ID
 {
     EN_NONE,
+    EN_CULTIST_SUMMON,
     EN_MIMIC,
     EN_BLOOD_FAE_WARRIOR,
     EN_BLOOD_FAE_MYSTIC,

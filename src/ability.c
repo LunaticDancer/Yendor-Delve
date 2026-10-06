@@ -253,6 +253,38 @@ Ability InitAbility(ABILITY id)
             100,
             AF_TARGETS_ALLIES,
         };
+        case AB_CULTIST_MADDENING_TOUCH:
+        return (Ability)
+        {
+            id,
+            "Maddening Touch",
+            150,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_CULTIST_MANIA:
+        return (Ability)
+        {
+            id,
+            "Mania",
+            100,
+            AF_TARGETS_ALLIES,
+        };
+        case AB_CULTIST_SUMMON:
+        return (Ability)
+        {
+            id,
+            "Summon",
+            250,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_CULTIST_PRAY:
+        return (Ability)
+        {
+            id,
+            "Pray",
+            50,
+            AF_TARGETS_SELF,
+        };
         case AB_MIMIC_CHOMP:
         return (Ability)
         {

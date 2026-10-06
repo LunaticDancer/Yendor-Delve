@@ -474,6 +474,13 @@ void ProgressTime(short ticks)
 	appState.stateData.gameState.stateData.battleState.enemies[1].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[2].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
 
+	appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_CONFUSION] -= ticks;
+	appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_CONFUSION] -= ticks;
+	appState.stateData.gameState.playerTeam[2].stats.statusEffects[SE_CONFUSION] -= ticks;
+	appState.stateData.gameState.stateData.battleState.enemies[0].stats.statusEffects[SE_CONFUSION] -= ticks;
+	appState.stateData.gameState.stateData.battleState.enemies[1].stats.statusEffects[SE_CONFUSION] -= ticks;
+	appState.stateData.gameState.stateData.battleState.enemies[2].stats.statusEffects[SE_CONFUSION] -= ticks;
+
 	HandleTemporaryStats(&appState.stateData.gameState.playerTeam[0].stats, ticks);
 	HandleTemporaryStats(&appState.stateData.gameState.playerTeam[1].stats, ticks);
 	HandleTemporaryStats(&appState.stateData.gameState.playerTeam[2].stats, ticks);

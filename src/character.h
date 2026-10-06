@@ -15,6 +15,7 @@ typedef enum CHARACTER_ID
     CHAR_FLESH_GOLEM,   // starts off weak but gets stronger with each combat encounter
     CHAR_MAGUS,         // one HP but uniquely uses stamina as a shield
     CHAR_RIPPER,            // takes a turn immediately when something dies, can pay health to heal someone else
+    CHAR_CULTIST,       // summons friendly monsters, can gamble
     CHAR_LENGTH,
 } CHARACTER_ID;
 

@@ -320,7 +320,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 80,
                     .defense = 40,
                     .armor = 0,
-                    .critBonus = 100,
+                    .critBonus = 60,
                     .critRate = 20,
                     .critCounter = 0,
                     .mastery = 0,
@@ -332,6 +332,48 @@ Character InitCharacterData(CHARACTER_ID id)
                 .temporaryStats = {},
                 .lingeringEffects = {},
                 .abilities = InitAbilities((ABILITY[]){AB_RIPPER_REND,AB_RIPPER_EVISCERATE,AB_RIPPER_PREPARE,AB_RIPPER_TRANSFUSION,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            {
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+            },
+        };
+        break;
+        case CHAR_CULTIST:
+        return (Character){
+            id,
+            "The mysterious worshipper of The Mindless One, allied with otherworldly chaos.\nThe Cultist summons eldritch allies to outnumber her enemies and obtains various favours from her unknowable deity.",
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Cultist",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){1,7},
+                    .color = ORANGE,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 900,
+                    .maxHealth = 900,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 150,
+                    .speed = 100,
+                    .defense = 60,
+                    .armor = 0,
+                    .critBonus = 100,
+                    .critRate = 20,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_CULTIST_MADDENING_TOUCH,AB_CULTIST_MANIA,AB_CULTIST_SUMMON,AB_CULTIST_PRAY,AB_WAIT}, 5),
                 .abilityCount = 5,
             },
             {
