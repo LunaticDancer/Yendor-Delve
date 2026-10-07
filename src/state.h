@@ -56,6 +56,7 @@ struct BattleState
 	bool takeAnotherTurn;
 
 	// unique effects
+	short prayerFatigue;
 	char opportunitySkillCountdown;
 	float opportunityMult;
 	char fleshGolemSkillMask;

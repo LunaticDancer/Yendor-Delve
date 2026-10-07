@@ -149,6 +149,7 @@ void InitGameState(enum GAME_STATE _state)
 		appState.stateData.gameState.stateData.battleState.messages[10] = "";
 		appState.stateData.gameState.stateData.battleState.messages[11] = "";
 
+		appState.stateData.gameState.stateData.battleState.prayerFatigue = 0;
 		appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown = -1;
 		appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask = 0;
 		appState.stateData.gameState.stateData.battleState.flickeringMask = 0;

@@ -1180,7 +1180,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 if(&appState.stateData.gameState.stateData.battleState.enemies[i].stats != targets[0]) continue;
 
                 appState.stateData.gameState.stateData.battleState.enemies[i] = InitEnemyData(EN_CULTIST_SUMMON);
-                appState.stateData.gameState.stateData.battleState.enemies[i].stats.baseStats.mastery = (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5;
+                appState.stateData.gameState.stateData.battleState.enemies[i].stats.baseStats.mastery = 
+                    (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5 * CalculateEffectAmplification(caster, true);
                 message = CombineStrings((*caster).baseStats.name, " summons the spawn of The Mindless One, blessing the earth with its presence.");
                 AddCreatureToFlicker(targets[0]);
                 AddMessageToFeed(message);
@@ -1190,7 +1191,9 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     case AB_CULTIST_PRAY:
         message = CombineStrings((*caster).baseStats.name, " prays to The Mindless One, causing fate to change.");
         AddMessageToFeed(message);
-        if(rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng) % (1000 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery)*3) < 400)
+        appState.stateData.gameState.stateData.battleState.prayerFatigue++;
+        if(rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng) % (1000 + (caster->baseStats.mastery + 
+            caster->encounterStats.mastery + caster->itemStats.mastery)*3 + appState.stateData.gameState.stateData.battleState.prayerFatigue * 10) < 400 * CalculateEffectAmplification(caster, true))
         {
             CreatureStats* target;
             switch(rand() % 8)
