@@ -285,6 +285,38 @@ Ability InitAbility(ABILITY id)
             50,
             AF_TARGETS_SELF,
         };
+        case AB_CULTIST_SPAWN_ENROOT:
+        return (Ability)
+        {
+            id,
+            "Enroot",
+            150,
+            AF_TARGETS_ALLIES + AF_AOE,
+        };
+        case AB_CULTIST_SPAWN_SPORES:
+        return (Ability)
+        {
+            id,
+            "Spores",
+            150,
+            AF_TARGETS_ALLIES + AF_AOE,
+        };
+        case AB_CULTIST_SPAWN_GROW:
+        return (Ability)
+        {
+            id,
+            "Grow",
+            50,
+            AF_TARGETS_SELF,
+        };
+        case AB_CULTIST_SPAWN_INVIGORATE:
+        return (Ability)
+        {
+            id,
+            "Invigorate",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
         case AB_MIMIC_CHOMP:
         return (Ability)
         {

@@ -496,6 +496,26 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         return "Create a helpful monster in an empty enemy spot.";
     case AB_CULTIST_PRAY:
         return "Re-randomize enemy intent. Sometimes might result in an additional boon.";
+        case AB_CULTIST_SPAWN_ENROOT:
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (50 + 40% Mastery) damage to all allies.");
+        return result;
+    case AB_CULTIST_SPAWN_SPORES:
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Confuse all allies for ", strnum);
+        result = CombineStrings(result, " (100 + 100% Mastery) ticks.");
+        return result;
+    case AB_CULTIST_SPAWN_GROW:
+        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Gain ", strnum);
+        result = CombineStrings(result, " (40 + 80% Mastery) Speed.");
+        return result;
+        case AB_CULTIST_SPAWN_INVIGORATE:
+        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Give ", strnum);
+        result = CombineStrings(result, " (40 + 40% Mastery) Stamina to an enemy.");
+        return result;
     case AB_MIMIC_CHOMP:
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Attack an enemy for ", strnum);
@@ -1158,6 +1178,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 if(&appState.stateData.gameState.stateData.battleState.enemies[i].stats != targets[0]) continue;
 
                 appState.stateData.gameState.stateData.battleState.enemies[i] = InitEnemyData(EN_CULTIST_SUMMON);
+                appState.stateData.gameState.stateData.battleState.enemies[i].stats.baseStats.mastery = (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5;
                 message = CombineStrings((*caster).baseStats.name, " summons the spawn of The Mindless One, blessing the earth with its presence.");
                 AddCreatureToFlicker(targets[0]);
                 AddMessageToFeed(message);
@@ -1171,6 +1192,55 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         {
             AddMessageToFeed("The Mindless One doesn't have its random boons implemented yet, but at least you rolled one!");
         }
+        break;
+    case AB_CULTIST_SPAWN_ENROOT:
+        primaryEffectValue = (50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " expands its roots, piercing and strangling its allies for ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            if(targets[i] == caster) continue;
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        break;
+    case AB_CULTIST_SPAWN_SPORES:
+        primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " explodes with its spores, confusing its allies for ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " ticks.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            if(targets[i] == caster) continue;
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->statusEffects[SE_CONFUSION] = primaryEffectValue;
+        }
+        break;
+    case AB_CULTIST_SPAWN_GROW:
+        primaryEffectValue = ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        caster->encounterStats.speed += primaryEffectValue;
+        message = CombineStrings((*caster).baseStats.name, " rapidly grows in complexity, giving itself ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Speed.");
+        AddMessageToFeed(message);
+        break;
+        case AB_CULTIST_SPAWN_INVIGORATE:
+        primaryEffectValue = (40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, false);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " radiates a nurturing aura, granting ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Stamina.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->baseStats.currentStamina += primaryEffectValue;
         break;
     case AB_MIMIC_CHOMP:
         primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, true);
