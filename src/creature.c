@@ -5,6 +5,7 @@
 #include "state.h"
 
 extern struct AppState appState;
+extern ITEM_ID itemPoolTier1[];
 
 StatBonuses CreateEmptyStatBonuses()
 {
@@ -496,7 +497,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_CULTIST_SUMMON:
         return "Create a helpful monster in an empty enemy spot.";
     case AB_CULTIST_PRAY:
-        return "Re-randomize enemy intent. Sometimes might result in an additional boon.";
+        return "Re-randomize enemy intent. Sometimes might result in an additional boon (likeliness diminished by Mastery).";
         case AB_CULTIST_SPAWN_ENROOT:
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
@@ -1189,9 +1190,58 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     case AB_CULTIST_PRAY:
         message = CombineStrings((*caster).baseStats.name, " prays to The Mindless One, causing fate to change.");
         AddMessageToFeed(message);
-        if(rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng) % 1000 < 100)
+        if(rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng) % (1000 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery)*3) < 400)
         {
-            AddMessageToFeed("The Mindless One doesn't have its random boons implemented yet, but at least you rolled one!");
+            CreatureStats* target;
+            switch(rand() % 8)
+            {
+                case 0:
+                target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
+                (*target).encounterStats.shield += 50;
+                message = CombineStrings("The Mindless One grants ", target->baseStats.name);
+                message = CombineStrings(message, " 50 Shield.");
+                AddMessageToFeed(message);
+                break;
+                case 1:
+                target = &appState.stateData.gameState.stateData.battleState.enemies[rand()%3].stats;
+                message = CombineStrings("The Mindless One smites ", target->baseStats.name);
+                message = CombineStrings(message, " for 100 damage.");
+                AddMessageToFeed(message);
+                DealDamage(100, target,false, NULL);
+                break;
+                case 2:
+                Item cultistPrayItem = InitItem(itemPoolTier1[rand() % ITEM_POOL_TIER_ONE_SIZE]);
+                message = CombineStrings("The Mindless One conjures ", cultistPrayItem.name);
+                message = CombineStrings(message, " inside your shared inventory.");
+                AddItemToInventory(cultistPrayItem);
+                AddMessageToFeed(message);
+                break;
+                case 3:
+                Character* cultistPrayUpgradeCharacter = &appState.stateData.gameState.playerTeam[rand()%3];
+                Item* cultistPrayUpgradeItem = &(*cultistPrayUpgradeCharacter).items[rand()%4];
+                if(cultistPrayUpgradeItem->itemId == ITEM_NONE) break;
+                cultistPrayUpgradeItem->statBonuses.mastery += 5;
+                cultistPrayUpgradeCharacter->stats.itemStats.mastery += 5;
+                message = CombineStrings("The Mindless One upgrades ", (*cultistPrayUpgradeItem).name);
+                message = CombineStrings(message, " used by ");
+                message = CombineStrings(message, (*cultistPrayUpgradeCharacter).stats.baseStats.name);
+                message = CombineStrings(message, ", imbuing it with 5 additional Mastery.");
+                AddMessageToFeed(message);
+                break;
+                case 4:
+                target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
+                (*target).baseStats.currentStamina += 100;
+                message = CombineStrings("The Mindless One grants ", target->baseStats.name);
+                message = CombineStrings(message, " 100 Stamina.");
+                AddMessageToFeed(message);
+                break;
+                case 5:
+                AddMessageToFeed("The Mindless One chirps an alien melody.");
+                break;
+                default:
+                AddMessageToFeed("The Mindless One laughs jubilantly, the otherworldly voice echoing across the cave system.");
+                break;
+            }
         }
         break;
     case AB_CULTIST_SPAWN_ENROOT:

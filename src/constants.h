@@ -8,6 +8,7 @@
 #define CONFIG_FILE "yendor-delve.config"
 #define ITEM_SLOTS 4
 #define INVENTORY_SIZE 32
+#define ITEM_POOL_TIER_ONE_SIZE 20
 #define STAT_DEBUFFS 8
 #define LINGERING_EFFECTS 8
 #define TURN_PROGNOSES 9

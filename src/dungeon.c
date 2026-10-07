@@ -9,7 +9,7 @@ ENCOUNTER_ID encounterPoolTier1[8];
 ENCOUNTER_ID encounterPoolTier2[4];
 ENCOUNTER_ID encounterPoolTier3[4];
 
-ITEM_ID itemPoolTier1[20];
+ITEM_ID itemPoolTier1[ITEM_POOL_TIER_ONE_SIZE];
 ITEM_ID itemPoolTier2[8];
 ITEM_ID itemPoolTier3[8];
 
