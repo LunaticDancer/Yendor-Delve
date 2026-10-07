@@ -132,6 +132,7 @@ void InitGameState(enum GAME_STATE _state)
 
 	case GS_BATTLE:
 		rng_init(&appState.stateData.gameState.stateData.battleState.battleRng, time(NULL));
+		srand(time(NULL));
 		appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
 		appState.stateData.gameState.stateData.battleState.horizontalSelection = 0;
 		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
@@ -195,16 +196,41 @@ void HandleAbilityTargetInit()
 	Ability ab = appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection];
 	appState.stateData.gameState.stateData.battleState.abilityTargetsAllies = DoesAbilityHaveFlag(ab, AF_TARGETS_ALLIES);
 	appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies = DoesAbilityHaveFlag(ab, AF_TARGETS_ENEMIES);
-	appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies) ? ((appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0) ? 4 : (appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0) ? 3
-																																																																																									 : 5)
-																																						: ((appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0) ? 1 : (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0) ? 0
-																																																																															   : 2);
+	appState.stateData.gameState.stateData.battleState.horizontalSelection = (appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies) ? 
+	((appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.currentHealth > 0) ? 4 : 
+	(appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth > 0) ? 3 : 5)
+	: ((appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0) ? 1 : 
+	(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0) ? 0 : 2);
 	if (ab.abilityId == AB_DUELIST_OPPORTUNITY)
 	{
 		appState.stateData.gameState.stateData.battleState.battleState = BS_OPPORTUNITY_CHOICE;
 		appState.stateData.gameState.stateData.battleState.horizontalSelection = 2;
 	}
-	if (DoesAbilityHaveFlag(ab, AF_AOE))
+	else if(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.statusEffects[SE_CONFUSION] > 0)
+	{
+		char target = rand() % 6;
+		if(target <3)
+		{
+			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats,
+						(CreatureStats *[1]){&appState.stateData.gameState.playerTeam[target].stats}, 1);
+		}
+		else
+		{
+			CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats,
+						(CreatureStats *[1]){&appState.stateData.gameState.stateData.battleState.enemies[target-3].stats}, 1);
+		}
+
+		if (!appState.stateData.gameState.stateData.battleState.takeAnotherTurn)
+		{
+			ResetTurnClock(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
+			PassTurn();
+		}
+		else
+		{
+			appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_ABILITY_SELECT;
+		}
+	}
+	else if (DoesAbilityHaveFlag(ab, AF_AOE))
 	{
 		if (appState.stateData.gameState.stateData.battleState.abilityTargetsAllies && appState.stateData.gameState.stateData.battleState.abilityTargetsEnemies)
 		{
@@ -553,6 +579,7 @@ void CreatePrognoses()
 		{
 			appState.stateData.gameState.stateData.battleState.turnIndicators[i] =
 				CreateEnemyPrognosis(actingEntity, &enemyState[actingEntity - 3], &prognosisRng);
+			enemyState[actingEntity-3].stats.statusEffects[SE_CONFUSION] -= CalculateNextTurnTicks(&appState.stateData.gameState.stateData.battleState.enemies[actingEntity - 3].stats);
 			tickTimers[actingEntity] = CalculateNextTurnTicks(&appState.stateData.gameState.stateData.battleState.enemies[actingEntity - 3].stats);
 		}
 
@@ -606,6 +633,10 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy *c, RNG *rng)
 		if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_SELF))
 		{
 			// result.receiverMask = result.receiverMask | (1 << id);
+		}
+		else if(c->stats.statusEffects[SE_CONFUSION] > 0)
+		{
+			result.receiverMask = result.receiverMask | (1 << (rng_next_u32(rng) % 6));
 		}
 		else if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_AOE))
 		{
