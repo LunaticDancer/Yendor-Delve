@@ -253,6 +253,7 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
 void HandlePain(CreatureStats* c)
 {
     if(c->statusEffects[SE_PAIN] <= 0) return;
+    if(c->baseStats.currentHealth <= 0) return;
 
     char* message = CombineStrings(c->baseStats.name, " winces in pain, receiving ");
     char strnum[6];

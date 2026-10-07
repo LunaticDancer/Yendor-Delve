@@ -398,7 +398,7 @@ void DrawBattleScreenEnemy(char index)
         // sprintf(str_num, "%d", appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.ticksUntilNextTurn);
         // DrawText(str_num, SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1) + 16, LAYOUT_SPACING + 16, 16, PINK);
     
-    if(appState.stateData.gameState.stateData.battleState.enemies[index].enemyId != EN_NONE)
+    if(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth > 0)
     {
     DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize, 102, creatureBoxSize-40, 2, DARKGRAY);
     DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize, 101, 
@@ -432,6 +432,8 @@ void DrawDuelistOpportunitySelection()
 
 void DrawStatusEffects(Vector2 position, CreatureStats* _creature)
 {
+    if(_creature->baseStats.currentHealth <= 0) return;
+
     char strnum[6];
     int hOffset = 0;
     for(int i = 0; i < SE_LENGTH; i++)
