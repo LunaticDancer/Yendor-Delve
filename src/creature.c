@@ -1126,8 +1126,14 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         targets[0]->encounterStats.critBonus += primaryEffectValue;
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
+        dontResetCritProgress = true;
         break;
     case AB_RIPPER_CHASE:
+        if(targets[0]->baseStats.currentHealth <= 0)
+        {
+            AddMessageToFeed("Chasing the dead didn't prove very exciting.");
+            break;
+        }
         primaryEffectValue = (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
         short ripperChaseMastery = ((targets[0]->baseStats.maxHealth + targets[0]->encounterStats.health + targets[0]->itemStats.health - targets[0]->baseStats.currentHealth) * 0.2);
         sprintf(strnum, "%d", primaryEffectValue);
