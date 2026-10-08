@@ -23,5 +23,7 @@ void DrawCharacterSelect();
 Texture2D GetTileset(enum TILESET);
 void DrawTextBoxedSelectable(Font font, const char *text, Rectangle rec, float fontSize, float spacing, bool wordWrap, Color tint, int selectStart, int selectLength, Color selectTint, Color selectBackTint);
 void DrawTextBoxed(Font font, const char *text, Rectangle rec, float fontSize, float spacing, bool wordWrap, Color tint);
+void DrawTextStyled(Font font, const char *text, Vector2 position, float fontSize, float spacing, Color color);
+char* WrapText(Font font, const char* text, float fontSize, float spacing, float maxWidth);
 
 #endif

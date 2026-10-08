@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "raylib.h"
 #include "rlgl.h"
 #include "constants.h"
@@ -154,14 +155,14 @@ void DrawBattleAbilityDescription(CreatureStats* c, ABILITY a)
 {
     char* abilityDesc = GetAbilityDescription(a, c);
 
-    DrawRectangle(160, 128, 480 - LAYOUT_SPACING, 224, BLACK);
-    DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ 160, 128, 480 - LAYOUT_SPACING, 224}, (Vector2){0,0}, 0, DARKGRAY);
+    DrawRectangle(152, 128, 488 - LAYOUT_SPACING, 224, BLACK);
+    DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ 152, 128, 488 - LAYOUT_SPACING, 224}, (Vector2){0,0}, 0, DARKGRAY);
 
     Vector2 textSize = MeasureTextEx(basicFontLarger, InitAbility(a).name, 32, 0);
-    Vector2 textPosition = {400 - textSize.x / 2, 140};
+    Vector2 textPosition = {396 - textSize.x / 2, 144};
     DrawTextEx(basicFontLarger, InitAbility(a).name, textPosition, 32, 0, LIGHTGRAY);
 
-    DrawTextBoxed(basicFont, abilityDesc, (Rectangle){192, 176, 416-LAYOUT_SPACING, 224},16,0,true, GRAY);
+    DrawTextBoxed(basicFont, abilityDesc, (Rectangle){184, 188, 424-LAYOUT_SPACING, 224},16,0,true, GRAY);
 }
 
 void DrawPrognoses()
@@ -364,6 +365,8 @@ void DrawBattleScreenPartyMember(char index)
 void DrawBattleScreenEnemy(char index)
 {
     short creatureBoxSize = 128;
+    DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1), LAYOUT_SPACING,
+        creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING, BLACK);
     DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1), LAYOUT_SPACING,
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
         (appState.stateData.gameState.stateData.battleState.currentActingEntity == index+3) ? WHITE :
@@ -526,31 +529,37 @@ void DrawBattleScreenMessageFeed()
     char* result = malloc(1);
      result[0] =  '\0'; 
 
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[0]);
-    result = CombineStrings(result, "\n");
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[1]);
-    result = CombineStrings(result, "\n");
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[2]);
-    result = CombineStrings(result, "\n");
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[3]);
-    result = CombineStrings(result, "\n");
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[4]);
-    result = CombineStrings(result, "\n");
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[5]);
-    result = CombineStrings(result, "\n");
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[6]);
-    result = CombineStrings(result, "\n");
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[7]);
-    result = CombineStrings(result, "\n");
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[8]);
-    result = CombineStrings(result, "\n");
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[9]);
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[11]);
     result = CombineStrings(result, "\n");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[10]);
     result = CombineStrings(result, "\n");
-     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[11]);
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[9]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[8]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[7]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[6]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[5]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[4]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[3]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[2]);
+    result = CombineStrings(result, "\n");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[1]);
+    result = CombineStrings(result, "\n");
+    result = CombineStrings(result, "[cffffffff]");
+     result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[0]);
+    result = CombineStrings(result, "[r]");
 
-    DrawTextBoxed(basicFontLarger, result, (Rectangle){272, 128+LAYOUT_SPACING, 368-LAYOUT_SPACING, 360}, 16, 0, true, LIGHTGRAY);
+    result = WrapText(basicFontLarger, result, 16, 0, 488-LAYOUT_SPACING);
+    Vector2 textSize = MeasureTextEx(basicFontLarger, result, 16,0);
+
+    DrawTextStyled(basicFontLarger, result, (Vector2){160,368 - textSize.y},16,0, GRAY);
+    free(result);
 }
 
 void DrawDungeonScreen()
@@ -1167,4 +1176,194 @@ void DrawTextBoxedSelectable(Font font, const char *text, Rectangle rec, float f
 
         if ((textOffsetX != 0) || (codepoint != ' ')) textOffsetX += glyphWidth;  // avoid leading spaces
     }
+}
+
+void DrawTextStyled(Font font, const char *text, Vector2 position, float fontSize, float spacing, Color color)
+{
+    // Text inline styling strategy used: [ ] delimiters for format
+    // - Define foreground color:      [cRRGGBBAA]
+    // - Define background color:      [bRRGGBBAA]
+    // - Reset formating:              [r]
+    // Example: [bAA00AAFF][cFF0000FF]red text on gray background[r] normal text
+
+    if (font.texture.id == 0) font = GetFontDefault();
+
+    int textLen = TextLength(text);
+
+    Color colFront = color;
+    Color colBack = BLANK;
+    int backRecPadding = 4; // Background rectangle padding
+
+    float textOffsetY = 0.0f;
+    float textOffsetX = 0.0f;
+    float textLineSpacing = 0.0f;
+    float scaleFactor = fontSize/font.baseSize;
+
+    for (int i = 0; i < textLen;)
+    {
+        int codepointByteCount = 0;
+        int codepoint = GetCodepointNext(&text[i], &codepointByteCount);
+
+        if (codepoint == '\n')
+        {
+            textOffsetY += (fontSize + textLineSpacing);
+            textOffsetX = 0.0f;
+        }
+        else
+        {
+            if (codepoint == '[') // Process pipe styling
+            {
+                if (((i + 2) < textLen) && (text[i + 1] == 'r') && (text[i + 2] == ']')) // Reset styling
+                {
+                    colFront = color;
+                    colBack = BLANK;
+
+                    i += 3;     // Skip "[r]"
+                    continue;   // Do not draw characters
+                }
+                else if (((i + 1) < textLen) && ((text[i + 1] == 'c') || (text[i + 1] == 'b')))
+                {
+                    i += 2;     // Skip "[c" or "[b" to start parsing color
+
+                    // Parse following color
+                    char colHexText[9] = { 0 };
+                    const char *textPtr = &text[i]; // Color should start here, let's see...
+
+                    int colHexCount = 0;
+                    while ((textPtr != NULL) && (textPtr[colHexCount] != '\0') && (textPtr[colHexCount] != ']'))
+                    {
+                        if (((textPtr[colHexCount] >= '0') && (textPtr[colHexCount] <= '9')) ||
+                            ((textPtr[colHexCount] >= 'A') && (textPtr[colHexCount] <= 'F')) ||
+                            ((textPtr[colHexCount] >= 'a') && (textPtr[colHexCount] <= 'f')))
+                        {
+                            colHexText[colHexCount] = textPtr[colHexCount];
+                            colHexCount++;
+                        }
+                        else break; // Only affects while loop
+                    }
+
+                    // Convert hex color text into actual Color
+                    unsigned int colHexValue = strtoul(colHexText, NULL, 16);
+                    if (text[i - 1] == 'c')
+                    {
+						colFront = GetColor(colHexValue);
+						//colFront.a *= (unsigned char)(colFront.a*(float)color.a/255.0f); // TODO: Review
+					}
+                    else if (text[i - 1] == 'b')
+					{
+						colBack = GetColor(colHexValue);
+						//colBack.a *= (unsigned char)(colFront.a*(float)color.a/255.0f);
+					}
+
+                    i += (colHexCount + 1); // Skip color value retrieved and ']'
+                    continue;   // Do not draw characters
+                }
+            }
+
+            int index = GetGlyphIndex(font, codepoint);
+            float increaseX = 0.0f;
+
+            if (font.glyphs[index].advanceX == 0) increaseX = ((float)font.recs[index].width*scaleFactor + spacing);
+            else increaseX += ((float)font.glyphs[index].advanceX*scaleFactor + spacing);
+
+            // Draw background rectangle color (if required)
+            if (colBack.a > 0) DrawRectangleRec((Rectangle) { position.x + textOffsetX, position.y + textOffsetY - backRecPadding, increaseX, fontSize + 2*backRecPadding }, colBack);
+
+            if ((codepoint != ' ') && (codepoint != '\t'))
+            {
+                DrawTextCodepoint(font, codepoint, (Vector2){ position.x + textOffsetX, position.y + textOffsetY }, fontSize, colFront);
+            }
+
+            textOffsetX += increaseX;
+        }
+
+        i += codepointByteCount;
+    }
+}
+
+char* WrapText(Font font, const char* text, float fontSize, float spacing, float maxWidth)
+{
+    if (!text) return NULL;
+
+    int length = TextLength(text);
+    // Worst case: a '\n' after every character. Allocate generously.
+    char* result = (char*)malloc(length * 2 + 1);
+    if (!result) return NULL;
+
+    int outLen = 0; 
+    float lineWidth = 0.0f;
+    float spaceWidth = MeasureTextEx(font, " ", fontSize, spacing).x;
+
+    int   lastBreakOut = -1;
+    float widthAtBreak = 0.0f;
+
+    const char* p = text;
+    while (*p)
+    {
+        int cpByteCount = 0;
+        int codepoint = GetCodepoint(p, &cpByteCount);
+        if (cpByteCount <= 0) cpByteCount = 1;
+
+        char glyph[8] = {0};
+        memcpy(glyph, p, cpByteCount < 7 ? cpByteCount : 7);
+        float glyphWidth = MeasureTextEx(font, glyph, fontSize, spacing).x;
+
+        bool isSpace = (codepoint == ' ' || codepoint == '\t');
+        bool isNewline = (codepoint == '\n');
+
+        if (isNewline)
+        {
+            result[outLen++] = '\n';
+            lineWidth = 0.0f;
+            lastBreakOut = -1;
+            p += cpByteCount;
+            continue;
+        }
+
+        float advance = isSpace ? spaceWidth : glyphWidth;
+        if (lineWidth + advance > maxWidth && lineWidth > 0.0f)
+        {
+            if (isSpace)
+            {
+                result[outLen++] = '\n';
+                lineWidth = 0.0f;
+                lastBreakOut = -1;
+                p += cpByteCount;
+                continue;
+            }
+            else if (lastBreakOut >= 0)
+            {
+                result[lastBreakOut] = '\n';
+                lineWidth = 0.0f;
+                for (int i = lastBreakOut + 1; i < outLen; )
+                {
+                    int bc = 0;
+                    GetCodepoint(&result[i], &bc);
+                    if (bc <= 0) bc = 1;
+                    char g[8] = {0};
+                    memcpy(g, &result[i], bc < 7 ? bc : 7);
+                    lineWidth += MeasureTextEx(font, g, fontSize, spacing).x;
+                    i += bc;
+                }
+                lineWidth += glyphWidth; 
+                lastBreakOut = -1;
+            }
+        }
+
+        memcpy(&result[outLen], p, cpByteCount);
+        outLen += cpByteCount;
+        lineWidth += advance;
+
+        if (isSpace)
+        {
+            lastBreakOut = outLen - cpByteCount;
+            widthAtBreak = lineWidth;
+        }
+
+        p += cpByteCount;
+    }
+
+    result[outLen] = '\0';
+    (void)widthAtBreak; 
+    return result;
 }
