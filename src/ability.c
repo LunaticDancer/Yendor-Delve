@@ -293,6 +293,70 @@ Ability InitAbility(ABILITY id)
             50,
             AF_TARGETS_SELF,
         };
+        case AB_WOLF_BITE:
+        return (Ability)
+        {
+            id,
+            "Bite",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_WOLF_HUNT:
+        return (Ability)
+        {
+            id,
+            "Hunt",
+            150,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_WOLF_FERAL_AURA:
+        return (Ability)
+        {
+            id,
+            "Feral Aura",
+            150,
+            AF_TARGETS_ENEMIES + AF_TARGETS_ALLIES + AF_AOE,
+        };
+        case AB_WOLF_PURSUE:
+        return (Ability)
+        {
+            id,
+            "Pursue",
+            200,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_GUIDE_RESONANT_STRIKE:
+        return (Ability)
+        {
+            id,
+            "Resonant Strike",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_GUIDE_HARMONIZE:
+        return (Ability)
+        {
+            id,
+            "Harmonize",
+            200,
+            AF_TARGETS_ALLIES + AF_AOE,
+        };
+        case AB_GUIDE_DISTRACT:
+        return (Ability)
+        {
+            id,
+            "Distract",
+            100,
+            AF_TARGETS_ALLIES,
+        };
+        case AB_GUIDE_DANCE_OF_THE_DESPERATE:
+        return (Ability)
+        {
+            id,
+            "Dance of the Desperate",
+            0,
+            AF_TARGETS_ENEMIES,
+        };
         case AB_CULTIST_SPAWN_ENROOT:
         return (Ability)
         {

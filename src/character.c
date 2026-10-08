@@ -384,6 +384,90 @@ Character InitCharacterData(CHARACTER_ID id)
             },
         };
         break;
+        case CHAR_WOLF:
+        return (Character){
+            id,
+            "This ominous beast seems to have adopted your adventuring party.\nA masterful hunter by nature, the Wolf has the ability to turn all living things feral, making them more reckless in combat.",
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Wolf",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){2,9},
+                    .color = DARKBLUE,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 900,
+                    .maxHealth = 900,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 150,
+                    .speed = 200,
+                    .defense = 50,
+                    .armor = 0,
+                    .critBonus = 100,
+                    .critRate = 5,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 400,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_WOLF_BITE,AB_WOLF_HUNT,AB_WOLF_FERAL_AURA,AB_WOLF_PURSUE,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            {
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+            },
+        };
+        break;
+        case CHAR_GUIDE:
+        return (Character){
+            id,
+            "A mysterious figure, wielding a walking stick with a bell at its end.\nThe Guide is a master of defense, protecting and nurturing allies, even if it comes at a personal cost.",
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Guide",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){0,7},
+                    .color = SKYBLUE,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 1000,
+                    .maxHealth = 1000,
+                    .currentStamina = 900,
+                    .maxStamina = 900,
+                    .staminaRegen = 150,
+                    .speed = 100,
+                    .defense = 80,
+                    .armor = 1,
+                    .critBonus = 100,
+                    .critRate = 5,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 700,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_GUIDE_RESONANT_STRIKE,AB_GUIDE_HARMONIZE,AB_GUIDE_DISTRACT,AB_GUIDE_DANCE_OF_THE_DESPERATE,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            {
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+                InitItem(ITEM_NONE),
+            },
+        };
+        break;
     }
 }
 
