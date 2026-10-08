@@ -170,6 +170,18 @@ void DrawPrognoses()
     Vector2 boxSize = (Vector2){144, 34};
     for (int i = 0; i < TURN_PROGNOSES; i++)
     {
+        if(appState.stateData.gameState.stateData.battleState.horizontalSelection == i && appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW)
+        {
+            char strnum[6];
+            sprintf(strnum, "%d", appState.stateData.gameState.stateData.battleState.turnIndicators[i].ticksUntil);
+            char* text = CombineStrings("Happens in\n", strnum);
+            text = CombineStrings(text, " ticks.");
+            Vector2 textSize = MeasureTextEx(basicFont, text, 16,0);
+            DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){ 428, 384, 160, 64}, 
+                (Vector2){0,0}, 0, GRAY);
+            DrawTextEx(basicFont, text,(Vector2){508-textSize.x/2, 416 - textSize.y/2},16,0,LIGHTGRAY);
+        }
+
         Vector2 position = (Vector2){LAYOUT_SPACING, 355 - ((i+1)*(LAYOUT_SPACING+boxSize.y))};
         DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){ position.x, position.y, boxSize.x, boxSize.y}, 
         (Vector2){0,0}, 0, 

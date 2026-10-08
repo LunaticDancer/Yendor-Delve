@@ -36,6 +36,7 @@ typedef struct TurnIndicator
 	bool isAttack;
 	char receiverMask;
 	ABILITY abilityId;
+	short ticksUntil;
 }TurnIndicator;
 
 struct BattleState

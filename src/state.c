@@ -554,6 +554,7 @@ void CreatePrognoses()
 	int actingEntity = appState.stateData.gameState.stateData.battleState.currentActingEntity;
 	short tickTimers[6];
 	Enemy enemyState[3];
+	short timeFromNow = 0;
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -573,13 +574,14 @@ void CreatePrognoses()
 		if (actingEntity < 3)
 		{
 			appState.stateData.gameState.stateData.battleState.turnIndicators[i] =
-				(TurnIndicator){actingEntity, false, 0, AB_WAIT};
+				(TurnIndicator){actingEntity, false, 0, AB_WAIT,timeFromNow};
 			tickTimers[actingEntity] = CalculateNextTurnTicks(&appState.stateData.gameState.playerTeam[actingEntity].stats);
 		}
 		else
 		{
 			appState.stateData.gameState.stateData.battleState.turnIndicators[i] =
 				CreateEnemyPrognosis(actingEntity, &enemyState[actingEntity - 3], &prognosisRng);
+			appState.stateData.gameState.stateData.battleState.turnIndicators[i].ticksUntil = timeFromNow;
 			enemyState[actingEntity-3].stats.statusEffects[SE_CONFUSION] -= CalculateNextTurnTicks(&appState.stateData.gameState.stateData.battleState.enemies[actingEntity - 3].stats);
 			tickTimers[actingEntity] = CalculateNextTurnTicks(&appState.stateData.gameState.stateData.battleState.enemies[actingEntity - 3].stats);
 		}
@@ -603,6 +605,7 @@ void CreatePrognoses()
 			actingEntity = j;
 			shortest = tickTimers[j];
 		}
+		timeFromNow+=shortest;
 		for (int j = 0; j < 6; j++)
 		{
 			tickTimers[j] -= shortest;
@@ -612,7 +615,7 @@ void CreatePrognoses()
 
 TurnIndicator CreateEnemyPrognosis(char id, Enemy *c, RNG *rng)
 {
-	TurnIndicator result = (TurnIndicator){id, true, 1, AB_WAIT};
+	TurnIndicator result = (TurnIndicator){id, true, 1, AB_WAIT,0};
 	short abilitySelected = 0;
 
 	switch (c->enemyId)
