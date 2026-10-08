@@ -30,6 +30,8 @@ char inputThisFrame; // bitmask of possible inputs, see enum CONTROLS in constan
 char inputHeld;
 
 void PollSDLGamepadEvents(void);
+bool SDLAxisFlicked(SDL_GameControllerAxis axis, bool positive);
+bool SDLAxisUnflicked(SDL_GameControllerAxis axis, bool positive);
 bool SDLButtonPressed(SDL_GameControllerButton btn);
 bool SDLButtonReleased(SDL_GameControllerButton btn);
 void ReadInput();
@@ -158,22 +160,22 @@ void ReadInput()
 		inputThisFrame = inputThisFrame | K_BACK;
 	}
 
-	if (!IsHeld(K_UP) && SDLButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_UP))
+	if (!IsHeld(K_UP) && (SDLButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_UP) || SDLAxisFlicked(SDL_CONTROLLER_AXIS_LEFTY, false)))
 	{
 		inputHeld = inputThisFrame | K_UP;
 		inputThisFrame = inputThisFrame | K_UP;
 	}
-	if (!IsHeld(K_DOWN) && SDLButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+	if (!IsHeld(K_DOWN) && (SDLButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN) || SDLAxisFlicked(SDL_CONTROLLER_AXIS_LEFTY, true)))
 	{
 		inputHeld = inputThisFrame | K_DOWN;
 		inputThisFrame = inputThisFrame | K_DOWN;
 	}
-	if (!IsHeld(K_LEFT) && SDLButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
+	if (!IsHeld(K_LEFT) && (SDLButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT) || SDLAxisFlicked(SDL_CONTROLLER_AXIS_LEFTX, false)))
 	{
 		inputHeld = inputThisFrame | K_LEFT;
 		inputThisFrame = inputThisFrame | K_LEFT;
 	}
-	if (!IsHeld(K_RIGHT) && SDLButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
+	if (!IsHeld(K_RIGHT) && (SDLButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) || SDLAxisFlicked(SDL_CONTROLLER_AXIS_LEFTX, true)))
 	{
 		inputHeld = inputThisFrame | K_RIGHT;
 		inputThisFrame = inputThisFrame | K_RIGHT;
@@ -189,19 +191,19 @@ void ReadInput()
 		inputThisFrame = inputThisFrame | K_BACK;
 	}
 
-	if (IsHeld(K_UP) && SDLButtonReleased(SDL_CONTROLLER_BUTTON_DPAD_UP))
+	if (IsHeld(K_UP) && (SDLButtonReleased(SDL_CONTROLLER_BUTTON_DPAD_UP) && SDLAxisUnflicked(SDL_CONTROLLER_AXIS_LEFTY, false)))
 	{
 		inputHeld = inputThisFrame & ~K_UP;
 	}
-	if (IsHeld(K_DOWN) && SDLButtonReleased(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+	if (IsHeld(K_DOWN) && (SDLButtonReleased(SDL_CONTROLLER_BUTTON_DPAD_DOWN) && SDLAxisUnflicked(SDL_CONTROLLER_AXIS_LEFTY, true)))
 	{
 		inputHeld = inputThisFrame & ~K_DOWN;
 	}
-	if (IsHeld(K_LEFT) && SDLButtonReleased(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
+	if (IsHeld(K_LEFT) && (SDLButtonReleased(SDL_CONTROLLER_BUTTON_DPAD_LEFT) && SDLAxisUnflicked(SDL_CONTROLLER_AXIS_LEFTX, false)))
 	{
 		inputHeld = inputThisFrame & ~K_LEFT;
 	}
-	if (IsHeld(K_RIGHT) && SDLButtonReleased(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
+	if (IsHeld(K_RIGHT) && (SDLButtonReleased(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) && SDLAxisUnflicked(SDL_CONTROLLER_AXIS_LEFTX, true)))
 	{
 		inputHeld = inputThisFrame & ~K_RIGHT;
 	}
@@ -213,6 +215,20 @@ void ReadInput()
 	{
 		inputHeld = inputThisFrame & ~K_BACK;
 	}
+}
+
+bool SDLAxisUnflicked(SDL_GameControllerAxis axis, bool positive)
+{
+	if (!activeController) return false;
+	return (positive) ? SDL_GameControllerGetAxis(activeController, axis) < 8000 :
+		SDL_GameControllerGetAxis(activeController, axis) > -8000;
+}
+
+bool SDLAxisFlicked(SDL_GameControllerAxis axis, bool positive)
+{
+	if (!activeController) return false;
+	return (positive) ? SDL_GameControllerGetAxis(activeController, axis) > 15000 :
+		SDL_GameControllerGetAxis(activeController, axis) < -15000;
 }
 
 bool SDLButtonPressed(SDL_GameControllerButton btn)
