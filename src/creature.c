@@ -130,7 +130,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
         switch (c->lingeringEffects[i].effectId)
         {
         case LE_ONHIT_DUELIST_PARRY:
-            primaryValue = ((20 + (c->baseStats.mastery + c->encounterStats.mastery + c->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(c, true);
+            primaryValue = ((40 + (c->baseStats.mastery + c->encounterStats.mastery + c->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(c, true);
             sprintf(strnum, "%d", primaryValue);
             message = CombineStrings((*c).baseStats.name, " parries the attack, gaining ");
             message = CombineStrings(message, strnum);
@@ -351,22 +351,23 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (20 + 20% Mastery) Speed.");
         return result;
     case AB_DUELIST_OPPORTUNITY:
-        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, false));
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8
+            + (caster->baseStats.speed + caster->encounterStats.speed + caster->itemStats.speed) * 0.1)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Amplify the effectiveness of abilities by ", strnum);
-        result = CombineStrings(result, "% (100 + 80% Mastery) a select number of turns from now (can also benefit enemies).");
+        result = CombineStrings(result, "% (100 + 80% Mastery + 10% Speed) a select number of turns from now (can also benefit enemies).");
         return result;
     case AB_DUELIST_PARRY:
         sprintf(strnum, "%.0f", ((5 + (caster->baseStats.speed + caster->encounterStats.speed + caster->itemStats.speed) * 0.05)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Gain ", strnum);
-        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (5 + 5% Speed) Armour until next turn. Each time you get hit within that time, gain ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (20 + 50% Mastery) Speed.");
+        result = CombineStrings(result, " (40 + 50% Mastery) Speed.");
         return result;
     case AB_DUELIST_BREATH:
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Regain ", strnum);
-        result = CombineStrings(result, " (50 + 100% Mastery) stamina.");
+        result = CombineStrings(result, " (50 + 100% Mastery) stamina and gain double the crit progress.");
         return result;
     case AB_MONK_MEDITATE:
         sprintf(strnum, "%.0f", (10 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, false));
@@ -727,7 +728,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_DUELIST_OPPORTUNITY:
-        primaryEffectValue = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, false);
+        primaryEffectValue = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8
+            + (caster->baseStats.speed + caster->encounterStats.speed + caster->itemStats.speed) * 0.1)) * CalculateEffectAmplification(caster, false);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " creates an opening, amplifying the potency of skills by ");
         message = CombineStrings(message, strnum);
@@ -757,9 +759,10 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         primaryEffectValue = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, false);
         sprintf(strnum, "%d", primaryEffectValue);
         caster->baseStats.currentStamina += primaryEffectValue;
+        (*caster).baseStats.critCounter += (*caster).baseStats.critRate + (*caster).itemStats.critRate + (*caster).encounterStats.critRate;
         message = CombineStrings((*caster).baseStats.name, " takes a steady breath, regaining ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Stamina.");
+        message = CombineStrings(message, " Stamina and greatly increasing Crit Progress.");
         AddMessageToFeed(message);
         break;
     case AB_MONK_MEDITATE:
