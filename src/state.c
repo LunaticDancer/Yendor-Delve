@@ -323,16 +323,16 @@ void HandleFleshGolemUpgrade()
 	switch (skills)
 	{
 	case 0:
-		hpGain = 150;
+		hpGain = 250;
 		break;
 	case 1:
-		hpGain = 100;
+		hpGain = 150;
 		break;
 	case 2:
-		hpGain = 50;
+		hpGain = 100;
 		break;
 	case 3:
-		hpGain = 25;
+		hpGain = 50;
 		break;
 	case 4:
 		hpGain = 10;

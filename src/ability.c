@@ -245,21 +245,21 @@ Ability InitAbility(ABILITY id)
             100,
             AF_TARGETS_ENEMIES,
         };
-        case AB_RIPPER_PREPARE:
+        case AB_RIPPER_STALK:
         return (Ability)
         {
             id,
             "Stalk",
             150,
-            AF_TARGETS_ENEMIES + AF_TARGETS_ALLIES,
+            AF_TARGETS_ALLIES,
         };
-        case AB_RIPPER_TRANSFUSION:
+        case AB_RIPPER_CHASE:
         return (Ability)
         {
             id,
-            "Dubious Transfusion",
+            "Chase",
             100,
-            AF_TARGETS_ALLIES,
+            AF_TARGETS_ENEMIES,
         };
         case AB_CULTIST_MADDENING_TOUCH:
         return (Ability)

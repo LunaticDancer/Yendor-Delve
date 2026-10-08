@@ -372,7 +372,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_MONK_MEDITATE:
         sprintf(strnum, "%.0f", (10 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Gain ", strnum);
-        result = CombineStrings(result, " (10 + 40% Mastery) mastery.");
+        result = CombineStrings(result, " (10 + 40% Mastery) Mastery and double the Crit Progress this turn.");
         return result;
     case AB_MONK_TRUE_STRIKE:
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true));
@@ -382,7 +382,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_MONK_ATTUNEMENT:
         sprintf(strnum, "%.0f", ((150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings((caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ? "Shield all allies for " : " Shield a target ally for ", strnum);
-        result = CombineStrings(result, " (50 + 200% Mastery) health points.");
+        result = CombineStrings(result, " (150 + 200% Mastery) health points.");
         result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ? " " : " Becomes an area ability upon crit. ");
         return result;
     case AB_MONK_CLEANSE:
@@ -475,17 +475,15 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_RIPPER_EVISCERATE:
         result = "Deal unavoidable damage to an enemy equal to twice the sum of negative effects they carry.";
         return result;
-    case AB_RIPPER_PREPARE:
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
+    case AB_RIPPER_STALK:
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
         result = CombineStrings("Give an ally ", strnum);
-        sprintf(strnum, "%.0f", (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (10 + 30% Mastery) Crit Bonus and make them Untargettable for 500 ticks OR apply ");
-        result = CombineStrings(result, " (60 + 100% Mastery) Exhaustion to an enemy.");
+        result = CombineStrings(result, " (20 + 30% Mastery) Crit Bonus and make them Untargettable for 500 ticks. This ability doesn't Crit.");
         return result;
-    case AB_RIPPER_TRANSFUSION:
-        sprintf(strnum, "%.0f", (((caster->baseStats.currentHealth) * 0.5)));
-        result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (50% current Health) damage to yourself. Heal an ally by 60% of the damage dealt and cleanse their status effects. Permanently raise your Mastery by 20% of the damage dealt.");
+    case AB_RIPPER_CHASE:
+        sprintf(strnum, "%.0f", (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Apply ", strnum);
+        result = CombineStrings(result, " (60 + 100% Mastery) Exhaustion to an enemy and gain Mastery equal to 20% of their missing Health.");
         return result;
     case AB_CULTIST_MADDENING_TOUCH:
         sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
@@ -775,6 +773,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         break;
     case AB_MONK_MEDITATE:
         dontResetCritProgress = true;
+        (*caster).baseStats.critCounter += (*caster).baseStats.critRate + (*caster).itemStats.critRate + (*caster).encounterStats.critRate;
         primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, false);
         (*caster).encounterStats.mastery += primaryEffectValue;
         sprintf(strnum, "%d", primaryEffectValue);
@@ -1115,10 +1114,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddCreatureToFlicker(targets[0]);
         DealDamage(primaryEffectValue, targets[0], true, caster);
         break;
-    case AB_RIPPER_PREPARE:
-        if(appState.stateData.gameState.stateData.battleState.horizontalSelection <3)
-        {
-        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3) * CalculateEffectAmplification(caster, true);
+    case AB_RIPPER_STALK:
+        primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " conceals ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -1127,45 +1124,25 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, "% Crit Bonus.");
         targets[0]->statusEffects[SE_UNTARGETTABLE] = 500;
         targets[0]->encounterStats.critBonus += primaryEffectValue;
-        }
-        else
-        {
-        primaryEffectValue = (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
-        sprintf(strnum, "%d", primaryEffectValue);
-        message = CombineStrings((*caster).baseStats.name, " tires ");
-        message = CombineStrings(message, targets[0]->baseStats.name);
-        message = CombineStrings(message, ", out in a manic chase, applying ");
-        message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Exhaustion.");
-        targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
-        }
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
         break;
-    case AB_RIPPER_TRANSFUSION:
-        primaryEffectValue = CalculateDamage(caster->baseStats.currentHealth/2, caster);
+    case AB_RIPPER_CHASE:
+        primaryEffectValue = (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        short ripperChaseMastery = ((targets[0]->baseStats.maxHealth + targets[0]->encounterStats.health + targets[0]->itemStats.health - targets[0]->baseStats.currentHealth) * 0.2);
         sprintf(strnum, "%d", primaryEffectValue);
-        message = CombineStrings((*caster).baseStats.name, " deals ");
-        message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " damage to self and heals ");
+        message = CombineStrings((*caster).baseStats.name, " chases ");
         message = CombineStrings(message, targets[0]->baseStats.name);
-        message = CombineStrings(message, " for ");
-        sprintf(strnum, "%d", (short)(primaryEffectValue * 0.6));
+        message = CombineStrings(message, " maniacally, applying ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Health, while gaining ");
-        sprintf(strnum, "%d", (short)(primaryEffectValue * 0.2));
+        message = CombineStrings(message, " Exhaustion and gaining ");
+        sprintf(strnum, "%d", ripperChaseMastery);
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " permanent Mastery.");
+        message = CombineStrings(message, " Mastery through the excitement.");
+        targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
+        caster->encounterStats.mastery += ripperChaseMastery;
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
-        AddCreatureToFlicker(caster);
-        DealDamage(primaryEffectValue, caster, true, caster);
-        targets[0]->baseStats.currentHealth += (short)(primaryEffectValue * 0.6);
-        if(targets[0]->baseStats.currentHealth > targets[0]->baseStats.maxHealth + targets[0]->itemStats.health + targets[0]->encounterStats.health)
-        {
-            targets[0]->baseStats.currentHealth = targets[0]->baseStats.maxHealth + targets[0]->itemStats.health + targets[0]->encounterStats.health;
-        }
-        caster->baseStats.mastery += (short)(primaryEffectValue * 0.2);
     break;
     case AB_CULTIST_MADDENING_TOUCH:
         primaryEffectValue = (40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);

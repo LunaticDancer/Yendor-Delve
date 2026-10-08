@@ -331,7 +331,7 @@ Character InitCharacterData(CHARACTER_ID id)
                 .itemStats = CreateEmptyStatBonuses(),
                 .temporaryStats = {},
                 .lingeringEffects = {},
-                .abilities = InitAbilities((ABILITY[]){AB_RIPPER_REND,AB_RIPPER_EVISCERATE,AB_RIPPER_PREPARE,AB_RIPPER_TRANSFUSION,AB_WAIT}, 5),
+                .abilities = InitAbilities((ABILITY[]){AB_RIPPER_REND,AB_RIPPER_EVISCERATE,AB_RIPPER_CHASE,AB_RIPPER_STALK,AB_WAIT}, 5),
                 .abilityCount = 5,
             },
             {

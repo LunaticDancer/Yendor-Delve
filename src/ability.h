@@ -39,8 +39,8 @@ typedef enum ABILITY
     AB_MAGUS_SARCOPHAGUS,   // give an ally a massive boost of defense but considerably delay their next turn
     AB_RIPPER_REND,
     AB_RIPPER_EVISCERATE,
-    AB_RIPPER_PREPARE,
-    AB_RIPPER_TRANSFUSION,
+    AB_RIPPER_STALK,
+    AB_RIPPER_CHASE,
     AB_CULTIST_MADDENING_TOUCH,
     AB_CULTIST_SUMMON,
     AB_CULTIST_PRAY,
