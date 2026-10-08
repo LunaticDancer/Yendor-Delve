@@ -122,7 +122,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "True Strike",
-            500,
+            400,
             AF_TARGETS_ENEMIES,
         };
         case AB_MONK_ATTUNEMENT:
@@ -130,7 +130,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "Attunement",
-            500,
+            400,
             AF_TARGETS_ALLIES,
         };
         case AB_MONK_CLEANSE:
@@ -138,7 +138,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "Cleanse",
-            200,
+            150,
             AF_TARGETS_ALLIES + AF_TARGETS_ENEMIES,
         };
         case AB_FOLEM_STRIKE:

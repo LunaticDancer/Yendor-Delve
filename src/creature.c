@@ -380,7 +380,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ? " (100 + 200% Mastery) unavoidable damage to all enemies." : " (100 + 200% Mastery) unavoidable damage to target enemy. Becomes an area ability upon crit.");
         return result;
     case AB_MONK_ATTUNEMENT:
-        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, false));
+        sprintf(strnum, "%.0f", ((150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings((caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ? "Shield all allies for " : " Shield a target ally for ", strnum);
         result = CombineStrings(result, " (50 + 200% Mastery) health points.");
         result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ? " " : " Becomes an area ability upon crit. ");
@@ -774,6 +774,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         break;
     case AB_MONK_MEDITATE:
+        dontResetCritProgress = true;
         primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, false);
         (*caster).encounterStats.mastery += primaryEffectValue;
         sprintf(strnum, "%d", primaryEffectValue);
@@ -819,7 +820,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_MONK_ATTUNEMENT:
-        primaryEffectValue = (50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0) * CalculateEffectAmplification(caster, false);
+        primaryEffectValue = (150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0) * CalculateEffectAmplification(caster, false);
         for (int i = 0; i < numberOfTargets; i++)
         {
             targets[i]->encounterStats.shield += primaryEffectValue;
