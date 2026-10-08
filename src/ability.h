@@ -30,6 +30,7 @@ typedef enum ABILITY
     AB_FOLEM_EPIDERMIZE,
     AB_FOLEM_EXPUNGE,
     AB_FOLEM_CRIPPLE,
+    AB_FOLEM_MEND,
     AB_SHAPESHIFTER_SCRATCH,
     AB_SHAPESHIFTER_TRANSFORM,
     AB_MAGUS_DISINTEGRATE,      // stupidly strong single target attack

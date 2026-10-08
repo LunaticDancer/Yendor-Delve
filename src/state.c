@@ -313,7 +313,7 @@ void HandleFleshGolemUpgrade()
 {
 	short hpGain = 0;
 	char skills = 0;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		if (appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << i))
 		{
@@ -335,6 +335,9 @@ void HandleFleshGolemUpgrade()
 		hpGain = 25;
 		break;
 	case 4:
+		hpGain = 10;
+		break;
+	case 5:
 		hpGain = 0;
 		break;
 	}

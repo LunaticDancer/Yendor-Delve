@@ -247,8 +247,8 @@ Character InitCharacterData(CHARACTER_ID id)
                 .itemStats = CreateEmptyStatBonuses(),
                 .temporaryStats = {},
                 .lingeringEffects = {},
-                .abilities = InitAbilities((ABILITY[]){AB_FOLEM_STRIKE,AB_FOLEM_EXPUNGE, AB_FOLEM_EPIDERMIZE,AB_FOLEM_CRIPPLE,AB_WAIT}, 5),
-                .abilityCount = 5,
+                .abilities = InitAbilities((ABILITY[]){AB_FOLEM_STRIKE,AB_FOLEM_EXPUNGE, AB_FOLEM_EPIDERMIZE,AB_FOLEM_CRIPPLE,AB_FOLEM_MEND,AB_WAIT}, 6),
+                .abilityCount = 6,
             },
             {
                 InitItem(ITEM_NONE),

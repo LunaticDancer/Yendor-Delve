@@ -173,6 +173,14 @@ Ability InitAbility(ABILITY id)
             300,
             AF_TARGETS_ENEMIES,
         };
+        case AB_FOLEM_MEND:
+        return (Ability)
+        {
+            id,
+            "Mend",
+            200,
+            AF_TARGETS_ALLIES,
+        };
         case AB_SHAPESHIFTER_SCRATCH:
         return (Ability)
         {
