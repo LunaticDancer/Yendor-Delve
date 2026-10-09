@@ -477,8 +477,8 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         return result;
     case AB_RIPPER_STALK:
         sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
-        result = CombineStrings("Give an ally ", strnum);
-        result = CombineStrings(result, " (20 + 30% Mastery) Crit Bonus and make them Untargettable for 500 ticks. This ability doesn't Crit.");
+        result = CombineStrings("Make an ally Untargettable for 500 ticks and give them ", strnum);
+        result = CombineStrings(result, " (20 + 30% Mastery) Crit Bonus. This ability doesn't Crit.");
         return result;
     case AB_RIPPER_CHASE:
         sprintf(strnum, "%.0f", (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true));
@@ -509,7 +509,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Target enemy gains ", strnum);
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (20 + 40%) Berserk each time they get hit until your next turn. Deal ");
+        result = CombineStrings(result, " (20 + 40% Mastery) Berserk each time they get hit until your next turn. Deal ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (50 + 80% Mastery) damage to that enemy.");
         return result;
@@ -1314,6 +1314,124 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 AddMessageToFeed("The Mindless One laughs jubilantly, the otherworldly voice echoing across the cave system.");
                 break;
             }
+        }
+        break;
+    case AB_WOLF_BITE:
+        primaryEffectValue = (50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true);
+        short wolfBiteBerserk = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " bites ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and aggravating the wound.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->statusEffects[SE_CONFUSION] = wolfBiteBerserk;
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break;
+    case AB_WOLF_HUNT:
+        primaryEffectValue = (300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 3.0) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " springs at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " with a lethal attack, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and losing 50 Speed.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        caster->encounterStats.speed -= 50;
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+    case AB_WOLF_FERAL_AURA:
+        primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " stands ominously still, applying ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Berserk to everyone else.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            if(targets[i] == caster) continue;
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->statusEffects[SE_BERSERK] += primaryEffectValue;
+        }
+        break;
+    case AB_WOLF_PURSUE:
+        primaryEffectValue = targets[0]->statusEffects[SE_BERSERK];
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " steadily paces behind ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", removing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Berserk and ");
+        sprintf(strnum, "%d", primaryEffectValue*2);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Speed.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->statusEffects[SE_BERSERK] -= primaryEffectValue;
+        targets[0]->encounterStats.speed -= primaryEffectValue * 2;
+        break;
+    case AB_GUIDE_RESONANT_STRIKE:
+        primaryEffectValue = (10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2 +
+            MAX(0, (caster->baseStats.defense + caster->encounterStats.defense + caster->itemStats.defense) - 
+            (targets[0]->baseStats.defense + targets[0]->encounterStats.defense + targets[0]->itemStats.defense))) * CalculateEffectAmplification(caster, true);
+        short guideResonantStrikeShield = (50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " strikes ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " with their bell, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and gaining ");
+        sprintf(strnum, "%d", guideResonantStrikeShield);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Shield points.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        caster->encounterStats.shield += guideResonantStrikeShield;
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break;
+    case AB_GUIDE_HARMONIZE:
+        primaryEffectValue = (40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " plays a somber note with their bell, attuning the team to its resonance, granting all allies ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Defense.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->encounterStats.defense += primaryEffectValue;
+        }
+        break;
+    case AB_GUIDE_DISTRACT:
+        primaryEffectValue = (300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " creates an aggravating dissonance near ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", making them the  centre of attention for ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " ticks.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        break;
+    case AB_GUIDE_DANCE_OF_THE_DESPERATE:
+        primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.6) * CalculateEffectAmplification(caster, true);
+        short guideDancePain = (30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue, targets[0]);
+        message = CombineStrings((*caster).baseStats.name, " enters a feverish dance, granting every ally ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Stamina and Max Stamina, while applying ");
+        sprintf(strnum, "%d", guideDancePain);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Pain to self.");
+        AddMessageToFeed(message);
+        caster->statusEffects[SE_PAIN] += guideDancePain;
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->encounterStats.stamina += primaryEffectValue;
+            targets[i]->baseStats.currentStamina += primaryEffectValue;
         }
         break;
     case AB_CULTIST_SPAWN_ENROOT:

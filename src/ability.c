@@ -355,7 +355,7 @@ Ability InitAbility(ABILITY id)
             id,
             "Dance of the Desperate",
             0,
-            AF_TARGETS_ENEMIES,
+            AF_TARGETS_ALLIES + AF_AOE,
         };
         case AB_CULTIST_SPAWN_ENROOT:
         return (Ability)
