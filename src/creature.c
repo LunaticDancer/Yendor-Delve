@@ -1310,6 +1310,20 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 case 5:
                 AddMessageToFeed("The Mindless One chirps an alien melody.");
                 break;
+                case 6:
+                target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
+                dontResetCritProgress = true;
+                (*target).baseStats.critCounter += 50;
+                message = CombineStrings("The Mindless One blesses ", target->baseStats.name);
+                message = CombineStrings(message, " with luck, granting them 50 Crit Progress.");
+                AddMessageToFeed(message);
+                break;
+                case 7:
+                AddMessageToFeed("The Mindless One cackles like mad. Something seems to be different...");
+                appState.stateData.gameState.playerTeam[0].stats.baseStats.color = GREEN;
+                appState.stateData.gameState.playerTeam[1].stats.baseStats.color = PURPLE;
+                appState.stateData.gameState.playerTeam[2].stats.baseStats.color = RED;
+                break;
                 default:
                 AddMessageToFeed("The Mindless One laughs jubilantly, the otherworldly voice echoing across the cave system.");
                 break;
