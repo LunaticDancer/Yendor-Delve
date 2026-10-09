@@ -505,6 +505,52 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         return "Create a helpful monster in an empty enemy spot.";
     case AB_CULTIST_PRAY:
         return "Re-randomize enemy intent. Sometimes might result in an additional boon (likeliness diminished by Mastery).";
+    case AB_WOLF_BITE:
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Target enemy gains ", strnum);
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (20 + 40%) Berserk each time they get hit until your next turn. Deal ");
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (50 + 80% Mastery) damage to that enemy.");
+        return result;
+    case AB_WOLF_HUNT:
+        sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 3.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (300 + 300% Mastery) damage to an enemy, lose 50 Speed.");
+        return result;
+    case AB_WOLF_FERAL_AURA:
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Give everyone else ", strnum);
+        result = CombineStrings(result, " (20 + 20% Mastery) Berserk.");
+        return result;
+    case AB_WOLF_PURSUE:
+        return "Target enemy loses half of their Berserk and loses Speed equal to twice the Berserk lost.";
+    case AB_GUIDE_RESONANT_STRIKE:
+        sprintf(strnum, "%.0f", ((50+ (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Gain ", strnum);
+        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (50 + 80% Mastery) Shield. Deal ");
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (10 + 20% Mastery) damage to an enemy. If your Defense is higher than the target's, the damage is further amplified by the difference.");
+        return result;
+    case AB_GUIDE_HARMONIZE:
+        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Give every ally ", strnum);
+        result = CombineStrings(result, " (40 + 80% Mastery) Defense.");
+        return result;
+    case AB_GUIDE_DISTRACT:
+        sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Target ally becomes a guaranteed target of every enemy ability for ", strnum);
+        result = CombineStrings(result, " (300 + 150% Mastery) ticks.");
+        return result;
+    case AB_GUIDE_DANCE_OF_THE_DESPERATE:
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.6)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Give every ally ", strnum);
+        sprintf(strnum, "%.0f", ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (100 + 60% Mastery) Stamina and Max Stamina, apply ");
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (30 + 100% Mastery) Pain to self.");
+        return result;
         case AB_CULTIST_SPAWN_ENROOT:
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);

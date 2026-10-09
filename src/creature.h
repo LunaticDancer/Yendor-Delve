@@ -74,6 +74,7 @@ typedef struct LingeringEffect
     LINGERING_EFFECT effectId;
     short tickDuration;
     short triggerLimit;
+    short storedValue;
 } LingeringEffect;
 
 typedef struct CreatureStats

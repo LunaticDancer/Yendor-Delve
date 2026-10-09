@@ -322,7 +322,7 @@ Ability InitAbility(ABILITY id)
         {
             id,
             "Pursue",
-            200,
+            300,
             AF_TARGETS_ENEMIES,
         };
         case AB_GUIDE_RESONANT_STRIKE:
