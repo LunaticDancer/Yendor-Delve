@@ -138,6 +138,15 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             AddMessageToFeed(message);
             c->encounterStats.speed += primaryValue;
             break;
+        case LE_ONHIT_WOLF_BITE:
+            primaryValue = c->lingeringEffects[i].storedValue;
+            sprintf(strnum, "%d", primaryValue);
+            message = CombineStrings((*c).baseStats.name, "'s bite mark itches, causing ");
+            message = CombineStrings(message, strnum);
+            message = CombineStrings(message, " Berserk.");
+            AddMessageToFeed(message);
+            c->statusEffects[SE_BERSERK] += primaryValue;
+            break;
         }
     }
 }
@@ -1321,7 +1330,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 case 7:
                 AddMessageToFeed("The Mindless One cackles like mad. Something seems to be different...");
                 appState.stateData.gameState.playerTeam[0].stats.baseStats.color = GREEN;
-                appState.stateData.gameState.playerTeam[1].stats.baseStats.color = PURPLE;
+                appState.stateData.gameState.playerTeam[1].stats.baseStats.color = DARKPURPLE;
                 appState.stateData.gameState.playerTeam[2].stats.baseStats.color = RED;
                 break;
                 default:
@@ -1341,7 +1350,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " damage and aggravating the wound.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        targets[0]->statusEffects[SE_CONFUSION] = wolfBiteBerserk;
+        LingeringEffect wolfBiteEffect = (LingeringEffect){LE_ONHIT_WOLF_BITE, CalculateNextTurnTicks(caster), 0, wolfBiteBerserk};
+        ApplyLingeringEffect(targets[0], wolfBiteEffect);
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_WOLF_HUNT:

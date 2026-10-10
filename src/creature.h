@@ -20,6 +20,7 @@ typedef enum LINGERING_EFFECT
 {
     LE_NONE,
     LE_ONHIT_DUELIST_PARRY,
+    LE_ONHIT_WOLF_BITE,
 } LINGERING_EFFECT;
 
 // diminishing stat influence formula: 100 / (100 + stat)
