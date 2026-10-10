@@ -152,6 +152,7 @@ void InitGameState(enum GAME_STATE _state)
 		appState.stateData.gameState.stateData.battleState.prayerFatigue = 0;
 		appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown = -1;
 		appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask = 0;
+		appState.stateData.gameState.stateData.battleState.distractionTimer = -1;
 		appState.stateData.gameState.stateData.battleState.flickeringMask = 0;
 	}
 	appState.stateData.gameState.gameState = _state;
@@ -490,6 +491,13 @@ void ProgressTime(short ticks)
 	appState.stateData.gameState.stateData.battleState.enemies[1].stats.baseStats.ticksUntilNextTurn -= ticks;
 	appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.ticksUntilNextTurn -= ticks;
 
+	if(appState.stateData.gameState.stateData.battleState.distractionTimer > 0)
+	{
+		appState.stateData.gameState.stateData.battleState.distractionTimer-=ticks;
+		if(appState.stateData.gameState.stateData.battleState.distractionTimer <= 0)
+		AddMessageToFeed("The dissonant echo fades away.");
+	}
+
 	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[0].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[0].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[0].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
 	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[1].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[1].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[1].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
 	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[2].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[2].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[2].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
@@ -583,7 +591,7 @@ void CreatePrognoses()
 		else
 		{
 			appState.stateData.gameState.stateData.battleState.turnIndicators[i] =
-				CreateEnemyPrognosis(actingEntity, &enemyState[actingEntity - 3], &prognosisRng);
+				CreateEnemyPrognosis(actingEntity, &enemyState[actingEntity - 3], &prognosisRng, timeFromNow);
 			appState.stateData.gameState.stateData.battleState.turnIndicators[i].ticksUntil = timeFromNow;
 			enemyState[actingEntity-3].stats.statusEffects[SE_CONFUSION] -= CalculateNextTurnTicks(&appState.stateData.gameState.stateData.battleState.enemies[actingEntity - 3].stats);
 			tickTimers[actingEntity] = CalculateNextTurnTicks(&appState.stateData.gameState.stateData.battleState.enemies[actingEntity - 3].stats);
@@ -616,7 +624,7 @@ void CreatePrognoses()
 	}
 }
 
-TurnIndicator CreateEnemyPrognosis(char id, Enemy *c, RNG *rng)
+TurnIndicator CreateEnemyPrognosis(char id, Enemy *c, RNG *rng, short time)
 {
 	TurnIndicator result = (TurnIndicator){id, true, 1, AB_WAIT,0};
 	short abilitySelected = 0;
@@ -654,7 +662,11 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy *c, RNG *rng)
 		}
 		else
 		{
-			if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES))
+			if(appState.stateData.gameState.stateData.battleState.distractionTimer >= time)
+			{
+				result.receiverMask = result.receiverMask | (1 << (appState.stateData.gameState.stateData.battleState.distractionTarget));
+			}
+			else if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES))
 			{
 				result.receiverMask = result.receiverMask | (1 << PickSingularTarget(c, rng));
 			}
@@ -797,7 +809,7 @@ void TakeAutonomousTurn(Enemy *actor)
 	}
 
 	// dummy call to sync RNG
-	CreateEnemyPrognosis(appState.stateData.gameState.stateData.battleState.currentActingEntity, actor, &appState.stateData.gameState.stateData.battleState.battleRng);
+	CreateEnemyPrognosis(appState.stateData.gameState.stateData.battleState.currentActingEntity, actor, &appState.stateData.gameState.stateData.battleState.battleRng, 0);
 
 	char numberOfTargets = 0;
 	for (int j = 0; j < 6; j++)

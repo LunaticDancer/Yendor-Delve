@@ -60,6 +60,8 @@ struct BattleState
 	short prayerFatigue;
 	char opportunitySkillCountdown;
 	float opportunityMult;
+	char distractionTarget;
+	short distractionTimer;
 	char fleshGolemSkillMask;
 };
 
@@ -128,7 +130,7 @@ void HandleStartOfTurnProcs();
 void ProgressTime(short ticks);
 void HandleTemporaryStats(CreatureStats* c, short ticks);
 void CreatePrognoses();
-TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng);
+TurnIndicator CreateEnemyPrognosis(char id, Enemy* c, RNG* rng, short time);
 char PickSingularTarget(Enemy*, RNG*);
 void HandleEnemyTurn();
 void TakeAutonomousTurn(Enemy* actor);

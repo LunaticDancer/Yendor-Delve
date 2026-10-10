@@ -1428,6 +1428,20 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " ticks.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
+        appState.stateData.gameState.stateData.battleState.distractionTimer = primaryEffectValue;
+        for(int i = 0; i < 3; i++)
+        {
+            if(&appState.stateData.gameState.playerTeam[i].stats == targets[0])
+            {
+                appState.stateData.gameState.stateData.battleState.distractionTarget = i;
+                break;
+            }
+            if(&appState.stateData.gameState.stateData.battleState.enemies[i].stats == targets[0])
+            {
+                appState.stateData.gameState.stateData.battleState.distractionTarget = i + 3;
+                break;
+            }
+        }
         break;
     case AB_GUIDE_DANCE_OF_THE_DESPERATE:
         primaryEffectValue = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.6) * CalculateEffectAmplification(caster, true);
