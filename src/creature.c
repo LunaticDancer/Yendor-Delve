@@ -1276,7 +1276,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             caster->encounterStats.mastery + caster->itemStats.mastery)*4 + appState.stateData.gameState.stateData.battleState.prayerFatigue * 15) < 400 * CalculateEffectAmplification(caster, true))
         {
             CreatureStats* target;
-            switch(rand() % 8)
+            switch(rand() % 12)
             {
                 case 0:
                 target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
@@ -1334,6 +1334,29 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 appState.stateData.gameState.playerTeam[0].stats.baseStats.color = GREEN;
                 appState.stateData.gameState.playerTeam[1].stats.baseStats.color = DARKPURPLE;
                 appState.stateData.gameState.playerTeam[2].stats.baseStats.color = RED;
+                break;
+                case 8:
+                AddMessageToFeed("The Mindless One grants everyone 20 Mastery.");
+                appState.stateData.gameState.playerTeam[0].stats.encounterStats.mastery += 20;
+                appState.stateData.gameState.playerTeam[1].stats.encounterStats.mastery += 20;
+                appState.stateData.gameState.playerTeam[2].stats.encounterStats.mastery += 20;
+                appState.stateData.gameState.stateData.battleState.enemies[0].stats.encounterStats.mastery += 20;
+                appState.stateData.gameState.stateData.battleState.enemies[1].stats.encounterStats.mastery += 20;
+                appState.stateData.gameState.stateData.battleState.enemies[2].stats.encounterStats.mastery += 20;
+                break;
+                case 9:
+                appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
+                message = CombineStrings("The Mindless One yanks ", caster->baseStats.name);
+                message = CombineStrings(message, " outside the flow of time, granting them an additional turn.");
+                AddMessageToFeed(message);
+                break;
+                case 10:
+                target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
+                dontResetCritProgress = true;
+                EmptyStatusEffects(target);
+                message = CombineStrings("The Mindless One cures ", target->baseStats.name);
+                message = CombineStrings(message, " of all ailments.");
+                AddMessageToFeed(message);
                 break;
                 default:
                 AddMessageToFeed("The Mindless One laughs jubilantly, the otherworldly voice echoing across the cave system.");
