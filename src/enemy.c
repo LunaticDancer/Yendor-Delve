@@ -54,7 +54,7 @@ Enemy InitEnemyData(ENEMY_ID id)
                     .tileLookupPosition = (Vector2){10,14},
                     .color = DARKPURPLE,
 
-                    .ticksUntilNextTurn = 500,
+                    .ticksUntilNextTurn = 100,
                     .currentHealth = 150,
                     .maxHealth = 150,
                     .currentStamina = 1000,

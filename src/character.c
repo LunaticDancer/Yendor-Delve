@@ -48,48 +48,6 @@ Character InitCharacterData(CHARACTER_ID id)
             },
         };
         break;
-        /*case CHAR_ASSASSIN:
-        return (Character){
-            id,
-            "Mysterious and elusive, the Assassin is a frail but tactical fighter, waiting for the right opportunity to deal a decisive strike.\nThe Assassin is a tricky character, specializing in stealth, capitalizing on critical opportunities and bleeding the opponent to death.",
-            (CreatureStats){
-                .baseStats = (CreatureBaseStats){
-                    .name = "Assassin",
-                    .tileset = TL_CREATURES,
-                    .tileLookupPosition = (Vector2){1, 1},
-                    .color = GRAY,
-
-                    .ticksUntilNextTurn = 0,
-                    .currentHealth = 600,
-                    .maxHealth = 600,
-                    .currentStamina = 1200,
-                    .maxStamina = 1200,
-                    .staminaRegen = 150,
-                    .speed = 110,
-                    .defense = 40,
-                    .armor = 0,
-                    .critBonus = 125,
-                    .critRate = 25,
-                    .critCounter = 0,
-                    .mastery = 0,
-                    .targetPriority = 400,
-                },
-                .statusEffects = {},
-                .encounterStats = CreateEmptyStatBonuses(),
-                .itemStats = CreateEmptyStatBonuses(),
-                .temporaryStats = {},
-                .lingeringEffects = {},
-                .abilities = InitAbilities((ABILITY[]){AB_ASSASSIN_SLASH, AB_ASSASSIN_PREPARE, AB_ASSASSIN_CONCEAL, AB_ASSASSIN_REND,AB_WAIT}, 5),
-                .abilityCount = 5,
-            },
-            {
-                InitItem(ITEM_NONE),
-                InitItem(ITEM_NONE),
-                InitItem(ITEM_NONE),
-                InitItem(ITEM_NONE),
-            },
-        };
-        break;*/
         case CHAR_DUELIST:
         return (Character){
             id,
@@ -152,7 +110,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 60,
                     .armor = 0,
-                    .critBonus = 50,
+                    .critBonus = 40,
                     .critRate = 10,
                     .critCounter = 0,
                     .mastery = 0,
