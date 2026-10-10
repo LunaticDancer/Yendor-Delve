@@ -119,8 +119,8 @@ void InitGameState(enum GAME_STATE _state)
 
 	case GS_DUNGEON:
 		appState.stateData.gameState.stateData.dungeonState.isBrowsingEquipment = false;
-		appState.stateData.gameState.stateData.dungeonState.selectionX = 0;
-		appState.stateData.gameState.stateData.dungeonState.selectionY = 0;
+		appState.stateData.gameState.stateData.dungeonState.selectionX = 1;
+		appState.stateData.gameState.stateData.dungeonState.selectionY = 1;
 		ENCOUNTER_ID *encounterSelection = SelectRandomEncounters(appState.stateData.gameState.floor);
 		appState.stateData.gameState.stateData.dungeonState.encounters[0] = GetEncounterData(encounterSelection[0]);
 		appState.stateData.gameState.stateData.dungeonState.encounters[1] = GetEncounterData(encounterSelection[1]);
