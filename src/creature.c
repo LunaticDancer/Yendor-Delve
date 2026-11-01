@@ -145,7 +145,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONABIL_WANDERER_HAT: return "When using an ability, gain half of the Stamina spent as Shield.";
         case LE_ONABIL_LIVING_CHAINMAIL: return "When using an ability, gain 50 Defense.";
         case LE_ONABIL_ASSASSIN_SHOES: return "When using Wait, gain 100 Crit Progress.";
-        case LE_ONABIL_SCRYER_BALL: return "When using a single target ability, the target becomes untargetable for 241 moments.";
+        case LE_ONABIL_SCRYER_BALL: return "The sole target of your ability gains 241 Untargettable.";
         case LE_ONABIL_ANTLER_HELMET: return "When using an ability that targets only allies, gain 30 Mastery.";
         case LE_ONATT_HAMMER_OF_GLORY: return "When attacking, apply 10 Pain and Exhaust.";
         case LE_ONATT_BALL_ON_CHAIN: return "When attacking, delay the target's turn by 100 moments.";
