@@ -143,7 +143,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_AMULET_OF_YENDOR: return "Whoever holds it is an equal to Gods.";
         case LE_ONABIL_COMFORTABLE_SHOES: return "When using an ability, regain 50 stamina.";
         case LE_ONABIL_WANDERER_HAT: return "When using an ability, gain half of the Stamina spent as Shield.";
-        case LE_ONABIL_LIVING_CHAINMAIL: return "When using an ability, gain 50 Defense.";
+        case LE_ONABIL_LIVING_CHAINMAIL: return "When using an ability, gain 30 Defense.";
         case LE_ONABIL_ASSASSIN_SHOES: return "When using Wait, gain 100 Crit Progress.";
         case LE_ONABIL_SCRYER_BALL: return "The sole target of your ability gains 241 Untargetable.";
         case LE_ONABIL_ANTLER_HELMET: return "When using an ability which targets only allies, gain 30 Mastery.";
@@ -308,9 +308,9 @@ void HandleOnAbilityEffects(CreatureStats *c, ABILITY a, CreatureStats **targets
             break;
             case LE_ONABIL_LIVING_CHAINMAIL:
             message = CombineStrings("The chainmail shifts and adapts, granting ", (*c).baseStats.name);
-            message = CombineStrings(message, " 50 additional Defense.");
+            message = CombineStrings(message, " 30 additional Defense.");
             AddMessageToFeed(message);
-            c->encounterStats.defense += 50;
+            c->encounterStats.defense += 30;
             break;
             case LE_ONABIL_ASSASSIN_SHOES:
             if(a != AB_WAIT) break;
