@@ -127,6 +127,7 @@ void EmptyStatusEffects(CreatureStats*);
 void ResetTurnClock(CreatureStats*);
 short CalculateNextTurnTicks(CreatureStats* _creature);
 short CalculateDamage(short baseDamage, CreatureStats* target);
+float GetDamageMult(CreatureStats* c);
 void DealDamage(short damage, CreatureStats* target, bool trueDamage, CreatureStats* dealer);
 void HandlePain(CreatureStats*,short);
 float CalculateEffectAmplification(CreatureStats*, bool);
