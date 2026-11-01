@@ -754,7 +754,7 @@ void HandleBattleInput()
 			}
 			else
 			{
-				if (appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection - 3].stats.statusEffects[SE_UNTARGETTABLE] > 0)
+				if (appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection - 3].stats.statusEffects[SE_UNTARGETABLE] > 0)
 				{
 					ShowPopupMessage("This enemy is untargettable.");
 					return;

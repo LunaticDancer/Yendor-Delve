@@ -798,7 +798,7 @@ void DrawStatusEffects(Vector2 position, CreatureStats* _creature)
                 (Vector2){0,0}, 0, *gray
             );
             break;
-            case SE_UNTARGETTABLE:
+            case SE_UNTARGETABLE:
             DrawTexturePro(
                 GetTileset(TL_CREATURES),
                 (Rectangle){
