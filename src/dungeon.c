@@ -200,8 +200,8 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Green Dragon",
-                TL_BIG_CREATURES,
-                (Vector2){3,0},
+                TL_BIG_COMMUNITY,
+                (Vector2){2,0},
                 green,
                 "The legendary winged beast stands in your way.",
                 {EN_NONE, ENB_GREEN_DRAGON, EN_NONE},

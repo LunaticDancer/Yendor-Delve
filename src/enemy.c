@@ -136,8 +136,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Green Dragon",
-                    .tileset = TL_BIG_CREATURES,
-                    .tileLookupPosition = (Vector2){3,0},
+                    .tileset = TL_BIG_COMMUNITY,
+                    .tileLookupPosition = (Vector2){2,0},
                     .color = green,
 
                     .ticksUntilNextTurn = 0,
