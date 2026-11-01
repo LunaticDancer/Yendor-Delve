@@ -721,6 +721,43 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.damageMultiplier = 0.2;
         return result;
         //
+        case ITEM_EIGHT_EYED_MASK:
+        result = (Item){
+            id,
+            "Eight Eyed Mask",
+            TL_COMMUNITY,
+            (Vector2){7,6},
+            purple,
+            ES_HEAD,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.speed = 300;
+        result.statBonuses.critBonus = 50;
+        result.statBonuses.critRate = -10;
+        result.statBonuses.mastery = -50;
+        result.statBonuses.defense = -20;
+        return result;
+        //
+        case ITEM_HOLLOW_SKULL:
+        result = (Item){
+            id,
+            "Hollow Skull",
+            TL_COMMUNITY,
+            (Vector2){8,6},
+            raywhite,
+            ES_HEAD,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.mastery = -50;
+        result.statBonuses.targetPriority = +50;
+        result.statBonuses.staminaRegen = 70;
+        result.statBonuses.defense = 70;
+        result.statBonuses.health = 750;
+        
+        return result;
+        //
         case ITEM_MALEVOLENCE:
         result = (Item){
             id,
@@ -733,6 +770,7 @@ Item InitItem(ITEM_ID id)
             LE_ONATT_MALEVOLENCE,
         };
         result.statBonuses.mastery = 40;
+        
         return result;
         //
         case ITEM_CRYSTAL_MAIL:
@@ -749,6 +787,7 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.defense = 100;
         result.statBonuses.armor = 50;
         result.statBonuses.damageMultiplier = 0.1;
+
         return result;
         //
         case ITEM_ASSASSIN_SHOES:
@@ -763,6 +802,7 @@ Item InitItem(ITEM_ID id)
             LE_ONABIL_ASSASSIN_SHOES,
         };
         result.statBonuses.targetPriority = -200;
+
         return result;
         //
         case ITEM_AMBROSIA:
@@ -797,13 +837,15 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.mastery = 241;
         result.statBonuses.damageMultiplier = -1.0;
         result.statBonuses.speed = 77;
+        
+        return result;
         //
         case ITEM_ANTLER_HELMET:
         result = (Item){
             id,
             "Antler Helmet",
             TL_COMMUNITY,
-            (Vector2){4,6},
+            (Vector2){0,7},
             lightgray,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -820,7 +862,7 @@ Item InitItem(ITEM_ID id)
             id,
             "Stone Boots",
             TL_COMMUNITY,
-            (Vector2){5,6},
+            (Vector2){1,7},
             gray,
             ES_LEGS,
             CreateEmptyStatBonuses(),
