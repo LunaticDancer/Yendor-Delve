@@ -146,7 +146,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONABIL_LIVING_CHAINMAIL: return "When using an ability, gain 50 Defense.";
         case LE_ONABIL_ASSASSIN_SHOES: return "When using Wait, gain 100 Crit Progress.";
         case LE_ONABIL_SCRYER_BALL: return "The sole target of your ability gains 241 Untargettable.";
-        case LE_ONABIL_ANTLER_HELMET: return "When using an ability that targets only allies, gain 30 Mastery.";
+        case LE_ONABIL_ANTLER_HELMET: return "When using an ability which targets only allies, gain 30 Mastery.";
         case LE_ONATT_HAMMER_OF_GLORY: return "When attacking, apply 10 Pain and Exhaust.";
         case LE_ONATT_BALL_ON_CHAIN: return "When attacking, delay the target's turn by 100 moments.";
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 10 Bleed.";
@@ -347,7 +347,8 @@ void HandleOnAbilityEffects(CreatureStats *c, ABILITY a, CreatureStats **targets
 
                 if (only_allies) {
                     c->encounterStats.mastery += 30;
-                    message = CombineStrings((*c).baseStats.name, "'s helmet responds positively to the ability, granting 30 additional Mastery.");
+                    message = CombineStrings("The enchanted helmet approves of ", (*c).baseStats.name);
+                    message = CombineStrings(message, "'s comradery, granting 30 additional Mastery.");
                     AddMessageToFeed(message);
                 }
             }
