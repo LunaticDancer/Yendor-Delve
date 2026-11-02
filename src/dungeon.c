@@ -6,7 +6,7 @@
 
 extern struct AppState appState;
 
-ENCOUNTER_ID bossPoolTier1[1];
+ENCOUNTER_ID bossPoolTier1[2];
 ENCOUNTER_ID bossPoolTier2[1];
 
 ENCOUNTER_ID encounterPoolTier1[10];
@@ -104,6 +104,8 @@ ITEM_ID MatchRewardToEncounter(ENCOUNTER_ID enc, char floor)
 void InitEncounterPools()
 {
     bossPoolTier1[0] = ENCB_GREEN_DRAGON;
+    bossPoolTier1[1] = ENCB_CHOIR;
+    
     bossPoolTier2[0] = ENCB_BLACK_DRAGON;
 
     encounterPoolTier1[0] = ENC_BLOOD_FAERIES;
@@ -206,6 +208,18 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 green,
                 "The legendary winged beast stands in your way.",
                 {EN_NONE, ENB_GREEN_DRAGON, EN_NONE},
+                false,
+            };
+        case ENCB_CHOIR:
+            return (Encounter)
+            {
+                id,
+                "Mass",
+                TL_BIG_COMMUNITY,
+                (Vector2){5,0},
+                orange,
+                "The air grows heavy with song. All else falls silent.",
+                {ENB_CHOIR_RIGHT, ENB_CHOIR_PREACHER, ENB_CHOIR_LEFT},
                 false,
             };
         case ENC_BONFIRE:
