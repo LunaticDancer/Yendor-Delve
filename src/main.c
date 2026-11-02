@@ -8,6 +8,7 @@
 #include "constants.h"
 #include "state.h"
 #include "colors.h"
+#include "audio.h"
 
 static SDL_GameController *activeController = NULL;
 static SDL_JoystickID activeControllerId = -1;
@@ -75,6 +76,8 @@ int main()
 	camera.zoom = 1.0f;
 	InitAppState(AS_MAIN_MENU);
 
+	LoadAudio();
+
 	titleFont = LoadFontEx("assets/fonts/KAISG.TTF", 120, 0, 0);
 	SetTextureFilter(titleFont.texture, TEXTURE_FILTER_TRILINEAR);
 	basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 64, 0, 0);
@@ -122,6 +125,7 @@ int main()
 	UnloadTexture(boneFrame);
 	UnloadTexture(spikeFrame);
 	UnloadTexture(ornateFrame);
+	UnloadAudio();
 
 	if (activeController) SDL_GameControllerClose(activeController);
 	SDL_Quit();
@@ -614,6 +618,7 @@ void HandleCharacterSelectInput()
 		{
 			SaveConfig();
 			InitGameState(GS_DUNGEON);
+			PlaySFX(SFX_Delve);
 			ShowPopupMessage("Seek the amulet of Yendor in\nthe depths of the dungeon.");
 		}
 	}
@@ -659,6 +664,7 @@ void HandleBattleInput()
 				message = CombineStrings("Victory! You've defeated your foes and\nobtained ", appState.stateData.gameState.stateData.battleState.reward.name);
 				message = CombineStrings(message, ".");
 				ShowPopupMessage(message);
+				PlaySFX(SFX_Ping);
 				AddItemToInventory(appState.stateData.gameState.stateData.battleState.reward);
 				appState.stateData.gameState.floor++;
 				HandleFleshGolemUpgrade();
@@ -728,6 +734,7 @@ void HandleBattleInput()
 			else
 			{
 				ShowPopupMessage("Not enough stamina to use this ability.");
+				PlaySFX(SFX_Nullify);
 			}
 		}
 		if (IsPressed(K_UP))
@@ -759,6 +766,7 @@ void HandleBattleInput()
 				if (appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.horizontalSelection - 3].stats.statusEffects[SE_UNTARGETABLE] > 0)
 				{
 					ShowPopupMessage("This enemy is untargetable.");
+					PlaySFX(SFX_Nullify);
 					return;
 				}
 				CastAbility(ab.abilityId, ab.staminaCost, &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats,
@@ -887,6 +895,7 @@ void HandleEncounterSelection()
 {
 	Encounter encounter = appState.stateData.gameState.stateData.dungeonState.encounters[appState.stateData.gameState.stateData.dungeonState.selectionX / 2];
 
+	PlaySFX(SFX_Delve);
 	switch (encounter.id)
 	{
 	case ENC_NONE:
@@ -914,6 +923,7 @@ void HandleEncounterSelection()
 																					   : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth;
 
 		ShowPopupMessage("The party has rested at the safe place,\nregaining much of its strength.");
+		PlaySFX(SFX_Enhance);
 		appState.stateData.gameState.floor++;
 		InitGameState(GS_DUNGEON);
 		break;
@@ -923,6 +933,7 @@ void HandleEncounterSelection()
 		char *message = malloc(1);
 		message[0] = '\0';
 		message = CombineStrings("You've opened the chest and found\n", reward.name);
+		PlaySFX(SFX_Ping);
 		message = CombineStrings(message, ".");
 		ShowPopupMessage(message);
 		AddItemToInventory(reward);

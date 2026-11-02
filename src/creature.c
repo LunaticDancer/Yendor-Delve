@@ -5,6 +5,7 @@
 #include "state.h"
 #include "colors.h"
 #include "drawing.h"
+#include "audio.h"
 
 extern struct AppState appState;
 extern ITEM_ID itemPoolTier1[];
@@ -267,6 +268,8 @@ void HandleStartOfTurnEffects(CreatureStats* c)
 
 void HandleOnDeathEffects(CreatureStats *c)
 {
+    // Death sound
+    PlaySFX(SFX_Death);
     // Ripper reset
     for(int i = 0; i<3;i++)
     {
@@ -453,7 +456,7 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
             AddMessageToFeed(message);
             HandleOnDeathEffects(target);
         }
-    }
+    } else {PlaySFX(SFX_Hit);}
 }
 
 float GetDamageMult(CreatureStats* c)
