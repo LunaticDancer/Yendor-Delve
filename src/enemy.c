@@ -661,5 +661,80 @@ Enemy InitEnemyData(ENEMY_ID id)
             AB_GORLAK_EQUIP,
         };
         break;
+
+        case EN_ICE_ELEMENTAL:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Ice Elemental",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){11,6},
+                    .color = skyblue,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 400,
+                    .maxHealth = 400,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 150,
+                    .speed = 120,
+                    .defense = 100,
+                    .armor = 2,
+                    .critBonus = 100,
+                    .critRate = 1,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_ICE_ELEMENTAL_FREEZE,AB_ICE_ELEMENTAL_SHARDS,AB_ICE_ELEMENTAL_AURA,AB_WAIT}, 4),
+                .abilityCount = 4,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+        case EN_FIRE_ELEMENTAL:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Fire Elemental",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){12,6},
+                    .color = orange,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 300,
+                    .maxHealth = 300,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 175,
+                    .speed = 200,
+                    .defense = 90,
+                    .armor = 1,
+                    .critBonus = 100,
+                    .critRate = 5,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_FIRE_ELEMENTAL_FIREBALL,AB_FIRE_ELEMENTAL_FLARE,AB_FIRE_ELEMENTAL_INFERNO,AB_WAIT}, 4),
+                .abilityCount = 4,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
     }
 }
