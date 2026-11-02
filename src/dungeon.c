@@ -9,7 +9,7 @@ extern struct AppState appState;
 ENCOUNTER_ID bossPoolTier1[1];
 ENCOUNTER_ID bossPoolTier2[1];
 
-ENCOUNTER_ID encounterPoolTier1[9];
+ENCOUNTER_ID encounterPoolTier1[10];
 ENCOUNTER_ID encounterPoolTier2[4];
 ENCOUNTER_ID encounterPoolTier3[4];
 
@@ -115,6 +115,7 @@ void InitEncounterPools()
     encounterPoolTier1[6] = ENC_GHOSTS_EASY;
     encounterPoolTier1[7] = ENC_BANDITS_EASY;
     encounterPoolTier1[8] = ENC_GORLAK;
+    encounterPoolTier1[9] = ENC_ELEMENTAL_DUO;
 }
 
 void InitItemPools()
@@ -313,6 +314,18 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 magenta,
                 "A small, mysterious creature, wearing adventuring gear.",
                 {EN_NONE, EN_GORLAK, EN_NONE},
+                false,
+            };
+        case ENC_ELEMENTAL_DUO:
+            return (Encounter)
+            {
+                id,
+                "Elemental Duo",
+                TL_CREATURES,
+                (Vector2){11, 6},
+                skyblue,
+                "Elementals of ice and fire. An unlikely pairing.",
+                {EN_ICE_ELEMENTAL, EN_NONE, EN_FIRE_ELEMENTAL},
                 false,
             };
         default:
