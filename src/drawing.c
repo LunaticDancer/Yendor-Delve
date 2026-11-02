@@ -38,6 +38,7 @@ void DrawBattleAbilityDescription(CreatureStats*, ABILITY);
 void DrawPrognoses();
 void DrawBattleScreenPartyMember(char);
 void DrawBattleScreenEnemy(char);
+void DrawBattleScreenEnemyHp(char index);
 void DrawDuelistOpportunitySelection();
 void DrawStatusEffects(Vector2 position, CreatureStats* creature);
 void DrawBattleScreenMessageFeed();
@@ -344,10 +345,21 @@ void DrawBattle()
     {
         DrawBattleAbilitySelection();
     }
+    if(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT)
+    {
+        GetAbilityDescription(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[
+            appState.stateData.gameState.stateData.battleState.verticalSelection].abilityId, &appState.stateData.gameState.playerTeam[
+            appState.stateData.gameState.stateData.battleState.currentActingEntity].stats);
+    }
     if(appState.stateData.gameState.stateData.battleState.battleState == BS_OPPORTUNITY_CHOICE)
     {
         DrawDuelistOpportunitySelection();
     }
+    
+
+    DrawBattleScreenEnemyHp(0);
+    DrawBattleScreenEnemyHp(1);
+    DrawBattleScreenEnemyHp(2);
 
     EndMode2D();
     return;
@@ -624,6 +636,21 @@ void DrawBattleScreenPartyMember(char index)
     DrawStatusEffects((Vector2){LAYOUT_SPACING + creatureBoxSize * index + 16, SCREEN_HEIGHT - creatureBoxSize + LAYOUT_SPACING + 16}, &appState.stateData.gameState.playerTeam[index].stats);
 }
 
+void DrawBattleScreenEnemyHp(char index)
+{    
+    if(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth <= 0) return;
+
+    short creatureBoxSize = 128;
+    char strnum[8];
+    sprintf(strnum, "%d", appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth
+        +appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.shield);
+    Vector2 str_size = MeasureTextEx(basicFontLarger, strnum, 16,0);
+    DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2 + 1, 103-str_size.y/2 + 1}, 16,0,*black);
+    DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2 - 1, 103-str_size.y/2 - 1}, 16,0,*black);
+    DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2, 103-str_size.y/2}, 16,0,*white);
+    
+}
+
 void DrawBattleScreenEnemy(char index)
 {
     short creatureBoxSize = 128;
@@ -676,13 +703,6 @@ void DrawBattleScreenEnemy(char index)
         (int)((creatureBoxSize-40) * ClampFloat((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.shield / 
         (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth, 0, 1)), 
         4, *skyblue);
-    char strnum[8];
-    sprintf(strnum, "%d", appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth
-        +appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.shield);
-    Vector2 str_size = MeasureTextEx(basicFontLarger, strnum, 16,0);
-    DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2 + 1, 103-str_size.y/2 + 1}, 16,0,*black);
-    DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2 - 1, 103-str_size.y/2 - 1}, 16,0,*black);
-    DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2, 103-str_size.y/2}, 16,0,*white);
     }
     DrawStatusEffects((Vector2){SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1) + 16, LAYOUT_SPACING + 16}, &appState.stateData.gameState.stateData.battleState.enemies[index].stats);
 }
