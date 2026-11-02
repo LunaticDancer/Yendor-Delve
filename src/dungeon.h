@@ -31,6 +31,7 @@ typedef struct Encounter
 {
     ENCOUNTER_ID id;
     char* name;
+    char* welcomeMessage;
     enum TILESET tileset;
     Vector2 tileLookupPosition;
     Color *color;

@@ -171,6 +171,8 @@ void TransitionToBattle()
 
 	InitGameState(GS_BATTLE);
 
+	if(strlen(encounter.welcomeMessage)>1) appState.stateData.gameState.stateData.battleState.messages[0] = encounter.welcomeMessage;
+
 	appState.stateData.gameState.stateData.battleState.reward = reward;
 	appState.stateData.gameState.stateData.battleState.enemies[0] = InitEnemyData(encounter.enemies[0]);
 	appState.stateData.gameState.stateData.battleState.enemies[1] = InitEnemyData(encounter.enemies[1]);
