@@ -168,6 +168,120 @@ Enemy InitEnemyData(ENEMY_ID id)
         };
         break;
         
+        case ENB_CHOIR_LEFT:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Choir",
+                    .tileset = TL_BIG_COMMUNITY,
+                    .tileLookupPosition = (Vector2){3,0},
+                    .color = orange,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 900,
+                    .maxHealth = 900,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 200,
+                    .speed = 150,
+                    .defense = 100,
+                    .armor = 0,
+                    .critBonus = 100,
+                    .critRate = 10,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_CULTIST_SPAWN_ENROOT, AB_CULTIST_SPAWN_SPORES,AB_CULTIST_SPAWN_GROW,AB_CULTIST_SPAWN_INVIGORATE,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+        
+        case ENB_CHOIR_RIGHT:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Choir",
+                    .tileset = TL_BIG_COMMUNITY,
+                    .tileLookupPosition = (Vector2){5,0},
+                    .color = orange,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 900,
+                    .maxHealth = 900,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 200,
+                    .speed = 150,
+                    .defense = 100,
+                    .armor = 0,
+                    .critBonus = 100,
+                    .critRate = 10,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_CULTIST_SPAWN_ENROOT, AB_CULTIST_SPAWN_SPORES,AB_CULTIST_SPAWN_GROW,AB_CULTIST_SPAWN_INVIGORATE,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+        
+        case ENB_CHOIR_PREACHER:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Choir",
+                    .tileset = TL_BIG_COMMUNITY,
+                    .tileLookupPosition = (Vector2){4,0},
+                    .color = orange,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 1500,
+                    .maxHealth = 1500,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 200,
+                    .speed = 150,
+                    .defense = 100,
+                    .armor = 0,
+                    .critBonus = 100,
+                    .critRate = 10,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_CULTIST_SPAWN_ENROOT, AB_CULTIST_SPAWN_SPORES,AB_CULTIST_SPAWN_GROW,AB_CULTIST_SPAWN_INVIGORATE,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+
         case EN_CULTIST_SUMMON:
         return (Enemy){
             id,
