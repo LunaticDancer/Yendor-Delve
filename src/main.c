@@ -2,7 +2,13 @@
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
-#include "SDL2/SDL.h"
+#define SDL_MAIN_HANDLED
+#ifdef _WIN32
+    #include <SDL.h>
+    //#include </usr/i686-w64-mingw32/include/SDL2/SDL.h>
+#else
+    #include <SDL2/SDL.h>
+#endif
 #include "raylib.h"
 #include "drawing.h"
 #include "constants.h"
@@ -53,7 +59,7 @@ void HandlePauseMenuInput();
 void HandleEquipmentInput();
 void HandleItemSelectInput();
 
-int main()
+int main(int argc, char *argv[])
 {
 	// Tell the window to use vsync and work on high DPI displays
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
