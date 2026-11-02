@@ -11,7 +11,7 @@ typedef enum STATUS_EFFECT
     SE_BLEED,           // deal X damage at start of turn
     SE_BERSERK,         // remove X Def, add X% damage output
     SE_EXHAUSTION,      // remove X speed, abilities cost X more stamina
-    SE_UNTARGETTABLE,   // can't be targetted by enemy abilities for X ticks
+    SE_UNTARGETABLE,   // can't be targetted by enemy abilities for X ticks
     SE_PAIN,                    // deal X damage each time the creature becomes a target of ability
     SE_CONFUSION,       // confused creatures cast spells at random targets
     SE_LENGTH,
@@ -26,6 +26,8 @@ typedef enum LINGERING_EFFECT
     LE_ONABIL_COMFORTABLE_SHOES,
     LE_ONABIL_LIVING_CHAINMAIL,
     LE_ONABIL_ASSASSIN_SHOES,
+    LE_ONABIL_SCRYER_BALL,
+    LE_ONABIL_ANTLER_HELMET,
 
     LE_ONATT_HAMMER_OF_GLORY,
     LE_ONATT_BALL_ON_CHAIN,
@@ -125,6 +127,7 @@ void EmptyStatusEffects(CreatureStats*);
 void ResetTurnClock(CreatureStats*);
 short CalculateNextTurnTicks(CreatureStats* _creature);
 short CalculateDamage(short baseDamage, CreatureStats* target);
+float GetDamageMult(CreatureStats* c);
 void DealDamage(short damage, CreatureStats* target, bool trueDamage, CreatureStats* dealer);
 void HandlePain(CreatureStats*,short);
 float CalculateEffectAmplification(CreatureStats*, bool);

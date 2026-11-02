@@ -25,6 +25,7 @@ extern Texture bigCreatureAtlas;
 extern Texture itemAtlas;
 extern Texture generalAtlas;
 extern Texture communityAtlas;
+extern Texture bigCommunityAtlas;
 extern Texture boneFrame;
 extern Texture spikeFrame;
 extern Texture ornateFrame;
@@ -442,11 +443,11 @@ void DrawPrognoses()
                 GetTileset(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset),
                 (Rectangle){
                     appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileLookupPosition.x * TILE_SIZE 
-                    * ((appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1),
+                    * (IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset) ? 2 : 1),
                     appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileLookupPosition.y * TILE_SIZE 
-                    * ((appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1),
-                    TILE_SIZE * ((appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1), 
-                    TILE_SIZE * ((appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1),
+                    * (IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset) ? 2 : 1),
+                    TILE_SIZE * (IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset) ? 2 : 1), 
+                    TILE_SIZE * (IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.turnIndicators[i].senderId-3].stats.baseStats.tileset) ? 2 : 1),
                 },
                 (Rectangle){
                     position.x + boxSize.x/2 + offset - TILE_SIZE/2,
@@ -504,11 +505,11 @@ void DrawPrognoses()
                         GetTileset(appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileset),
                         (Rectangle){
                             appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileLookupPosition.x * TILE_SIZE 
-                    * ((appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1),
+                    * (IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileset) ? 2 : 1),
                             appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileLookupPosition.y * TILE_SIZE 
-                    * ((appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1),
-                            TILE_SIZE * ((appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1), 
-                            TILE_SIZE * ((appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1),
+                    * (IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileset) ? 2 : 1),
+                            TILE_SIZE * (IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileset) ? 2 : 1), 
+                            TILE_SIZE * (IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[j-3].stats.baseStats.tileset) ? 2 : 1),
                         },
                         (Rectangle){
                             position.x + boxSize.x/2 + offset - TILE_SIZE/2,
@@ -641,16 +642,16 @@ void DrawBattleScreenEnemy(char index)
     DrawTexturePro(
             GetTileset(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset),
             (Rectangle){
-                appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileLookupPosition.x * TILE_SIZE * ((appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1),
-                appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileLookupPosition.y * TILE_SIZE * ((appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1),
-                TILE_SIZE * ((appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1), 
-                TILE_SIZE * ((appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset == TL_BIG_CREATURES) ? 2 : 1),
+                appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileLookupPosition.x * TILE_SIZE * ((IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset)) ? 2 : 1),
+                appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileLookupPosition.y * TILE_SIZE * ((IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset)) ? 2 : 1),
+                TILE_SIZE * ((IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset)) ? 2 : 1), 
+                TILE_SIZE * ((IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset)) ? 2 : 1),
             },
             (Rectangle){
-                SCREEN_WIDTH - (creatureBoxSize / 2) - (creatureBoxSize * index) - TILE_SIZE - ((appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset == TL_BIG_CREATURES) ? TILE_SIZE : 0),
-                (creatureBoxSize / 2) - TILE_SIZE - ((appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset == TL_BIG_CREATURES) ? TILE_SIZE + 8 : 0),
-                TILE_SIZE * (appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset == TL_BIG_CREATURES ? 4 : 2), 
-                TILE_SIZE * (appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset == TL_BIG_CREATURES ? 4 : 2),
+                SCREEN_WIDTH - (creatureBoxSize / 2) - (creatureBoxSize * index) - TILE_SIZE - ((IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset)) ? TILE_SIZE : 0),
+                (creatureBoxSize / 2) - TILE_SIZE - ((IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset)) ? TILE_SIZE + 8 : 0),
+                TILE_SIZE * (IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset) ? 4 : 2), 
+                TILE_SIZE * (IsBigSpritesheet(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.tileset) ? 4 : 2),
             },
             (Vector2){0,0},
             0,
@@ -684,6 +685,39 @@ void DrawBattleScreenEnemy(char index)
     DrawTextEx(basicFontLarger, strnum, (Vector2){SCREEN_WIDTH - (index+1) * creatureBoxSize + creatureBoxSize/2 - str_size.x/2, 103-str_size.y/2}, 16,0,*white);
     }
     DrawStatusEffects((Vector2){SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1) + 16, LAYOUT_SPACING + 16}, &appState.stateData.gameState.stateData.battleState.enemies[index].stats);
+}
+
+void DrawEnemyDamageOverlay(char index, short value)
+{
+    if(!(appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT || appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT)) return;
+    if(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth < 0) return;
+    short creatureBoxSize = 128;
+    if(appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth < value)
+        {
+            DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize, 101, 
+                (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth / 
+                ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.itemStats.health + (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.health))), 
+                4, *darkgray);
+        }
+        else
+        {
+            float width = (float)(value - appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.shield) / ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth + 
+                (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.itemStats.health + (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.health);
+            short offset = (short)(((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth / 
+                ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth + 
+                (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.itemStats.health + 
+                (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.health) - width) * (float)(creatureBoxSize-40));
+
+                DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize + offset, 101, (short)(width * (float)(creatureBoxSize-40))+1, 4, *gray);
+                DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize + offset, 101, 1, 4, *black);
+        }
+}
+
+void ShowEnemyDamageOverlays(short damage, bool trueDamage)
+{
+    DrawEnemyDamageOverlay(0, trueDamage ? damage : CalculateDamage(damage, &appState.stateData.gameState.stateData.battleState.enemies[0].stats));
+    DrawEnemyDamageOverlay(1, trueDamage ? damage : CalculateDamage(damage, &appState.stateData.gameState.stateData.battleState.enemies[1].stats));
+    DrawEnemyDamageOverlay(2, trueDamage ? damage : CalculateDamage(damage, &appState.stateData.gameState.stateData.battleState.enemies[2].stats));
 }
 
 void DrawDuelistOpportunitySelection()
@@ -765,7 +799,7 @@ void DrawStatusEffects(Vector2 position, CreatureStats* _creature)
                 (Vector2){0,0}, 0, *gray
             );
             break;
-            case SE_UNTARGETTABLE:
+            case SE_UNTARGETABLE:
             DrawTexturePro(
                 GetTileset(TL_CREATURES),
                 (Rectangle){
@@ -1080,17 +1114,17 @@ void DrawDungeonScreenEncounterSprite(char index)
             GetTileset(appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset),
             (Rectangle){
                 appState.stateData.gameState.stateData.dungeonState.encounters[index].tileLookupPosition.x * TILE_SIZE 
-                * (appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset == TL_BIG_CREATURES ? 2 : 1),
+                * (IsBigSpritesheet(appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset) ? 2 : 1),
                 appState.stateData.gameState.stateData.dungeonState.encounters[index].tileLookupPosition.y * TILE_SIZE 
-                * (appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset == TL_BIG_CREATURES ? 2 : 1),
-                TILE_SIZE * (appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset == TL_BIG_CREATURES ? 2 : 1), 
-                TILE_SIZE * (appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset == TL_BIG_CREATURES ? 2 : 1),
+                * (IsBigSpritesheet(appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset) ? 2 : 1),
+                TILE_SIZE * (IsBigSpritesheet(appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset) ? 2 : 1), 
+                TILE_SIZE * (IsBigSpritesheet(appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset) ? 2 : 1),
             },
             (Rectangle){
-                LAYOUT_SPACING + 67 + 210 * index - (appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset == TL_BIG_CREATURES ? 8 : 0),
-                 LAYOUT_SPACING + 96 - (appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset == TL_BIG_CREATURES ? 8 : 0),
-                TILE_SIZE * (appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset == TL_BIG_CREATURES ? 2 : 1), 
-                TILE_SIZE * (appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset == TL_BIG_CREATURES ? 2 : 1),
+                LAYOUT_SPACING + 67 + 210 * index - (IsBigSpritesheet(appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset) ? 8 : 0),
+                 LAYOUT_SPACING + 96 - (IsBigSpritesheet(appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset) ? 8 : 0),
+                TILE_SIZE * (IsBigSpritesheet(appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset) ? 2 : 1), 
+                TILE_SIZE * (IsBigSpritesheet(appState.stateData.gameState.stateData.dungeonState.encounters[index].tileset) ? 2 : 1),
             },
             (Vector2){0,0},
             0,
@@ -1345,6 +1379,9 @@ Texture GetTileset(enum TILESET ts)
             break;
         case TL_COMMUNITY:
             return communityAtlas;
+            break;
+        case TL_BIG_COMMUNITY:
+            return bigCommunityAtlas;
             break;
     }
 }
@@ -1672,4 +1709,18 @@ char* WrapText(Font font, const char* text, float fontSize, float spacing, float
     result[outLen] = '\0';
     (void)widthAtBreak; 
     return result;
+}
+
+bool IsBigSpritesheet(enum TILESET tileset) {
+    switch (tileset) {
+        case TL_BIG_COMMUNITY:
+            return true;
+            break;
+        case TL_BIG_CREATURES:
+            return true;
+            break;
+        default:
+            return false;
+            break;
+    }
 }

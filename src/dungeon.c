@@ -143,6 +143,7 @@ void InitItemPools()
     itemPoolTier1[21] = ITEM_HALLOWED_FLESH;
     itemPoolTier1[22] = ITEM_TRAVELER_SHOES;
     itemPoolTier1[23] = ITEM_BATTLE_SHIELD;
+    itemPoolTier1[24] = ITEM_STONE_BOOTS;
 
     itemPoolTier2[0] = ITEM_ELEMANCER_CROWN;
     itemPoolTier2[1] = ITEM_ELEMANCER_CAPE;
@@ -156,6 +157,14 @@ void InitItemPools()
     itemPoolTier2[9] = ITEM_LIVING_CHAINMAIL;
     itemPoolTier2[10] = ITEM_BALL_ON_CHAIN;
     itemPoolTier2[11] = ITEM_MORNINGSTAR;
+    itemPoolTier2[12] = ITEM_MALEVOLENCE;
+    itemPoolTier2[13] = ITEM_CRYSTAL_MAIL;
+    itemPoolTier2[14] = ITEM_ASSASSIN_SHOES;
+    itemPoolTier2[15] = ITEM_AMBROSIA;
+    itemPoolTier2[16] = ITEM_HOLLOW_SKULL;
+    itemPoolTier2[17] = ITEM_EIGHT_EYED_MASK;
+    itemPoolTier2[18] = ITEM_SCRYER_BALL;
+    itemPoolTier2[19] = ITEM_ANTLER_HELMET;
 }
 
 Encounter GetEncounterData(ENCOUNTER_ID id)
@@ -191,8 +200,8 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Green Dragon",
-                TL_BIG_CREATURES,
-                (Vector2){3,0},
+                TL_BIG_COMMUNITY,
+                (Vector2){2,0},
                 green,
                 "The legendary winged beast stands in your way.",
                 {EN_NONE, ENB_GREEN_DRAGON, EN_NONE},

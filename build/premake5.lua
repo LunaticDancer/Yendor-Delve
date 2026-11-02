@@ -171,9 +171,9 @@ if (downloadRaylib) then
     project (workspaceName)
         kind "ConsoleApp"
         location "build_files/"
-        targetdir "../bin/%{cfg.buildcfg}"
+        targetdir "../bin/%{cfg.platform}/%{cfg.buildcfg}"
 
-        filter {"system:windows", "configurations:Release", "action:gmake*"}
+        filter {"system:windows", "configurations:Release"}
             kind "WindowedApp"
             buildoptions { "-Wl,--subsystem,windows" }
 
@@ -196,7 +196,7 @@ if (downloadRaylib) then
             ["Game Resource Files/*"] = {"../resources/**"},
         }
         
-        files {"../src/**.c", "../src/**.cpp", "../src/**.h", "../src/**.hpp", "../include/**.h", "../include/**.hpp"}
+        files {"../src/*.c", "../src/*.cpp", "../src/*.h", "../src/*.hpp", "../include/*.h", "../include/*.hpp"}
         
         filter {"system:windows", "action:vs*"}
             files {"../src/*.rc", "../src/*.ico"}
@@ -207,7 +207,7 @@ if (downloadRaylib) then
         includedirs { "../src" }
         includedirs { "../include" }
 
-        links {"raylib", "GL"}
+        links {"raylib"}
 
         cdialect "C17"
         cppdialect "C++17"
@@ -218,17 +218,8 @@ if (downloadRaylib) then
         platform_defines()
 
         filter "system:linux"
-        buildoptions { "`pkg-config --cflags sdl2`" }
-        linkoptions  { "`pkg-config --libs sdl2`" }
-
-        filter "system:windows"
-        defines{"_WIN32"}
-        includedirs { "/usr/i686-w64-mingw32/include/SDL2" }
-        libdirs { "/usr/i686-w64-mingw32/lib" }
-        -- Standard Windows libs for Raylib + SDL2
-        links {"winmm", "gdi32", "opengl32", "user32", "shell32", "advapi32", "SDL2", "SDL2main", "mingw32"}
-        libdirs {"../bin/%{cfg.buildcfg}"}
-
+        --includedirs { "/usr/include/SDL2" }
+        links { "SDL2" }
         -- old config
         --buildoptions { "`pkg-config --cflags sdl2`" }
         --linkoptions  { "`pkg-config --libs sdl2`" }
@@ -242,11 +233,28 @@ if (downloadRaylib) then
 
         filter "system:windows"
             defines{"_WIN32"}
-            links {"winmm", "gdi32", "opengl32"}
-            libdirs {"../bin/%{cfg.buildcfg}"}
+            linkoptions { "-static-libgcc" }
+            --linkoptions { "-mwindows" }
+            includedirs { "/usr/i686-w64-mingw32/include/SDL2" }
+            libdirs {
+                "/usr/i686-w64-mingw32/lib",
+                "../bin/%{cfg.platform}/%{cfg.buildcfg}"
+            }
+            links {
+                "raylib",
+                "SDL2",
+                --"SDL2main",
+                "kernel32", "user32", "gdi32", "winmm", "ole32", "oleaut32",
+                "uuid", "imm32", "setupapi", "hid", "version", "comdlg32",
+                "advapi32", "shell32", "opengl32", "ws2_32",
+                "mingw32",
+                "mingwex",
+                "msvcrt",
+                "gcc",
+            }
 
         filter "system:linux"
-            links {"pthread", "m", "dl", "rt"}
+            links {"pthread", "m", "dl", "rt", "GL"}
 
         filter {"system:linux", "options:wayland=off"}
             links {"X11"}
@@ -268,10 +276,13 @@ if (downloadRaylib) then
         location "build_files/"
 
         language "C"
-        targetdir "../bin/%{cfg.buildcfg}"
+        targetdir "../bin/%{cfg.platform}/%{cfg.buildcfg}"
 
 
-        filter {"options:wayland=on"}
+        filter {"system:linux", "options:wayland=off"}
+            defines {"_GLFW_X11"}
+
+        filter {"system:linux", "options:wayland=on"}
             defines {"GLFW_LINUX_ENABLE_WAYLAND=TRUE" }
 
         filter {"options:wayland=on", "system:linux"}

@@ -17,6 +17,8 @@ void DrawMainMenu();
 void DrawSettings();
 void DrawGameplay();
 void DrawBattle();
+void DrawEnemyDamageOverlay(char index, short value);
+void ShowEnemyDamageOverlays(short damage, bool trueDamage);
 void DrawGameOver();
 void DrawDungeonScreen();
 void DrawEquipmentDialog();
@@ -27,5 +29,6 @@ void DrawTextBoxedSelectable(Font font, const char *text, Rectangle rec, float f
 void DrawTextBoxed(Font font, const char *text, Rectangle rec, float fontSize, float spacing, bool wordWrap, Color tint);
 void DrawTextStyled(Font font, const char *text, Vector2 position, float fontSize, float spacing, Color color);
 char* WrapText(Font font, const char* text, float fontSize, float spacing, float maxWidth);
+bool IsBigSpritesheet(enum TILESET);
 
 #endif
