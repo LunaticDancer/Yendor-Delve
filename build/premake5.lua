@@ -235,9 +235,9 @@ if (downloadRaylib) then
             defines{"_WIN32"}
             linkoptions { "-static-libgcc" }
             --linkoptions { "-mwindows" }
-            includedirs { "/usr/i686-w64-mingw32/include/SDL2" }
+            includedirs { "external/SDL2-2.32.10/x86_64-w64-mingw32/include/SDL2" }
             libdirs {
-                "/usr/i686-w64-mingw32/lib",
+                "external/SDL2-2.32.10/x86_64-w64-mingw32/lib",
                 "../bin/%{cfg.platform}/%{cfg.buildcfg}"
             }
             links {
