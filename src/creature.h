@@ -34,6 +34,8 @@ typedef enum LINGERING_EFFECT
     LE_ONATT_MORNINGSTAR,
     LE_ONATT_MALEVOLENCE,
 
+    LE_ONENC_COIN,
+
     LE_ONHIT_DUELIST_PARRY,
     LE_ONHIT_WOLF_BITE,
     LE_ONHIT_PENITENT_MAIL,
@@ -121,6 +123,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT);
 void HandleOnHitEffects(CreatureStats*, short, CreatureStats*);
 void HandleOnAttackEffects(CreatureStats*, short, CreatureStats*);
 void HandleStartOfTurnEffects(CreatureStats*);
+void HandleStartOfCombatEffects(CreatureStats*);
 void HandleOnDeathEffects(CreatureStats*);
 void HandleOnAbilityEffects(CreatureStats*, ABILITY,CreatureStats **targets, short numberOfTargets);
 void EmptyStatusEffects(CreatureStats*);

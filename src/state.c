@@ -207,6 +207,10 @@ void TransitionToBattle()
 	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[1].stats);
 	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[2].stats);
 
+	HandleStartOfCombatEffects(&appState.stateData.gameState.playerTeam[0].stats);
+	HandleStartOfCombatEffects(&appState.stateData.gameState.playerTeam[1].stats);
+	HandleStartOfCombatEffects(&appState.stateData.gameState.playerTeam[2].stats);
+
 	PassTurn();
 }
 

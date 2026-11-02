@@ -152,6 +152,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONATT_BALL_ON_CHAIN: return "When attacking, delay the target's turn by 100 moments.";
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 10 Bleed.";
         case LE_ONATT_MALEVOLENCE: return "When attacking, apply all the negative status you carry.";
+        case LE_ONENC_COIN: return "At the start of combat, you move first.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
@@ -261,6 +262,24 @@ void HandleStartOfTurnEffects(CreatureStats* c)
             case LE_ONTURN_AMBROSIA:
             if(c->statusEffects[SE_CONFUSION] < 1)
             c->statusEffects[SE_CONFUSION] = 1;
+            break;
+        }
+    }
+}
+
+void HandleStartOfCombatEffects(CreatureStats* c)
+{
+    char strnum[8];
+    char *message;
+    short primaryValue;
+    for (int i = 0; i < LINGERING_EFFECTS; i++)
+    {
+        if (c->lingeringEffects[i].effectId == LE_NONE)
+            continue;
+        switch (c->lingeringEffects[i].effectId)
+        {
+            case LE_ONENC_COIN:
+            c->baseStats.ticksUntilNextTurn = 0;
             break;
         }
     }
