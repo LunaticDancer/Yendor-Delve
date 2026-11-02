@@ -533,12 +533,12 @@ void ProgressTime(short ticks)
 	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina;
 	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina;
 
-	appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
-	appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
-	appState.stateData.gameState.playerTeam[2].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
-	appState.stateData.gameState.stateData.battleState.enemies[0].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
-	appState.stateData.gameState.stateData.battleState.enemies[1].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
-	appState.stateData.gameState.stateData.battleState.enemies[2].stats.statusEffects[SE_UNTARGETTABLE] -= ticks;
+	appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETABLE] -= ticks;
+	appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETABLE] -= ticks;
+	appState.stateData.gameState.playerTeam[2].stats.statusEffects[SE_UNTARGETABLE] -= ticks;
+	appState.stateData.gameState.stateData.battleState.enemies[0].stats.statusEffects[SE_UNTARGETABLE] -= ticks;
+	appState.stateData.gameState.stateData.battleState.enemies[1].stats.statusEffects[SE_UNTARGETABLE] -= ticks;
+	appState.stateData.gameState.stateData.battleState.enemies[2].stats.statusEffects[SE_UNTARGETABLE] -= ticks;
 
 	appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_CONFUSION] -= ticks;
 	appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_CONFUSION] -= ticks;
@@ -731,9 +731,9 @@ char PickSingularTarget(Enemy *c, RNG *rng)
 {
 	char pick = 0;
 	bool targets[] = {
-		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
-		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
-		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[2].stats.statusEffects[SE_UNTARGETTABLE] <= 0),
+		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETABLE] <= 0),
+		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETABLE] <= 0),
+		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[2].stats.statusEffects[SE_UNTARGETABLE] <= 0),
 	};
 	char numberOfLivingTargets =
 		(targets[0] ? 1 : 0) +
