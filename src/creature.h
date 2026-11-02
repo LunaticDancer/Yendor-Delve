@@ -108,6 +108,7 @@ typedef struct CreatureStats
     StatBonuses itemStats;
     StatDebuff temporaryStats[STAT_DEBUFFS];
     LingeringEffect lingeringEffects[LINGERING_EFFECTS];
+    LINGERING_EFFECT creatureEffect;
     Ability* abilities;
     char abilityCount;
 } CreatureStats;
