@@ -609,7 +609,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_DUELIST_LUNGE:
         damage = ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
-        sprintf(strnum, "%.0f", damage);
+        sprintf(strnum, "%d", damage);
         result = CombineStrings("Deal ", strnum);
         sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, " (60 + 50% Mastery) damage and gain ");
@@ -1097,7 +1097,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     bool dontResetCritProgress = false;
     bool skipAbility = false;
 
-    caster->baseStats.currentStamina -= cost + caster->statusEffects[SE_EXHAUSTION];
+    caster->baseStats.currentStamina -= cost + ((id == AB_WAIT) ? 0 : caster->statusEffects[SE_EXHAUSTION]);
 
     if(numberOfTargets == 1)
     {

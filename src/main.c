@@ -732,7 +732,10 @@ void HandleBattleInput()
 		}
 		if (IsPressed(K_CONFIRM))
 		{
-			if (appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].staminaCost + ((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].abilityId == AB_WAIT) ? 0 : appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.statusEffects[SE_EXHAUSTION]) <= appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.baseStats.currentStamina)
+			if ((appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].abilityId == AB_WAIT) 
+			|| (appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.abilities[appState.stateData.gameState.stateData.battleState.verticalSelection].staminaCost 
+				+ appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.statusEffects[SE_EXHAUSTION] 
+				<= appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats.baseStats.currentStamina))
 			{
 				appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_TARGET_SELECT;
 				HandleAbilityTargetInit();
