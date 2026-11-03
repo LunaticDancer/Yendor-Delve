@@ -47,6 +47,14 @@ ENCOUNTER_ID* SelectRandomEncounters(char floor)
         for(int i = 0; i < 3; i++)
         {
             result[i] = encounterPoolTier1[rng_next_u32(&appState.stateData.gameState.runRng) % ARR_SIZE(encounterPoolTier1)];
+            // duplicate prevention
+            for(int j = 0; j < i; j++)
+            {
+                if(result[i] == result[j])
+                {
+                    result[i] = ARR_SIZE(encounterPoolTier1) - j - 1;
+                }
+            }
         }
     }
     if(floor % 8 == 5)
