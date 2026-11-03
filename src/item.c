@@ -534,6 +534,23 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.mastery = 40;
         return result;
         //
+        case ITEM_TOY_DAGGER:
+        result = (Item){
+            id,
+            "Toy Dagger",
+            TL_ITEMS,
+            (Vector2){0,1},
+            beige,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.speed = 50;
+        result.statBonuses.critBonus = -100;
+        result.statBonuses.critRate = 200;
+        
+        return result;
+        //
         case ITEM_ELEMANCER_CROWN:
         result = (Item){
             id,
