@@ -237,7 +237,7 @@ if (downloadRaylib) then
             --linkoptions { "-mwindows" }
             includedirs { "external/SDL2-2.32.10/x86_64-w64-mingw32/include/SDL2" }
             libdirs {
-                "external/SDL2-2.32.10/x86_64-w64-mingw32/lib",
+                "../external/SDL2-2.32.10/x86_64-w64-mingw32/lib",
                 "../bin/%{cfg.platform}/%{cfg.buildcfg}"
             }
             links {
