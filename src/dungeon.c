@@ -42,6 +42,13 @@ ENCOUNTER_ID* SelectRandomEncounters(char floor)
             result[i] = bossPoolTier2[rng_next_u32(&appState.stateData.gameState.runRng) % ARR_SIZE(bossPoolTier2)];
         }
     }
+    else if(floor > 8 && floor < 16) 
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            result[i] = encounterPoolTier2[rng_next_u32(&appState.stateData.gameState.runRng) % ARR_SIZE(encounterPoolTier2)];
+        }
+    }
     else
     {
         for(int i = 0; i < 3; i++)
@@ -126,6 +133,11 @@ void InitEncounterPools()
     encounterPoolTier1[7] = ENC_BANDITS_EASY;
     encounterPoolTier1[8] = ENC_GORLAK;
     encounterPoolTier1[9] = ENC_ELEMENTAL_DUO;
+
+    encounterPoolTier2[0] = ENC_GIANT_FROG;
+    encounterPoolTier2[1] = ENC_GIANT_FROG;
+    encounterPoolTier2[2] = ENC_GIANT_FROG;
+    encounterPoolTier2[3] = ENC_GIANT_FROG;
 }
 
 void InitItemPools()
@@ -234,7 +246,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Mass",
-                "\0",
+                "Please, take a seat. You are just in time for mass.",
                 TL_BIG_COMMUNITY,
                 (Vector2){5,0},
                 orange,
@@ -370,6 +382,19 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 skyblue,
                 "Elementals of ice and fire. An unlikely pairing.",
                 {EN_ICE_ELEMENTAL, EN_NONE, EN_FIRE_ELEMENTAL},
+                false,
+            };
+        case ENC_GIANT_FROG:
+            return (Encounter)
+            {
+                id,
+                "Giant Frog",
+                "Good lord that's a big frog.",
+                TL_COMMUNITY,
+                (Vector2){4, 6},
+                darkblue,
+                "This ambush predator usually just goes for bugs, but anything that fits in its mouth is fair game.",
+                {EN_FROG_STINKFLY, EN_GIANT_FROG, EN_FROG_STINKFLY},
                 false,
             };
         default:

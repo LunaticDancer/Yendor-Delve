@@ -850,5 +850,79 @@ Enemy InitEnemyData(ENEMY_ID id)
             AB_WAIT,
         };
         break;
+        case EN_GIANT_FROG:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Giant Frog",
+                    .tileset = TL_COMMUNITY,
+                    .tileLookupPosition = (Vector2){4,6},
+                    .color = darkblue,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 800,
+                    .maxHealth = 800,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 255,
+                    .speed = 100,
+                    .defense = 300,
+                    .armor = 3,
+                    .critBonus = 100,
+                    .critRate = 35,
+                    .critCounter = 0,
+                    .mastery = 30,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_FROG_DEVOUR, AB_FROG_STOMP, AB_FROG_SING, AB_WAIT}, 4),
+                .abilityCount = 3,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+        case EN_FROG_STINKFLY:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Stinkfly",
+                    .tileset = TL_COMMUNITY,
+                    .tileLookupPosition = (Vector2){5,6},
+                    .color = brown,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 400,
+                    .maxHealth = 400,
+                    .currentStamina = 1000,
+                    .maxStamina = 500,
+                    .staminaRegen = 1000,
+                    .speed = 100,
+                    .defense = 110,
+                    .armor = 0,
+                    .critBonus = 0,
+                    .critRate = 25,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 100,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_FROG_FLY_BUZZ, AB_FROG_FLY_STINK, AB_WAIT}, 3),
+                .abilityCount = 2,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
     }
 }

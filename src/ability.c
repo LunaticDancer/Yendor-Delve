@@ -677,6 +677,46 @@ Ability InitAbility(ABILITY id)
             250,
             AF_TARGETS_ENEMIES + AF_AOE
         };
+        case AB_FROG_DEVOUR:
+        return (Ability)
+        {
+            id,
+            "Devour",
+            600,
+            AF_TARGETS_ALLIES,
+        };
+        case AB_FROG_STOMP:
+        return (Ability)
+        {
+            id,
+            "Stomp",
+            150,
+            AF_TARGETS_ENEMIES
+        };
+        case AB_FROG_SING:
+        return (Ability)
+        {
+            id,
+            "Frogsong",
+            350,
+            AF_AOE
+        };
+        case AB_FROG_FLY_BUZZ:
+        return (Ability)
+        {
+            id,
+            "Buzz",
+            50,
+            AF_AOE
+        };
+        case AB_FROG_FLY_STINK:
+        return (Ability)
+        {
+            id,
+            "Stink",
+            50,
+            AF_TARGETS_ENEMIES
+        };
     }
 }
 

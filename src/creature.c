@@ -1128,7 +1128,11 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (30 + 50% Mastery) damage to all enemies.");
         return result;
-
+    case AB_FROG_FLY_STINK:
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
+        result = CombineStrings("Apply ", strnum);
+        result = CombineStrings(result, " Exhaustion to all enemies.");
+        return result;
         
     default:
         return "Ability description missing, oopsie!";
@@ -2880,6 +2884,20 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             DealDamage(primaryEffectValue, targets[i], false, caster);
         }
         break;
+    case AB_FROG_FLY_STINK:
+        primaryEffectValue = (40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " emits a most foul odour, applying");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Exhaustion to ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ".");
+        AddMessageToFeed(message);
+
+        AddCreatureToFlicker(targets[0]);
+            targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
+        break;
+        
     default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
         AddMessageToFeed(message);
