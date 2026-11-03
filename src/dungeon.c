@@ -9,7 +9,7 @@ extern struct AppState appState;
 ENCOUNTER_ID bossPoolTier1[2];
 ENCOUNTER_ID bossPoolTier2[1];
 
-ENCOUNTER_ID encounterPoolTier1[9];
+ENCOUNTER_ID encounterPoolTier1[10];
 ENCOUNTER_ID encounterPoolTier2[4];
 ENCOUNTER_ID encounterPoolTier3[4];
 
@@ -117,6 +117,7 @@ void InitEncounterPools()
     encounterPoolTier1[6] = ENC_GHOSTS_EASY;
     encounterPoolTier1[7] = ENC_BANDITS_EASY;
     encounterPoolTier1[8] = ENC_GORLAK;
+    encounterPoolTier1[9] = ENC_ELEMENTAL_DUO;
 }
 
 void InitItemPools()
@@ -178,6 +179,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Dungeon Master",
+                "They await you, calmly and expectingly.",
                 TL_BIG_CREATURES,
                 (Vector2){5,3},
                 gold,
@@ -190,6 +192,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Black Dragon",
+                "\0",
                 TL_BIG_CREATURES,
                 (Vector2){3,0},
                 darkgray,
@@ -202,6 +205,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Green Dragon",
+                "\0",
                 TL_BIG_COMMUNITY,
                 (Vector2){2,0},
                 green,
@@ -214,6 +218,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Mass",
+                "\0",
                 TL_BIG_COMMUNITY,
                 (Vector2){5,0},
                 orange,
@@ -226,6 +231,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Bonfire",
+                "\0",
                 TL_GENERAL,
                 (Vector2){1, 1},
                 orange,
@@ -238,6 +244,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Chest",
+                "\0",
                 TL_GENERAL,
                 (Vector2){10, 1},
                 brown,
@@ -250,6 +257,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Chest",
+                "The chest was a trap! Prepare to face trouble.",
                 TL_GENERAL,
                 (Vector2){10, 1},
                 brown,
@@ -262,6 +270,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Blood Fae",
+                "\0",
                 TL_CREATURES,
                 (Vector2){12, 3},
                 red,
@@ -274,6 +283,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Caustic Cube",
+                "\0",
                 TL_CREATURES,
                 (Vector2){6, 14},
                 green,
@@ -286,6 +296,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Tooth Fae",
+                "\0",
                 TL_COMMUNITY,
                 (Vector2){4, 4},
                 raywhite,
@@ -298,6 +309,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Revenant Souls",
+                "\0",
                 TL_CREATURES,
                 (Vector2){4,6},
                 skyblue,
@@ -310,6 +322,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Bandit Troupe",
+                "You hear a holler behind you: \"Get'em boys!\"",
                 TL_CREATURES,
                 (Vector2){0,1},
                 gray,
@@ -322,6 +335,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Gorlak",
+                "Gorlak strolls into battle.",
                 TL_CREATURES,
                 (Vector2){8,15},
                 magenta,
@@ -329,11 +343,25 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 {EN_NONE, EN_GORLAK, EN_NONE},
                 false,
             };
+        case ENC_ELEMENTAL_DUO:
+            return (Encounter)
+            {
+                id,
+                "Elemental Duo",
+                "\0",
+                TL_CREATURES,
+                (Vector2){11, 6},
+                skyblue,
+                "Elementals of ice and fire. An unlikely pairing.",
+                {EN_ICE_ELEMENTAL, EN_NONE, EN_FIRE_ELEMENTAL},
+                false,
+            };
         default:
             return (Encounter)
             {
                 id,
                 "No encounter",
+                "\0",
                 TL_GENERAL,
                 (Vector2){1, 0},
                 darkgray,

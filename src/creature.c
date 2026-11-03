@@ -152,6 +152,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONATT_BALL_ON_CHAIN: return "When attacking, delay the target's turn by 100 moments.";
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 10 Bleed.";
         case LE_ONATT_MALEVOLENCE: return "When attacking, apply all the negative status you carry.";
+        case LE_ONENC_COIN: return "At the start of combat, you move first.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
@@ -261,6 +262,24 @@ void HandleStartOfTurnEffects(CreatureStats* c)
             case LE_ONTURN_AMBROSIA:
             if(c->statusEffects[SE_CONFUSION] < 1)
             c->statusEffects[SE_CONFUSION] = 1;
+            break;
+        }
+    }
+}
+
+void HandleStartOfCombatEffects(CreatureStats* c)
+{
+    char strnum[8];
+    char *message;
+    short primaryValue;
+    for (int i = 0; i < LINGERING_EFFECTS; i++)
+    {
+        if (c->lingeringEffects[i].effectId == LE_NONE)
+            continue;
+        switch (c->lingeringEffects[i].effectId)
+        {
+            case LE_ONENC_COIN:
+            c->baseStats.ticksUntilNextTurn = 0;
             break;
         }
     }
@@ -1002,6 +1021,48 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings("Gain ", strnum);
         result = CombineStrings(result, " (40 + 10% Mastery) Shield and 10 Speed.");
         return result;
+    case AB_ICE_ELEMENTAL_FREEZE:
+        sprintf(strnum, "%.0f", ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Delay an enemy's turn by ", strnum);
+        result = CombineStrings(result, " (400 + 100% Mastery) moments.");
+        return result;
+    case AB_ICE_ELEMENTAL_SHARDS:
+        damage = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (50 + 50% Mastery) damage and apply ");
+        sprintf(strnum, "%.0f", ((200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (200 + 50% Mastery) Exhaustion.");
+        return result;
+    case AB_ICE_ELEMENTAL_AURA:
+        sprintf(strnum, "%.0f", ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
+
+        result = CombineStrings("All enemies lose ", strnum);
+        result = CombineStrings(result, " (60 + 80% Mastery) Speed.");
+        return result;
+    case AB_FIRE_ELEMENTAL_FIREBALL:
+        damage = ((80 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%.0f", ((80 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (80 + 100% Mastery) damage to an enemy.");
+        return result;
+    case AB_FIRE_ELEMENTAL_FLARE:
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Gain ", strnum);
+        result = CombineStrings(result, " (20 + 30% Mastery) Speed and Mastery.");
+        return result;
+    case AB_FIRE_ELEMENTAL_INFERNO:
+        damage = ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%.0f", ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (30 + 50% Mastery) damage to all enemies.");
+        return result;
+
+        
     default:
         return "Ability description missing, oopsie!";
     }
@@ -2662,6 +2723,84 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             case 1: caster->baseStats.color = raywhite; break;
             case 2: caster->baseStats.color = skyblue; break;
             case 3: caster->baseStats.color = gold; break;
+        }
+        break;
+    case AB_ICE_ELEMENTAL_FREEZE:
+        primaryEffectValue = ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " freezes ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", delaying their turn by ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " moments.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->baseStats.ticksUntilNextTurn += primaryEffectValue;
+        break;
+    case AB_ICE_ELEMENTAL_SHARDS:
+        primaryEffectValue = (50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        short iceElemShardsExhaustion = (200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " shoots shards of ice at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and applying ");
+        sprintf(strnum, "%d", iceElemShardsExhaustion);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Exhaustion.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->statusEffects[SE_EXHAUSTION] += iceElemShardsExhaustion;
+        DealDamage(primaryEffectValue, targets[0], true, caster);
+        break;
+    case AB_ICE_ELEMENTAL_AURA:
+        primaryEffectValue = ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " creates a chilling aura that engulfs the room, reducing the Speed of the opposing team by ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, ".");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->encounterStats.speed -= primaryEffectValue;
+        }
+        break;
+    case AB_FIRE_ELEMENTAL_FIREBALL:
+        primaryEffectValue = (80 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " launches a ball of fire at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break;
+    case AB_FIRE_ELEMENTAL_FLARE:
+        primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " flares up, gaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Mastery and Speed.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(caster);
+        caster->encounterStats.speed += primaryEffectValue;
+        caster->encounterStats.mastery += primaryEffectValue;
+        break;
+    case AB_FIRE_ELEMENTAL_INFERNO:
+        primaryEffectValue = (30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " explodes into an inferno, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage to all enemies.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
         }
         break;
     default:

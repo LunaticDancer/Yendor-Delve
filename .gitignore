@@ -408,3 +408,5 @@ Makefile
 /build/compile_commands.json
 
 build-for-windows.txt
+
+yendor-delve.config
