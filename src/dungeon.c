@@ -169,6 +169,10 @@ void InitItemPools()
     itemPoolTier2[17] = ITEM_EIGHT_EYED_MASK;
     itemPoolTier2[18] = ITEM_SCRYER_BALL;
     itemPoolTier2[19] = ITEM_ANTLER_HELMET;
+    itemPoolTier2[20] = ITEM_GOLDEN_CAPE;
+    itemPoolTier2[21] = ITEM_GOLDEN_SKIRT;
+    itemPoolTier2[22] = ITEM_COIN;
+    itemPoolTier2[23] = ITEM_ILLUSION_PANTS;
     itemPoolTier2[20] = ITEM_FOOT_FUNGUS;
 }
 
@@ -195,8 +199,8 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 id,
                 "Black Dragon",
                 "\0",
-                TL_BIG_CREATURES,
-                (Vector2){3,0},
+                TL_BIG_COMMUNITY,
+                (Vector2){6,0},
                 darkgray,
                 "The winged deathbringer, guarding the entrance to the city.",
                 {EN_NONE, ENB_BLACK_DRAGON, EN_NONE},
