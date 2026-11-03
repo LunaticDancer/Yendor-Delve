@@ -155,6 +155,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONENC_COIN: return "At the start of combat, you move first.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
+        case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
         default: return NULL;
     }
@@ -206,6 +207,11 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
                 appState.stateData.gameState.playerTeam[j].items[1].statBonuses.armor -= 1;
             }
             break;
+        case LE_ONHIT_FOOT_FUNGUS:
+            CreatureStats footFungusDummy;
+            footFungusDummy.baseStats.name = "The fungal colony, distressed by its host's hurt,";
+            footFungusDummy.baseStats.mastery = c->baseStats.mastery + c->encounterStats.mastery + c->itemStats.mastery - 50;
+            CastAbility(AB_CULTIST_PRAY,0,&footFungusDummy,(CreatureStats *[0]){}, 0);
         }
     }
 }

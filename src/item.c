@@ -875,5 +875,23 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.damageMultiplier = 0.5;
         
         return result;
+        //
+        case ITEM_FOOT_FUNGUS:
+        result = (Item){
+            id,
+            "Foot Fungus",
+            TL_GENERAL,
+            (Vector2){1,2},
+            orange,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_ONHIT_FOOT_FUNGUS,
+        };
+        result.statBonuses.defense = 40;
+        result.statBonuses.staminaRegen = 100;
+        result.statBonuses.speed = 40;
+        result.statBonuses.mastery = -30;
+        
+        return result;
     }
 }

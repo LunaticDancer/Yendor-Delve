@@ -168,6 +168,7 @@ void InitItemPools()
     itemPoolTier2[17] = ITEM_EIGHT_EYED_MASK;
     itemPoolTier2[18] = ITEM_SCRYER_BALL;
     itemPoolTier2[19] = ITEM_ANTLER_HELMET;
+    itemPoolTier2[20] = ITEM_FOOT_FUNGUS;
 }
 
 Encounter GetEncounterData(ENCOUNTER_ID id)
