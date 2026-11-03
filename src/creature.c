@@ -153,6 +153,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 10 Bleed.";
         case LE_ONATT_MALEVOLENCE: return "When attacking, apply all the negative status you carry.";
         case LE_ONENC_COIN: return "At the start of combat, you move first.";
+        case LE_ONENC_ILLUSION_PROTECT: return "At the start of combat, you gain 1 Protection.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
@@ -279,7 +280,15 @@ void HandleStartOfCombatEffects(CreatureStats* c)
         switch (c->lingeringEffects[i].effectId)
         {
             case LE_ONENC_COIN:
+            message = CombineStrings(c->baseStats.name, " wins the coin flip and acts first.");
+            AddMessageToFeed(message);
             c->baseStats.ticksUntilNextTurn = 0;
+            break;
+
+            case LE_ONENC_ILLUSION_PROTECT:
+            message = CombineStrings(c->baseStats.name, "'s armor swirls in a strange pattern, granting 1 Protection.");
+            AddMessageToFeed(message);
+            c->statusEffects[SE_PROTECTION] +=1;
             break;
         }
     }

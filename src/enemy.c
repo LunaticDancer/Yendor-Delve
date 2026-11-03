@@ -98,8 +98,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Black Dragon",
-                    .tileset = TL_BIG_CREATURES,
-                    .tileLookupPosition = (Vector2){3,0},
+                    .tileset = TL_BIG_COMMUNITY,
+                    .tileLookupPosition = (Vector2){6,0},
                     .color = darkgray,
 
                     .ticksUntilNextTurn = 0,

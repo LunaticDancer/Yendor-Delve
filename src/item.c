@@ -875,5 +875,68 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.damageMultiplier = 0.5;
         
         return result;
+        //
+        case ITEM_GOLDEN_CAPE:
+        result = (Item){
+            id,
+            "Golden Cloak",
+            TL_COMMUNITY,
+            (Vector2){5,5},
+            gold,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.mastery = 80;
+        result.statBonuses.speed = -10;
+        
+        return result;
+        //
+        case ITEM_GOLDEN_SKIRT:
+        result = (Item){
+            id,
+            "Golden Skirt",
+            TL_COMMUNITY,
+            (Vector2){9,6},
+            gold,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.mastery = 80;
+        result.statBonuses.speed = -10;
+        
+        return result;
+        //
+        case ITEM_COIN:
+        result = (Item){
+            id,
+            "The Coin",
+            TL_COMMUNITY,
+            (Vector2){6,6},
+            gold,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_ONENC_COIN,
+        };
+        result.statBonuses.critBonus = 100;
+        
+        return result;
+        //
+        case ITEM_ILLUSION_PANTS:
+        result = (Item){
+            id,
+            "Illusory Pants",
+            TL_ITEMS,
+            (Vector2){13,2},
+            magenta,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_ONENC_ILLUSION_PROTECT,
+        };
+        result.statBonuses.armor = 2;
+        result.statBonuses.targetPriority = -50;
+        
+        return result;
     }
 }
