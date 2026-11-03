@@ -179,7 +179,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Dungeon Master",
-                "They await you, calmly and expectedly.",
+                "They await you, calmly and expectingly.",
                 TL_BIG_CREATURES,
                 (Vector2){5,3},
                 gold,
@@ -192,7 +192,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Black Dragon",
-                '\0',
+                "\0",
                 TL_BIG_CREATURES,
                 (Vector2){3,0},
                 darkgray,
@@ -205,7 +205,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Green Dragon",
-                '\0',
+                "\0",
                 TL_BIG_COMMUNITY,
                 (Vector2){2,0},
                 green,
@@ -218,7 +218,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Mass",
-                '\0',
+                "\0",
                 TL_BIG_COMMUNITY,
                 (Vector2){5,0},
                 orange,
@@ -231,7 +231,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Bonfire",
-                '\0',
+                "\0",
                 TL_GENERAL,
                 (Vector2){1, 1},
                 orange,
@@ -244,7 +244,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Chest",
-                '\0',
+                "\0",
                 TL_GENERAL,
                 (Vector2){10, 1},
                 brown,
@@ -270,7 +270,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Blood Fae",
-                '\0',
+                "\0",
                 TL_CREATURES,
                 (Vector2){12, 3},
                 red,
@@ -283,7 +283,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Caustic Cube",
-                '\0',
+                "\0",
                 TL_CREATURES,
                 (Vector2){6, 14},
                 green,
@@ -296,7 +296,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Tooth Fae",
-                '\0',
+                "\0",
                 TL_COMMUNITY,
                 (Vector2){4, 4},
                 raywhite,
@@ -309,7 +309,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Revenant Souls",
-                '\0',
+                "\0",
                 TL_CREATURES,
                 (Vector2){4,6},
                 skyblue,
@@ -348,7 +348,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Elemental Duo",
-                '\0',
+                "\0",
                 TL_CREATURES,
                 (Vector2){11, 6},
                 skyblue,
@@ -361,7 +361,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "No encounter",
-                '\0',
+                "\0",
                 TL_GENERAL,
                 (Vector2){1, 0},
                 darkgray,
