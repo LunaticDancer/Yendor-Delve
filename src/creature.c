@@ -148,10 +148,12 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONABIL_ASSASSIN_SHOES: return "When using Wait, gain 100 Crit Progress.";
         case LE_ONABIL_SCRYER_BALL: return "The sole target of your ability gains 241 Untargetable.";
         case LE_ONABIL_ANTLER_HELMET: return "When using an ability which targets only allies, gain 30 Mastery.";
+        case LE_ONABIL_MASTER_ROBE: return "When targetting allies, transfer your Crit Progress to them.";
         case LE_ONATT_HAMMER_OF_GLORY: return "When attacking, apply 10 Pain and Exhaust.";
         case LE_ONATT_BALL_ON_CHAIN: return "When attacking, delay the target's turn by 100 moments.";
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 10 Bleed.";
         case LE_ONATT_MALEVOLENCE: return "When attacking, apply all the negative status you carry.";
+        case LE_ONDTH_VENGEFUL_SPIRIT: return "Oh death, deal 1000 unavoidable damage to opposite enemy.";
         case LE_ONENC_COIN: return "At the start of combat, you move first.";
         case LE_ONENC_ILLUSION_PROTECT: return "At the start of combat, you gain 1 Protection.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
@@ -307,6 +309,28 @@ void HandleOnDeathEffects(CreatureStats *c)
 {
     // Death sound
     PlaySFX(SFX_Death);
+
+    char strnum[8];
+    char *message;
+    short primaryValue;
+    for (int i = 0; i < LINGERING_EFFECTS; i++)
+    {
+        if (c->lingeringEffects[i].effectId == LE_NONE)
+            continue;
+        switch (c->lingeringEffects[i].effectId)
+        {
+            case LE_ONDTH_VENGEFUL_SPIRIT:
+            for(int j = 0; j < 3; j++)
+            {
+                if(&appState.stateData.gameState.playerTeam[j].stats != c) continue;
+                message = CombineStrings("The Vengeful Spirit rushes at ", appState.stateData.gameState.stateData.battleState.enemies[2-j].stats.baseStats.name);
+                message = CombineStrings(message, " furiously, dealing 1000 unavoidable damage.");
+                AddMessageToFeed(message);
+                DealDamage(1000, &appState.stateData.gameState.stateData.battleState.enemies[2-j].stats, true, NULL);
+            }
+        }
+    }
+    
     // Ripper reset
     for(int i = 0; i<3;i++)
     {
@@ -393,6 +417,31 @@ void HandleOnAbilityEffects(CreatureStats *c, ABILITY a, CreatureStats **targets
                 }
             }
             break;
+            case LE_ONABIL_MASTER_ROBE:
+                if (numberOfTargets < 1)
+                    return;
+                bool masterRobeGave = false;
+                for (int j = 0; j < numberOfTargets; j++)
+                {
+                    for (int k = 0; k < 3; k++)
+                    {
+                        if (targets[j] == &appState.stateData.gameState.playerTeam[k].stats)
+                        {
+                            if (targets[j] == c)
+                                continue;
+                            masterRobeGave = true;
+                            targets[j]->baseStats.critCounter += c->baseStats.critCounter;
+                        }
+                    }
+                }
+                if(!masterRobeGave) break;
+                sprintf(strnum, "%d", c->baseStats.critCounter);
+                message = CombineStrings((*c).baseStats.name, " distributes ");
+                message = CombineStrings(message, strnum);
+                message = CombineStrings(message, " Crit Progress among affected allies.");
+                c->baseStats.critCounter = 0;
+                AddMessageToFeed(message);
+                break;
         }
     }
 }

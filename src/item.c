@@ -973,5 +973,36 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.mastery = -30;
         
         return result;
+        case ITEM_MASTER_ROBE:
+        result = (Item){
+            id,
+            "Master's Robe",
+            TL_COMMUNITY,
+            (Vector2){7,1},
+            darkgreen,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+            LE_ONABIL_MASTER_ROBE,
+        };
+        result.statBonuses.mastery = 100;
+        result.statBonuses.defense = 100;
+        
+        return result;
+        case ITEM_VENGEFUL_SPIRIT:
+        result = (Item){
+            id,
+            "Vengeful Spirit",
+            TL_COMMUNITY,
+            (Vector2){5,2},
+            violet,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+            LE_ONDTH_VENGEFUL_SPIRIT,
+        };
+        result.statBonuses.critBonus = 30;
+        result.statBonuses.critRate = 30;
+        result.statBonuses.damageMultiplier = 0.1;
+        
+        return result;
     }
 }
