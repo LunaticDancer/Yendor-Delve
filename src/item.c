@@ -534,6 +534,23 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.mastery = 40;
         return result;
         //
+        case ITEM_TOY_DAGGER:
+        result = (Item){
+            id,
+            "Toy Dagger",
+            TL_ITEMS,
+            (Vector2){0,1},
+            beige,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.speed = 50;
+        result.statBonuses.critBonus = -100;
+        result.statBonuses.critRate = 200;
+        
+        return result;
+        //
         case ITEM_ELEMANCER_CROWN:
         result = (Item){
             id,
@@ -936,6 +953,24 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.armor = 2;
         result.statBonuses.targetPriority = -50;
+        
+        return result;
+        //
+        case ITEM_FOOT_FUNGUS:
+        result = (Item){
+            id,
+            "Foot Fungus",
+            TL_GENERAL,
+            (Vector2){1,2},
+            orange,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_ONHIT_FOOT_FUNGUS,
+        };
+        result.statBonuses.defense = 40;
+        result.statBonuses.staminaRegen = 100;
+        result.statBonuses.speed = 40;
+        result.statBonuses.mastery = -30;
         
         return result;
     }

@@ -156,6 +156,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONENC_ILLUSION_PROTECT: return "At the start of combat, you gain 1 Protection.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
+        case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
         default: return NULL;
     }
@@ -177,9 +178,12 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             sprintf(strnum, "%d", primaryValue);
             message = CombineStrings((*c).baseStats.name, " parries the attack, gaining ");
             message = CombineStrings(message, strnum);
-            message = CombineStrings(message, " Speed.");
+            message = CombineStrings(message, " Speed and applying ");
+            message = CombineStrings(message, strnum);
+            message = CombineStrings(message, " Pain to the assailant.");
             AddMessageToFeed(message);
             c->encounterStats.speed += primaryValue;
+            caster->statusEffects[SE_PAIN] += primaryValue;
             break;
         case LE_ONHIT_WOLF_BITE:
             primaryValue = c->lingeringEffects[i].storedValue;
@@ -207,6 +211,11 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
                 appState.stateData.gameState.playerTeam[j].items[1].statBonuses.armor -= 1;
             }
             break;
+        case LE_ONHIT_FOOT_FUNGUS:
+            CreatureStats footFungusDummy;
+            footFungusDummy.baseStats.name = "The fungal colony, distressed by its host's hurt,";
+            footFungusDummy.baseStats.mastery = c->baseStats.mastery + c->encounterStats.mastery + c->itemStats.mastery - 50;
+            CastAbility(AB_CULTIST_PRAY,0,&footFungusDummy,(CreatureStats *[0]){}, 0);
         }
     }
 }
@@ -619,12 +628,12 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (5 + 5% Speed) Armour until next turn. Each time you get hit within that time, gain ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (40 + 50% Mastery) Speed.");
+        result = CombineStrings(result, " (40 + 50% Mastery) Speed and apply as much Pain to the attacker.");
         return result;
     case AB_DUELIST_BREATH:
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Regain ", strnum);
-        result = CombineStrings(result, " (50 + 100% Mastery) stamina and gain double the Crit Progress.");
+        result = CombineStrings(result, " (50 + 100% Mastery) stamina and gain double the Crit Progress. Halve all of your status effects.");
         return result;
     case AB_MONK_MEDITATE:
         sprintf(strnum, "%.0f", (10 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, false));
@@ -1288,7 +1297,11 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         (*caster).baseStats.critCounter += (*caster).baseStats.critRate + (*caster).itemStats.critRate + (*caster).encounterStats.critRate;
         message = CombineStrings((*caster).baseStats.name, " takes a steady breath, regaining ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Stamina and greatly increasing Crit Progress.");
+        message = CombineStrings(message, " Stamina and greatly increasing Crit Progress. Their status ailments are partially cleansed.");
+        for(int i = 0; i < SE_LENGTH; i++)
+        {
+            caster->statusEffects[i] /= 2;
+        }
         AddMessageToFeed(message);
         break;
     case AB_MONK_MEDITATE:

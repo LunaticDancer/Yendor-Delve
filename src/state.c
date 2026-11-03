@@ -30,6 +30,8 @@ void InitAppState(enum APP_STATE _state)
 		appState.stateData.gameState.teamCompMask = (1 << appState.settings.character1) | (1 << appState.settings.character2) | (1 << appState.settings.character3);
 		appState.stateData.gameState.floor = 1;
 		appState.stateData.gameState.isPaused = 0;
+		for(int i = 0; i < INVENTORY_SIZE; i++)
+			appState.stateData.gameState.inventory[i] = InitItem(ITEM_NONE);
 		InitGameState(GS_CHARACTER_SELECT);
 		break;
 	}

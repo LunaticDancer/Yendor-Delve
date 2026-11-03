@@ -147,6 +147,7 @@ void InitItemPools()
     itemPoolTier1[22] = ITEM_TRAVELER_SHOES;
     itemPoolTier1[23] = ITEM_BATTLE_SHIELD;
     itemPoolTier1[24] = ITEM_STONE_BOOTS;
+    itemPoolTier1[25] = ITEM_TOY_DAGGER;
 
     itemPoolTier2[0] = ITEM_ELEMANCER_CROWN;
     itemPoolTier2[1] = ITEM_ELEMANCER_CAPE;
@@ -172,6 +173,7 @@ void InitItemPools()
     itemPoolTier2[21] = ITEM_GOLDEN_SKIRT;
     itemPoolTier2[22] = ITEM_COIN;
     itemPoolTier2[23] = ITEM_ILLUSION_PANTS;
+    itemPoolTier2[20] = ITEM_FOOT_FUNGUS;
 }
 
 Encounter GetEncounterData(ENCOUNTER_ID id)
