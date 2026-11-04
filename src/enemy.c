@@ -98,8 +98,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Black Dragon",
-                    .tileset = TL_BIG_CREATURES,
-                    .tileLookupPosition = (Vector2){3,0},
+                    .tileset = TL_BIG_COMMUNITY,
+                    .tileLookupPosition = (Vector2){6,0},
                     .color = darkgray,
 
                     .ticksUntilNextTurn = 0,
@@ -168,6 +168,120 @@ Enemy InitEnemyData(ENEMY_ID id)
         };
         break;
         
+        case ENB_CHOIR_LEFT:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Choir",
+                    .tileset = TL_BIG_COMMUNITY,
+                    .tileLookupPosition = (Vector2){3,0},
+                    .color = orange,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 900,
+                    .maxHealth = 900,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 200,
+                    .speed = 150,
+                    .defense = 100,
+                    .armor = 0,
+                    .critBonus = 100,
+                    .critRate = 10,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_CULTIST_SPAWN_ENROOT, AB_CULTIST_SPAWN_SPORES,AB_CULTIST_SPAWN_GROW,AB_CULTIST_SPAWN_INVIGORATE,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+        
+        case ENB_CHOIR_RIGHT:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Choir",
+                    .tileset = TL_BIG_COMMUNITY,
+                    .tileLookupPosition = (Vector2){5,0},
+                    .color = orange,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 900,
+                    .maxHealth = 900,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 200,
+                    .speed = 150,
+                    .defense = 100,
+                    .armor = 0,
+                    .critBonus = 100,
+                    .critRate = 10,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_CULTIST_SPAWN_ENROOT, AB_CULTIST_SPAWN_SPORES,AB_CULTIST_SPAWN_GROW,AB_CULTIST_SPAWN_INVIGORATE,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+        
+        case ENB_CHOIR_PREACHER:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Choir",
+                    .tileset = TL_BIG_COMMUNITY,
+                    .tileLookupPosition = (Vector2){4,0},
+                    .color = orange,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 1500,
+                    .maxHealth = 1500,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 200,
+                    .speed = 150,
+                    .defense = 100,
+                    .armor = 0,
+                    .critBonus = 100,
+                    .critRate = 10,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_CULTIST_SPAWN_ENROOT, AB_CULTIST_SPAWN_SPORES,AB_CULTIST_SPAWN_GROW,AB_CULTIST_SPAWN_INVIGORATE,AB_WAIT}, 5),
+                .abilityCount = 5,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+
         case EN_CULTIST_SUMMON:
         return (Enemy){
             id,
@@ -659,6 +773,155 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_GORLAK_EQUIP,
+        };
+        break;
+
+        case EN_ICE_ELEMENTAL:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Ice Elemental",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){11,6},
+                    .color = skyblue,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 400,
+                    .maxHealth = 400,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 150,
+                    .speed = 120,
+                    .defense = 100,
+                    .armor = 2,
+                    .critBonus = 100,
+                    .critRate = 1,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_ICE_ELEMENTAL_FREEZE,AB_ICE_ELEMENTAL_SHARDS,AB_ICE_ELEMENTAL_AURA,AB_WAIT}, 4),
+                .abilityCount = 4,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+        case EN_FIRE_ELEMENTAL:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Fire Elemental",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){12,6},
+                    .color = orange,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 300,
+                    .maxHealth = 300,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 175,
+                    .speed = 200,
+                    .defense = 90,
+                    .armor = 1,
+                    .critBonus = 100,
+                    .critRate = 5,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_FIRE_ELEMENTAL_FIREBALL,AB_FIRE_ELEMENTAL_FLARE,AB_FIRE_ELEMENTAL_INFERNO,AB_WAIT}, 4),
+                .abilityCount = 4,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+        case EN_GIANT_FROG:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Giant Frog",
+                    .tileset = TL_COMMUNITY,
+                    .tileLookupPosition = (Vector2){4,6},
+                    .color = darkblue,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 1000,
+                    .maxHealth = 1000,
+                    .currentStamina = 1000,
+                    .maxStamina = 1000,
+                    .staminaRegen = 255,
+                    .speed = 200,
+                    .defense = 200,
+                    .armor = 3,
+                    .critBonus = 100,
+                    .critRate = 35,
+                    .critCounter = 0,
+                    .mastery = 30,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_FROG_DEVOUR, AB_FROG_STOMP, AB_FROG_SING, AB_WAIT}, 4),
+                .abilityCount = 4,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+        };
+        break;
+        case EN_FROG_STINKFLY:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Stinkfly",
+                    .tileset = TL_COMMUNITY,
+                    .tileLookupPosition = (Vector2){5,6},
+                    .color = brown,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 400,
+                    .maxHealth = 400,
+                    .currentStamina = 1000,
+                    .maxStamina = 500,
+                    .staminaRegen = 1000,
+                    .speed = 300,
+                    .defense = 110,
+                    .armor = 0,
+                    .critBonus = 0,
+                    .critRate = 25,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 100,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_FROG_FLY_BUZZ, AB_FROG_FLY_STINK, AB_WAIT}, 3),
+                .abilityCount = 3,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
         };
         break;
     }

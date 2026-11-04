@@ -30,6 +30,8 @@ void InitAppState(enum APP_STATE _state)
 		appState.stateData.gameState.teamCompMask = (1 << appState.settings.character1) | (1 << appState.settings.character2) | (1 << appState.settings.character3);
 		appState.stateData.gameState.floor = 1;
 		appState.stateData.gameState.isPaused = 0;
+		for(int i = 0; i < INVENTORY_SIZE; i++)
+			appState.stateData.gameState.inventory[i] = InitItem(ITEM_NONE);
 		InitGameState(GS_CHARACTER_SELECT);
 		break;
 	}
@@ -171,6 +173,8 @@ void TransitionToBattle()
 
 	InitGameState(GS_BATTLE);
 
+	if(strlen(encounter.welcomeMessage)>1) appState.stateData.gameState.stateData.battleState.messages[0] = encounter.welcomeMessage;
+
 	appState.stateData.gameState.stateData.battleState.reward = reward;
 	appState.stateData.gameState.stateData.battleState.enemies[0] = InitEnemyData(encounter.enemies[0]);
 	appState.stateData.gameState.stateData.battleState.enemies[1] = InitEnemyData(encounter.enemies[1]);
@@ -200,6 +204,13 @@ void TransitionToBattle()
 	ApplyItemPassives(&appState.stateData.gameState.playerTeam[1]);
 	ApplyItemPassives(&appState.stateData.gameState.playerTeam[2]);
 
+	ApplyCreaturePassive(&appState.stateData.gameState.playerTeam[0].stats);
+	ApplyCreaturePassive(&appState.stateData.gameState.playerTeam[1].stats);
+	ApplyCreaturePassive(&appState.stateData.gameState.playerTeam[2].stats);
+	ApplyCreaturePassive(&appState.stateData.gameState.stateData.battleState.enemies[0].stats);
+	ApplyCreaturePassive(&appState.stateData.gameState.stateData.battleState.enemies[1].stats);
+	ApplyCreaturePassive(&appState.stateData.gameState.stateData.battleState.enemies[2].stats);
+
 	ResetTurnClock(&appState.stateData.gameState.playerTeam[0].stats);
 	ResetTurnClock(&appState.stateData.gameState.playerTeam[1].stats);
 	ResetTurnClock(&appState.stateData.gameState.playerTeam[2].stats);
@@ -207,7 +218,25 @@ void TransitionToBattle()
 	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[1].stats);
 	ResetTurnClock(&appState.stateData.gameState.stateData.battleState.enemies[2].stats);
 
+	HandleStartOfCombatEffects(&appState.stateData.gameState.playerTeam[0].stats);
+	HandleStartOfCombatEffects(&appState.stateData.gameState.playerTeam[1].stats);
+	HandleStartOfCombatEffects(&appState.stateData.gameState.playerTeam[2].stats);
+
 	PassTurn();
+}
+
+void ApplyCreaturePassive(CreatureStats* c)
+{
+	switch(c->creatureEffect)
+	{
+		case LE_NONE: return;
+
+		default:
+		LingeringEffect le;
+		le.effectId = c->creatureEffect;
+		le.isPermanent = true;
+		ApplyLingeringEffect(c, le);
+	}
 }
 
 void ApplyItemPassives(Character* c)

@@ -39,5 +39,6 @@ void UnloadAudio(void) {
 
 void PlaySFX(Sound sound) {
     SetSoundVolume(sound, ((float)appState.settings.sfxVolume)/10.);
+    StopSound(sound);
     PlaySound(sound);
 };

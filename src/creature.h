@@ -28,16 +28,23 @@ typedef enum LINGERING_EFFECT
     LE_ONABIL_ASSASSIN_SHOES,
     LE_ONABIL_SCRYER_BALL,
     LE_ONABIL_ANTLER_HELMET,
+    LE_ONABIL_MASTER_ROBE,
 
     LE_ONATT_HAMMER_OF_GLORY,
     LE_ONATT_BALL_ON_CHAIN,
     LE_ONATT_MORNINGSTAR,
     LE_ONATT_MALEVOLENCE,
 
+    LE_ONDTH_VENGEFUL_SPIRIT,
+
+    LE_ONENC_COIN,
+    LE_ONENC_ILLUSION_PROTECT,
+
     LE_ONHIT_DUELIST_PARRY,
     LE_ONHIT_WOLF_BITE,
     LE_ONHIT_PENITENT_MAIL,
     LE_ONHIT_CRYSTAL_MAIL,
+    LE_ONHIT_FOOT_FUNGUS,
 
     LE_ONTURN_AMBROSIA,
 } LINGERING_EFFECT;
@@ -106,6 +113,7 @@ typedef struct CreatureStats
     StatBonuses itemStats;
     StatDebuff temporaryStats[STAT_DEBUFFS];
     LingeringEffect lingeringEffects[LINGERING_EFFECTS];
+    LINGERING_EFFECT creatureEffect;
     Ability* abilities;
     char abilityCount;
 } CreatureStats;
@@ -121,6 +129,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT);
 void HandleOnHitEffects(CreatureStats*, short, CreatureStats*);
 void HandleOnAttackEffects(CreatureStats*, short, CreatureStats*);
 void HandleStartOfTurnEffects(CreatureStats*);
+void HandleStartOfCombatEffects(CreatureStats*);
 void HandleOnDeathEffects(CreatureStats*);
 void HandleOnAbilityEffects(CreatureStats*, ABILITY,CreatureStats **targets, short numberOfTargets);
 void EmptyStatusEffects(CreatureStats*);

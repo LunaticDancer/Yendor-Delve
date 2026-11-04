@@ -629,6 +629,94 @@ Ability InitAbility(ABILITY id)
             150,
             AF_TARGETS_SELF,
         };
+        case AB_ICE_ELEMENTAL_FREEZE:
+        return (Ability)
+        {
+            id,
+            "Freeze",
+            150,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_ICE_ELEMENTAL_SHARDS:
+        return (Ability)
+        {
+            id,
+            "Ice Shards",
+            150,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_ICE_ELEMENTAL_AURA:
+        return (Ability)
+        {
+            id,
+            "Chilling Aura",
+            200,
+            AF_TARGETS_ENEMIES + AF_AOE,
+        };
+        case AB_FIRE_ELEMENTAL_FIREBALL:
+        return (Ability)
+        {
+            id,
+            "Fireball",
+            200,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_FIRE_ELEMENTAL_FLARE:
+        return (Ability)
+        {
+            id,
+            "Flare Up",
+            150,
+            AF_TARGETS_SELF,
+        };
+        case AB_FIRE_ELEMENTAL_INFERNO:
+        return (Ability)
+        {
+            id,
+            "Inferno",
+            250,
+            AF_TARGETS_ENEMIES + AF_AOE
+        };
+        case AB_FROG_DEVOUR:
+        return (Ability)
+        {
+            id,
+            "Devour",
+            600,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_FROG_STOMP:
+        return (Ability)
+        {
+            id,
+            "Stomp",
+            150,
+            AF_TARGETS_ENEMIES
+        };
+        case AB_FROG_SING:
+        return (Ability)
+        {
+            id,
+            "Frogsong",
+            350,
+            AF_TARGETS_ALLIES + AF_AOE
+        };
+        case AB_FROG_FLY_BUZZ:
+        return (Ability)
+        {
+            id,
+            "Buzz",
+            50,
+            AF_TARGETS_ENEMIES
+        };
+        case AB_FROG_FLY_STINK:
+        return (Ability)
+        {
+            id,
+            "Stink",
+            50,
+            AF_TARGETS_ENEMIES
+        };
     }
 }
 

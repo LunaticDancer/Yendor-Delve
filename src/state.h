@@ -127,6 +127,7 @@ void LoadConfig();
 struct Settings GetDefaultConfig();
 void InitGameState(enum GAME_STATE);
 void TransitionToBattle();
+void ApplyCreaturePassive(CreatureStats* c);
 void ApplyItemPassives(Character* c);
 void HandleAbilityTargetInit();
 void AddMessageToFeed(char*);

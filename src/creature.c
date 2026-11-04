@@ -148,12 +148,17 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONABIL_ASSASSIN_SHOES: return "When using Wait, gain 100 Crit Progress.";
         case LE_ONABIL_SCRYER_BALL: return "The sole target of your ability gains 241 Untargetable.";
         case LE_ONABIL_ANTLER_HELMET: return "When using an ability which targets only allies, gain 30 Mastery.";
+        case LE_ONABIL_MASTER_ROBE: return "When targetting allies, transfer your Crit Progress to them.";
         case LE_ONATT_HAMMER_OF_GLORY: return "When attacking, apply 10 Pain and Exhaust.";
         case LE_ONATT_BALL_ON_CHAIN: return "When attacking, delay the target's turn by 100 moments.";
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 10 Bleed.";
         case LE_ONATT_MALEVOLENCE: return "When attacking, apply all the negative status you carry.";
+        case LE_ONDTH_VENGEFUL_SPIRIT: return "Oh death, deal 1000 unavoidable damage to opposite enemy.";
+        case LE_ONENC_COIN: return "At the start of combat, you move first.";
+        case LE_ONENC_ILLUSION_PROTECT: return "At the start of combat, you gain 1 Protection.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
+        case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
         default: return NULL;
     }
@@ -175,9 +180,12 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             sprintf(strnum, "%d", primaryValue);
             message = CombineStrings((*c).baseStats.name, " parries the attack, gaining ");
             message = CombineStrings(message, strnum);
-            message = CombineStrings(message, " Speed.");
+            message = CombineStrings(message, " Speed and applying ");
+            message = CombineStrings(message, strnum);
+            message = CombineStrings(message, " Pain to the assailant.");
             AddMessageToFeed(message);
             c->encounterStats.speed += primaryValue;
+            caster->statusEffects[SE_PAIN] += primaryValue;
             break;
         case LE_ONHIT_WOLF_BITE:
             primaryValue = c->lingeringEffects[i].storedValue;
@@ -205,6 +213,11 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
                 appState.stateData.gameState.playerTeam[j].items[1].statBonuses.armor -= 1;
             }
             break;
+        case LE_ONHIT_FOOT_FUNGUS:
+            CreatureStats footFungusDummy;
+            footFungusDummy.baseStats.name = "The fungal colony, distressed by its host's hurt,";
+            footFungusDummy.baseStats.mastery = c->baseStats.mastery + c->encounterStats.mastery + c->itemStats.mastery - 50;
+            CastAbility(AB_CULTIST_PRAY,0,&footFungusDummy,(CreatureStats *[0]){}, 0);
         }
     }
 }
@@ -266,10 +279,58 @@ void HandleStartOfTurnEffects(CreatureStats* c)
     }
 }
 
+void HandleStartOfCombatEffects(CreatureStats* c)
+{
+    char strnum[8];
+    char *message;
+    short primaryValue;
+    for (int i = 0; i < LINGERING_EFFECTS; i++)
+    {
+        if (c->lingeringEffects[i].effectId == LE_NONE)
+            continue;
+        switch (c->lingeringEffects[i].effectId)
+        {
+            case LE_ONENC_COIN:
+            message = CombineStrings(c->baseStats.name, " wins the coin flip and acts first.");
+            AddMessageToFeed(message);
+            c->baseStats.ticksUntilNextTurn = 0;
+            break;
+
+            case LE_ONENC_ILLUSION_PROTECT:
+            message = CombineStrings(c->baseStats.name, "'s armor swirls in a strange pattern, granting 1 Protection.");
+            AddMessageToFeed(message);
+            c->statusEffects[SE_PROTECTION] +=1;
+            break;
+        }
+    }
+}
+
 void HandleOnDeathEffects(CreatureStats *c)
 {
     // Death sound
     PlaySFX(SFX_Death);
+
+    char strnum[8];
+    char *message;
+    short primaryValue;
+    for (int i = 0; i < LINGERING_EFFECTS; i++)
+    {
+        if (c->lingeringEffects[i].effectId == LE_NONE)
+            continue;
+        switch (c->lingeringEffects[i].effectId)
+        {
+            case LE_ONDTH_VENGEFUL_SPIRIT:
+            for(int j = 0; j < 3; j++)
+            {
+                if(&appState.stateData.gameState.playerTeam[j].stats != c) continue;
+                message = CombineStrings("The Vengeful Spirit rushes at ", appState.stateData.gameState.stateData.battleState.enemies[2-j].stats.baseStats.name);
+                message = CombineStrings(message, " furiously, dealing 1000 unavoidable damage.");
+                AddMessageToFeed(message);
+                DealDamage(1000, &appState.stateData.gameState.stateData.battleState.enemies[2-j].stats, true, NULL);
+            }
+        }
+    }
+    
     // Ripper reset
     for(int i = 0; i<3;i++)
     {
@@ -356,6 +417,31 @@ void HandleOnAbilityEffects(CreatureStats *c, ABILITY a, CreatureStats **targets
                 }
             }
             break;
+            case LE_ONABIL_MASTER_ROBE:
+                if (numberOfTargets < 1)
+                    return;
+                bool masterRobeGave = false;
+                for (int j = 0; j < numberOfTargets; j++)
+                {
+                    for (int k = 0; k < 3; k++)
+                    {
+                        if (targets[j] == &appState.stateData.gameState.playerTeam[k].stats)
+                        {
+                            if (targets[j] == c)
+                                continue;
+                            masterRobeGave = true;
+                            targets[j]->baseStats.critCounter += c->baseStats.critCounter;
+                        }
+                    }
+                }
+                if(!masterRobeGave) break;
+                sprintf(strnum, "%d", c->baseStats.critCounter);
+                message = CombineStrings((*c).baseStats.name, " distributes ");
+                message = CombineStrings(message, strnum);
+                message = CombineStrings(message, " Crit Progress among affected allies.");
+                c->baseStats.critCounter = 0;
+                AddMessageToFeed(message);
+                break;
         }
     }
 }
@@ -572,7 +658,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_DUELIST_LUNGE:
         damage = ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
-        sprintf(strnum, "%.0f", damage);
+        sprintf(strnum, "%d", damage);
         result = CombineStrings("Deal ", strnum);
         sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, " (60 + 50% Mastery) damage and gain ");
@@ -591,12 +677,12 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (5 + 5% Speed) Armour until next turn. Each time you get hit within that time, gain ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (40 + 50% Mastery) Speed.");
+        result = CombineStrings(result, " (40 + 50% Mastery) Speed and apply as much Pain to the attacker.");
         return result;
     case AB_DUELIST_BREATH:
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Regain ", strnum);
-        result = CombineStrings(result, " (50 + 100% Mastery) stamina and gain double the Crit Progress.");
+        result = CombineStrings(result, " (50 + 100% Mastery) stamina and gain double the Crit Progress. Halve all of your status effects.");
         return result;
     case AB_MONK_MEDITATE:
         sprintf(strnum, "%.0f", (10 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, false));
@@ -1002,6 +1088,76 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings("Gain ", strnum);
         result = CombineStrings(result, " (40 + 10% Mastery) Shield and 10 Speed.");
         return result;
+    case AB_ICE_ELEMENTAL_FREEZE:
+        sprintf(strnum, "%.0f", ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Delay an enemy's turn by ", strnum);
+        result = CombineStrings(result, " (400 + 100% Mastery) moments.");
+        return result;
+    case AB_ICE_ELEMENTAL_SHARDS:
+        damage = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (50 + 50% Mastery) damage and apply ");
+        sprintf(strnum, "%.0f", ((200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (200 + 50% Mastery) Exhaustion.");
+        return result;
+    case AB_ICE_ELEMENTAL_AURA:
+        sprintf(strnum, "%.0f", ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
+
+        result = CombineStrings("All enemies lose ", strnum);
+        result = CombineStrings(result, " (60 + 80% Mastery) Speed.");
+        return result;
+    case AB_FIRE_ELEMENTAL_FIREBALL:
+        damage = ((80 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%.0f", ((80 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (80 + 100% Mastery) damage to an enemy.");
+        return result;
+    case AB_FIRE_ELEMENTAL_FLARE:
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Gain ", strnum);
+        result = CombineStrings(result, " (20 + 30% Mastery) Speed and Mastery.");
+        return result;
+    case AB_FIRE_ELEMENTAL_INFERNO:
+        damage = ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%.0f", ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (30 + 50% Mastery) damage to all enemies.");
+        return result;
+    case AB_FROG_FLY_STINK:
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
+        result = CombineStrings("Apply ", strnum);
+        result = CombineStrings(result, " (50 + 30\% Mastery) Exhaustion to an enemy and give them half that much Target Priority.");
+        return result;
+    case AB_FROG_FLY_BUZZ:
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.speed + caster->encounterStats.speed + caster->itemStats.speed) * 0.1)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (20 + 10\% Speed) damage to an enemy and become Untargetable for 200 moments.");
+        return result;
+    case AB_FROG_DEVOUR:
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (50 + 50\% Mastery) damage to an enemy. ");
+        result = CombineStrings(result, "Then, if the sum of its health and stamina are less than 500, swallow it whole.");
+        return result;
+    case AB_FROG_STOMP:
+        sprintf(strnum, "%.0f", ((25 + 
+            ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.25)+
+            ((caster->baseStats.defense + caster->encounterStats.defense + caster->itemStats.defense) * 0.10)
+            )* GetDamageMult(caster) * CalculateEffectAmplification(caster, true)));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (25 + 25\% Mastery + 10\% Mastery) damage to an enemy.");
+        return result;
+    case AB_FROG_SING:
+        sprintf(strnum, "%.0f",(20 + (caster->baseStats.defense + caster->encounterStats.defense + caster->itemStats.defense) * 0.1));
+        result = CombineStrings("Give every ally ", strnum);
+        result = CombineStrings(result, " (20 + 10% Defense) Mastery.");
+        return result;
+        
     default:
         return "Ability description missing, oopsie!";
     }
@@ -1018,7 +1174,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     bool dontResetCritProgress = false;
     bool skipAbility = false;
 
-    caster->baseStats.currentStamina -= cost + caster->statusEffects[SE_EXHAUSTION];
+    caster->baseStats.currentStamina -= cost + ((id == AB_WAIT) ? 0 : caster->statusEffects[SE_EXHAUSTION]);
 
     if(numberOfTargets == 1)
     {
@@ -1218,7 +1374,11 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         (*caster).baseStats.critCounter += (*caster).baseStats.critRate + (*caster).itemStats.critRate + (*caster).encounterStats.critRate;
         message = CombineStrings((*caster).baseStats.name, " takes a steady breath, regaining ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Stamina and greatly increasing Crit Progress.");
+        message = CombineStrings(message, " Stamina and greatly increasing Crit Progress. Their status ailments are partially cleansed.");
+        for(int i = 0; i < SE_LENGTH; i++)
+        {
+            caster->statusEffects[i] /= 2;
+        }
         AddMessageToFeed(message);
         break;
     case AB_MONK_MEDITATE:
@@ -1429,6 +1589,12 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         if(strcmp(targets[0]->baseStats.name, "Empty Space") == 0)
         {
         message = CombineStrings((*caster).baseStats.name, " becomes an incidental little critter found on the dungeon floor.");
+        }
+        else if(appState.stateData.gameState.floor%8 == 0 || targets[0]->baseStats.tileset == TL_BIG_CREATURES || targets[0]->baseStats.tileset == TL_BIG_COMMUNITY)
+        {
+            AddMessageToFeed("Despite best efforts, the Shapeshifter fails to assume that form.");
+            AddCreatureToFlicker(caster);
+            break;
         }
         else
         {
@@ -2664,6 +2830,186 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             case 3: caster->baseStats.color = gold; break;
         }
         break;
+    case AB_ICE_ELEMENTAL_FREEZE:
+        primaryEffectValue = ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " freezes ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", delaying their turn by ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " moments.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->baseStats.ticksUntilNextTurn += primaryEffectValue;
+        break;
+    case AB_ICE_ELEMENTAL_SHARDS:
+        primaryEffectValue = (50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        short iceElemShardsExhaustion = (200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " shoots shards of ice at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and applying ");
+        sprintf(strnum, "%d", iceElemShardsExhaustion);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Exhaustion.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->statusEffects[SE_EXHAUSTION] += iceElemShardsExhaustion;
+        DealDamage(primaryEffectValue, targets[0], true, caster);
+        break;
+    case AB_ICE_ELEMENTAL_AURA:
+        primaryEffectValue = ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " creates a chilling aura that engulfs the room, reducing the Speed of the opposing team by ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, ".");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->encounterStats.speed -= primaryEffectValue;
+        }
+        break;
+    case AB_FIRE_ELEMENTAL_FIREBALL:
+        primaryEffectValue = (80 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " launches a ball of fire at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break;
+    case AB_FIRE_ELEMENTAL_FLARE:
+        primaryEffectValue = (20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " flares up, gaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Mastery and Speed.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(caster);
+        caster->encounterStats.speed += primaryEffectValue;
+        caster->encounterStats.mastery += primaryEffectValue;
+        break;
+    case AB_FIRE_ELEMENTAL_INFERNO:
+        primaryEffectValue = (30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " explodes into an inferno, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage to all enemies.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        break;
+    case AB_FROG_FLY_STINK:
+        primaryEffectValue = (50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " emits a most foul odour, applying ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Exhaustion to ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " and raises their target priority by half that much.");
+        AddMessageToFeed(message);
+
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
+        targets[0]->baseStats.targetPriority += primaryEffectValue*0.5;
+        break;
+    case AB_FROG_FLY_BUZZ:
+        primaryEffectValue = ((20 + (caster->baseStats.speed + caster->encounterStats.speed + caster->itemStats.speed) * 0.1) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " frantically flies around, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage to ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " and becoming untargetable for 200 moments.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        caster->statusEffects[SE_UNTARGETABLE] = 200;
+        break; 
+    case AB_FROG_STOMP:
+        primaryEffectValue = ((25 + 
+            ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.25)+
+            ((caster->baseStats.defense + caster->encounterStats.defense + caster->itemStats.defense) * 0.10)
+            ) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " launches its full body weight at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        break; 
+    case AB_FROG_DEVOUR:
+        primaryEffectValue = ((50 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.50)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " fires its tongue at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " at a blinding speed, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+            int healthcheck = targets[i]->baseStats.currentHealth;
+            for (int tmbr = 0; tmbr < 3; tmbr++) {
+                if (&appState.stateData.gameState.playerTeam[tmbr].stats == targets[0]) {
+                    healthcheck += targets[0]->baseStats.currentStamina;
+                }
+            }
+
+            if (healthcheck <= 500) {
+            
+            if (targets[0] != caster) {
+                message = CombineStrings("Having sufficiently weakened its prey, ",(*caster).baseStats.name);
+                message = CombineStrings(message, " swallows ");
+                message = CombineStrings(message, targets[0]->baseStats.name);
+                message = CombineStrings(message, " whole, never to be seen again.");
+            } else {
+                message = CombineStrings("In a curious error, ",(*caster).baseStats.name);
+                message = CombineStrings(message, " disapears into its own mouth, never to be seen again.");
+            }
+
+            AddMessageToFeed(message);
+                //replacement effect
+                Enemy example_of_nothing = InitEnemyData(EN_NONE);
+                targets[i]->baseStats = example_of_nothing.stats.baseStats;
+            }
+        }
+        break; 
+    case AB_FROG_SING:
+        primaryEffectValue = (20 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.10));
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " croaks out a powerful song, granting each of its allies ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Mastery.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->encounterStats.mastery += primaryEffectValue;
+        }
+        break;
+        break; 
+    
     default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
         AddMessageToFeed(message);

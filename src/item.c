@@ -534,6 +534,23 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.mastery = 40;
         return result;
         //
+        case ITEM_TOY_DAGGER:
+        result = (Item){
+            id,
+            "Toy Dagger",
+            TL_ITEMS,
+            (Vector2){0,1},
+            beige,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.speed = 50;
+        result.statBonuses.critBonus = -100;
+        result.statBonuses.critRate = 200;
+        
+        return result;
+        //
         case ITEM_ELEMANCER_CROWN:
         result = (Item){
             id,
@@ -873,6 +890,118 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.armor = 5;
         result.statBonuses.speed = -100;
         result.statBonuses.damageMultiplier = 0.5;
+        
+        return result;
+        //
+        case ITEM_GOLDEN_CAPE:
+        result = (Item){
+            id,
+            "Golden Cloak",
+            TL_COMMUNITY,
+            (Vector2){5,5},
+            gold,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.mastery = 80;
+        result.statBonuses.speed = -10;
+        
+        return result;
+        //
+        case ITEM_GOLDEN_SKIRT:
+        result = (Item){
+            id,
+            "Golden Skirt",
+            TL_COMMUNITY,
+            (Vector2){9,6},
+            gold,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.mastery = 80;
+        result.statBonuses.speed = -10;
+        
+        return result;
+        //
+        case ITEM_COIN:
+        result = (Item){
+            id,
+            "The Coin",
+            TL_COMMUNITY,
+            (Vector2){6,6},
+            gold,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_ONENC_COIN,
+        };
+        result.statBonuses.critBonus = 100;
+        
+        return result;
+        //
+        case ITEM_ILLUSION_PANTS:
+        result = (Item){
+            id,
+            "Illusory Pants",
+            TL_ITEMS,
+            (Vector2){13,2},
+            magenta,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_ONENC_ILLUSION_PROTECT,
+        };
+        result.statBonuses.armor = 2;
+        result.statBonuses.targetPriority = -50;
+        
+        return result;
+        //
+        case ITEM_FOOT_FUNGUS:
+        result = (Item){
+            id,
+            "Foot Fungus",
+            TL_GENERAL,
+            (Vector2){1,2},
+            orange,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_ONHIT_FOOT_FUNGUS,
+        };
+        result.statBonuses.defense = 40;
+        result.statBonuses.staminaRegen = 100;
+        result.statBonuses.speed = 40;
+        result.statBonuses.mastery = -30;
+        
+        return result;
+        case ITEM_MASTER_ROBE:
+        result = (Item){
+            id,
+            "Master's Robe",
+            TL_COMMUNITY,
+            (Vector2){7,1},
+            darkgreen,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+            LE_ONABIL_MASTER_ROBE,
+        };
+        result.statBonuses.mastery = 100;
+        result.statBonuses.defense = 100;
+        
+        return result;
+        case ITEM_VENGEFUL_SPIRIT:
+        result = (Item){
+            id,
+            "Vengeful Spirit",
+            TL_COMMUNITY,
+            (Vector2){5,2},
+            violet,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+            LE_ONDTH_VENGEFUL_SPIRIT,
+        };
+        result.statBonuses.critBonus = 30;
+        result.statBonuses.critRate = 30;
+        result.statBonuses.damageMultiplier = 0.1;
         
         return result;
     }

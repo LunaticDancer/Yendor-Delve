@@ -10,6 +10,7 @@ typedef enum ENCOUNTER_ID
     ENCB_DUNGEON_MASTER,
     ENCB_BLACK_DRAGON,
     ENCB_GREEN_DRAGON,
+    ENCB_CHOIR,
     ENC_BONFIRE,
     ENC_CHEST,
     ENC_MIMIC,
@@ -19,6 +20,9 @@ typedef enum ENCOUNTER_ID
     ENC_GHOSTS_EASY,
     ENC_BANDITS_EASY,
     ENC_GORLAK,
+    ENC_ELEMENTAL_DUO,
+
+    ENC_GIANT_FROG,
 } ENCOUNTER_ID;
 
 extern ENCOUNTER_ID encounterPoolTier1[];
@@ -29,6 +33,7 @@ typedef struct Encounter
 {
     ENCOUNTER_ID id;
     char* name;
+    char* welcomeMessage;
     enum TILESET tileset;
     Vector2 tileLookupPosition;
     Color *color;
