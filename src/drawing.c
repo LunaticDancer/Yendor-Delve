@@ -915,9 +915,29 @@ void DrawDungeonScreen()
         return;
     }
 
-    Vector2 textSize = MeasureTextEx(basicFontLarger, "Prepare for an encounter:", 32, 0);
+    char strnum[8];
+    sprintf(strnum, "%d", appState.stateData.gameState.floor);
+    char* text;
+    switch(appState.stateData.gameState.floor)
+    {
+        case 1: text = "Prepare for an encounter:"; break;
+        case 2: case 3: case 4: case 5: case 6: case 7:
+        text = CombineStrings("Dungeon, floor ", strnum);
+        break;
+        case 8: text = "Dungeon, exit"; break;
+        case 9: case 10: case 11: case 12: case 13: case 14: case 15:
+        text = CombineStrings("Caves, layer ", strnum);
+        break;
+        case 16: text = "Mysterious Gate"; break;
+        case 17: case 18: case 19: case 20: case 21: case 22: case 23:
+        text = CombineStrings("Lost City, layer ", strnum);
+        break;
+        case 24: text = "Inner Workshop"; break;
+        default: text = "Where the hell are we?"; break;
+    }
+    Vector2 textSize = MeasureTextEx(basicFontLarger, text, 32, 0);
     Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 10};
-    DrawTextEx(basicFontLarger, "Prepare for an encounter:", textPosition, 32, 0, *darkgray);
+    DrawTextEx(basicFontLarger, text, textPosition, 32, 0, *darkgray);
 
     // encounter selection frames
     DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){LAYOUT_SPACING + 5, 48 + LAYOUT_SPACING,
