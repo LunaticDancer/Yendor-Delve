@@ -658,11 +658,11 @@ void HandleBattleInput()
 			{
 				if(appState.stateData.gameState.floor % 8 == 0)
 				{
-					appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth 
+					appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[0].stats.baseStats.health 
 						+ appState.stateData.gameState.playerTeam[0].stats.itemStats.health);
-					appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth 
+					appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[1].stats.baseStats.health 
 						+ appState.stateData.gameState.playerTeam[1].stats.itemStats.health);
-					appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth 
+					appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[2].stats.baseStats.health 
 						+ appState.stateData.gameState.playerTeam[2].stats.itemStats.health);
 				}
 				char *message = malloc(1);
@@ -914,21 +914,21 @@ void HandleEncounterSelection()
 		break;
 
 	case ENC_BONFIRE:
-		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) * 0.3;
-		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) * 0.3;
-		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[0].stats.baseStats.health + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[1].stats.baseStats.health + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[2].stats.baseStats.health + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) * 0.3;
 
 		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth >
-																						   (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
-																					   ? (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
+																						   (appState.stateData.gameState.playerTeam[0].stats.baseStats.health + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
+																					   ? (appState.stateData.gameState.playerTeam[0].stats.baseStats.health + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
 																					   : appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth;
 		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth >
-																						   (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health)
-																					   ? (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health)
+																						   (appState.stateData.gameState.playerTeam[1].stats.baseStats.health + appState.stateData.gameState.playerTeam[1].stats.itemStats.health)
+																					   ? (appState.stateData.gameState.playerTeam[1].stats.baseStats.health + appState.stateData.gameState.playerTeam[1].stats.itemStats.health)
 																					   : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth;
 		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth >
-																						   (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health)
-																					   ? (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health)
+																						   (appState.stateData.gameState.playerTeam[2].stats.baseStats.health + appState.stateData.gameState.playerTeam[2].stats.itemStats.health)
+																					   ? (appState.stateData.gameState.playerTeam[2].stats.baseStats.health + appState.stateData.gameState.playerTeam[2].stats.itemStats.health)
 																					   : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth;
 
 		ShowPopupMessage("The party has rested at the safe place,\nregaining much of its strength.");

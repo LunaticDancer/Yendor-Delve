@@ -5,6 +5,8 @@
 #include "raylib.h"
 #include "ability.h"
 
+#define GET_SCALING(creature, stat) ((*creature).baseStats.stat + (*creature).itemStats.stat  + (*creature).encounterStats.stat)
+
 typedef enum STATUS_EFFECT
 {
     SE_PROTECTION,      // become entirely immune to single target abilities for X instances
@@ -60,9 +62,9 @@ typedef struct CreatureBaseStats
 
     short ticksUntilNextTurn;
     short currentHealth;
-    short maxHealth;
+    short health;
     short currentStamina;
-    short maxStamina;
+    short stamina;
     short staminaRegen;               // stamina gained per 1000 ticks of turn timer
     short speed;                      // diminishing formula, at speed 0 the wait time is 1000 ticks
     short defense;                      // diminishing formula
@@ -71,6 +73,7 @@ typedef struct CreatureBaseStats
     short critRate;                     // crit can exceed 100%, making it proc mustiple times, applying the multiplier each time
     short critCounter;                  // crit occurence accumulation, persists between battles
     short mastery;                      // ability scaling
+    float damageMultiplier;     // dummy stat for macro, do not use
     short targetPriority;
 } CreatureBaseStats;
 

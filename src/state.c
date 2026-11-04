@@ -193,9 +193,9 @@ void TransitionToBattle()
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[0].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[1].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[2].stats);
-	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina;
-	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina;
-	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[0].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[1].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[2].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina;
 
 	EmptyLingeringEffects(&appState.stateData.gameState.playerTeam[0].stats);
 	EmptyLingeringEffects(&appState.stateData.gameState.playerTeam[1].stats);
@@ -397,7 +397,7 @@ void HandleFleshGolemUpgrade()
 		if (appState.stateData.gameState.playerTeam[i].characterId == CHAR_FLESH_GOLEM)
 		{
 			appState.stateData.gameState.playerTeam[i].stats.baseStats.currentHealth += hpGain;
-			appState.stateData.gameState.playerTeam[i].stats.baseStats.maxHealth += hpGain;
+			appState.stateData.gameState.playerTeam[i].stats.baseStats.health += hpGain;
 		}
 	}
 }
@@ -558,9 +558,9 @@ void ProgressTime(short ticks)
 	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[0].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[0].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[0].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
 	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[1].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[1].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[1].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
 	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[2].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[2].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[2].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
-	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina;
-	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina;
-	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[0].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[0].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[1].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[1].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[2].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[2].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina;
 
 	appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETABLE] -= ticks;
 	appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETABLE] -= ticks;

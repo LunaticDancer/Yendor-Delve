@@ -20,9 +20,9 @@ Character InitCharacterData(CHARACTER_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 1500,
-                    .maxHealth = 1500,
+                    .health = 1500,
                     .currentStamina = 600,
-                    .maxStamina = 600,
+                    .stamina = 600,
                     .staminaRegen = 100,
                     .speed = 100,
                     .defense = 60,
@@ -62,9 +62,9 @@ Character InitCharacterData(CHARACTER_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 1000,
-                    .maxHealth = 1000,
+                    .health = 1000,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 100,
                     .defense = 20,
@@ -104,9 +104,9 @@ Character InitCharacterData(CHARACTER_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 700,
-                    .maxHealth = 700,
+                    .health = 700,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 100,
                     .defense = 20,
@@ -146,9 +146,9 @@ Character InitCharacterData(CHARACTER_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 400,
-                    .maxHealth = 400,
+                    .health = 400,
                     .currentStamina = 100,
-                    .maxStamina = 100,
+                    .stamina = 100,
                     .staminaRegen = 150,
                     .speed = 200,
                     .defense = 100,
@@ -188,9 +188,9 @@ Character InitCharacterData(CHARACTER_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 200,
-                    .maxHealth = 200,
+                    .health = 200,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 90,
                     .defense = 10,
@@ -230,9 +230,9 @@ Character InitCharacterData(CHARACTER_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 1,
-                    .maxHealth = 1,
+                    .health = 1,
                     .currentStamina = 500,
-                    .maxStamina = 500,
+                    .stamina = 500,
                     .staminaRegen = 150,
                     .speed = 100,
                     .defense = 0,
@@ -272,9 +272,9 @@ Character InitCharacterData(CHARACTER_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 800,
-                    .maxHealth = 800,
+                    .health = 800,
                     .currentStamina = 800,
-                    .maxStamina = 800,
+                    .stamina = 800,
                     .staminaRegen = 150,
                     .speed = 80,
                     .defense = 40,
@@ -314,9 +314,9 @@ Character InitCharacterData(CHARACTER_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 900,
-                    .maxHealth = 900,
+                    .health = 900,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 100,
                     .defense = 60,
@@ -356,9 +356,9 @@ Character InitCharacterData(CHARACTER_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 900,
-                    .maxHealth = 900,
+                    .health = 900,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 200,
                     .defense = 50,
@@ -398,9 +398,9 @@ Character InitCharacterData(CHARACTER_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 1000,
-                    .maxHealth = 1000,
+                    .health = 1000,
                     .currentStamina = 900,
-                    .maxStamina = 900,
+                    .stamina = 900,
                     .staminaRegen = 150,
                     .speed = 100,
                     .defense = 80,
@@ -448,9 +448,9 @@ void EquipItem(Character* ch, ITEM_ID it, char slot)
     (*ch).stats.itemStats.staminaRegen += (*ch).items[slot].statBonuses.staminaRegen;
     (*ch).stats.itemStats.targetPriority += (*ch).items[slot].statBonuses.targetPriority;
 
-    if((*ch).stats.baseStats.currentHealth > (*ch).stats.itemStats.health + (*ch).stats.baseStats.maxHealth)
+    if((*ch).stats.baseStats.currentHealth > (*ch).stats.itemStats.health + (*ch).stats.baseStats.health)
     {
-        (*ch).stats.baseStats.currentHealth = (*ch).stats.itemStats.health + (*ch).stats.baseStats.maxHealth;
+        (*ch).stats.baseStats.currentHealth = (*ch).stats.itemStats.health + (*ch).stats.baseStats.health;
     }
 }
 
@@ -468,9 +468,9 @@ void UnequipItem(Character* ch, char slot)
     (*ch).stats.itemStats.staminaRegen -= (*ch).items[slot].statBonuses.staminaRegen;
     (*ch).stats.itemStats.targetPriority -= (*ch).items[slot].statBonuses.targetPriority;
 
-    if((*ch).stats.baseStats.currentHealth > (*ch).stats.itemStats.health + (*ch).stats.baseStats.maxHealth)
+    if((*ch).stats.baseStats.currentHealth > (*ch).stats.itemStats.health + (*ch).stats.baseStats.health)
     {
-        (*ch).stats.baseStats.currentHealth = (*ch).stats.itemStats.health + (*ch).stats.baseStats.maxHealth;
+        (*ch).stats.baseStats.currentHealth = (*ch).stats.itemStats.health + (*ch).stats.baseStats.health;
     }
 
     (*ch).items[slot] = InitItem(ITEM_NONE);
@@ -486,11 +486,11 @@ char* GetCharacterStatsRundown(Character ch)
      sprintf(str_num, "%d", ch.stats.baseStats.currentHealth);
     result = CombineStrings(result, str_num);
      result = CombineStrings(result, "/");
-     sprintf(str_num, "%d", ch.stats.baseStats.maxHealth + ch.stats.itemStats.health);
+     sprintf(str_num, "%d", ch.stats.baseStats.health + ch.stats.itemStats.health);
     result = CombineStrings(result, str_num);
 
      result = CombineStrings(result, "\nStamina: ");
-     sprintf(str_num, "%d", ch.stats.baseStats.maxStamina + ch.stats.itemStats.stamina);
+     sprintf(str_num, "%d", ch.stats.baseStats.stamina + ch.stats.itemStats.stamina);
     result = CombineStrings(result, str_num);
 
      result = CombineStrings(result, "\nStamina regeneration: ");
