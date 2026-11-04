@@ -708,36 +708,38 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ? "Cleanse all status effects from all creatures and entities." : "Cleanse all status effects from target creature. Becomes an area ability upon crit.";
         return result;
     case AB_FOLEM_STRIKE:
-        damage = (((caster->baseStats.health + caster->encounterStats.health + caster->itemStats.health) * 0.1 + 
-        (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        damage = ((GET_SCALING(caster, health) * 0.2 + 
+        GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
-        sprintf(strnum, "%.0f", (((caster->baseStats.health + caster->encounterStats.health + caster->itemStats.health) * 0.1 + 
-        (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%d", damage);
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (10% Health + 30% Mastery) damage.");
+        result = CombineStrings(result, " (20% Health + 30% Mastery) damage and apply ");
+        sprintf(strnum, "%.0f", ((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.01 + GET_SCALING(caster, armor)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (100% Armour + 1% missing Health) Pain.");
         return result;
     case AB_FOLEM_EXPUNGE:
-        damage = (((caster->baseStats.health + caster->encounterStats.health + caster->itemStats.health) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        damage = ((GET_SCALING(caster, health) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
-        sprintf(strnum, "%.0f", (((caster->baseStats.health + caster->encounterStats.health + caster->itemStats.health) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%d", damage);
         result = CombineStrings("Deal ", strnum);
-        sprintf(strnum, "%.0f", (((caster->baseStats.health + caster->encounterStats.health + caster->itemStats.health) * 0.2)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (50% Health) damage to an enemy and ");
+        sprintf(strnum, "%.0f", ((GET_SCALING(caster, health) * 0.2)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (100% Health) damage to an enemy and ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (20% Health) damage to self.");
         return result;
     case AB_FOLEM_EPIDERMIZE:
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.9)) * CalculateEffectAmplification(caster, false));
+        sprintf(strnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.9)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Gain ", strnum);
-        sprintf(strnum, "%.0f", (((caster->baseStats.health + caster->encounterStats.health + caster->itemStats.health) * 0.1) +
-            ((caster->baseStats.health + caster->encounterStats.health + caster->itemStats.health - caster->baseStats.currentHealth) * 0.1) + 
-        (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, false));
+        sprintf(strnum, "%.0f", ((GET_SCALING(caster, health) * 0.1) +
+            ((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.2) + 
+        GET_SCALING(caster, mastery) * 1.0) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, " (10 + 90% Mastery) Defense and ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (100% Mastery + 10% Health + 10% missing Health) Shield points.");
+        result = CombineStrings(result, " (100% Mastery + 10% Health + 20% missing Health) Shield points.");
         return result;
     case AB_FOLEM_CRIPPLE:
-        sprintf(strnum, "%.0f", (((caster->baseStats.health + caster->encounterStats.health + caster->itemStats.health - caster->baseStats.currentHealth) * 0.1)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", (((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.1)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Apply ", strnum);
         result = CombineStrings(result, " (10% missing Health) Bleed to an enemy.");
         return result;
@@ -747,9 +749,9 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (30% current Health) Health. Heal an ally by 60% of the Health lost and cleanse their status effects.");
         return result;
     case AB_SHAPESHIFTER_SCRATCH:
-        damage = ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        damage = ((10 + GET_SCALING(caster, mastery) * 2.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%d", damage);
         result = CombineStrings("Scratch an enemy for ", strnum);
         result = CombineStrings(result, " (10 + 200% Mastery) damage.");
         return result;
@@ -1481,17 +1483,22 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 1;
         }
-        primaryEffectValue = ((GET_SCALING(caster, health) * 0.1 
+        primaryEffectValue = ((GET_SCALING(caster, health) * 0.2 
             + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        short folemStrikePain = ((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.01 + GET_SCALING(caster, armor)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " slams ");
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, " with a mass of chaotic flesh, dealing ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " damage.");
+        message = CombineStrings(message, " damage and applying ");
+        sprintf(strnum, "%d",  folemStrikePain);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Pain.");
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
         // >:3
+        targets[0]->statusEffects[SE_PAIN] += folemStrikePain;
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_FOLEM_EXPUNGE:
@@ -1499,7 +1506,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 2;
         }
-        primaryEffectValue = ((GET_SCALING(caster, health) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = ((GET_SCALING(caster, health) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         short folemExpungeValue = ((GET_SCALING(caster, health) * 0.2)) * CalculateEffectAmplification(caster, true);
         message = CombineStrings((*caster).baseStats.name, " explodes violently with viscera, dealing ");
@@ -1524,7 +1531,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         primaryEffectValue = ((10 + GET_SCALING(caster, mastery) * 0.9)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, false);
         sprintf(strnum, "%d", primaryEffectValue);
         short folemEpidermizeShield = ((GET_SCALING(caster, health) * 0.1) +
-            ((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.1) + 
+            ((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.2) + 
         GET_SCALING(caster, mastery) * 1.0) * CalculateEffectAmplification(caster, false);
         message = CombineStrings((*caster).baseStats.name, " rapidly hardens its epidermis into a carapace, gaining ");
         message = CombineStrings(message, strnum);
