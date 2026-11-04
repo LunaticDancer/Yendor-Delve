@@ -1,6 +1,7 @@
 #ifndef creature_h
 #define creature_h
 
+#include <math.h>
 #include "constants.h"
 #include "raylib.h"
 #include "ability.h"

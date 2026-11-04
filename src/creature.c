@@ -487,7 +487,8 @@ short CalculateDamage(short baseDamage, CreatureStats *target)
     }
     else
     {
-        result = (short)((float)baseDamage * ((100 - effectiveDef) / 100.0));
+        double logScale = 36.7879441234;
+        result = (short)((float)baseDamage * log((100-effectiveDef)/logScale));
     }
     if(effectiveArmor>0) result -= effectiveArmor;
 
