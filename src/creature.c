@@ -1201,10 +1201,11 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(CombineStrings(caster->baseStats.name, " does nothing."));
         break;
     case AB_BERSERKER_SWING:
-        short berserkerSwingDamage =  ((40 + GET_SCALING(caster, mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         short berserkerSwingRageGain = ((10 + GET_SCALING(caster, mastery) * 0.1)) * CalculateEffectAmplification(caster, false);
         caster->statusEffects[SE_BERSERK] += berserkerSwingRageGain;
         primaryEffectValue = ((10 + GET_SCALING(caster, mastery) * 0.2)) * CalculateEffectAmplification(caster, true);
+        targets[0]->encounterStats.defense -= primaryEffectValue;
+        short berserkerSwingDamage =  ((40 + GET_SCALING(caster, mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " hacks at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -1219,7 +1220,6 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Berserk.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        targets[0]->encounterStats.defense -= primaryEffectValue;
         DealDamage(berserkerSwingDamage, targets[0], false, caster);
         break;
     case AB_BERSERKER_BASH:
