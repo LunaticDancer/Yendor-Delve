@@ -808,11 +808,11 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_RIPPER_EVISCERATE:
         for(int i=0;i<3;i++)
         {
-            DrawEnemyDamageOverlay(i, (appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_BERSERK] + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_BLEED]
+            DrawEnemyDamageOverlay(i, CalculateDamage( (appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_BERSERK] + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_BLEED]
                 + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_EXHAUSTION] + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_PAIN])
-                * 2 * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+                * 3 * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), &appState.stateData.gameState.stateData.battleState.enemies[i].stats));
         }
-        result = "Deal unavoidable damage to an enemy equal to twice the sum of negative effects they carry.";
+        result = "Deal damage to an enemy equal to thrice the sum of negative effects they carry.";
         return result;
     case AB_RIPPER_STALK:
         sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
@@ -873,11 +873,15 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_GUIDE_RESONANT_STRIKE:
         for(int i=0;i<3;i++)
         {
-            DrawEnemyDamageOverlay(i, ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)
-                + MAX(0, (caster->baseStats.defense + caster->encounterStats.defense + caster->itemStats.defense) - 
-                (appState.stateData.gameState.stateData.battleState.enemies[i].stats.baseStats.defense + appState.stateData.gameState.stateData.battleState.enemies[i].stats.encounterStats.defense 
-                + appState.stateData.gameState.stateData.battleState.enemies[i].stats.itemStats.defense))) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+            DrawEnemyDamageOverlay(i,  CalculateDamage( (10 + GET_SCALING(caster, mastery) * 0.2
+                + MAX(0, GET_SCALING(caster, defense) - 
+                GET_SCALING(&appState.stateData.gameState.stateData.battleState.enemies[i].stats, defense))) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), 
+                &appState.stateData.gameState.stateData.battleState.enemies[i].stats));
         }
+
+        //primaryEffectValue = (10 + GET_SCALING(caster, mastery) * 0.2 +
+        //    MAX(0, GET_SCALING(caster, defense) - 
+         //   GET_SCALING(targets[0], defense))) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%.0f", ((50+ (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Gain ", strnum);
         sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
@@ -1746,7 +1750,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_RIPPER_EVISCERATE:
-        primaryEffectValue = (2 * (targets[0]->statusEffects[SE_BLEED] + targets[0]->statusEffects[SE_BERSERK] + targets[0]->statusEffects[SE_EXHAUSTION] 
+        primaryEffectValue = (3 * (targets[0]->statusEffects[SE_BLEED] + targets[0]->statusEffects[SE_BERSERK] + targets[0]->statusEffects[SE_EXHAUSTION] 
             + targets[0]->statusEffects[SE_PAIN])) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " tears ");
@@ -1756,7 +1760,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " unavoidable damage.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        DealDamage(primaryEffectValue, targets[0], true, caster);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
         if(targets[0]->baseStats.currentHealth <= 0) 
         {
             appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
