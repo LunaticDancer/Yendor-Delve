@@ -803,19 +803,16 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_RIPPER_REND:
         sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.15)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Apply ", strnum);
-        sprintf(strnum, "%.0f", ((2 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (10 + 15% Mastery) Bleed to an enemy and remove ");
-        result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (2 + 20% Mastery) of their Armour. If there's no more Armour to remove, apply twice as much Pain instead.");
+        result = CombineStrings(result, " (10 + 15% Mastery) Bleed and Pain to an enemy.");
         return result;
     case AB_RIPPER_EVISCERATE:
         for(int i=0;i<3;i++)
         {
             DrawEnemyDamageOverlay(i, CalculateDamage( (appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_BERSERK] + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_BLEED]
                 + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_EXHAUSTION] + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_PAIN])
-                * 3 * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), &appState.stateData.gameState.stateData.battleState.enemies[i].stats));
+                * 2 * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), &appState.stateData.gameState.stateData.battleState.enemies[i].stats));
         }
-        result = "Deal damage to an enemy equal to thrice the sum of negative effects they carry.";
+        result = "Deal damage to an enemy equal to twice the sum of negative effects they carry.";
         return result;
     case AB_RIPPER_STALK:
         sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
@@ -823,9 +820,9 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (20 + 30% Mastery) Crit Bonus. This ability doesn't Crit.");
         return result;
     case AB_RIPPER_CHASE:
-        sprintf(strnum, "%.0f", (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", (60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.6) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Apply ", strnum);
-        result = CombineStrings(result, " (60 + 100% Mastery) Exhaustion to an enemy and gain Mastery equal to 20% of their missing Health.");
+        result = CombineStrings(result, " (60 + 60% Mastery) Exhaustion to an enemy and gain Mastery equal to 20% of their missing Health.");
         return result;
     case AB_CULTIST_MADDENING_TOUCH:
         damage = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
@@ -1720,36 +1717,16 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         break;
     case AB_RIPPER_REND:
         primaryEffectValue = (10 + GET_SCALING(caster, mastery) * 0.15) * CalculateEffectAmplification(caster, true);
-        short ripperRendShred = (2 + GET_SCALING(caster, mastery) * 0.2) * CalculateEffectAmplification(caster, true);
-        short ripperRendPain = (ripperRendShred > GET_SCALING(targets[0], armor)) ? 
-        ripperRendShred - GET_SCALING(targets[0], armor) : 0;
         sprintf(strnum, "%d", primaryEffectValue, targets[0]);
         message = CombineStrings((*caster).baseStats.name, " hacks at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, ", applying ");
         message = CombineStrings(message, strnum);
-        if(ripperRendPain != 0)
-        {
-            message = CombineStrings(message, " Bleed, removing ");
-            sprintf(strnum, "%d", targets[0]->baseStats.armor + targets[0]->encounterStats.armor + targets[0]->itemStats.armor);
-            message = CombineStrings(message, strnum);
-            message = CombineStrings(message, " Armour and applying ");
-            sprintf(strnum, "%d", ripperRendPain * 2);
-            message = CombineStrings(message, strnum);
-            message = CombineStrings(message, " Pain.");
-        }
-        else
-        {
-            message = CombineStrings(message, " Bleed and removing ");
-            sprintf(strnum, "%d", ripperRendShred);
-            message = CombineStrings(message, strnum);
-            message = CombineStrings(message, " Armour.");
-        }
+        message = CombineStrings(message, " Bleed and Pain.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
-        targets[0]->encounterStats.armor -= ripperRendShred - ripperRendPain;
-        targets[0]->statusEffects[SE_PAIN] += ripperRendPain * 2;
+        targets[0]->statusEffects[SE_PAIN] += primaryEffectValue;
         DealDamage(0, targets[0], true, caster);
         if(targets[0]->baseStats.currentHealth <= 0) 
         {
@@ -1758,7 +1735,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_RIPPER_EVISCERATE:
-        primaryEffectValue = (3 * (targets[0]->statusEffects[SE_BLEED] + targets[0]->statusEffects[SE_BERSERK] + targets[0]->statusEffects[SE_EXHAUSTION] 
+        primaryEffectValue = (2 * (targets[0]->statusEffects[SE_BLEED] + targets[0]->statusEffects[SE_BERSERK] + targets[0]->statusEffects[SE_EXHAUSTION] 
             + targets[0]->statusEffects[SE_PAIN])) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " tears ");
@@ -1795,7 +1772,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             AddMessageToFeed("Chasing the dead didn't prove very exciting.");
             break;
         }
-        primaryEffectValue = (60 + GET_SCALING(caster, mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (60 + GET_SCALING(caster, mastery) * 0.6) * CalculateEffectAmplification(caster, true);
         short ripperChaseMastery = ((GET_SCALING(targets[0], health) - targets[0]->baseStats.currentHealth) * 0.2);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " chases ");
