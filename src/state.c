@@ -726,6 +726,11 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy *c, RNG *rng, short time)
 			else if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES))
 			{
 				result.receiverMask = result.receiverMask | (1 << PickSingularTarget(c, rng));
+				if(result.receiverMask == 8)
+				{
+					result.receiverMask = 0;
+					result.abilityId = AB_WAIT;
+				}
 			}
 			else
 			{
@@ -768,6 +773,7 @@ char PickSingularTarget(Enemy *c, RNG *rng)
 		(targets[0] ? 1 : 0) +
 		(targets[1] ? 1 : 0) +
 		(targets[2] ? 1 : 0);
+	if(numberOfLivingTargets == 0) return 3;
 	switch (c->targettingBehavior)
 	{
 	case TG_TRUE_RANDOM:
@@ -812,9 +818,9 @@ char PickSingularTarget(Enemy *c, RNG *rng)
 	case TG_WEIGHTED_RANDOM:
 	{
 		short priorities[] = {
-			appState.stateData.gameState.playerTeam[0].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.encounterStats.targetPriority,
-			appState.stateData.gameState.playerTeam[1].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.encounterStats.targetPriority,
-			appState.stateData.gameState.playerTeam[2].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.encounterStats.targetPriority,
+			MAX(1,appState.stateData.gameState.playerTeam[0].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.encounterStats.targetPriority),
+			MAX(1,appState.stateData.gameState.playerTeam[1].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.encounterStats.targetPriority),
+			MAX(1,appState.stateData.gameState.playerTeam[2].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.encounterStats.targetPriority),
 		};
 		short roll = rng_next_u32(rng) % ((targets[0] ? priorities[0] : 0) + (targets[1] ? priorities[1] : 0) + (targets[2] ? priorities[2] : 0));
 		for (int i = 0; i < 3; i++)
