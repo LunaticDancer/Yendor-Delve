@@ -185,7 +185,8 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             message = CombineStrings(message, " Pain to the assailant.");
             AddMessageToFeed(message);
             c->encounterStats.speed += primaryValue;
-            caster->statusEffects[SE_PAIN] += primaryValue;
+            if(caster != NULL)
+                caster->statusEffects[SE_PAIN] += primaryValue;
             break;
         case LE_ONHIT_WOLF_BITE:
             primaryValue = c->lingeringEffects[i].storedValue;
