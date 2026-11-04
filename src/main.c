@@ -86,9 +86,9 @@ int main(int argc, char *argv[])
 
 	titleFont = LoadFontEx("assets/fonts/KAISG.TTF", 120, 0, 0);
 	SetTextureFilter(titleFont.texture, TEXTURE_FILTER_TRILINEAR);
-	basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 64, 0, 0);
+	basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/AtkinsonHyperlegible-Bold.otf", 64, 0, 0);
 	SetTextureFilter(basicFont.texture, TEXTURE_FILTER_TRILINEAR);
-	basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 128, 0, 0);
+	basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "AtkinsonHyperlegible-Bold.otf", 128, 0, 0);
 	SetTextureFilter(basicFontLarger.texture, TEXTURE_FILTER_TRILINEAR);
 	set_palette(appState.settings.palette);
 
@@ -468,9 +468,9 @@ void HandleSettingsInput()
 
 			case SET_FONT:
 			appState.settings.font = (appState.settings.font + 1) % 2;
-			basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 64, 0, 0);
+			basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/AtkinsonHyperlegible-Bold.otf", 64, 0, 0);
 			SetTextureFilter(basicFont.texture, TEXTURE_FILTER_TRILINEAR);
-			basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 128, 0, 0);
+			basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/AtkinsonHyperlegible-Bold.otf", 128, 0, 0);
 			SetTextureFilter(basicFontLarger.texture, TEXTURE_FILTER_TRILINEAR);
 			break;
 			
@@ -504,9 +504,9 @@ void HandleSettingsInput()
 
 			case SET_FONT:
 			appState.settings.font = (appState.settings.font + 1) % 2;
-			basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 64, 0, 0);
+			basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/AtkinsonHyperlegible-Bold.otf", 64, 0, 0);
 			SetTextureFilter(basicFont.texture, TEXTURE_FILTER_TRILINEAR);
-			basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 128, 0, 0);
+			basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/AtkinsonHyperlegible-Bold.otf", 128, 0, 0);
 			SetTextureFilter(basicFontLarger.texture, TEXTURE_FILTER_TRILINEAR);
 			break;
 
