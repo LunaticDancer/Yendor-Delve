@@ -1222,8 +1222,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(berserkerSwingDamage, targets[0], false, caster);
         break;
     case AB_BERSERKER_BASH:
-        primaryEffectValue = CalculateDamage((((caster->baseStats.armor + caster->encounterStats.armor + caster->itemStats.armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateEffectAmplification(caster, false)
-            * (200/(200 + targets[0]->baseStats.ticksUntilNextTurn)), targets[0]);
+        primaryEffectValue = CalculateDamage(MAX(0,((caster->baseStats.armor + caster->encounterStats.armor + caster->itemStats.armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateEffectAmplification(caster, false)
+            * (200.0/(200 + targets[0]->baseStats.ticksUntilNextTurn)), targets[0]);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " slams ");
         message = CombineStrings(message, targets[0]->baseStats.name);
