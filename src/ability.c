@@ -683,7 +683,7 @@ Ability InitAbility(ABILITY id)
             id,
             "Devour",
             600,
-            AF_TARGETS_ALLIES,
+            AF_TARGETS_ENEMIES,
         };
         case AB_FROG_STOMP:
         return (Ability)
@@ -699,7 +699,7 @@ Ability InitAbility(ABILITY id)
             id,
             "Frogsong",
             350,
-            AF_AOE
+            AF_TARGETS_ALLIES + AF_AOE
         };
         case AB_FROG_FLY_BUZZ:
         return (Ability)
@@ -707,7 +707,7 @@ Ability InitAbility(ABILITY id)
             id,
             "Buzz",
             50,
-            AF_AOE
+            AF_TARGETS_ENEMIES
         };
         case AB_FROG_FLY_STINK:
         return (Ability)

@@ -1131,7 +1131,31 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_FROG_FLY_STINK:
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)));
         result = CombineStrings("Apply ", strnum);
-        result = CombineStrings(result, " Exhaustion to all enemies.");
+        result = CombineStrings(result, " (50 + 30\% Mastery) Exhaustion to an enemy and give them half that much Target Priority.");
+        return result;
+    case AB_FROG_FLY_BUZZ:
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.speed + caster->encounterStats.speed + caster->itemStats.speed) * 0.1)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (20 + 10\% Speed) damage to an enemy and become Untargetable for 200 moments.");
+        return result;
+    case AB_FROG_DEVOUR:
+        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (50 + 50\% Mastery) damage to an enemy. ");
+        result = CombineStrings(result, "Then, if the sum of its health and stamina are less than 500, swallow it whole.");
+        return result;
+    case AB_FROG_STOMP:
+        sprintf(strnum, "%.0f", ((25 + 
+            ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.25)+
+            ((caster->baseStats.defense + caster->encounterStats.defense + caster->itemStats.defense) * 0.10)
+            )* GetDamageMult(caster) * CalculateEffectAmplification(caster, true)));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (25 + 25\% Mastery + 10\% Mastery) damage to an enemy.");
+        return result;
+    case AB_FROG_SING:
+        sprintf(strnum, "%.0f",(20 + (caster->baseStats.defense + caster->encounterStats.defense + caster->itemStats.defense) * 0.1));
+        result = CombineStrings("Give every ally ", strnum);
+        result = CombineStrings(result, " (20 + 10% Defense) Mastery.");
         return result;
         
     default:
@@ -2885,19 +2909,107 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_FROG_FLY_STINK:
-        primaryEffectValue = (40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3);
+        primaryEffectValue = (50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3);
         sprintf(strnum, "%d", primaryEffectValue);
-        message = CombineStrings((*caster).baseStats.name, " emits a most foul odour, applying");
+        message = CombineStrings((*caster).baseStats.name, " emits a most foul odour, applying ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Exhaustion to ");
         message = CombineStrings(message, targets[0]->baseStats.name);
-        message = CombineStrings(message, ".");
+        message = CombineStrings(message, " and raises their target priority by half that much.");
         AddMessageToFeed(message);
 
         AddCreatureToFlicker(targets[0]);
-            targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
+        targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
+        targets[0]->baseStats.targetPriority += primaryEffectValue*0.5;
         break;
-        
+    case AB_FROG_FLY_BUZZ:
+        primaryEffectValue = ((20 + (caster->baseStats.speed + caster->encounterStats.speed + caster->itemStats.speed) * 0.1) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " frantically flies around, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage to ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " and becoming untargetable for 200 moments.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        caster->statusEffects[SE_UNTARGETABLE] = 200;
+        break; 
+    case AB_FROG_STOMP:
+        primaryEffectValue = ((25 + 
+            ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.25)+
+            ((caster->baseStats.defense + caster->encounterStats.defense + caster->itemStats.defense) * 0.10)
+            ) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " launches its full body weight at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        break; 
+    case AB_FROG_DEVOUR:
+        primaryEffectValue = ((50 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.50)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " fires its tongue at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " at a blinding speed, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+            int healthcheck = targets[i]->baseStats.currentHealth;
+            for (int tmbr = 0; tmbr < 3; tmbr++) {
+                if (&appState.stateData.gameState.playerTeam[tmbr].stats == targets[0]) {
+                    healthcheck += targets[0]->baseStats.currentStamina;
+                }
+            }
+
+            if (healthcheck <= 500) {
+            
+            if (targets[0] != caster) {
+                message = CombineStrings("Having sufficiently weakened its prey, ",(*caster).baseStats.name);
+                message = CombineStrings(message, " swallows ");
+                message = CombineStrings(message, targets[0]->baseStats.name);
+                message = CombineStrings(message, " whole, never to be seen again.");
+            } else {
+                message = CombineStrings("In a curious error, ",(*caster).baseStats.name);
+                message = CombineStrings(message, " disapears into its own mouth, never to be seen again.");
+            }
+
+            AddMessageToFeed(message);
+                //replacement effect
+                Enemy example_of_nothing = InitEnemyData(EN_NONE);
+                targets[i]->baseStats = example_of_nothing.stats.baseStats;
+            }
+        }
+        break; 
+    case AB_FROG_SING:
+        primaryEffectValue = (20 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.10));
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " croaks out a powerful song, granting each of its allies ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Mastery.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->encounterStats.mastery += primaryEffectValue;
+        }
+        break;
+        break; 
+    
     default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
         AddMessageToFeed(message);

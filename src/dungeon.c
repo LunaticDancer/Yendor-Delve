@@ -389,7 +389,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Giant Frog",
-                "Good lord that's a big frog.",
+                "By the gods that's a big frog.",
                 TL_COMMUNITY,
                 (Vector2){4, 6},
                 darkblue,
