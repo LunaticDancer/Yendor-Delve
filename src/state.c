@@ -825,9 +825,9 @@ char PickSingularTarget(Enemy *c, RNG *rng)
 		short roll = rng_next_u32(rng) % ((targets[0] ? priorities[0] : 0) + (targets[1] ? priorities[1] : 0) + (targets[2] ? priorities[2] : 0));
 		for (int i = 0; i < 3; i++)
 		{
-			if (roll <= priorities[i] && targets[i])
+			if (roll <= MAX(1,priorities[i]) && targets[i])
 				return i;
-			roll -= priorities[i];
+			roll -= MAX(1,priorities[i]);
 		}
 	}
 	}
