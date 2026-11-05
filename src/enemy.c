@@ -89,6 +89,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -127,6 +128,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -165,6 +167,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -203,6 +206,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -241,6 +245,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -279,6 +284,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
 
@@ -317,6 +323,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -355,6 +362,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -393,6 +401,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -431,6 +440,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -469,6 +479,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -507,6 +518,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_FRONT,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -545,6 +557,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -583,6 +596,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_FRONT,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -621,6 +635,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_TRUE_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -659,6 +674,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_TRUE_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -697,6 +713,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_BACK,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -735,6 +752,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -773,6 +791,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_GORLAK_EQUIP,
+            "The Gorlak nods approvingly and disappears in a puff of magic.",
         };
         break;
 
@@ -811,6 +830,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         case EN_FIRE_ELEMENTAL:
@@ -848,6 +868,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         case EN_GIANT_FROG:
@@ -885,6 +906,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         case EN_FROG_STINKFLY:
@@ -922,6 +944,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
     }

@@ -528,6 +528,7 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
 
     if ((*target).baseStats.currentHealth <= 0)
     {
+        (*target).baseStats.currentHealth = 0;
         if(strcmp(target->baseStats.name, "Empty Space") == 0)
         {
             AddMessageToFeed("The empty space has been truly killed dead.");
@@ -539,8 +540,18 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
         }
         else
         {
+            char *message;
+            bool shownAltMessage = false;
+            for (int i = 0; i < 3; i++)
+            {
+                if(&appState.stateData.gameState.stateData.battleState.enemies[i].stats != target) continue;
+                if(strlen(appState.stateData.gameState.stateData.battleState.enemies[i].customDeathMessage)<2) continue;
+
+                shownAltMessage = true;
+                message = appState.stateData.gameState.stateData.battleState.enemies[i].customDeathMessage;
+            }
             (*target).baseStats.currentHealth = 0;
-            char *message = CombineStrings((*target).baseStats.name, " was slain!");
+            if(!shownAltMessage) message = CombineStrings((*target).baseStats.name, " was slain!");
             AddMessageToFeed(message);
             HandleOnDeathEffects(target);
         }

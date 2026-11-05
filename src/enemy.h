@@ -47,6 +47,7 @@ typedef struct Enemy
     CreatureStats stats;
     TARGETTING_TYPE targettingBehavior;
     ABILITY lastUsedAbility;
+    char* customDeathMessage;
 } Enemy;
 
 bool IsEnemyIrrelevant(Enemy e);
