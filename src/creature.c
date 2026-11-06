@@ -337,6 +337,19 @@ void HandleOnDeathEffects(CreatureStats *c)
                 message = CombineStrings(message, "! You swiftly pick it up and add it to your shared inventory.");
                 AddItemToInventory(jarBreakItem);
                 AddMessageToFeed(message);
+            case LE_ONDTH_MANRAT:
+            bool hasAllies = false;
+            for(int i = 0; i < 3; i++)
+            {
+                if(&appState.stateData.gameState.stateData.battleState.enemies[i].stats.baseStats.currentHealth > 0) continue;
+                i ->statusEffects[SE_BERSERK] +=100;
+                i ->baseStats.ticksUntilNextTurn = 0;
+                hasAllies = true;
+            }
+            if(hasAllies == true) continue;
+            message = CombineStrings(c.stats.baseStats.name);
+            message = CombineStrings(message, "'s death is avenged by its remaining allies, who gain 100 Berserk and immediately take a turn.");
+            AddMessageToFeed(message);
         }
     }
     
@@ -1151,6 +1164,28 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         sprintf(strnum, "%.0f", ((30 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (30 + 50% Mastery) damage to all enemies.");
+        return result;
+    case AB_MANRAT_RALLYING_ASSAULT:
+        damage = ((50 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%.0f", ((40 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(spnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (50 + 50% Mastery) damage to an enemy and give all allies ");
+        result = CombineStrings(result, spnum);
+        result = CombineStrings(result, " (10 + 20% Mastery) Speed.";
+        return result;
+    case AB_MANRAT_STRUGGLE:
+        damage = ((30 + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%.0f", ((30 + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (40 + 50% Mastery) damage to all enemies.");
+        return result;
+    case AB_MANRAT_DISASSEMBLE:
+        sprintf(strnum, "%.0f", ((5 + GET_SCALING(target, defense) * 0.05)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Apply ", strnum);
+        result = CombineStrings(result, " (5 + 5% target's Defense) Pain to an enemy.");
         return result;
     case AB_FROG_FLY_STINK:
         sprintf(strnum, "%.0f", ((50 + GET_SCALING(caster, mastery) * 0.3)));
