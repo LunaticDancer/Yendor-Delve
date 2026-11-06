@@ -677,6 +677,30 @@ Ability InitAbility(ABILITY id)
             250,
             AF_TARGETS_ENEMIES + AF_AOE
         };
+	    case AB_MANRAT_RALLYING_ASSAULT:
+        return (Ability)
+        {
+            id,
+            "Rallying Assault",
+            70,
+            AF_TARGETS_ENEMIES
+        };
+	    case AB_MANRAT_STRUGGLE:
+        return (Ability)
+        {
+            id,
+            "Struggle",
+            100,
+            AF_TARGETS_ENEMIES + AF_AOE
+        };
+	    case AB_MANRAT_DISASSEMBLE:
+        return (Ability)
+        {
+            id,
+            "Disassemble",
+            180,
+            AF_TARGETS_ENEMIES
+        };
         case AB_FROG_DEVOUR:
         return (Ability)
         {
