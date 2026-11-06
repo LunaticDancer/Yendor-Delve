@@ -9,7 +9,7 @@ extern struct AppState appState;
 ENCOUNTER_ID bossPoolTier1[2];
 ENCOUNTER_ID bossPoolTier2[1];
 
-ENCOUNTER_ID encounterPoolTier1[10];
+ENCOUNTER_ID encounterPoolTier1[11];
 ENCOUNTER_ID encounterPoolTier2[4];
 ENCOUNTER_ID encounterPoolTier3[4];
 
@@ -133,6 +133,7 @@ void InitEncounterPools()
     encounterPoolTier1[7] = ENC_BANDITS_EASY;
     encounterPoolTier1[8] = ENC_GORLAK;
     encounterPoolTier1[9] = ENC_ELEMENTAL_DUO;
+    encounterPoolTier1[10] = ENC_MANRAT_TROUPE
 
     encounterPoolTier2[0] = ENC_GIANT_FROG;
     encounterPoolTier2[1] = ENC_GIANT_FROG;
@@ -382,6 +383,19 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 skyblue,
                 "Elementals of ice and fire. An unlikely pairing.",
                 {EN_ICE_ELEMENTAL, EN_NONE, EN_FIRE_ELEMENTAL},
+                false,
+            };
+        case ENC_MANRAT_TROUPE:
+            return (Encounter)
+            {
+                id,
+                "Manrat Troupe",
+                "\0",
+                TL_CREATURES,
+                (Vector2){14, 3},
+                lightgray,
+                "A nest of manrats lies in your way. Nothing of value will be lost tearing it down.",
+                {EN_MANRAT, EN_MANRAT, EN_MANRAT},
                 false,
             };
         case ENC_GIANT_FROG:
