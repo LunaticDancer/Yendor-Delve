@@ -133,7 +133,7 @@ void InitEncounterPools()
     encounterPoolTier1[7] = ENC_BANDITS_EASY;
     encounterPoolTier1[8] = ENC_GORLAK;
     encounterPoolTier1[9] = ENC_ELEMENTAL_DUO;
-    encounterPoolTier1[10] = ENC_MANRAT_TROUPE
+    encounterPoolTier1[10] = ENC_MANRAT_TROUPE;
 
     encounterPoolTier2[0] = ENC_GIANT_FROG;
     encounterPoolTier2[1] = ENC_JAR_CAMP;
