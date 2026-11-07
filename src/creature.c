@@ -331,11 +331,11 @@ void HandleOnDeathEffects(CreatureStats *c)
             }
             case LE_ONDTH_MANRAT:
             bool hasAllies = false;
-            for(int i = 0; i < 3; i++)
+            for(int j = 0; j < 3; j++)
             {
-                if(&appState.stateData.gameState.stateData.battleState.enemies[i].stats.baseStats.currentHealth > 0) continue;
-                i ->statusEffects[SE_BERSERK] +=100;
-                i ->baseStats.ticksUntilNextTurn = 0;
+                if(appState.stateData.gameState.stateData.battleState.enemies[j].stats.baseStats.currentHealth > 0) continue;
+                appState.stateData.gameState.stateData.battleState.enemies[j]->statusEffects[SE_BERSERK]+=100;
+                appState.stateData.gameState.stateData.battleState.enemies[j]->baseStats.ticksUntilNextTurn = 0;
                 hasAllies = true;
             }
             if(hasAllies == true) continue;
@@ -1158,7 +1158,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (30 + 50% Mastery) damage to all enemies.");
         return result;
     case AB_MANRAT_RALLYING_ASSAULT:
-        damage = ((50 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        damage = ((50 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((40 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
@@ -1168,14 +1168,14 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (10 + 20% Mastery) Speed.";
         return result;
     case AB_MANRAT_STRUGGLE:
-        damage = ((30 + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        damage = ((30 + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((30 + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (40 + 50% Mastery) damage to all enemies.");
         return result;
     case AB_MANRAT_DISASSEMBLE:
-        result = CombineStrings("Apply 5 + 5% target's Defense Pain to an enemy.");
+        result = "Apply Pain to an enemy equal to 5 + 5% of their Defense .";
         return result;
     case AB_FROG_FLY_STINK:
         sprintf(strnum, "%.0f", ((50 + GET_SCALING(caster, mastery) * 0.3)));
@@ -2943,9 +2943,9 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_MANRAT_RALLYING_ASSAULT:
-        primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = ((50 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
-        short rallyBoost = (10 + GET_SCALING(caster, mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
+        short rallyBoost = (((10 + GET_SCALING(caster, mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
         message = CombineStrings((*caster).baseStats.name, " lets out a courageous cry and jabs forward towards ");
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, ", dealing ");
@@ -2953,14 +2953,14 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " damage and granting its team ");
         sprintf(strnum, "%d", rallyBoost);
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Speed."
+        message = CombineStrings(message, " Speed.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         DealDamage(primaryEffectValue, targets[0], false, caster);
         }
         break;
     case AB_MANRAT_STRUGGLE:
-        primaryEffectValue = (30 + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = ((30 + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " lashes out desperately, dealing ");
         message = CombineStrings(message, strnum);
@@ -2973,7 +2973,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_MANRAT_DISASSEMBLE:
-        primaryEffectValue = (5 + GET_SCALING(targets[0[, defense) * 0.05)) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = ((5 + GET_SCALING(targets[0], defense) * 0.05)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " strikes at the weak points in ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -2981,8 +2981,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Pain.");
         AddMessageToFeed(message);
-        AddCreatureToFlicker(targets[0];
-        targets[0]->statusEffects[SE_PAIN] += primaryEffectValue;
+        AddCreatureToFlicker(targets[0]);
+        targets[0]->statusEffects[SE_PAIN]+=primaryEffectValue;
         break;
     case AB_FROG_FLY_STINK:
         primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 0.3);
