@@ -2987,21 +2987,21 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         for (int i = 0; i < 3; i++)
         {
             if (caster == &appState.stateData.gameState.playerTeam[i].stats)
-                {
-                    isEnemy = false;
-                }
+            {
+                isEnemy = false;
+            }
         }
         for (int i = 0; i < 3; i++)
+        {
+            if (isEnemy == false)
             {
-                if (isEnemy == false)
-                {
-                    appState.stateData.gameState.playerTeam[i].stats.encounterStats.speed+=rallyBoost;
-                }
-                else
-                {
-                    appState.stateData.gameState.stateData.battleState.enemies[i].stats.encounterStats.speed+=rallyBoost;
-                }
+                appState.stateData.gameState.playerTeam[i].stats.encounterStats.speed+=rallyBoost;
             }
+            else
+            {
+                appState.stateData.gameState.stateData.battleState.enemies[i].stats.encounterStats.speed+=rallyBoost;
+            }
+        }
         break;
     case AB_MANRAT_STRUGGLE:
         primaryEffectValue = ((30 + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
