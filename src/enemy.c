@@ -901,7 +901,7 @@ Enemy InitEnemyData(ENEMY_ID id)
                 .itemStats = CreateEmptyStatBonuses(),
                 .temporaryStats = {},
                 .lingeringEffects = {LE_ONDTH_MANRAT},
-                .abilities = InitAbilities((ABILITY[]){AB_MANRAT_RALLYING_ASSAULT,AB_MANRAT_STRUGGLE,AB_MANRAT_DISASSEMBLE,AB_WAIT}, 4),
+                .abilities = InitAbilities((ABILITY[]){AB_MANRAT_RALLYING_ASSAULT,AB_MANRAT_STRUGGLE,AB_MANRAT_PINPOINT,AB_WAIT}, 4),
                 .abilityCount = 4,
             },
             TG_WEIGHTED_RANDOM,
