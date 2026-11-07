@@ -693,11 +693,11 @@ Ability InitAbility(ABILITY id)
             100,
             AF_TARGETS_ENEMIES + AF_AOE
         };
-	    case AB_MANRAT_DISASSEMBLE:
+	    case AB_MANRAT_PINPOINT:
         return (Ability)
         {
             id,
-            "Disassemble",
+            "Pinpoint",
             180,
             AF_TARGETS_ENEMIES
         };
