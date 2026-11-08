@@ -4,7 +4,7 @@
 #include "creature.h"
 #include "item.h"
 #include "ability.h"
- 
+
 typedef enum ENEMY_ID
 {
     EN_NONE,
