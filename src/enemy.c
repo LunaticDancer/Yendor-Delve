@@ -7,7 +7,7 @@ bool IsEnemyIrrelevant(Enemy e)
 {
     switch(e.enemyId)
     {
-        case EN_CULTIST_SUMMON: return true; 
+        case EN_CULTIST_SUMMON: return true;
         default: return false;
     }
 }
