@@ -6,9 +6,11 @@
 #include "colors.h"
 #include "drawing.h"
 #include "audio.h"
+#include "item.h"
 
 extern struct AppState appState;
 extern ITEM_ID itemPoolTier1[];
+extern ITEM_ID itemPoolTier2[];
 
 StatBonuses CreateEmptyStatBonuses()
 {
@@ -153,7 +155,8 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONATT_BALL_ON_CHAIN: return "When attacking, delay the target's turn by 100 moments.";
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 10 Bleed.";
         case LE_ONATT_MALEVOLENCE: return "When attacking, apply all the negative status you carry.";
-        case LE_ONDTH_VENGEFUL_SPIRIT: return "Oh death, deal 1000 unavoidable damage to opposite enemy.";
+        case LE_ONDTH_VENGEFUL_SPIRIT: return "On death, deal 1000 unavoidable damage to opposite enemy.";
+        case LE_ONDTH_JAR_BREAK_GOODIES: return "On death, drop a random tier 2 item.";
         case LE_ONENC_COIN: return "At the start of combat, you move first.";
         case LE_ONENC_ILLUSION_PROTECT: return "At the start of combat, you gain 1 Protection.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
@@ -329,6 +332,12 @@ void HandleOnDeathEffects(CreatureStats *c)
                 AddMessageToFeed(message);
                 DealDamage(1000, &appState.stateData.gameState.stateData.battleState.enemies[2-j].stats, true, NULL);
             }
+            case LE_ONDTH_JAR_BREAK_GOODIES:
+                Item jarBreakItem = InitItem(itemPoolTier2[rand() % ITEM_POOL_TIER_TWO_SIZE]);
+                message = CombineStrings("Out of the jar drops ", jarBreakItem.name);
+                message = CombineStrings(message, "! You swiftly pick it up and add it to your shared inventory.");
+                AddItemToInventory(jarBreakItem);
+                AddMessageToFeed(message);
         }
     }
     

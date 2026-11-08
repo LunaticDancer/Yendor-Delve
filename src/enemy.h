@@ -31,6 +31,8 @@ typedef enum ENEMY_ID
     EN_FIRE_ELEMENTAL,
     EN_GIANT_FROG,
     EN_FROG_STINKFLY,
+    EN_QUICKPIG,
+    EN_PIGJAR,
 } ENEMY_ID;
 
 typedef enum TARGETTING_TYPE
