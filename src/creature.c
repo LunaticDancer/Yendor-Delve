@@ -528,6 +528,7 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
 
     if ((*target).baseStats.currentHealth <= 0)
     {
+        (*target).baseStats.currentHealth = 0;
         if(strcmp(target->baseStats.name, "Empty Space") == 0)
         {
             AddMessageToFeed("The empty space has been truly killed dead.");
@@ -539,8 +540,18 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
         }
         else
         {
+            char *message;
+            bool shownAltMessage = false;
+            for (int i = 0; i < 3; i++)
+            {
+                if(&appState.stateData.gameState.stateData.battleState.enemies[i].stats != target) continue;
+                if(strlen(appState.stateData.gameState.stateData.battleState.enemies[i].customDeathMessage)<2) continue;
+
+                shownAltMessage = true;
+                message = appState.stateData.gameState.stateData.battleState.enemies[i].customDeathMessage;
+            }
             (*target).baseStats.currentHealth = 0;
-            char *message = CombineStrings((*target).baseStats.name, " was slain!");
+            if(!shownAltMessage) message = CombineStrings((*target).baseStats.name, " was slain!");
             AddMessageToFeed(message);
             HandleOnDeathEffects(target);
         }
@@ -616,7 +627,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (40 + 120% Mastery) damage.");
         return result;
     case AB_BERSERKER_BASH:
-        sprintf(strnum, "%.0f", ((GET_SCALING(caster, armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateEffectAmplification(caster, false));
+        sprintf(strnum, "%.0f", MIN(9999,((GET_SCALING(caster, armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateEffectAmplification(caster, false)));
         result = CombineStrings("Stun an enemy with a powerful shield strike, delaying their next turn by ", strnum);
         result = CombineStrings(result, " (Armour x Berserk) moments of time.");
         return result;
@@ -1227,8 +1238,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(berserkerSwingDamage, targets[0], false, caster);
         break;
     case AB_BERSERKER_BASH:
-        primaryEffectValue = CalculateDamage(MAX(0,(GET_SCALING(caster, armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateEffectAmplification(caster, false)
-            * (200.0/(200 + targets[0]->baseStats.ticksUntilNextTurn)), targets[0]);
+        primaryEffectValue = MIN(9999, CalculateDamage(MIN(30000, MAX(0,(GET_SCALING(caster, armor) * (caster->statusEffects[SE_BERSERK] + 1))) * CalculateEffectAmplification(caster, false)
+            * (200.0/(200 + targets[0]->baseStats.ticksUntilNextTurn))), targets[0]));
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " slams ");
         message = CombineStrings(message, targets[0]->baseStats.name);
