@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "ability.h"
 
-Ability InitAbility(ABILITY id)
+Ability InitAbility(ABILITY id) 
 {
     switch(id)
     {
