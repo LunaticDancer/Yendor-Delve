@@ -11,7 +11,7 @@ extern struct AppState appState;
 extern ITEM_ID itemPoolTier1[];
 extern ITEM_ID itemPoolTier2[];
 
-StatBonuses CreateEmptyStatBonuses()
+StatBonuses CreateEmptyStatBonuses() 
 {
     return (StatBonuses){
         0,
