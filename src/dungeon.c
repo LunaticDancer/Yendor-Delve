@@ -4,7 +4,7 @@
 #include "state.h"
 #include "colors.h"
 
-extern struct AppState appState;
+extern struct AppState appState; 
 
 ENCOUNTER_ID bossPoolTier1[2];
 ENCOUNTER_ID bossPoolTier2[1];
