@@ -8,7 +8,7 @@
 
 #define GET_SCALING(creature, stat) ((*creature).baseStats.stat + (*creature).itemStats.stat  + (*creature).encounterStats.stat)
 
-typedef enum STATUS_EFFECT
+typedef enum STATUS_EFFECT 
 {
     SE_PROTECTION,      // become entirely immune to single target abilities for X instances
     SE_BLEED,           // deal X damage at start of turn
