@@ -150,6 +150,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONABIL_SCRYER_BALL: return "The sole target of your ability gains 241 Untargetable.";
         case LE_ONABIL_ANTLER_HELMET: return "When using an ability which targets only allies, gain 30 Mastery.";
         case LE_ONABIL_MASTER_ROBE: return "When targetting allies, transfer your Crit Progress to them.";
+        case LE_ONABIL_TRUMPET: return "When using an ability, gain 50 Target Priority.";
         case LE_ONATT_HAMMER_OF_GLORY: return "When attacking, apply 10 Pain and Exhaust.";
         case LE_ONATT_BALL_ON_CHAIN: return "When attacking, delay the target's turn by 100 moments.";
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 10 Bleed.";
@@ -467,6 +468,12 @@ void HandleOnAbilityEffects(CreatureStats *c, ABILITY a, CreatureStats **targets
                 message = CombineStrings(message, " Crit Progress among affected allies.");
                 c->baseStats.critCounter = 0;
                 AddMessageToFeed(message);
+                break;
+            case LE_ONABIL_TRUMPET:
+                message = CombineStrings("The loud trumpet brings more attention to ", (*c).baseStats.name);
+                message = CombineStrings(message, ", granting 50 Target Priority.");
+                AddMessageToFeed(message);
+                c->baseStats.targetPriority += 50;
                 break;
         }
     }

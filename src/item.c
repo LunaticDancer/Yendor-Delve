@@ -1005,6 +1005,22 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.damageMultiplier = 0.1;
         
         return result;
+        case ITEM_TRUMPET:
+        result = (Item){
+            id,
+            "Trumpet",
+            TL_ITEMS,
+            (Vector2){17,4},
+            gold,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_ONABIL_TRUMPET,
+        };
+        result.statBonuses.critBonus = 40;
+        result.statBonuses.critRate = 40;
+        result.statBonuses.stamina = 300;
+        
+        return result;
         case ITEM_ROSE_SIGNET:
         result = (Item){
             id,
