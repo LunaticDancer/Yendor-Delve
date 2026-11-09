@@ -23,6 +23,7 @@ typedef enum ENCOUNTER_ID
     ENC_ELEMENTAL_DUO,
 
     ENC_GIANT_FROG,
+    ENC_JAR_CAMP,
 } ENCOUNTER_ID;
 
 extern ENCOUNTER_ID encounterPoolTier1[];

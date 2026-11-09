@@ -1,9 +1,12 @@
 #ifndef creature_h
 #define creature_h
 
+#include <math.h>
 #include "constants.h"
 #include "raylib.h"
 #include "ability.h"
+
+#define GET_SCALING(creature, stat) ((*creature).baseStats.stat + (*creature).itemStats.stat  + (*creature).encounterStats.stat)
 
 typedef enum STATUS_EFFECT
 {
@@ -11,9 +14,10 @@ typedef enum STATUS_EFFECT
     SE_BLEED,           // deal X damage at start of turn
     SE_BERSERK,         // remove X Def, add X% damage output
     SE_EXHAUSTION,      // remove X speed, abilities cost X more stamina
-    SE_UNTARGETABLE,   // can't be targetted by enemy abilities for X ticks
-    SE_PAIN,                    // deal X damage each time the creature becomes a target of ability
+    SE_UNTARGETABLE,    // can't be targetted by enemy abilities for X ticks
+    SE_PAIN,            // deal X damage each time the creature becomes a target of ability
     SE_CONFUSION,       // confused creatures cast spells at random targets
+    SE_BAGGED,          // Quickpig uses this to track whether or not it has stolen an item
     SE_LENGTH,
 } STATUS_EFFECT;
 
@@ -36,6 +40,7 @@ typedef enum LINGERING_EFFECT
     LE_ONATT_MALEVOLENCE,
 
     LE_ONDTH_VENGEFUL_SPIRIT,
+    LE_ONDTH_JAR_BREAK_GOODIES,
 
     LE_ONENC_COIN,
     LE_ONENC_ILLUSION_PROTECT,
@@ -60,9 +65,9 @@ typedef struct CreatureBaseStats
 
     short ticksUntilNextTurn;
     short currentHealth;
-    short maxHealth;
+    short health;
     short currentStamina;
-    short maxStamina;
+    short stamina;
     short staminaRegen;               // stamina gained per 1000 ticks of turn timer
     short speed;                      // diminishing formula, at speed 0 the wait time is 1000 ticks
     short defense;                      // diminishing formula
@@ -71,6 +76,7 @@ typedef struct CreatureBaseStats
     short critRate;                     // crit can exceed 100%, making it proc mustiple times, applying the multiplier each time
     short critCounter;                  // crit occurence accumulation, persists between battles
     short mastery;                      // ability scaling
+    float damageMultiplier;     // dummy stat for macro, do not use
     short targetPriority;
 } CreatureBaseStats;
 

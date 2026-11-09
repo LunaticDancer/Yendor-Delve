@@ -193,9 +193,9 @@ void TransitionToBattle()
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[0].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[1].stats);
 	EmptyStatusEffects(&appState.stateData.gameState.playerTeam[2].stats);
-	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina;
-	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina;
-	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[0].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[1].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina;
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[2].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina;
 
 	EmptyLingeringEffects(&appState.stateData.gameState.playerTeam[0].stats);
 	EmptyLingeringEffects(&appState.stateData.gameState.playerTeam[1].stats);
@@ -397,7 +397,7 @@ void HandleFleshGolemUpgrade()
 		if (appState.stateData.gameState.playerTeam[i].characterId == CHAR_FLESH_GOLEM)
 		{
 			appState.stateData.gameState.playerTeam[i].stats.baseStats.currentHealth += hpGain;
-			appState.stateData.gameState.playerTeam[i].stats.baseStats.maxHealth += hpGain;
+			appState.stateData.gameState.playerTeam[i].stats.baseStats.health += hpGain;
 		}
 	}
 }
@@ -555,12 +555,12 @@ void ProgressTime(short ticks)
 		AddMessageToFeed("The dissonant echo fades away.");
 	}
 
-	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[0].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[0].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[0].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
-	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[1].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[1].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[1].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
-	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina += (appState.stateData.gameState.playerTeam[2].stats.baseStats.staminaRegen + appState.stateData.gameState.playerTeam[2].stats.itemStats.staminaRegen + appState.stateData.gameState.playerTeam[2].stats.encounterStats.staminaRegen) * ((float)ticks / 1000.0);
-	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[0].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[0].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina;
-	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[1].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina;
-	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina > appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina) ? appState.stateData.gameState.playerTeam[2].stats.baseStats.maxStamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina += GET_SCALING(&appState.stateData.gameState.playerTeam[0].stats, staminaRegen) * ((float)ticks / 1000.0);
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina += GET_SCALING(&appState.stateData.gameState.playerTeam[1].stats, staminaRegen) * ((float)ticks / 1000.0);
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina += GET_SCALING(&appState.stateData.gameState.playerTeam[2].stats, staminaRegen) * ((float)ticks / 1000.0);
+	appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina > GET_SCALING(&appState.stateData.gameState.playerTeam[0].stats, stamina)) ? GET_SCALING(&appState.stateData.gameState.playerTeam[0].stats, stamina) : appState.stateData.gameState.playerTeam[0].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina > GET_SCALING(&appState.stateData.gameState.playerTeam[1].stats, stamina)) ? GET_SCALING(&appState.stateData.gameState.playerTeam[1].stats, stamina) : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina;
+	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = (appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina > GET_SCALING(&appState.stateData.gameState.playerTeam[2].stats, stamina)) ? GET_SCALING(&appState.stateData.gameState.playerTeam[2].stats, stamina) : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina;
 
 	appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETABLE] -= ticks;
 	appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETABLE] -= ticks;
@@ -726,6 +726,11 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy *c, RNG *rng, short time)
 			else if (DoesAbilityHaveFlag(c->stats.abilities[abilitySelected], AF_TARGETS_ENEMIES))
 			{
 				result.receiverMask = result.receiverMask | (1 << PickSingularTarget(c, rng));
+				if(result.receiverMask == 8)
+				{
+					result.receiverMask = 0;
+					result.abilityId = AB_WAIT;
+				}
 			}
 			else
 			{
@@ -768,6 +773,7 @@ char PickSingularTarget(Enemy *c, RNG *rng)
 		(targets[0] ? 1 : 0) +
 		(targets[1] ? 1 : 0) +
 		(targets[2] ? 1 : 0);
+	if(numberOfLivingTargets == 0) return 3;
 	switch (c->targettingBehavior)
 	{
 	case TG_TRUE_RANDOM:
@@ -812,16 +818,16 @@ char PickSingularTarget(Enemy *c, RNG *rng)
 	case TG_WEIGHTED_RANDOM:
 	{
 		short priorities[] = {
-			appState.stateData.gameState.playerTeam[0].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.encounterStats.targetPriority,
-			appState.stateData.gameState.playerTeam[1].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.encounterStats.targetPriority,
-			appState.stateData.gameState.playerTeam[2].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.encounterStats.targetPriority,
+			MAX(1,appState.stateData.gameState.playerTeam[0].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[0].stats.encounterStats.targetPriority),
+			MAX(1,appState.stateData.gameState.playerTeam[1].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[1].stats.encounterStats.targetPriority),
+			MAX(1,appState.stateData.gameState.playerTeam[2].stats.baseStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[2].stats.encounterStats.targetPriority),
 		};
 		short roll = rng_next_u32(rng) % ((targets[0] ? priorities[0] : 0) + (targets[1] ? priorities[1] : 0) + (targets[2] ? priorities[2] : 0));
 		for (int i = 0; i < 3; i++)
 		{
-			if (roll <= priorities[i] && targets[i])
+			if (roll <= MAX(1,priorities[i]) && targets[i])
 				return i;
-			roll -= priorities[i];
+			roll -= MAX(1,priorities[i]);
 		}
 	}
 	}

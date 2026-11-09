@@ -5,6 +5,7 @@
 
 #define ARR_SIZE(arr) ( sizeof((arr)) / sizeof((arr[0])) )
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 #define CONFIG_FILE "yendor-delve.config"
 #define ITEM_SLOTS 4

@@ -86,9 +86,9 @@ int main(int argc, char *argv[])
 
 	titleFont = LoadFontEx("assets/fonts/KAISG.TTF", 120, 0, 0);
 	SetTextureFilter(titleFont.texture, TEXTURE_FILTER_TRILINEAR);
-	basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 64, 0, 0);
+	basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/AtkinsonHyperlegible-Bold.otf", 64, 0, 0);
 	SetTextureFilter(basicFont.texture, TEXTURE_FILTER_TRILINEAR);
-	basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 128, 0, 0);
+	basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "AtkinsonHyperlegible-Bold.otf", 128, 0, 0);
 	SetTextureFilter(basicFontLarger.texture, TEXTURE_FILTER_TRILINEAR);
 	set_palette(appState.settings.palette);
 
@@ -468,9 +468,9 @@ void HandleSettingsInput()
 
 			case SET_FONT:
 			appState.settings.font = (appState.settings.font + 1) % 2;
-			basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 64, 0, 0);
+			basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/AtkinsonHyperlegible-Bold.otf", 64, 0, 0);
 			SetTextureFilter(basicFont.texture, TEXTURE_FILTER_TRILINEAR);
-			basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 128, 0, 0);
+			basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/AtkinsonHyperlegible-Bold.otf", 128, 0, 0);
 			SetTextureFilter(basicFontLarger.texture, TEXTURE_FILTER_TRILINEAR);
 			break;
 			
@@ -504,9 +504,9 @@ void HandleSettingsInput()
 
 			case SET_FONT:
 			appState.settings.font = (appState.settings.font + 1) % 2;
-			basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 64, 0, 0);
+			basicFont = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/AtkinsonHyperlegible-Bold.otf", 64, 0, 0);
 			SetTextureFilter(basicFont.texture, TEXTURE_FILTER_TRILINEAR);
-			basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/OpenSans-Regular.ttf", 128, 0, 0);
+			basicFontLarger = LoadFontEx((appState.settings.font == FS_FANCY) ? "assets/fonts/alagard.ttf" : "assets/fonts/AtkinsonHyperlegible-Bold.otf", 128, 0, 0);
 			SetTextureFilter(basicFontLarger.texture, TEXTURE_FILTER_TRILINEAR);
 			break;
 
@@ -658,11 +658,11 @@ void HandleBattleInput()
 			{
 				if(appState.stateData.gameState.floor % 8 == 0)
 				{
-					appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth 
+					appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[0].stats.baseStats.health 
 						+ appState.stateData.gameState.playerTeam[0].stats.itemStats.health);
-					appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth 
+					appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[1].stats.baseStats.health 
 						+ appState.stateData.gameState.playerTeam[1].stats.itemStats.health);
-					appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth 
+					appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth = (appState.stateData.gameState.playerTeam[2].stats.baseStats.health 
 						+ appState.stateData.gameState.playerTeam[2].stats.itemStats.health);
 				}
 				char *message = malloc(1);
@@ -914,21 +914,21 @@ void HandleEncounterSelection()
 		break;
 
 	case ENC_BONFIRE:
-		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) * 0.3;
-		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) * 0.3;
-		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[0].stats.baseStats.health + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[1].stats.baseStats.health + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[2].stats.baseStats.health + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) * 0.3;
 
 		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth >
-																						   (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
-																					   ? (appState.stateData.gameState.playerTeam[0].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
+																						   (appState.stateData.gameState.playerTeam[0].stats.baseStats.health + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
+																					   ? (appState.stateData.gameState.playerTeam[0].stats.baseStats.health + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
 																					   : appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth;
 		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth >
-																						   (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health)
-																					   ? (appState.stateData.gameState.playerTeam[1].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[1].stats.itemStats.health)
+																						   (appState.stateData.gameState.playerTeam[1].stats.baseStats.health + appState.stateData.gameState.playerTeam[1].stats.itemStats.health)
+																					   ? (appState.stateData.gameState.playerTeam[1].stats.baseStats.health + appState.stateData.gameState.playerTeam[1].stats.itemStats.health)
 																					   : appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth;
 		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth >
-																						   (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health)
-																					   ? (appState.stateData.gameState.playerTeam[2].stats.baseStats.maxHealth + appState.stateData.gameState.playerTeam[2].stats.itemStats.health)
+																						   (appState.stateData.gameState.playerTeam[2].stats.baseStats.health + appState.stateData.gameState.playerTeam[2].stats.itemStats.health)
+																					   ? (appState.stateData.gameState.playerTeam[2].stats.baseStats.health + appState.stateData.gameState.playerTeam[2].stats.itemStats.health)
 																					   : appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth;
 
 		ShowPopupMessage("The party has rested at the safe place,\nregaining much of its strength.");

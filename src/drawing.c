@@ -581,17 +581,17 @@ void DrawBattleScreenPartyMember(char index)
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 441, creatureBoxSize-40, 2, *darkgray);
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 440, 
         (int)((creatureBoxSize-40) * ClampFloat((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
-        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health), 0, 1)), 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.health + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health), 0, 1)), 
         4, *red);
         DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 440, 
         (int)((creatureBoxSize-40) * ClampFloat((float)appState.stateData.gameState.playerTeam[index].stats.encounterStats.shield / 
-        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health), 0, 1)), 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.health + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health), 0, 1)), 
         4,*skyblue);
 
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 449, creatureBoxSize-40, 2, *darkgray);
     DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 448, 
         (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentStamina / 
-        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxStamina + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.stamina + (float)appState.stateData.gameState.playerTeam[index].stats.encounterStats.stamina))), 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.stamina + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.stamina + (float)appState.stateData.gameState.playerTeam[index].stats.encounterStats.stamina))), 
         4, *darkgreen);
 
     if((appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_ABILITY_SELECT || appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT) && appState.stateData.gameState.stateData.battleState.currentActingEntity == index)
@@ -603,14 +603,14 @@ void DrawBattleScreenPartyMember(char index)
         {
             DrawRectangle(LAYOUT_SPACING + 16 + index * creatureBoxSize, 448, 
                 (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentStamina / 
-                ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxStamina + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.stamina + (float)appState.stateData.gameState.playerTeam[index].stats.encounterStats.stamina))), 
+                ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.stamina + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.stamina + (float)appState.stateData.gameState.playerTeam[index].stats.encounterStats.stamina))), 
                 4, *maroon);
         }
         else
         {
-            float width = (float)cost / ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxStamina + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.stamina + (float)appState.stateData.gameState.playerTeam[index].stats.encounterStats.stamina);
+            float width = (float)cost / ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.stamina + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.stamina + (float)appState.stateData.gameState.playerTeam[index].stats.encounterStats.stamina);
             short offset = (short)(((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentStamina / 
-                ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxStamina + 
+                ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.stamina + 
                 (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.stamina + 
                 (float)appState.stateData.gameState.playerTeam[index].stats.encounterStats.stamina) - width) * (float)(creatureBoxSize-40));
 
@@ -697,11 +697,11 @@ void DrawBattleScreenEnemy(char index)
     DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize, 102, creatureBoxSize-40, 2, *darkgray);
     DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize, 101, 
         (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth / 
-        (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth)), 
+        (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.health)), 
         4, *red);
     DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize, 101, 
         (int)((creatureBoxSize-40) * ClampFloat((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.shield / 
-        (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth, 0, 1)), 
+        (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.health, 0, 1)), 
         4, *skyblue);
     }
     DrawStatusEffects((Vector2){SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1) + 16, LAYOUT_SPACING + 16}, &appState.stateData.gameState.stateData.battleState.enemies[index].stats);
@@ -716,15 +716,15 @@ void DrawEnemyDamageOverlay(char index, short value)
         {
             DrawRectangle(SCREEN_WIDTH + LAYOUT_SPACING + 16 - (index+1) * creatureBoxSize, 101, 
                 (int)((creatureBoxSize-40) * ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth / 
-                ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.itemStats.health + (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.health))), 
+                ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.health + (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.itemStats.health + (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.health))), 
                 4, *darkgray);
         }
         else
         {
-            float width = (float)(value - appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.shield) / ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth + 
+            float width = (float)(value - appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.shield) / ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.health + 
                 (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.itemStats.health + (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.health);
             short offset = (short)(((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.currentHealth / 
-                ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.maxHealth + 
+                ((float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.baseStats.health + 
                 (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.itemStats.health + 
                 (float)appState.stateData.gameState.stateData.battleState.enemies[index].stats.encounterStats.health) - width) * (float)(creatureBoxSize-40));
 
@@ -855,6 +855,18 @@ void DrawStatusEffects(Vector2 position, CreatureStats* _creature)
                 (Vector2){0,0}, 0, *purple
             );
             break;
+            case SE_BAGGED:
+            DrawTexturePro(
+                GetTileset(TL_COMMUNITY),
+                (Rectangle){
+                    1 * TILE_SIZE,
+                    0 * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Rectangle){position.x, position.y+hOffset, TILE_SIZE, TILE_SIZE, },
+                (Vector2){0,0}, 0, *red
+            );
+            break;
         }
         hOffset += 18;
     }
@@ -915,9 +927,29 @@ void DrawDungeonScreen()
         return;
     }
 
-    Vector2 textSize = MeasureTextEx(basicFontLarger, "Prepare for an encounter:", 32, 0);
+    char strnum[8];
+    sprintf(strnum, "%d", appState.stateData.gameState.floor);
+    char* text;
+    switch(appState.stateData.gameState.floor)
+    {
+        case 1: text = "Prepare for an encounter:"; break;
+        case 2: case 3: case 4: case 5: case 6: case 7:
+        text = CombineStrings("Dungeon, floor ", strnum);
+        break;
+        case 8: text = "Dungeon, exit"; break;
+        case 9: case 10: case 11: case 12: case 13: case 14: case 15:
+        text = CombineStrings("Caves, layer ", strnum);
+        break;
+        case 16: text = "Mysterious Gate"; break;
+        case 17: case 18: case 19: case 20: case 21: case 22: case 23:
+        text = CombineStrings("Lost City, layer ", strnum);
+        break;
+        case 24: text = "Inner Workshop"; break;
+        default: text = "Where the hell are we?"; break;
+    }
+    Vector2 textSize = MeasureTextEx(basicFontLarger, text, 32, 0);
     Vector2 textPosition = {SCREEN_WIDTH / 2 - textSize.x / 2, 10};
-    DrawTextEx(basicFontLarger, "Prepare for an encounter:", textPosition, 32, 0, *darkgray);
+    DrawTextEx(basicFontLarger, text, textPosition, 32, 0, *darkgray);
 
     // encounter selection frames
     DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){LAYOUT_SPACING + 5, 48 + LAYOUT_SPACING,
@@ -1245,7 +1277,7 @@ void DrawDungeonScreenPartyMemberBars(char index)
     DrawRectangle(104 + index * 160, 449, 112, 2, *darkgray);
     DrawRectangle(104 + index * 160, 448, 
         (int)(112 * ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.currentHealth / 
-        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.maxHealth + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health))), 
+        ((float)appState.stateData.gameState.playerTeam[index].stats.baseStats.health + (float)appState.stateData.gameState.playerTeam[index].stats.itemStats.health))), 
         4, *red);
 
     DrawRectangle(104 + index * 160, 457, 112, 2, *darkgray);

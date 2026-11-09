@@ -28,9 +28,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 0,
-                    .maxHealth = 0,
+                    .health = 0,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 100,
                     .speed = 100,
                     .defense = 0,
@@ -66,9 +66,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 30000,
-                    .maxHealth = 30000,
+                    .health = 30000,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 300,
                     .speed = 400,
                     .defense = 150,
@@ -89,6 +89,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -104,9 +105,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 10000,
-                    .maxHealth = 10000,
+                    .health = 10000,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 200,
                     .speed = 250,
                     .defense = 250,
@@ -127,6 +128,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -142,9 +144,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 2500,
-                    .maxHealth = 2500,
+                    .health = 2500,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 200,
                     .speed = 150,
                     .defense = 150,
@@ -165,6 +167,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -180,9 +183,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 900,
-                    .maxHealth = 900,
+                    .health = 900,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 200,
                     .speed = 150,
                     .defense = 100,
@@ -203,6 +206,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -218,9 +222,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 900,
-                    .maxHealth = 900,
+                    .health = 900,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 200,
                     .speed = 150,
                     .defense = 100,
@@ -241,6 +245,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -256,9 +261,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 1500,
-                    .maxHealth = 1500,
+                    .health = 1500,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 200,
                     .speed = 150,
                     .defense = 100,
@@ -279,6 +284,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
 
@@ -294,9 +300,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 100,
                     .currentHealth = 150,
-                    .maxHealth = 150,
+                    .health = 150,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 200,
                     .speed = 150,
                     .defense = 50,
@@ -317,6 +323,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -332,9 +339,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 1000,
-                    .maxHealth = 1000,
+                    .health = 1000,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 200,
                     .speed = 350,
                     .defense = 150,
@@ -355,6 +362,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -370,9 +378,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 200,
-                    .maxHealth = 200,
+                    .health = 200,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 250,
                     .defense = 130,
@@ -393,6 +401,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -408,9 +417,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 140,
-                    .maxHealth = 140,
+                    .health = 140,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 400,
                     .defense = 110,
@@ -431,6 +440,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -446,9 +456,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 600,
-                    .maxHealth = 600,
+                    .health = 600,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 150,
                     .defense = 80,
@@ -469,6 +479,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -484,9 +495,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 300,
                     .currentHealth = 50,
-                    .maxHealth = 50,
+                    .health = 50,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 120,
                     .defense = 20,
@@ -507,6 +518,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_FRONT,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -522,9 +534,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 300,
-                    .maxHealth = 300,
+                    .health = 300,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 100,
                     .defense = 100,
@@ -545,6 +557,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -560,9 +573,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 400,
                     .currentHealth = 120,
-                    .maxHealth = 120,
+                    .health = 120,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 150,
                     .defense = 50,
@@ -583,6 +596,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_FRONT,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -598,9 +612,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 200,
-                    .maxHealth = 200,
+                    .health = 200,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 200,
                     .defense = 300,
@@ -621,6 +635,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_TRUE_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -636,9 +651,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 500,
-                    .maxHealth = 500,
+                    .health = 500,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 80,
                     .defense = 100,
@@ -659,6 +674,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_TRUE_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -674,9 +690,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 200,
-                    .maxHealth = 200,
+                    .health = 200,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 150,
                     .defense = 50,
@@ -697,6 +713,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_BACK,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -712,9 +729,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 100,
-                    .maxHealth = 100,
+                    .health = 100,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 260,
                     .defense = 500,
@@ -735,6 +752,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         
@@ -750,9 +768,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 500,
-                    .maxHealth = 500,
+                    .health = 500,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 140,
                     .defense = 100,
@@ -773,6 +791,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_GORLAK_EQUIP,
+            "The Gorlak nods approvingly and disappears in a puff of magic.",
         };
         break;
 
@@ -788,9 +807,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 400,
-                    .maxHealth = 400,
+                    .health = 400,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 150,
                     .speed = 120,
                     .defense = 100,
@@ -811,6 +830,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         case EN_FIRE_ELEMENTAL:
@@ -825,9 +845,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 300,
-                    .maxHealth = 300,
+                    .health = 300,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 175,
                     .speed = 200,
                     .defense = 90,
@@ -848,6 +868,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         case EN_GIANT_FROG:
@@ -862,9 +883,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 1000,
-                    .maxHealth = 1000,
+                    .health = 1000,
                     .currentStamina = 1000,
-                    .maxStamina = 1000,
+                    .stamina = 1000,
                     .staminaRegen = 255,
                     .speed = 200,
                     .defense = 200,
@@ -885,6 +906,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
         };
         break;
         case EN_FROG_STINKFLY:
@@ -899,9 +921,9 @@ Enemy InitEnemyData(ENEMY_ID id)
 
                     .ticksUntilNextTurn = 0,
                     .currentHealth = 400,
-                    .maxHealth = 400,
+                    .health = 400,
                     .currentStamina = 1000,
-                    .maxStamina = 500,
+                    .stamina = 500,
                     .staminaRegen = 1000,
                     .speed = 300,
                     .defense = 110,
@@ -922,6 +944,86 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
+            "\0",
+        };
+        break;
+        break;
+        case EN_QUICKPIG:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Quickpig",
+                    .tileset = TL_COMMUNITY,
+                    .tileLookupPosition = (Vector2){1,0},
+                    .color = brown,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 800,
+                    .health = 800,
+                    .currentStamina = 200,
+                    .stamina = 200,
+                    .staminaRegen = 1000,
+                    .speed = 240,
+                    .defense = 240,
+                    .armor = 0,
+                    .critBonus = 40,
+                    .critRate = 40,
+                    .critCounter = 0,
+                    .mastery = 100,
+                    .targetPriority = 50,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_QPIG_ROB, AB_QPIG_SPRINT, AB_QPIG_TACKLE, AB_WAIT}, 4),
+                .abilityCount = 4,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_QPIG_ROB,
+            "\0",
+        };
+        break;
+        case EN_PIGJAR:
+        Color* pickedcolor[16] = {beige, beige, beige, beige, brown, brown, brown, brown, orange, red, skyblue, raywhite, gold, lightgray, lime, purple};
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Jar",
+                    .tileset = TL_COMMUNITY,
+                    .tileLookupPosition = (rand() % 8 == 0)? (Vector2){2,0} : (Vector2){3,0},
+                    .color = pickedcolor[(rand() % 16)],
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 4,
+                    .health = 4,
+                    .currentStamina = 0,
+                    .stamina = 0,
+                    .staminaRegen = 0,
+                    .speed = 0,
+                    .defense = 250,
+                    .armor = 15,
+                    .critBonus = 500,
+                    .critRate = 0,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 100,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_WAIT}, 1),
+                .abilityCount = 1,
+                .creatureEffect = LE_ONDTH_JAR_BREAK_GOODIES,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+            "\0",
         };
         break;
     }
