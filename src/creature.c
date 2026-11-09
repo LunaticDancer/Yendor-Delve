@@ -6,7 +6,6 @@
 #include "colors.h"
 #include "drawing.h"
 #include "audio.h"
-#include "item.h"
 
 extern struct AppState appState;
 extern ITEM_ID itemPoolTier1[];
@@ -3041,11 +3040,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Speed.");
         AddMessageToFeed(message);
-        for (int i = 0; i < numberOfTargets; i++)
-        {
-            AddCreatureToFlicker(targets[i]);
-            targets[i]->encounterStats.speed += primaryEffectValue;
-        }
+        AddCreatureToFlicker(caster);
+        caster->encounterStats.speed += primaryEffectValue;
         break;
     case AB_QPIG_TACKLE:
         primaryEffectValue = (70 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
