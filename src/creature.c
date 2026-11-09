@@ -1705,6 +1705,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         caster->baseStats.color = beige;
         caster->abilities = InitAbilities(abilities, abCount);
         caster->abilityCount = abCount;
+        caster->creatureEffect = targets[0]->creatureEffect;
         if(targets[0]->creatureEffect != LE_NONE)
         {
             ApplyLingeringEffect(caster,(LingeringEffect){targets[0]->creatureEffect,0,0,0,true});
