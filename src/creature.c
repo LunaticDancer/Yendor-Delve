@@ -158,7 +158,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONDTH_JAR_BREAK_GOODIES: return "On death, drop a random tier 2 item.";
         case LE_ONENC_COIN: return "At the start of combat, you move first.";
         case LE_ONENC_ILLUSION_PROTECT: return "At the start of combat, you gain 1 Protection.";
-        case LE_REPLDMG_ROSE_SIGNET: return "Instead of damaging others, apply half that much Bleed.";
+        case LE_REPLDMG_ROSE_SIGNET: return "Instead of dealing damage, apply half that much Bleed.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
