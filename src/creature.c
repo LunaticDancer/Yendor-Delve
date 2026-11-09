@@ -295,7 +295,8 @@ void HandleStartOfCombatEffects(CreatureStats* c)
         switch (c->lingeringEffects[i].effectId)
         {
             case LE_ONENC_COIN:
-            message = CombineStrings(c->baseStats.name, " wins the coin flip and acts first.");
+            message = CombineStrings("The coin's charm of luck allows ",c->baseStats.name);
+            message = CombineStrings(message, " to act first.");
             AddMessageToFeed(message);
             c->baseStats.ticksUntilNextTurn = 0;
             break;

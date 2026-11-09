@@ -494,7 +494,7 @@ Item InitItem(ITEM_ID id)
             id,
             "Hallowed Flesh",
             TL_ITEMS,
-            (Vector2){7,4},
+            (Vector2){3,7},
             beige,
             ES_TORSO,
             CreateEmptyStatBonuses(),
@@ -770,7 +770,6 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.mastery = -50;
         result.statBonuses.targetPriority = 50;
-        result.statBonuses.staminaRegen = 70;
         result.statBonuses.defense = 70;
         result.statBonuses.health = 750;
         
@@ -905,6 +904,7 @@ Item InitItem(ITEM_ID id)
             LE_NONE,
         };
         result.statBonuses.mastery = 80;
+        result.statBonuses.defense = 40;
         result.statBonuses.speed = -10;
         
         return result;
@@ -921,6 +921,7 @@ Item InitItem(ITEM_ID id)
             LE_NONE,
         };
         result.statBonuses.mastery = 80;
+        result.statBonuses.defense = 40;
         result.statBonuses.speed = -10;
         
         return result;
@@ -951,7 +952,7 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
             LE_ONENC_ILLUSION_PROTECT,
         };
-        result.statBonuses.armor = 2;
+        result.statBonuses.armor = 10;
         result.statBonuses.targetPriority = -50;
         
         return result;
@@ -1016,7 +1017,7 @@ Item InitItem(ITEM_ID id)
             LE_REPLDMG_ROSE_SIGNET,
         };
         result.statBonuses.mastery = 50;
-        result.statBonuses.staminaRegen = 20;
+        result.statBonuses.staminaRegen = 50;
         result.statBonuses.critBonus = 20;
         
         return result;
