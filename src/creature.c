@@ -1194,9 +1194,9 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (70 + 40% Mastery) Damage.");
         return result;
     case AB_QPIG_SPRINT:
-        sprintf(strnum, "%.0f",(GET_SCALING(caster, mastery) * 0.3));
+        sprintf(strnum, "%.0f",4);
         result = CombineStrings("Gain ", strnum);
-        result = CombineStrings(result, " (30% Mastery) Speed.");
+        result = CombineStrings(result, " (40% Mastery) Speed.");
         return result;
         
     default:
@@ -2950,7 +2950,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         break;
     case AB_FROG_FLY_BUZZ:
         primaryEffectValue = ((20 + GET_SCALING(caster, speed) * 0.1) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
-        sprintf(strnum, "%d", primaryEffectValue);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " frantically flies around, dealing ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " damage to ");
@@ -2969,7 +2969,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             (GET_SCALING(caster, mastery) * 0.25)+
             (GET_SCALING(caster, defense) * 0.10)
             ) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
-        sprintf(strnum, "%d", primaryEffectValue);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " launches its full body weight at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, ", dealing ");
@@ -2984,7 +2984,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         break; 
     case AB_FROG_DEVOUR:
         primaryEffectValue = ((50 + (GET_SCALING(caster, mastery) * 0.50)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
-        sprintf(strnum, "%d", primaryEffectValue);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " fires its tongue at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, " at a blinding speed, dealing ");
@@ -3035,7 +3035,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_QPIG_SPRINT:
-        primaryEffectValue = (GET_SCALING(caster, mastery) * 0.3);
+        primaryEffectValue = (GET_SCALING(caster, mastery) * 0.4);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " picks up the pace and gains ");
         message = CombineStrings(message, strnum);
@@ -3049,7 +3049,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         break;
     case AB_QPIG_TACKLE:
         primaryEffectValue = (70 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
-        sprintf(strnum, "%d", primaryEffectValue);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " dashes at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, " and tackles them, dealing ");
@@ -3064,7 +3064,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         break; 
     case AB_QPIG_ROB:
         primaryEffectValue = (50 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
-        sprintf(strnum, "%d", primaryEffectValue);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         bool stealing_item = caster->statusEffects[SE_BAGGED] == 0;
         if (stealing_item) {
             short theft_options = 0;
