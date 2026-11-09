@@ -890,10 +890,10 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        sprintf(strnum, "%.0f", ((200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.2)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (50 + 100% Mastery) Damage and apply Confusion for ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (100 + 120% Mastery) moments to an enemy.");
+        result = CombineStrings(result, " (150 + 150% Mastery) moments to an enemy.");
         return result;
     case AB_CULTIST_MANIA:
         sprintf(strnum, "%.0f", ((250 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true));
@@ -939,21 +939,17 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
                 GET_SCALING(&appState.stateData.gameState.stateData.battleState.enemies[i].stats, defense))) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), 
                 &appState.stateData.gameState.stateData.battleState.enemies[i].stats));
         }
-
-        //primaryEffectValue = (10 + GET_SCALING(caster, mastery) * 0.2 +
-        //    MAX(0, GET_SCALING(caster, defense) - 
-         //   GET_SCALING(targets[0], defense))) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%.0f", ((50+ (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Gain ", strnum);
         sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (50 + 80% Mastery) Shield. Deal ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (10 + 20% Mastery) damage to an enemy. If your Defense is higher than the target's, the damage is further amplified by the difference.");
+        result = CombineStrings(result, " (20 + 30% Mastery) damage to an enemy. If your Defense is higher than the target's, the damage is further amplified by the difference.");
         return result;
     case AB_GUIDE_HARMONIZE:
-        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Give every ally ", strnum);
-        result = CombineStrings(result, " (40 + 80% Mastery) Defense.");
+        result = CombineStrings(result, " (40 + 100% Mastery) Defense.");
         return result;
     case AB_GUIDE_DISTRACT:
         sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true));
@@ -1903,7 +1899,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     break;
     case AB_CULTIST_MADDENING_TOUCH:
         primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
-        short cultistMadTouchConfusion = (200 + GET_SCALING(caster, mastery) * 1.2) * CalculateEffectAmplification(caster, true);
+        short cultistMadTouchConfusion = (150 + GET_SCALING(caster, mastery) * 1.5) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " invades ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -2168,7 +2164,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         targets[0]->encounterStats.speed -= primaryEffectValue;
         break;
     case AB_GUIDE_RESONANT_STRIKE:
-        primaryEffectValue = (10 + GET_SCALING(caster, mastery) * 0.2 +
+        primaryEffectValue = (20 + GET_SCALING(caster, mastery) * 0.3 +
             MAX(0, GET_SCALING(caster, defense) - 
             GET_SCALING(targets[0], defense))) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         short guideResonantStrikeShield = (50 + GET_SCALING(caster, mastery) * 0.8) * CalculateEffectAmplification(caster, true);
@@ -2187,7 +2183,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_GUIDE_HARMONIZE:
-        primaryEffectValue = (40 + GET_SCALING(caster, mastery) * 0.8) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (40 + GET_SCALING(caster, mastery) * 1.0) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " plays a somber note with their bell, attuning the team to its resonance, granting all allies ");
         message = CombineStrings(message, strnum);
