@@ -1181,19 +1181,18 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings("Give every ally ", strnum);
         result = CombineStrings(result, " (20 + 10% Defense) Mastery.");
         return result;
-        
     case AB_QPIG_ROB:
-        sprintf(strnum, "%.0f",(50 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f",(100 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (50 + 30% Mastery + 10% Speed) Damage, then permanently steal an item from their person if you haven't done so already.");
         return result;
     case AB_QPIG_TACKLE:
-        sprintf(strnum, "%.0f",(70 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f",(150 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (70 + 40% Mastery) Damage and delay the target's turn by ");
         sprintf(strnum, "%d", GET_SCALING(caster, speed));
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " moments.");
+        result = CombineStrings(result, " (100% Speed) moments.");
         return result;
     case AB_QPIG_SPRINT:
         sprintf(strnum, "%.0f",(GET_SCALING(caster, mastery) * 0.4));
@@ -3047,7 +3046,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         caster->encounterStats.speed += primaryEffectValue;
         break;
     case AB_QPIG_TACKLE:
-        primaryEffectValue = (70 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (150 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " dashes at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -3065,7 +3064,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break; 
     case AB_QPIG_ROB:
-        primaryEffectValue = (50 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (100 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         bool stealing_item = caster->statusEffects[SE_BAGGED] == 0;
         if (stealing_item) {
