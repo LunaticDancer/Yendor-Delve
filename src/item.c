@@ -1004,5 +1004,21 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.damageMultiplier = 0.1;
         
         return result;
+        case ITEM_ROSE_SIGNET:
+        result = (Item){
+            id,
+            "Rose Signet",
+            TL_COMMUNITY,
+            (Vector2){6,7},
+            maroon,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+            LE_REPLDMG_ROSE_SIGNET,
+        };
+        result.statBonuses.mastery = 50;
+        result.statBonuses.staminaRegen = 20;
+        result.statBonuses.critBonus = 20;
+        
+        return result;
     }
 }
