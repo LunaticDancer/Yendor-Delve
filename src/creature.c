@@ -158,6 +158,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONDTH_JAR_BREAK_GOODIES: return "On death, drop a random tier 2 item.";
         case LE_ONENC_COIN: return "At the start of combat, you move first.";
         case LE_ONENC_ILLUSION_PROTECT: return "At the start of combat, you gain 1 Protection.";
+        case LE_REPLDMG_ROSE_SIGNET: return "Instead of damaging others, apply half that much Bleed";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
@@ -523,11 +524,29 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
     bool wasAlreadyDead = (*target).baseStats.currentHealth <= 0;
     short finalValue = 0;
     finalValue = (trueDamage ? (short)damage : CalculateDamage((short)damage, target));
-    if(finalValue < 0)
+    if(finalValue <= 0)
     {
         finalValue = 0;
         AddMessageToFeed("The attack was too weak to deal any damage.");
+    } else if (dealer) {
+        // Damage replacement effects
+        for (int i = 0; i < LINGERING_EFFECTS; i++)
+            {
+                if (dealer->lingeringEffects[i].effectId == LE_NONE)
+                    continue;
+                switch (dealer->lingeringEffects[i].effectId)
+                {
+                    case LE_REPLDMG_ROSE_SIGNET:
+                        if (finalValue > 0 && dealer!= target) {
+                            AddMessageToFeed("The Rose Signet dictates the damage is replaced with half that much Bleed.");
+                            target->statusEffects[SE_BLEED] += (short)(finalValue * 0.5);
+                            finalValue = 0;
+                        }
+                        break;
+                }
+            }
     }
+
     (*target).encounterStats.shield -= finalValue;
     if ((*target).encounterStats.shield < 0)
     {
