@@ -1194,7 +1194,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (70 + 40% Mastery) Damage.");
         return result;
     case AB_QPIG_SPRINT:
-        sprintf(strnum, "%.0f",4);
+        sprintf(strnum, "%.0f",(GET_SCALING(caster, mastery) * 0.4));
         result = CombineStrings("Gain ", strnum);
         result = CombineStrings(result, " (40% Mastery) Speed.");
         return result;
