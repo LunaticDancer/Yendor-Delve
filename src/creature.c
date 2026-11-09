@@ -3066,6 +3066,13 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         (50 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         bool stealing_item = caster->statusEffects[SE_BAGGED] == 0;
+        
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        
         if (stealing_item) {
             short theft_options = 0;
             int theft_slots[4];
@@ -3080,8 +3087,6 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             // find that target's gear slots
             if (theft_victim_index >= 0) {
                 for (int i = 0; i < 4; i++) {
-                    // AddMessageToFeed(&appState.stateData.gameState.playerTeam[theft_victim_index].items[i]);
-                    AddMessageToFeed(appState.stateData.gameState.playerTeam[theft_victim_index].items[i].itemId != ITEM_NONE? "filled": "empty");
                     if (appState.stateData.gameState.playerTeam[theft_victim_index].items[i].itemId != ITEM_NONE){
                         theft_options +=1;
                         theft_slots[theft_options-1] = i;
@@ -3092,7 +3097,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             if (theft_options == 0) {
                 message = CombineStrings((*caster).baseStats.name, " swiftly strikes at ");
                 message = CombineStrings(message, targets[0]->baseStats.name);
-                message = CombineStrings(message, " and dealing ");
+                message = CombineStrings(message, ", dealing ");
                 message = CombineStrings(message, strnum);
                 message = CombineStrings(message, " damage, but fails to steal anything.");
             } else {
@@ -3101,7 +3106,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
 
                 message = CombineStrings((*caster).baseStats.name, " swiftly strikes at ");
                 message = CombineStrings(message, targets[0]->baseStats.name);
-                message = CombineStrings(message, " and dealing ");
+                message = CombineStrings(message, ", dealing ");
                 message = CombineStrings(message, strnum);
                 message = CombineStrings(message, " damage, stealing their ");
                 message = CombineStrings(message, appState.stateData.gameState.playerTeam[theft_victim_index].items[stolen_item_slot].name);
@@ -3128,16 +3133,11 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         } else {
             message = CombineStrings((*caster).baseStats.name, " swiftly strikes at ");
             message = CombineStrings(message, targets[0]->baseStats.name);
-            message = CombineStrings(message, " and dealing ");
+            message = CombineStrings(message, ", dealing ");
             message = CombineStrings(message, strnum);
             message = CombineStrings(message, " damage, opting not to steal any more items.");
         }
         AddMessageToFeed(message);
-        for (int i = 0; i < numberOfTargets; i++)
-        {
-            AddCreatureToFlicker(targets[i]);
-            DealDamage(primaryEffectValue, targets[i], false, caster);
-        }
         break; 
     
     default:
