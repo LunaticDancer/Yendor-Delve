@@ -871,6 +871,45 @@ Enemy InitEnemyData(ENEMY_ID id)
             "\0",
         };
         break;
+        case EN_MANRAT:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Manrat",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){14,3},
+                    .color = lightgray,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 180,
+                    .health = 180,
+                    .currentStamina = 1000,
+                    .stamina = 1000,
+                    .staminaRegen = 150,
+                    .speed = 150,
+                    .defense = 120,
+                    .armor = 1,
+                    .critBonus = 100,
+                    .critRate = 5,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 600,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_MANRAT_RALLYING_ASSAULT,AB_MANRAT_STRUGGLE,AB_MANRAT_PINPOINT,AB_WAIT}, 4),
+                .abilityCount = 4,
+                .creatureEffect = LE_ONDTH_MANRAT,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+            "\0",
+        };
+        break;
         case EN_GIANT_FROG:
         return (Enemy){
             id,
