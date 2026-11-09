@@ -331,12 +331,14 @@ void HandleOnDeathEffects(CreatureStats *c)
                 AddMessageToFeed(message);
                 DealDamage(1000, &appState.stateData.gameState.stateData.battleState.enemies[2-j].stats, true, NULL);
             }
+            break;
             case LE_ONDTH_JAR_BREAK_GOODIES:
-                Item jarBreakItem = InitItem(itemPoolTier2[rand() % ITEM_POOL_TIER_TWO_SIZE]);
+                Item jarBreakItem = InitItem(itemPoolTier1[rand() % ITEM_POOL_TIER_ONE_SIZE]);
                 message = CombineStrings("Out of the jar drops ", jarBreakItem.name);
                 message = CombineStrings(message, "! You swiftly pick it up and add it to your shared inventory.");
                 AddItemToInventory(jarBreakItem);
                 AddMessageToFeed(message);
+            break;
             case LE_ONDTH_MANRAT:
             bool hasAllies = false;
             for(int j = 0; j < 3; j++)
@@ -349,6 +351,7 @@ void HandleOnDeathEffects(CreatureStats *c)
             if(hasAllies == false) continue;
             message = CombineStrings((*c).baseStats.name, "'s death is avenged by its remaining allies, who gain 100 Berserk and immediately take a turn.");
             AddMessageToFeed(message);
+            break;
         }
     }
     
