@@ -1975,7 +1975,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             + appState.stateData.gameState.stateData.battleState.prayerFatigue * 15) < 400 * CalculateEffectAmplification(caster, true))
         {
             CreatureStats* target;
-            switch(rand() % 15)
+            switch(rand() % 16)
             {
                 case 0:
                 target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
@@ -2078,6 +2078,10 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 message = CombineStrings("The Mindless One raises ", target->baseStats.name);
                 message = CombineStrings(message, " from the dead. Something's off...");
                 AddMessageToFeed(message);
+                break;
+                case 14:
+                AddMessageToFeed("Suddenly the world seems a little nicer.");
+                appState.stateData.gameState.karmicBalance += 1;
                 break;
                 default:
                 AddMessageToFeed("The Mindless One laughs jubilantly, the otherworldly voice echoing across the cave system.");
