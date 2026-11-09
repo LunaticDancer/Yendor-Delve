@@ -135,7 +135,7 @@ void InitEncounterPools()
     encounterPoolTier1[9] = ENC_ELEMENTAL_DUO;
 
     encounterPoolTier2[0] = ENC_GIANT_FROG;
-    encounterPoolTier2[1] = ENC_GIANT_FROG;
+    encounterPoolTier2[1] = ENC_JAR_CAMP;
     encounterPoolTier2[2] = ENC_GIANT_FROG;
     encounterPoolTier2[3] = ENC_GIANT_FROG;
 }
@@ -395,6 +395,19 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 darkblue,
                 "This ambush predator usually just goes for bugs, but anything that fits in its mouth is fair game.",
                 {EN_FROG_STINKFLY, EN_GIANT_FROG, EN_FROG_STINKFLY},
+                false,
+            };
+        case ENC_JAR_CAMP:
+            return (Encounter)
+            {
+                id,
+                "Abandoned Hideout",
+                "A Quickpig dashes between the jars.",
+                TL_COMMUNITY,
+                (Vector2){3, 0},
+                brown,
+                "A camp filled with jars, probably with goodies around. Beware of scavengers!",
+                {EN_PIGJAR, EN_QUICKPIG, EN_PIGJAR},
                 false,
             };
         default:

@@ -947,5 +947,84 @@ Enemy InitEnemyData(ENEMY_ID id)
             "\0",
         };
         break;
+        break;
+        case EN_QUICKPIG:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Quickpig",
+                    .tileset = TL_COMMUNITY,
+                    .tileLookupPosition = (Vector2){1,0},
+                    .color = brown,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 800,
+                    .health = 800,
+                    .currentStamina = 200,
+                    .stamina = 200,
+                    .staminaRegen = 1000,
+                    .speed = 240,
+                    .defense = 240,
+                    .armor = 0,
+                    .critBonus = 40,
+                    .critRate = 40,
+                    .critCounter = 0,
+                    .mastery = 100,
+                    .targetPriority = 50,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_QPIG_ROB, AB_QPIG_SPRINT, AB_QPIG_TACKLE, AB_WAIT}, 4),
+                .abilityCount = 4,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_QPIG_ROB,
+            "\0",
+        };
+        break;
+        case EN_PIGJAR:
+        Color* pickedcolor[16] = {beige, beige, beige, beige, brown, brown, brown, brown, orange, red, skyblue, raywhite, gold, lightgray, lime, purple};
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Jar",
+                    .tileset = TL_COMMUNITY,
+                    .tileLookupPosition = (rand() % 8 == 0)? (Vector2){2,0} : (Vector2){3,0},
+                    .color = pickedcolor[(rand() % 16)],
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 4,
+                    .health = 4,
+                    .currentStamina = 0,
+                    .stamina = 0,
+                    .staminaRegen = 0,
+                    .speed = 0,
+                    .defense = 250,
+                    .armor = 15,
+                    .critBonus = 500,
+                    .critRate = 0,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 100,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_WAIT}, 1),
+                .abilityCount = 1,
+                .creatureEffect = LE_ONDTH_JAR_BREAK_GOODIES,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+            "\0",
+        };
+        break;
     }
 }

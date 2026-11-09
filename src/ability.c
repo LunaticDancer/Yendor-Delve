@@ -717,6 +717,30 @@ Ability InitAbility(ABILITY id)
             50,
             AF_TARGETS_ENEMIES
         };
+        case AB_QPIG_ROB:
+        return (Ability)
+        {
+            id,
+            "Rob",
+            50,
+            AF_TARGETS_ENEMIES
+        };
+        case AB_QPIG_TACKLE:
+        return (Ability)
+        {
+            id,
+            "Tackle",
+            50,
+            AF_TARGETS_ENEMIES
+        };
+        case AB_QPIG_SPRINT:
+        return (Ability)
+        {
+            id,
+            "Sprint",
+            70,
+            AF_TARGETS_SELF
+        };
     }
 }
 
