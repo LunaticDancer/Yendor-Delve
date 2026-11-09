@@ -855,6 +855,18 @@ void DrawStatusEffects(Vector2 position, CreatureStats* _creature)
                 (Vector2){0,0}, 0, *purple
             );
             break;
+            case SE_BAGGED:
+            DrawTexturePro(
+                GetTileset(TL_COMMUNITY),
+                (Rectangle){
+                    1 * TILE_SIZE,
+                    0 * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE,
+                },
+                (Rectangle){position.x, position.y+hOffset, TILE_SIZE, TILE_SIZE, },
+                (Vector2){0,0}, 0, *red
+            );
+            break;
         }
         hOffset += 18;
     }

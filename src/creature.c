@@ -1183,6 +1183,22 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (20 + 10% Defense) Mastery.");
         return result;
         
+    case AB_QPIG_ROB:
+        sprintf(strnum, "%.0f",(50 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (50 + 30% Mastery + 10% Speed) Damage, then permanently steal an item from their person if you haven't done so already.");
+        return result;
+    case AB_QPIG_TACKLE:
+        sprintf(strnum, "%.0f",(70 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (70 + 40% Mastery) Damage.");
+        return result;
+    case AB_QPIG_SPRINT:
+        sprintf(strnum, "%.0f",(GET_SCALING(caster, mastery) * 0.3));
+        result = CombineStrings("Gain ", strnum);
+        result = CombineStrings(result, " (30% Mastery) Speed.");
+        return result;
+        
     default:
         return "Ability description missing, oopsie!";
     }
@@ -3018,6 +3034,110 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             targets[i]->encounterStats.mastery += primaryEffectValue;
         }
         break;
+    case AB_QPIG_SPRINT:
+        primaryEffectValue = (GET_SCALING(caster, mastery) * 0.3);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " picks up the pace and gains ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Speed.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->encounterStats.speed += primaryEffectValue;
+        }
+        break;
+    case AB_QPIG_TACKLE:
+        primaryEffectValue = (70 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " dashes at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " and tackles them, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        break; 
+    case AB_QPIG_ROB:
+        (50 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        bool stealing_item = caster->statusEffects[SE_BAGGED] == 0;
+        if (stealing_item) {
+            short theft_options = 0;
+            int theft_slots[4];
+            int theft_victim_index = -1;
+            
+            // find the target's index
+            for (int i = 0; i < 3; i++) {
+                if (&appState.stateData.gameState.playerTeam[i].stats == targets[0]) {
+                    theft_victim_index = i;
+                }
+            }
+            // find that target's gear slots
+            if (theft_victim_index >= 0) {
+                for (int i = 0; i < 4; i++) {
+                    // AddMessageToFeed(&appState.stateData.gameState.playerTeam[theft_victim_index].items[i]);
+                    AddMessageToFeed(appState.stateData.gameState.playerTeam[theft_victim_index].items[i].itemId != ITEM_NONE? "filled": "empty");
+                    if (appState.stateData.gameState.playerTeam[theft_victim_index].items[i].itemId != ITEM_NONE){
+                        theft_options +=1;
+                        theft_slots[theft_options-1] = i;
+                    }
+                }
+            }
+            // if nothing to steal
+            if (theft_options == 0) {
+                message = CombineStrings((*caster).baseStats.name, " swiftly strikes at ");
+                message = CombineStrings(message, targets[0]->baseStats.name);
+                message = CombineStrings(message, " and dealing ");
+                message = CombineStrings(message, strnum);
+                message = CombineStrings(message, " damage, but fails to steal anything.");
+            } else {
+                // Choose an item slot
+                int stolen_item_slot = theft_slots[rand() % theft_options];
+
+                message = CombineStrings((*caster).baseStats.name, " swiftly strikes at ");
+                message = CombineStrings(message, targets[0]->baseStats.name);
+                message = CombineStrings(message, " and dealing ");
+                message = CombineStrings(message, strnum);
+                message = CombineStrings(message, " damage, stealing their ");
+                message = CombineStrings(message, appState.stateData.gameState.playerTeam[theft_victim_index].items[stolen_item_slot].name);
+                message = CombineStrings(message, " right off their person! The item is completely ruined in the process.");
+                
+                // steal the item for realsies
+                
+                // remove lingering effect
+                Item removedItemExample = InitItem(appState.stateData.gameState.playerTeam[theft_victim_index].items[stolen_item_slot].itemId);
+                for (int i = 0; i < LINGERING_EFFECTS; i++)
+                { 
+                    if (removedItemExample.triggerAbility == targets[0]->lingeringEffects[i].effectId) {
+                        targets[0]->lingeringEffects[i].effectId = LE_NONE;
+                        targets[0]->lingeringEffects[i].triggerLimit = 0;
+                        targets[0]->lingeringEffects[i].tickDuration = 0;
+                        break;
+                    }
+                }
+                // remove stats and the actual item
+                appState.stateData.gameState.playerTeam[theft_victim_index].items[stolen_item_slot].itemId = ITEM_NONE;
+                UnequipItem(&appState.stateData.gameState.playerTeam[theft_victim_index], stolen_item_slot);
+                caster->statusEffects[SE_BAGGED] = 1;
+            }
+        } else {
+            message = CombineStrings((*caster).baseStats.name, " swiftly strikes at ");
+            message = CombineStrings(message, targets[0]->baseStats.name);
+            message = CombineStrings(message, " and dealing ");
+            message = CombineStrings(message, strnum);
+            message = CombineStrings(message, " damage, opting not to steal any more items.");
+        }
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
         break; 
     
     default:
