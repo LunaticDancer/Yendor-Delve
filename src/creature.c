@@ -341,14 +341,13 @@ void HandleOnDeathEffects(CreatureStats *c)
             bool hasAllies = false;
             for(int j = 0; j < 3; j++)
             {
-                if(appState.stateData.gameState.stateData.battleState.enemies[j].stats.baseStats.currentHealth > 0) continue;
-                appState.stateData.gameState.stateData.battleState.enemies[j]->statusEffects[SE_BERSERK]+=100;
-                appState.stateData.gameState.stateData.battleState.enemies[j]->baseStats.ticksUntilNextTurn = 0;
+                if(appState.stateData.gameState.stateData.battleState.enemies[j].stats.baseStats.currentHealth < 1) continue;
+                appState.stateData.gameState.stateData.battleState.enemies[j].stats.statusEffects[SE_BERSERK]+=100;
+                appState.stateData.gameState.stateData.battleState.enemies[j].stats.baseStats.ticksUntilNextTurn = 0;
                 hasAllies = true;
             }
-            if(hasAllies == true) continue;
-            message = CombineStrings(c.stats.baseStats.name);
-            message = CombineStrings(message, "'s death is avenged by its remaining allies, who gain 100 Berserk and immediately take a turn.");
+            if(hasAllies == false) continue;
+            message = CombineStrings((*c).baseStats.name, "'s death is avenged by its remaining allies, who gain 100 Berserk and immediately take a turn.");
             AddMessageToFeed(message);
         }
     }
@@ -1173,7 +1172,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (50 + 50% Mastery) damage to an enemy and give all allies ");
         sprintf(strnum, "%.0f", ((20 + GET_SCALING(caster, mastery) * 0.3)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (20 + 30% Mastery) Speed.";
+        result = CombineStrings(result, " (20 + 30% Mastery) Speed.");
         return result;
     case AB_MANRAT_STRUGGLE:
         damage = ((30 + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
@@ -1183,7 +1182,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (30 + 30% Mastery) damage to all enemies.");
         return result;
     case AB_MANRAT_PINPOINT:
-        result = "Apply Pain to an enemy equal to 5 + 5% of their Defense .";
+        result = "Apply Pain to an enemy equal to 5 + 5% of their Defense.";
         return result;
     case AB_FROG_FLY_STINK:
         sprintf(strnum, "%.0f", ((50 + GET_SCALING(caster, mastery) * 0.3)));

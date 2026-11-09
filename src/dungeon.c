@@ -137,8 +137,8 @@ void InitEncounterPools()
 
     encounterPoolTier2[0] = ENC_GIANT_FROG;
     encounterPoolTier2[1] = ENC_JAR_CAMP;
-    encounterPoolTier2[2] = ENC_GIANT_FROG;
-    encounterPoolTier2[3] = ENC_GIANT_FROG;
+    encounterPoolTier2[2] = ENC_CHEST;
+    encounterPoolTier2[3] = ENC_MIMIC;
 }
 
 void InitItemPools()
