@@ -794,22 +794,22 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_MAGUS_DISINTEGRATE:
         damage = ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.5) + 
             (caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
-            +MAGUS_DISINTEGRATE_COST) * 0.6) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+            +MAGUS_DISINTEGRATE_COST + caster->statusEffects[SE_EXHAUSTION]) * 0.6) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.5) + 
             (caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
-            +MAGUS_DISINTEGRATE_COST) * 0.6) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+            +MAGUS_DISINTEGRATE_COST + caster->statusEffects[SE_EXHAUSTION]) * 0.6) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (20 + 120% Mastery + 50% missing Stamina) damage to an enemy.");
         return result;
     case AB_MAGUS_ARCANE_BLAST:
         damage = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) + 
             (caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
-            +MAGUS_ARCANE_BLAST_COST) * 0.2) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+            +MAGUS_ARCANE_BLAST_COST + caster->statusEffects[SE_EXHAUSTION]) * 0.2) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) + 
             (caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
-            +MAGUS_ARCANE_BLAST_COST) * 0.2) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+            +MAGUS_ARCANE_BLAST_COST + caster->statusEffects[SE_EXHAUSTION]) * 0.2) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (50 + 80% Mastery + 20% missing Stamina) damage to all enemies.");
         return result;
@@ -817,7 +817,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         sprintf(strnum, "%.0f", (40+(caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Give an ally ", strnum);
         sprintf(strnum, "%.0f", ((10+(caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
-        +MAGUS_TUTOR_COST) * 0.01)) * CalculateEffectAmplification(caster, false));
+        +MAGUS_TUTOR_COST + caster->statusEffects[SE_EXHAUSTION]) * 0.01)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, " (40 + 40% Mastery) Mastery and ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (10 + 1% missing Stamina) Crit Multiplier.");
@@ -1193,17 +1193,23 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (50 + 30\% Mastery) Exhaustion to an enemy and give them half that much Target Priority.");
         return result;
     case AB_FROG_FLY_BUZZ:
+        ShowEnemyDamageOverlays(((20 + GET_SCALING(caster, speed) * 0.1)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), false);
         sprintf(strnum, "%.0f", ((20 + GET_SCALING(caster, speed) * 0.1)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (20 + 10\% Speed) damage to an enemy and become Untargetable for 200 moments.");
         return result;
     case AB_FROG_DEVOUR:
+        ShowEnemyDamageOverlays(((50 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), false);
         sprintf(strnum, "%.0f", ((50 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (50 + 50\% Mastery) damage to an enemy. ");
         result = CombineStrings(result, "Then, if the sum of its health and stamina are less than 500, swallow it whole.");
         return result;
     case AB_FROG_STOMP:
+        ShowEnemyDamageOverlays(((25 + 
+            (GET_SCALING(caster, mastery) * 0.25)+
+            (GET_SCALING(caster, defense) * 0.10)
+            )* GetDamageMult(caster) * CalculateEffectAmplification(caster, true)), false);
         sprintf(strnum, "%.0f", ((25 + 
             (GET_SCALING(caster, mastery) * 0.25)+
             (GET_SCALING(caster, defense) * 0.10)
@@ -1217,11 +1223,13 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (20 + 10% Defense) Mastery.");
         return result;
     case AB_QPIG_ROB:
+        ShowEnemyDamageOverlays((100 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true), false);
         sprintf(strnum, "%.0f",(100 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (50 + 30% Mastery + 10% Speed) Damage, then permanently steal an item from their person if you haven't done so already.");
         return result;
     case AB_QPIG_TACKLE:
+        ShowEnemyDamageOverlays((150 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true), false);
         sprintf(strnum, "%.0f",(150 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         result = CombineStrings(result, " (70 + 40% Mastery) Damage and delay the target's turn by ");
@@ -1818,7 +1826,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, " apart from the inside, dealing ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " unavoidable damage.");
+        message = CombineStrings(message, " damage.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         DealDamage(primaryEffectValue, targets[0], false, caster);
@@ -2923,7 +2931,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         targets[0]->statusEffects[SE_EXHAUSTION] += iceElemShardsExhaustion;
-        DealDamage(primaryEffectValue, targets[0], true, caster);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_ICE_ELEMENTAL_AURA:
         primaryEffectValue = ((60 + GET_SCALING(caster, mastery) * 0.8)) * CalculateEffectAmplification(caster, true);
