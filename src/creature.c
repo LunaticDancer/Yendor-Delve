@@ -1190,7 +1190,10 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_QPIG_TACKLE:
         sprintf(strnum, "%.0f",(70 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (70 + 40% Mastery) Damage.");
+        result = CombineStrings(result, " (70 + 40% Mastery) Damage and delay the target's turn by ");
+        sprintf(strnum, "%d", GET_SCALING(caster, speed));
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " moments.");
         return result;
     case AB_QPIG_SPRINT:
         sprintf(strnum, "%.0f",(GET_SCALING(caster, mastery) * 0.4));
@@ -3050,7 +3053,10 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, " and tackles them, dealing ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " damage.");
+        message = CombineStrings(message, " damage and delaying their turn by ");
+        sprintf(strnum, "%d", GET_SCALING(caster, speed));
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " moments.");
         AddMessageToFeed(message);
         for (int i = 0; i < numberOfTargets; i++)
         {
