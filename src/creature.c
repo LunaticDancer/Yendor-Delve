@@ -3066,13 +3066,6 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         (50 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         bool stealing_item = caster->statusEffects[SE_BAGGED] == 0;
-        
-        for (int i = 0; i < numberOfTargets; i++)
-        {
-            AddCreatureToFlicker(targets[i]);
-            DealDamage(primaryEffectValue, targets[i], false, caster);
-        }
-        
         if (stealing_item) {
             short theft_options = 0;
             int theft_slots[4];
@@ -3138,6 +3131,11 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             message = CombineStrings(message, " damage, opting not to steal any more items.");
         }
         AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
         break; 
     
     default:
