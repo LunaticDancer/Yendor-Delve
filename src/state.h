@@ -83,6 +83,7 @@ struct GameState
 	short teamCompMask;
 	Character playerTeam[3];
 	char floor;
+	short karmicBalance;
 	Item inventory[INVENTORY_SIZE];
 	bool isPaused;
 	char pauseMenuSelection;

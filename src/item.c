@@ -494,7 +494,7 @@ Item InitItem(ITEM_ID id)
             id,
             "Hallowed Flesh",
             TL_ITEMS,
-            (Vector2){7,4},
+            (Vector2){3,7},
             beige,
             ES_TORSO,
             CreateEmptyStatBonuses(),
@@ -770,7 +770,6 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.mastery = -50;
         result.statBonuses.targetPriority = 50;
-        result.statBonuses.staminaRegen = 70;
         result.statBonuses.defense = 70;
         result.statBonuses.health = 750;
         
@@ -905,6 +904,7 @@ Item InitItem(ITEM_ID id)
             LE_NONE,
         };
         result.statBonuses.mastery = 80;
+        result.statBonuses.defense = 40;
         result.statBonuses.speed = -10;
         
         return result;
@@ -921,6 +921,7 @@ Item InitItem(ITEM_ID id)
             LE_NONE,
         };
         result.statBonuses.mastery = 80;
+        result.statBonuses.defense = 40;
         result.statBonuses.speed = -10;
         
         return result;
@@ -951,7 +952,7 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
             LE_ONENC_ILLUSION_PROTECT,
         };
-        result.statBonuses.armor = 2;
+        result.statBonuses.armor = 10;
         result.statBonuses.targetPriority = -50;
         
         return result;
@@ -1002,6 +1003,38 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.critBonus = 30;
         result.statBonuses.critRate = 30;
         result.statBonuses.damageMultiplier = 0.1;
+        
+        return result;
+        case ITEM_TRUMPET:
+        result = (Item){
+            id,
+            "Trumpet",
+            TL_ITEMS,
+            (Vector2){17,4},
+            gold,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_ONABIL_TRUMPET,
+        };
+        result.statBonuses.critBonus = 40;
+        result.statBonuses.critRate = 40;
+        result.statBonuses.stamina = 300;
+        
+        return result;
+        case ITEM_ROSE_SIGNET:
+        result = (Item){
+            id,
+            "Rose Signet",
+            TL_COMMUNITY,
+            (Vector2){6,7},
+            maroon,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+            LE_REPLDMG_ROSE_SIGNET,
+        };
+        result.statBonuses.mastery = 50;
+        result.statBonuses.staminaRegen = 50;
+        result.statBonuses.critBonus = 20;
         
         return result;
     }
