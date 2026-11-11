@@ -3,7 +3,6 @@
 
 #include "creature.h"
 #include "item.h"
-#include "ability.h"
 
 typedef enum CHARACTER_ID
 {

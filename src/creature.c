@@ -159,7 +159,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONDTH_JAR_BREAK_GOODIES: return "On death, drop a random tier 2 item.";
         case LE_ONENC_COIN: return "At the start of combat, you move first.";
         case LE_ONENC_ILLUSION_PROTECT: return "At the start of combat, you gain 1 Protection.";
-        case LE_REPLDMG_ROSE_SIGNET: return "Instead of dealing damage, apply half that much Bleed.";
+        case LE_RPLDMG_ROSE_SIGNET: return "Instead of dealing damage, apply half that much Bleed.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
@@ -277,9 +277,18 @@ void HandleStartOfTurnEffects(CreatureStats* c)
         switch (c->lingeringEffects[i].effectId)
         {
             case LE_ONTURN_AMBROSIA:
-            if(c->statusEffects[SE_CONFUSION] < 1)
-            c->statusEffects[SE_CONFUSION] = 1;
-            break;
+                if(c->statusEffects[SE_CONFUSION] < 1)
+                c->statusEffects[SE_CONFUSION] = 1;
+                break;
+            case LE_ONABIL_CAT_WIZARD_PILLAR:
+                if(rand()%10 != 0) break;
+                switch(rand()%3)
+                {
+                    case 0: AddMessageToFeed("The enchanted pillar emits speech from its crystal: \"You're not welcome in our oasis.\""); break;
+                    case 1: AddMessageToFeed("The enchanted pillar emits speech from its crystal: \"Turn back or I will kill you.\""); break;
+                    case 2: AddMessageToFeed("The enchanted pillar emits speech from its crystal: \"You tresspass where you don't belong, typical for your kind.\""); break;
+                }
+                break;
         }
     }
 }
@@ -475,6 +484,13 @@ void HandleOnAbilityEffects(CreatureStats *c, ABILITY a, CreatureStats **targets
                 AddMessageToFeed(message);
                 c->baseStats.targetPriority += 50;
                 break;
+            case LE_ONABIL_CAT_WIZARD_PILLAR:
+                char pillarCount = (appState.stateData.gameState.stateData.battleState.enemies[0].enemyId == ENB_CAT_WIZARD_PILLAR)
+                    + (appState.stateData.gameState.stateData.battleState.enemies[2].enemyId == ENB_CAT_WIZARD_PILLAR);
+                if(appState.stateData.gameState.stateData.battleState.enemies[0].stats.statusEffects[SE_PROTECTION] >= pillarCount) break;
+                appState.stateData.gameState.stateData.battleState.enemies[1].stats.statusEffects[SE_PROTECTION]++;
+                AddMessageToFeed("The Arcane Resonator recalibrates itself, forming a protective barrier around its master.");
+                break;
         }
     }
 }
@@ -544,7 +560,7 @@ void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureSt
                     continue;
                 switch (dealer->lingeringEffects[i].effectId)
                 {
-                    case LE_REPLDMG_ROSE_SIGNET:
+                    case LE_RPLDMG_ROSE_SIGNET:
                         if (finalValue > 0 && dealer!= target) {
                             AddMessageToFeed("The Rose Signet dictates the damage is replaced with half that much Bleed.");
                             target->statusEffects[SE_BLEED] += (short)(finalValue * 0.5);
@@ -986,6 +1002,32 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings("Give ", strnum);
         result = CombineStrings(result, " (40 + 40% Mastery) Stamina to an enemy.");
         return result;
+        case AB_CAT_WIZARD_ARCANE_BLAST:
+            sprintf(strnum, "%.0f", ((50 + GET_SCALING(caster, mastery) * 1.0)) 
+            * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+            result = CombineStrings("Deal ", strnum);
+            result = CombineStrings(result, " (50 + 100% Mastery) damage to all enemies.");
+            return result;
+        case AB_CAT_WIZARD_CURSE_OF_MEEK:
+        return "Reduce an enemy's Mastery by 80%.";
+        case AB_CAT_WIZARD_HEX_OF_AMBITION:
+        return "Deal damage to an enemy equal to their Crit Progress times Crit Bonus above 100, then empty their Crit Progress.";
+        case AB_CAT_WIZARD_THOUSAND_SCRATCHES:
+            sprintf(strnum, "%.0f", ((GET_SCALING(caster, mastery) * 0.5)) 
+            * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+            result = CombineStrings("Apply ", strnum);
+            result = CombineStrings(result, " (50% Mastery) Bleed and Pain to an enemy.");
+            return result;
+        case AB_CAT_WIZARD_CRUSH:
+        return "Deal damage to an enemy equal to their Defense combined with their missing Health.";
+        case AB_CAT_WIZARD_ERECT_PILLAR:
+        return "Create an allied Arcane Resonator.";
+        case AB_CAT_WIZARD_PILLAR_ZAP:
+        return "Deal 50 unavoidable damage.";
+        case AB_CAT_WIZARD_PILLAR_OVERCLOCK:
+        return "Give all Arcane Resonators 100 Speed.";
+        case AB_CAT_WIZARD_PILLAR_AMPLIFY:
+        return "Give all allies 20 Mastery.";
     case AB_MIMIC_CHOMP:
         damage = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
@@ -2287,6 +2329,110 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         targets[0]->baseStats.currentStamina += primaryEffectValue;
+        break;
+        case AB_CAT_WIZARD_ARCANE_BLAST:
+        primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " projects an explosive wave of arcane energy, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage to all enemies.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        break;
+        case AB_CAT_WIZARD_CURSE_OF_MEEK:
+        targets[0]->encounterStats.mastery -= GET_SCALING(targets[0], mastery);
+        sprintf(strnum, "%d", GET_SCALING(targets[0], mastery));
+        message = CombineStrings((*caster).baseStats.name, " renders ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " feeble through dark magic, reducing their Mastery down to ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, ".");
+        AddMessageToFeed(message);
+        break;
+        case AB_CAT_WIZARD_HEX_OF_AMBITION:
+        primaryEffectValue = targets[0]->baseStats.critCounter * MAX(GET_SCALING(targets[0], critBonus) - 100, 1) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " turns ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, "'s hopes and aspirations against them, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and emptying their Crit Progress.");
+        AddMessageToFeed(message);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        AddCreatureToFlicker(targets[0]);
+        break;
+        case AB_CAT_WIZARD_THOUSAND_SCRATCHES:
+        primaryEffectValue = GET_SCALING(caster, mastery) * 0.5 * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " scratches ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " in a flurry, applying ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Bleed and Pain.");
+        AddMessageToFeed(message);
+        targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
+        targets[0]->statusEffects[SE_PAIN] += primaryEffectValue;
+        AddCreatureToFlicker(targets[0]);
+        break;
+        case AB_CAT_WIZARD_CRUSH:
+        primaryEffectValue = (GET_SCALING(targets[0], defense) + GET_SCALING(targets[0], health) - targets[0]->baseStats.currentHealth) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " crushes ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " with their telekinetic grip, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        AddCreatureToFlicker(targets[0]);
+        break;
+        case AB_CAT_WIZARD_ERECT_PILLAR:
+        if(appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth < 1)
+        {
+            appState.stateData.gameState.stateData.battleState.enemies[0] = InitEnemyData(ENB_CAT_WIZARD_PILLAR);
+            AddMessageToFeed("The cat magically assembles an arcane device to its left.");
+        }
+        else if(appState.stateData.gameState.stateData.battleState.enemies[2].stats.baseStats.currentHealth < 1)
+        {
+            appState.stateData.gameState.stateData.battleState.enemies[2] = InitEnemyData(ENB_CAT_WIZARD_PILLAR);
+            AddMessageToFeed("The cat magically assembles an arcane device to its right.");
+        }
+        else
+        {
+            appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
+            AddMessageToFeed("Seeing that both Arcane Resonators remain intact, Nebulon decides to do something else.");
+        }
+        break;
+        case AB_CAT_WIZARD_PILLAR_ZAP:
+        message = CombineStrings((*caster).baseStats.name, " zaps ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " with arcane energy, dealing 50 unavoidable damage.");
+        AddMessageToFeed(message);
+        DealDamage(50, targets[0], true, caster);
+        AddCreatureToFlicker(targets[0]);
+        break;
+        case AB_CAT_WIZARD_PILLAR_OVERCLOCK:
+        message = CombineStrings((*caster).baseStats.name, " enmeshes its machinery, causing all Arcane Resonators to gain 100 Speed.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            if((*targets[i]).baseStats.tileLookupPosition.y == 9) continue;
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->encounterStats.speed += 100;
+        }
+        break;
+        case AB_CAT_WIZARD_PILLAR_AMPLIFY:
+        message = CombineStrings((*caster).baseStats.name, " recalibrates its frequencies, granting all allies 20 Mastery.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->encounterStats.mastery += 20;
+        }
         break;
     case AB_MIMIC_CHOMP:
         primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 0.2) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);

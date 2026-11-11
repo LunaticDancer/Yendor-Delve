@@ -17,6 +17,7 @@ typedef enum STATUS_EFFECT
     SE_UNTARGETABLE,    // can't be targetted by enemy abilities for X ticks
     SE_PAIN,            // deal X damage each time the creature becomes a target of ability
     SE_CONFUSION,       // confused creatures cast spells at random targets
+
     SE_BAGGED,          // Quickpig uses this to track whether or not it has stolen an item
     SE_LENGTH,
 } STATUS_EFFECT;
@@ -34,6 +35,7 @@ typedef enum LINGERING_EFFECT
     LE_ONABIL_ANTLER_HELMET,
     LE_ONABIL_MASTER_ROBE,
     LE_ONABIL_TRUMPET,
+    LE_ONABIL_CAT_WIZARD_PILLAR,
 
     LE_ONATT_HAMMER_OF_GLORY,
     LE_ONATT_BALL_ON_CHAIN,
@@ -47,7 +49,7 @@ typedef enum LINGERING_EFFECT
     LE_ONENC_COIN,
     LE_ONENC_ILLUSION_PROTECT,
 
-    LE_REPLDMG_ROSE_SIGNET,
+    LE_RPLDMG_ROSE_SIGNET,
 
     LE_ONHIT_DUELIST_PARRY,
     LE_ONHIT_WOLF_BITE,

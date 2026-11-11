@@ -757,6 +757,7 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy *c, RNG *rng, short time)
 			}
 		}
 	}
+	break;
 	}
 
 	return result;

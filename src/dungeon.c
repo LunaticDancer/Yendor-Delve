@@ -6,7 +6,7 @@
 
 extern struct AppState appState;
 
-ENCOUNTER_ID bossPoolTier1[2];
+ENCOUNTER_ID bossPoolTier1[4];
 ENCOUNTER_ID bossPoolTier2[1];
 
 ENCOUNTER_ID encounterPoolTier1[11];
@@ -120,6 +120,8 @@ void InitEncounterPools()
 {
     bossPoolTier1[0] = ENCB_GREEN_DRAGON;
     bossPoolTier1[1] = ENCB_CHOIR;
+    bossPoolTier1[2] = ENCB_CAT_WIZARD;
+    bossPoolTier1[3] = ENCB_CAT_WIZARD;
     
     bossPoolTier2[0] = ENCB_BLACK_DRAGON;
 
@@ -229,6 +231,19 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 darkgray,
                 "The winged deathbringer, guarding the entrance to the city.",
                 {EN_NONE, ENB_BLACK_DRAGON, EN_NONE},
+                false,
+            };
+        case ENCB_CAT_WIZARD:
+            return (Encounter)
+            {
+                id,
+                "Archmage Nebulon",
+                "The little cat hisses in hostility. You can tell by its intent stare, that if it could speak to you, it would.",
+                TL_CREATURES,
+                (Vector2){0,9},
+                purple,
+                "A small beast stands in your way, unshaken in its resolve.",
+                {EN_NONE, ENB_CAT_WIZARD, ENB_CAT_WIZARD_PILLAR},
                 false,
             };
         case ENCB_GREEN_DRAGON:

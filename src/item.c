@@ -1030,7 +1030,7 @@ Item InitItem(ITEM_ID id)
             maroon,
             ES_TORSO,
             CreateEmptyStatBonuses(),
-            LE_REPLDMG_ROSE_SIGNET,
+            LE_RPLDMG_ROSE_SIGNET,
         };
         result.statBonuses.mastery = 50;
         result.statBonuses.staminaRegen = 50;
