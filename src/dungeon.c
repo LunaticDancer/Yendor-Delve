@@ -10,7 +10,7 @@ ENCOUNTER_ID bossPoolTier1[4];
 ENCOUNTER_ID bossPoolTier2[1];
 
 ENCOUNTER_ID encounterPoolTier1[11];
-ENCOUNTER_ID encounterPoolTier2[4];
+ENCOUNTER_ID encounterPoolTier2[5];
 ENCOUNTER_ID encounterPoolTier3[4];
 
 ITEM_ID itemPoolTier1[ITEM_POOL_TIER_ONE_SIZE];
@@ -141,6 +141,7 @@ void InitEncounterPools()
     encounterPoolTier2[1] = ENC_JAR_CAMP;
     encounterPoolTier2[2] = ENC_CHEST;
     encounterPoolTier2[3] = ENC_MIMIC;
+    encounterPoolTier2[4] = ENC_TUNNEL_WYRMS;
 }
 
 void InitItemPools()
