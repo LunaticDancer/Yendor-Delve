@@ -4,7 +4,7 @@
 #include "enemy.h"
 #include "item.h"
 
-typedef enum ENCOUNTER_ID 
+typedef enum ENCOUNTER_ID
 {
     ENC_NONE,
     ENCB_DUNGEON_MASTER,
