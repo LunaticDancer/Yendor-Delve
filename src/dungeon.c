@@ -450,7 +450,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 "A pair of wyrms slithers out from the darkness. Although aggressive, they never fully leave their hiding spots.",
                 TL_COMMUNITY,
                 (Vector2){0, 8},
-                brown,
+                maroon,
                 "The cave walls are covered in countless perfectly circular holes.",
                 {EN_TUNNEL_WYRM, EN_NONE, EN_TUNNEL_WYRM},
                 false,
