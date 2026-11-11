@@ -1333,7 +1333,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (50 + 60% Mastery) Damage and reduce the target's Mastery by ");
         sprintf(strnum, "%.0f",(60 + (GET_SCALING(caster, mastery) * 0.20))* CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (60 + 20% Mastery) for 250 moments.");
+        result = CombineStrings(result, " (60 + 20% Mastery) for 500 moments.");
         return result;
         
     default:
@@ -3489,13 +3489,13 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " damage and reducing their Mastery by ");
         sprintf(strnum, "%d", masteryDebuff);
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " for 250 moments.");
+        message = CombineStrings(message, " for 500 moments.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         DealDamage(primaryEffectValue, targets[0], false, caster);
         StatBonuses twyrmClampBonus = CreateEmptyStatBonuses();
         twyrmClampBonus.mastery = masteryDebuff;
-        StatDebuff twyrmClampDebuff = (StatDebuff){250, twyrmClampBonus};
+        StatDebuff twyrmClampDebuff = (StatDebuff){500, twyrmClampBonus};
         ApplyStatDebuff(caster, twyrmClampDebuff);
         break;
     
