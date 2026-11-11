@@ -442,6 +442,19 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 {EN_PIGJAR, EN_QUICKPIG, EN_PIGJAR},
                 false,
             };
+        case ENC_TUNNEL_WYRMS:
+            return (Encounter)
+            {
+                id,
+                "Wyrm Warren",
+                "A pair of wyrms slithers out from the darkness. Although aggressive, they never fully leave their hiding spots.",
+                TL_COMMUNITY,
+                (Vector2){0, 8},
+                brown,
+                "The cave walls are covered in countless perfectly circular holes.",
+                {EN_TUNNEL_WYRM, EN_NONE, EN_TUNNEL_WYRM},
+                false,
+            };
         default:
             return (Encounter)
             {
