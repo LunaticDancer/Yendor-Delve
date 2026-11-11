@@ -837,6 +837,30 @@ Ability InitAbility(ABILITY id)
             70,
             AF_TARGETS_SELF
         };
+		case AB_TWYRM_VENOM_SPIT:
+        return (Ability)
+        {
+            id,
+            "Venom Spit",
+            60,
+            AF_TARGETS_ENEMIES
+        };
+		case AB_TWYRM_IMPEDE:
+        return (Ability)
+        {
+            id,
+            "Impede",
+            80,
+            AF_TARGETS_ENEMIES
+        };
+		case AB_TWYRM_CLAMP_DOWN:
+        return (Ability)
+        {
+            id,
+            "Clamp Down",
+            50,
+            AF_TARGETS_ENEMIES
+        };
     }
 }
 
