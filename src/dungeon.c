@@ -451,7 +451,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 TL_COMMUNITY,
                 (Vector2){0, 8},
                 maroon,
-                "The cave walls are covered in countless perfectly circular holes.",
+                "The cave surface is covered in countless perfectly circular holes.",
                 {EN_TUNNEL_WYRM, EN_NONE, EN_TUNNEL_WYRM},
                 false,
             };
