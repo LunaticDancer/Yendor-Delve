@@ -1201,7 +1201,7 @@ Enemy InitEnemyData(ENEMY_ID id)
                 .itemStats = CreateEmptyStatBonuses(),
                 .temporaryStats = {},
                 .lingeringEffects = {},
-                .abilities = InitAbilities((ABILITY[]){AB_VENOM_SPIT, AB_IMPEDE, AB_CLAMP_DOWN, AB_WAIT}, 4),
+                .abilities = InitAbilities((ABILITY[]){AB_TWYRM_VENOM_SPIT, AB_TWYRM_IMPEDE, AB_TWYRM_CLAMP_DOWN, AB_WAIT}, 4),
                 .abilityCount = 4,
                 .creatureEffect = LE_ONHIT_TUNNEL_WYRM,
             },
