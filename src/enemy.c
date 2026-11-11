@@ -1171,5 +1171,44 @@ Enemy InitEnemyData(ENEMY_ID id)
             true,
         };
         break;
+        case EN_TUNNEL_WYRM:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Tunnel Wyrm",
+                    .tileset = TL_COMMUNITY,
+                    .tileLookupPosition = (Vector2){0,8},
+                    .color = maroon,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 750,
+                    .health = 750,
+                    .currentStamina = 1200,
+                    .stamina = 1200,
+                    .staminaRegen = 150,
+                    .speed = 120,
+                    .defense = 180,
+                    .armor = 8,
+                    .critBonus = 500,
+                    .critRate = 0,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 100,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_VENOM_SPIT, AB_IMPEDE, AB_CLAMP_DOWN, AB_WAIT}, 4),
+                .abilityCount = 4,
+                .creatureEffect = LE_ONHIT_TUNNEL_WYRM,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+            "\0",
+        };
+        break;
     }
 }
