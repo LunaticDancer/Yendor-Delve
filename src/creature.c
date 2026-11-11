@@ -3462,9 +3462,9 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         targetPriSap = ((GET_SCALING(targets[0], targetPriority) * 0.30)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineString("The holes dug by ", (*caster).baseStats.name);
-        message = CombineStrings(message, " around ");
+        message = CombineStrings(message, " around their position make the terrain harder for ");
         message = CombineStrings(message, targets[0]->baseStats.name);
-        message = CombineStrings(message, "'s position make the terrain harder for them to traverse, causing them to lose ");
+        message = CombineStrings(message, " to traverse, causing them to lose ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Speed, ");
         sprintf(strnum, "%d", defenseSap);
