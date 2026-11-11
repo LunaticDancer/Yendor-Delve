@@ -223,6 +223,16 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             footFungusDummy.baseStats.name = "The fungal colony, distressed by its host's hurt,";
             footFungusDummy.baseStats.mastery = c->baseStats.mastery + c->encounterStats.mastery + c->itemStats.mastery - 50;
             CastAbility(AB_CULTIST_PRAY,0,&footFungusDummy,(CreatureStats *[0]){}, 0);
+            break;
+        case LE_ONHIT_TUNNEL_WYRM:
+            if(short damage > 100)
+                message = CombineStrings("Startled by the powerful attack", (*c).baseStats.name);
+                message = CombineStrings(message, " retreats into its hole. Its next turn is delayed by 200 moments and it is applied 1 Protection and 30 Berserk.");
+                AddMessageToFeed(message);
+                c->encounterStats.ticksUntilNextTurn += 200;
+                c->statusEffects[SE_PROTECTION]+=1;
+                c->statusEffects[SE_BERSERK]+=30;
+            break;
         }
     }
 }
@@ -1306,6 +1316,24 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         sprintf(strnum, "%.0f",(GET_SCALING(caster, mastery) * 0.4));
         result = CombineStrings("Gain ", strnum);
         result = CombineStrings(result, " (40% Mastery) Speed.");
+        return result;
+    case AB_TWYRM_VENOM_SPIT:
+        ShowEnemyDamageOverlays((120 + (GET_SCALING(caster, mastery) * 0.50))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true), false);
+        sprintf(strnum, "%.0f",(120 + (GET_SCALING(caster, mastery) * 0.50))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (120 + 50% Mastery) Damage and apply 40 Bleed to self.");
+        return result;
+    case AB_TWYRM_IMPEDE:
+        result = "An enemy loses 30% of their Speed, Defense and Target Priotity.";
+        return result;
+    case AB_TWYRM_CLAMP_DOWN:
+        ShowEnemyDamageOverlays((50 + (GET_SCALING(caster, mastery) * 0.60))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true), false);
+        sprintf(strnum, "%.0f",(50 + (GET_SCALING(caster, mastery) * 0.60))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (50 + 60% Mastery) Damage and reduce the target's Mastery by ");
+        sprintf(strnum, "%.0f",(60 + (GET_SCALING(caster, mastery) * 0.20))* CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (60 + 20% Mastery) for 250 moments.");
         return result;
         
     default:
@@ -3415,6 +3443,61 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             DealDamage(primaryEffectValue, targets[i], false, caster);
         }
         break; 
+    case AB_TWYRM_VENOM_SPIT:
+        primaryEffectValue = (120 + (GET_SCALING(caster, mastery) * 0.50))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " shoots a spout of venom from a newly opened slit in its side, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage to ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " but applying 40 Bleed to themselves.");
+        AddMessageToFeed(message);
+        caster->statusEffects[SE_BLEED]+=40;
+        AddCreatureToFlicker(targets[0]);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break; 
+    case AB_TWYRM_IMPEDE:
+        primaryEffectValue = ((GET_SCALING(targets[0], defense) * 0.30)) * CalculateEffectAmplification(caster, true);
+        speedSap = ((GET_SCALING(targets[0], speed) * 0.30)) * CalculateEffectAmplification(caster, true);
+        targetPriSap = ((GET_SCALING(targets[0], targetPriority) * 0.30)) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineString("The holes dug by ", (*caster).baseStats.name);
+        message = CombineStrings(message, " around ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, "'s position make the terrain harder for them to traverse, causing them to lose ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Speed, ");
+        sprintf(strnum, "%d", defenseSap);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Defense, and ");
+        sprintf(strnum, "%d", targetPriSap);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Target Priority.");
+        AddMessageToFeed(message);
+        targets[0]->baseStats.speed-=primaryEffectValue;
+        targets[0]->baseStats.defense-=defenseSap;
+        targets[0]->baseStats.targetPriority-=targetPriSap;
+        break; 
+    case AB_TWYRM_CLAMP_DOWN:
+        primaryEffectValue = (50 + (GET_SCALING(caster, mastery) * 0.60))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        masteryDebuff = -1* (60 + (GET_SCALING(caster, mastery) * 0.20))* CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " bites down as hard as it can on ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, " and doesn't let go, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and reducing their Mastery by ");
+        sprintf(strnum, "%d", masteryDebuff);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " for 250 moments.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        StatBonuses twyrmClampBonus = CreateEmptyStatBonuses();
+        twyrmClampBonus.mastery = masteryDebuff;
+        StatDebuff twyrmClampDebuff = (StatDebuff){250, twyrmClampBonus};
+        ApplyStatDebuff(caster, twyrmClampDebuff);
+        break;
     
     default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
