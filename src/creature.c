@@ -749,10 +749,10 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%d", damage);
         result = CombineStrings("Deal ", strnum);
-        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, false));
+        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, " (60 + 50% Mastery) damage and gain ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (20 + 20% Mastery) Speed.");
+        result = CombineStrings(result, " (40 + 80% Mastery) Speed.");
         return result;
     case AB_DUELIST_OPPORTUNITY:
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8
@@ -1503,7 +1503,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     case AB_DUELIST_LUNGE:
         primaryEffectValue = ((60 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
-        short duelistLungeSpeed = ((20 + GET_SCALING(caster, mastery) * 0.2)) * CalculateEffectAmplification(caster, false);
+        short duelistLungeSpeed = ((40 + GET_SCALING(caster, mastery) * 0.8)) * CalculateEffectAmplification(caster, false);
         message = CombineStrings((*caster).baseStats.name, " lunges at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, ", dealing ");
