@@ -98,7 +98,7 @@ ITEM_ID MatchRewardToEncounter(ENCOUNTER_ID enc, char floor)
             }
             break;
         }
-        case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: default:
+        case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15:
         {
             switch(enc)
             {
@@ -108,6 +108,20 @@ ITEM_ID MatchRewardToEncounter(ENCOUNTER_ID enc, char floor)
 
                 default:
                 result  = itemPoolTier2[rng_next_u32(&appState.stateData.gameState.runRng) % ARR_SIZE(itemPoolTier2)];
+                break;
+            }
+            break;
+        }
+        default:
+        {
+            switch(enc)
+            {
+                case ENC_BONFIRE: case ENC_NONE:
+                result = ITEM_NONE;
+                break;
+
+                default:
+                result  = itemPoolTier3[rng_next_u32(&appState.stateData.gameState.runRng) % ARR_SIZE(itemPoolTier3)];
                 break;
             }
             break;
