@@ -487,7 +487,7 @@ void HandleOnAbilityEffects(CreatureStats *c, ABILITY a, CreatureStats **targets
             case LE_ONABIL_CAT_WIZARD_PILLAR:
                 char pillarCount = (appState.stateData.gameState.stateData.battleState.enemies[0].enemyId == ENB_CAT_WIZARD_PILLAR)
                     + (appState.stateData.gameState.stateData.battleState.enemies[2].enemyId == ENB_CAT_WIZARD_PILLAR);
-                if(appState.stateData.gameState.stateData.battleState.enemies[0].stats.statusEffects[SE_PROTECTION] >= pillarCount) break;
+                if(appState.stateData.gameState.stateData.battleState.enemies[1].stats.statusEffects[SE_PROTECTION] >= pillarCount) break;
                 appState.stateData.gameState.stateData.battleState.enemies[1].stats.statusEffects[SE_PROTECTION]++;
                 AddMessageToFeed("The Arcane Resonator recalibrates itself, forming a protective barrier around its master.");
                 break;
@@ -2363,6 +2363,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " damage and emptying their Crit Progress.");
         AddMessageToFeed(message);
         DealDamage(primaryEffectValue, targets[0], false, caster);
+        targets[0]->baseStats.critCounter = 0;
         AddCreatureToFlicker(targets[0]);
         break;
         case AB_CAT_WIZARD_THOUSAND_SCRATCHES:
@@ -2403,8 +2404,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         else
         {
-            appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
             AddMessageToFeed("Seeing that both Arcane Resonators remain intact, Nebulon decides to do something else.");
+            ApplyStatDebuff(caster, (StatDebuff){2, (StatBonuses){.speed = 1000}});
         }
         break;
         case AB_CAT_WIZARD_PILLAR_ZAP:

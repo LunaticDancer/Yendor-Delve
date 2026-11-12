@@ -581,8 +581,8 @@ void ProgressTime(short ticks)
 	HandleTemporaryStats(&appState.stateData.gameState.playerTeam[1].stats, ticks);
 	HandleTemporaryStats(&appState.stateData.gameState.playerTeam[2].stats, ticks);
 	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
-	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
-	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
+	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[1].stats, ticks);
+	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[2].stats, ticks);
 
 	ProgressLingeringEffects(&appState.stateData.gameState.playerTeam[0].stats, ticks);
 	ProgressLingeringEffects(&appState.stateData.gameState.playerTeam[1].stats, ticks);
