@@ -493,8 +493,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Hallowed Flesh",
-            TL_ITEMS,
-            (Vector2){3,7},
+            TL_QUIEK,
+            (Vector2){8,0},
             beige,
             ES_TORSO,
             CreateEmptyStatBonuses(),

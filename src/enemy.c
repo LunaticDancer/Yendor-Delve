@@ -1177,8 +1177,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Tunnel Wyrm",
-                    .tileset = TL_COMMUNITY,
-                    .tileLookupPosition = (Vector2){0,8},
+                    .tileset = TL_PHOLIDIA,
+                    .tileLookupPosition = (Vector2){8,0},
                     .color = maroon,
 
                     .ticksUntilNextTurn = 0,
