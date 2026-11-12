@@ -74,6 +74,9 @@ typedef enum ITEM_ID
     ITEM_ILLUSION_PANTS,
     ITEM_TRUMPET,
     ITEM_ROSE_SIGNET,
+    ITEM_IRON_KISS,
+    ITEM_BELT_HOLSTER,
+    ITEM_ANCIENT_ROOTS,
 } ITEM_ID;
 
 typedef struct Item
