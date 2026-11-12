@@ -229,7 +229,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
                 message = CombineStrings("Startled by the powerful attack", (*c).baseStats.name);
                 message = CombineStrings(message, " retreats into its hole. Its next turn is delayed by 200 moments and it is applied 1 Protection and 30 Berserk.");
                 AddMessageToFeed(message);
-                c->encounterStats.ticksUntilNextTurn += 200;
+                c->baseStats.ticksUntilNextTurn += 200;
                 c->statusEffects[SE_PROTECTION]+=1;
                 c->statusEffects[SE_BERSERK]+=30;
             break;
@@ -3252,7 +3252,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
 
         AddCreatureToFlicker(targets[0]);
         targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
-        targets[0]->baseStats.targetPriority += primaryEffectValue*0.5;
+        targets[0]->encounterStats.targetPriority += primaryEffectValue*0.5;
         break;
     case AB_FROG_FLY_BUZZ:
         primaryEffectValue = ((20 + GET_SCALING(caster, speed) * 0.1) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
@@ -3457,11 +3457,11 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break; 
     case AB_TWYRM_IMPEDE:
-        primaryEffectValue = ((GET_SCALING(targets[0], defense) * 0.30)) * CalculateEffectAmplification(caster, true);
-        speedSap = ((GET_SCALING(targets[0], speed) * 0.30)) * CalculateEffectAmplification(caster, true);
-        targetPriSap = ((GET_SCALING(targets[0], targetPriority) * 0.30)) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = ((GET_SCALING(targets[0], speed) * 0.30)) * CalculateEffectAmplification(caster, true);
+        short defenseSap = ((GET_SCALING(targets[0], defense) * 0.30)) * CalculateEffectAmplification(caster, true);
+        short targetPriSap = ((GET_SCALING(targets[0], targetPriority) * 0.30)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
-        message = CombineString("The holes dug by ", (*caster).baseStats.name);
+        message = CombineStrings("The holes dug by ", (*caster).baseStats.name);
         message = CombineStrings(message, " around their position make the terrain harder for ");
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, " to traverse, causing them to lose ");
@@ -3474,13 +3474,13 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Target Priority.");
         AddMessageToFeed(message);
-        targets[0]->baseStats.speed-=primaryEffectValue;
-        targets[0]->baseStats.defense-=defenseSap;
-        targets[0]->baseStats.targetPriority-=targetPriSap;
+        targets[0]->encounterStats.speed-=primaryEffectValue;
+        targets[0]->encounterStats.defense-=defenseSap;
+        targets[0]->encounterStats.targetPriority-=targetPriSap;
         break; 
     case AB_TWYRM_CLAMP_DOWN:
         primaryEffectValue = (50 + (GET_SCALING(caster, mastery) * 0.60))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
-        masteryDebuff = -1* (60 + (GET_SCALING(caster, mastery) * 0.20))* CalculateEffectAmplification(caster, true);
+        short masteryDebuff = -1* (60 + (GET_SCALING(caster, mastery) * 0.20))* CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " bites down as hard as it can on ");
         message = CombineStrings(message, targets[0]->baseStats.name);
