@@ -389,6 +389,14 @@ Ability InitAbility(ABILITY id)
             100,
             AF_TARGETS_ENEMIES,
         };
+        case AB_CULTIST_SPAWN_MIRACLE:
+        return (Ability)
+        {
+            id,
+            "Miracle",
+            150,
+            AF_TARGETS_ENEMIES,
+        };
         case AB_CAT_WIZARD_ARCANE_BLAST:
         return (Ability)
         {
