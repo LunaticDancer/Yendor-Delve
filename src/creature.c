@@ -156,13 +156,16 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 10 Bleed.";
         case LE_ONATT_MALEVOLENCE: return "When attacking, apply all the negative status you carry.";
         case LE_ONDTH_VENGEFUL_SPIRIT: return "On death, deal 1000 unavoidable damage to opposite enemy.";
+        case LE_ONDTH_ANCIENT_ROOTS: return "On death, return with 55\% of your health, then permanently destroy this item.";
         case LE_ONDTH_JAR_BREAK_GOODIES: return "On death, drop a random tier 2 item.";
         case LE_ONENC_COIN: return "At the start of combat, you move first.";
         case LE_ONENC_ILLUSION_PROTECT: return "At the start of combat, you gain 1 Protection.";
+        case LE_ONENC_BELT_HOLSTER: return "At the start of combat, copy your weapon's properties.";
         case LE_RPLDMG_ROSE_SIGNET: return "Instead of dealing damage, apply half that much Bleed.";
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
+        case LE_ONHIT_IRON_KISS: return "When you get hit and survive, retaliate by dealing damage equal to your mastery.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
         default: return NULL;
     }
@@ -223,6 +226,21 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             footFungusDummy.baseStats.name = "The fungal colony, distressed by its host's hurt,";
             footFungusDummy.baseStats.mastery = c->baseStats.mastery + c->encounterStats.mastery + c->itemStats.mastery - 50;
             CastAbility(AB_CULTIST_PRAY,0,&footFungusDummy,(CreatureStats *[0]){}, 0);
+            break;
+        case LE_ONHIT_IRON_KISS:
+            if (caster && caster != c && c->baseStats.currentHealth > 0){
+                int totaldamage = (GET_SCALING(c, mastery) * GetDamageMult(c) * CalculateEffectAmplification(caster, true));
+                message = CombineStrings((*c).baseStats.name, " retaliates with the Iron Kiss, dealing ");
+                sprintf(strnum, "%d", CalculateDamage(totaldamage, caster));
+                message = CombineStrings(message, strnum);
+                message = CombineStrings(message, " damage back to ");
+                message = CombineStrings(message, caster->baseStats.name);
+                message = CombineStrings(message, ".");
+                AddMessageToFeed(message);
+
+                AddCreatureToFlicker(caster);
+                DealDamage(totaldamage, caster, false, c);
+            }
             break;
         case LE_ONHIT_TUNNEL_WYRM:
             if(damage < 100) break;
@@ -326,6 +344,34 @@ void HandleStartOfCombatEffects(CreatureStats* c)
             AddMessageToFeed(message);
             c->statusEffects[SE_PROTECTION] +=1;
             break;
+
+            case LE_ONENC_BELT_HOLSTER:
+            int dual_wielder_index = -1;
+                // find the bearer's index
+                for (int ii = 0; ii < 3; ii++) {
+                    if (&appState.stateData.gameState.playerTeam[ii].stats == c) {
+                        dual_wielder_index = ii;
+                        break;
+                    }
+                }
+            Item copied_weapon = appState.stateData.gameState.playerTeam[dual_wielder_index].items[3];
+            Item belt_holster = appState.stateData.gameState.playerTeam[dual_wielder_index].items[2];
+            belt_holster.statBonuses = copied_weapon.statBonuses;
+            
+            // Copy triggered abilities
+            LingeringEffect le;
+            le.effectId = copied_weapon.triggerAbility;
+            le.isPermanent = true;
+            ApplyLingeringEffect(&(*c), le);
+
+            if (copied_weapon.itemId != ITEM_NONE) {
+                message = CombineStrings(c->baseStats.name, " pulls out a second ");
+                message = CombineStrings(message, copied_weapon.name);
+                message = CombineStrings(message, ".");
+                AddMessageToFeed(message);
+            }
+            
+            break;
         }
     }
 }
@@ -359,6 +405,41 @@ void HandleOnDeathEffects(CreatureStats *c)
                 message = CombineStrings("Out of the jar drops ", jarBreakItem.name);
                 message = CombineStrings(message, "! You swiftly pick it up and add it to your shared inventory.");
                 AddItemToInventory(jarBreakItem);
+                AddMessageToFeed(message);
+            break;
+            case LE_ONDTH_ANCIENT_ROOTS:
+                // heal to 55%
+                c->baseStats.currentHealth = GET_SCALING(c, health) * .55;
+                if (c->baseStats.currentHealth <= 0) {c->baseStats.currentHealth = 1;} // Magus deserves better than this
+                
+                // destroy the root
+                int root_bearer_index = -1;
+                // find the bearer's index
+                for (int ii = 0; ii < 3; ii++) {
+                    if (&appState.stateData.gameState.playerTeam[ii].stats == c) {
+                        root_bearer_index = ii;
+                        break;
+                    }
+                }
+                // remove item for real starting with its abilities. Yes this is all just copied from the Quickpig's rob ability
+                int broken_item_slot = 2;
+                Item removedItemExample = InitItem(appState.stateData.gameState.playerTeam[root_bearer_index].items[broken_item_slot].itemId);
+                for (int ii = 0; ii < LINGERING_EFFECTS; ii++)
+                { 
+                    if (removedItemExample.triggerAbility == c->lingeringEffects[ii].effectId) {
+                        c->lingeringEffects[ii].effectId = LE_NONE;
+                        c->lingeringEffects[ii].triggerLimit = 0;
+                        c->lingeringEffects[ii].tickDuration = 0;
+                        break;
+                    }
+                }
+                // remove stats and the actual item
+                appState.stateData.gameState.playerTeam[root_bearer_index].items[broken_item_slot].itemId = ITEM_NONE;
+                UnequipItem(&appState.stateData.gameState.playerTeam[root_bearer_index], broken_item_slot);
+
+
+                message = CombineStrings("The ancient root revives ", c->baseStats.name);
+                message = CombineStrings(message, ", breaking in the process.");
                 AddMessageToFeed(message);
             break;
             case LE_ONDTH_MANRAT:
@@ -3410,6 +3491,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             for (int i = 0; i < 3; i++) {
                 if (&appState.stateData.gameState.playerTeam[i].stats == targets[0]) {
                     theft_victim_index = i;
+                    break;
                 }
             }
             // find that target's gear slots

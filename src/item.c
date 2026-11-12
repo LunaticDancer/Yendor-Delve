@@ -1036,6 +1036,50 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.staminaRegen = 50;
         result.statBonuses.critBonus = 20;
         
+                return result;
+        case ITEM_IRON_KISS:
+        result = (Item){
+            id,
+            "Iron Kiss",
+            TL_JTAD,
+            (Vector2){6, 3},
+            violet,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_ONHIT_IRON_KISS,
+        };
+        result.statBonuses.mastery = 80;
+        result.statBonuses.armor = 8;
+        result.statBonuses.defense = 80;
+        
+        return result;
+        case ITEM_BELT_HOLSTER:
+        result = (Item){
+            id,
+            "Belt Holster",
+            TL_JTAD,
+            (Vector2){7, 3},
+            brown,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_ONENC_BELT_HOLSTER,
+        };
+
+        return result;
+        case ITEM_ANCIENT_ROOTS:
+        result = (Item){
+            id,
+            "Ancient Roots",
+            TL_JTAD,
+            (Vector2){8, 3},
+            beige,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_ONDTH_ANCIENT_ROOTS,
+        };
+        result.statBonuses.speed = -40;
+        result.statBonuses.defense = 80;
+        result.statBonuses.mastery = 50;
         return result;
     }
 }

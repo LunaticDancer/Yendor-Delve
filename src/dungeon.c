@@ -202,6 +202,10 @@ void InitItemPools()
     itemPoolTier2[26] = ITEM_VENGEFUL_SPIRIT;
     itemPoolTier2[27] = ITEM_ROSE_SIGNET;
     itemPoolTier2[28] = ITEM_TRUMPET;
+    itemPoolTier1[29] = ITEM_BELT_HOLSTER;
+
+    itemPoolTier3[0] = ITEM_IRON_KISS;
+    itemPoolTier3[1] = ITEM_ANCIENT_ROOTS;
 }
 
 Encounter GetEncounterData(ENCOUNTER_ID id)
