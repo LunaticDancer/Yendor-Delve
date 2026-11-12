@@ -24,7 +24,12 @@ extern Texture creatureAtlas;
 extern Texture bigCreatureAtlas;
 extern Texture itemAtlas;
 extern Texture generalAtlas;
-extern Texture communityAtlas;
+extern Texture jtadAtlas;
+extern Texture lunaticDancerAtlas;
+extern Texture magneterAtlas;
+extern Texture pholidiaAtlas;
+extern Texture quiekAtlas;
+extern Texture sofusAtlas;
 extern Texture bigCommunityAtlas;
 extern Texture boneFrame;
 extern Texture spikeFrame;
@@ -857,7 +862,7 @@ void DrawStatusEffects(Vector2 position, CreatureStats* _creature)
             break;
             case SE_BAGGED:
             DrawTexturePro(
-                GetTileset(TL_COMMUNITY),
+                GetTileset(TL_JTAD),
                 (Rectangle){
                     1 * TILE_SIZE,
                     0 * TILE_SIZE,
@@ -1393,8 +1398,8 @@ void DrawCharacterSelectOptionFrame(char index)
         (appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == index) ? *gold : *gray);
     if(appState.stateData.gameState.stateData.characterSelectState.currentSlotSelected == index && index!=3)
     {
-        DrawTexturePro(GetTileset(TL_COMMUNITY), (Rectangle){16,96,16,16},(Rectangle){160*index+72,360, 16,16},(Vector2){0,0},0,*darkgray);
-        DrawTexturePro(GetTileset(TL_COMMUNITY), (Rectangle){0,96,16,16},(Rectangle){160*index+72,434, 16,16},(Vector2){0,0},0,*darkgray);
+        DrawTexturePro(GetTileset(TL_LUNATICDANCER), (Rectangle){16,0,16,16},(Rectangle){160*index+72,360, 16,16},(Vector2){0,0},0,*darkgray);
+        DrawTexturePro(GetTileset(TL_LUNATICDANCER), (Rectangle){0,0,16,16},(Rectangle){160*index+72,434, 16,16},(Vector2){0,0},0,*darkgray);
     }
 }
 
@@ -1429,8 +1434,23 @@ Texture GetTileset(enum TILESET ts)
         case TL_GENERAL:
             return generalAtlas;
             break;
-        case TL_COMMUNITY:
-            return communityAtlas;
+        case TL_JTAD:
+            return jtadAtlas;
+            break;
+        case TL_LUNATICDANCER:
+            return lunaticDancerAtlas;
+            break;
+        case TL_MAGNETER:
+            return magneterAtlas;
+            break;
+        case TL_PHOLIDIA:
+            return pholidiaAtlas;
+            break;
+        case TL_QUIEK:
+            return quiekAtlas;
+            break;
+        case TL_SOFUS:
+            return sofusAtlas;
             break;
         case TL_BIG_COMMUNITY:
             return bigCommunityAtlas;

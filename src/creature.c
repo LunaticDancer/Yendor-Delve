@@ -1813,7 +1813,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 case 0: caster->baseStats.tileLookupPosition = (Vector2){8,9}; caster->baseStats.tileset = TL_CREATURES; break;
                 case 1: caster->baseStats.tileLookupPosition = (Vector2){10,9}; caster->baseStats.tileset = TL_CREATURES; break;
                 case 2: caster->baseStats.tileLookupPosition = (Vector2){0,10}; caster->baseStats.tileset = TL_CREATURES; break;
-                case 3: caster->baseStats.tileLookupPosition = (Vector2){1,1}; caster->baseStats.tileset = TL_COMMUNITY; break;
+                case 3: caster->baseStats.tileLookupPosition = (Vector2){6,0}; caster->baseStats.tileset = TL_JTAD; break;
             }
         }
         AddCreatureToFlicker(caster);
