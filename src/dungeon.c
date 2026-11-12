@@ -10,7 +10,7 @@ ENCOUNTER_ID bossPoolTier1[4];
 ENCOUNTER_ID bossPoolTier2[1];
 
 ENCOUNTER_ID encounterPoolTier1[11];
-ENCOUNTER_ID encounterPoolTier2[4];
+ENCOUNTER_ID encounterPoolTier2[5];
 ENCOUNTER_ID encounterPoolTier3[4];
 
 ITEM_ID itemPoolTier1[ITEM_POOL_TIER_ONE_SIZE];
@@ -141,6 +141,7 @@ void InitEncounterPools()
     encounterPoolTier2[1] = ENC_JAR_CAMP;
     encounterPoolTier2[2] = ENC_CHEST;
     encounterPoolTier2[3] = ENC_MIMIC;
+    encounterPoolTier2[4] = ENC_TUNNEL_WYRMS;
 }
 
 void InitItemPools()
@@ -439,6 +440,19 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 brown,
                 "A camp filled with jars, probably with goodies around. Beware of scavengers!",
                 {EN_PIGJAR, EN_QUICKPIG, EN_PIGJAR},
+                false,
+            };
+        case ENC_TUNNEL_WYRMS:
+            return (Encounter)
+            {
+                id,
+                "Wyrm Warren",
+                "A pair of wyrms slithers out from the darkness. Although aggressive, they never fully leave their hiding spots.",
+                TL_COMMUNITY,
+                (Vector2){0, 8},
+                maroon,
+                "The cave surface is covered in countless perfectly circular holes.",
+                {EN_TUNNEL_WYRM, EN_NONE, EN_TUNNEL_WYRM},
                 false,
             };
         default:
