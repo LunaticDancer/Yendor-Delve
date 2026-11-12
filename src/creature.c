@@ -914,20 +914,20 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_CULTIST_MADDENING_TOUCH:
         damage = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
-        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        sprintf(strnum, "%.0f", ((150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (50 + 100% Mastery) Damage and apply Confusion for ");
+        sprintf(strnum, "%.0f", ((250 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.5)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (100 + 100% Mastery) Damage and apply Confusion for ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (150 + 150% Mastery) moments to an enemy.");
+        result = CombineStrings(result, " (250 + 250% Mastery) moments to an enemy.");
         return result;
     case AB_CULTIST_MANIA:
-        sprintf(strnum, "%.0f", ((250 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 3.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Give an ally ", strnum);
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (250 + 200% Mastery) Stamina Regen, ");
+        result = CombineStrings(result, " (400 + 300% Mastery) Stamina Regen, ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (50 + 150% Mastery) Mastery and apply Confusion for 500 moments.");
+        result = CombineStrings(result, " (50 + 150% Mastery) Mastery and apply Confusion for 400 moments.");
         return result;
     case AB_CULTIST_SUMMON:
         return "Create a helpful monster in an empty enemy spot.";
@@ -1968,8 +1968,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         if(targets[0]->baseStats.currentHealth <= 0) appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
     break;
     case AB_CULTIST_MADDENING_TOUCH:
-        primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
-        short cultistMadTouchConfusion = (150 + GET_SCALING(caster, mastery) * 1.5) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (100 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        short cultistMadTouchConfusion = (250 + GET_SCALING(caster, mastery) * 2.5) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " invades ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -1985,7 +1985,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_CULTIST_MANIA:
-        primaryEffectValue = (250 + GET_SCALING(caster, mastery) * 2.0) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (400 + GET_SCALING(caster, mastery) * 3.0) * CalculateEffectAmplification(caster, true);
         short cultistManiaMastery = (100 + GET_SCALING(caster, mastery) * 1.5) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue, targets[0]);
         message = CombineStrings((*caster).baseStats.name, " imbues ");
@@ -1995,15 +1995,15 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Stamina Regen, ");
         sprintf(strnum, "%d", cultistManiaMastery);
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Mastery and inflicts Confusion for 500 moments.");
+        message = CombineStrings(message, " Mastery and inflicts Confusion for 400 moments.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         StatBonuses cultistManiaBonus = CreateEmptyStatBonuses();
         cultistManiaBonus.mastery = cultistManiaMastery;
         cultistManiaBonus.staminaRegen = primaryEffectValue;
-        StatDebuff cultistManiaBuff = (StatDebuff){500, cultistManiaBonus};
+        StatDebuff cultistManiaBuff = (StatDebuff){400, cultistManiaBonus};
         ApplyStatDebuff(caster, cultistManiaBuff);
-        targets[0]->statusEffects[SE_CONFUSION] = 500;
+        targets[0]->statusEffects[SE_CONFUSION] = 400;
         break;
     case AB_CULTIST_SUMMON:
         if(targets[0]->baseStats.currentHealth>0)
