@@ -1066,9 +1066,9 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (50 + 100% Mastery) Defense, and remove the same amount of Speed.");
         return result;
     case AB_BLOFAEWAR_CUT:
-        sprintf(strnum, "%.0f", ((1 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((5 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Attack an enemy for ", strnum);
-        result = CombineStrings(result, " (1 + 10% Mastery) damage, then apply the unmitigated damage as Bleed points.");
+        result = CombineStrings(result, " (5 + 20% Mastery) damage, then apply the unmitigated damage as Bleed points.");
         return result;
     case AB_BLOFAEMYS_INSPIRE:
         return "Give 10 Mastery to every ally.";
@@ -2535,7 +2535,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddCreatureToFlicker(targets[0]);
         break;
     case AB_BLOFAEWAR_CUT:
-        primaryEffectValue = CalculateDamage(((1 + GET_SCALING(caster, mastery) * 0.1)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), targets[0]);
+        primaryEffectValue = CalculateDamage(((5 + GET_SCALING(caster, mastery) * 0.2)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), targets[0]);
         primaryEffectValue = primaryEffectValue < 0 ? 0 : primaryEffectValue;
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " cuts ");
