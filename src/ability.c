@@ -389,6 +389,86 @@ Ability InitAbility(ABILITY id)
             100,
             AF_TARGETS_ENEMIES,
         };
+        case AB_CULTIST_SPAWN_MIRACLE:
+        return (Ability)
+        {
+            id,
+            "Miracle",
+            150,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_CAT_WIZARD_ARCANE_BLAST:
+        return (Ability)
+        {
+            id,
+            "Arcane Blast",
+            100,
+            AF_TARGETS_ENEMIES+AF_AOE,
+        };
+        case AB_CAT_WIZARD_CURSE_OF_MEEK:
+        return (Ability)
+        {
+            id,
+            "Curse of Meek",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_CAT_WIZARD_HEX_OF_AMBITION:
+        return (Ability)
+        {
+            id,
+            "Hex of Ambition",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_CAT_WIZARD_THOUSAND_SCRATCHES:
+        return (Ability)
+        {
+            id,
+            "A Thousand Scratches",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_CAT_WIZARD_CRUSH:
+        return (Ability)
+        {
+            id,
+            "Crush",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_CAT_WIZARD_ERECT_PILLAR:
+        return (Ability)
+        {
+            id,
+            "Build the Resonator",
+            100,
+            AF_TARGETS_SELF,
+        };
+        case AB_CAT_WIZARD_PILLAR_ZAP:
+        return (Ability)
+        {
+            id,
+            "Zap",
+            100,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_CAT_WIZARD_PILLAR_AMPLIFY:
+        return (Ability)
+        {
+            id,
+            "Amplify",
+            100,
+            AF_TARGETS_ALLIES + AF_AOE,
+        };
+        case AB_CAT_WIZARD_PILLAR_OVERCLOCK:
+        return (Ability)
+        {
+            id,
+            "Turn the Gears",
+            100,
+            AF_TARGETS_ALLIES + AF_AOE,
+        };
         case AB_MIMIC_CHOMP:
         return (Ability)
         {
@@ -764,6 +844,30 @@ Ability InitAbility(ABILITY id)
             "Sprint",
             70,
             AF_TARGETS_SELF
+        };
+		case AB_TWYRM_VENOM_SPIT:
+        return (Ability)
+        {
+            id,
+            "Venom Spit",
+            60,
+            AF_TARGETS_ENEMIES
+        };
+		case AB_TWYRM_IMPEDE:
+        return (Ability)
+        {
+            id,
+            "Impede",
+            80,
+            AF_TARGETS_ENEMIES
+        };
+		case AB_TWYRM_CLAMP_DOWN:
+        return (Ability)
+        {
+            id,
+            "Clamp Down",
+            50,
+            AF_TARGETS_ENEMIES
         };
     }
 }

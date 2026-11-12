@@ -5,11 +5,7 @@
 
 bool IsEnemyIrrelevant(Enemy e)
 {
-    switch(e.enemyId)
-    {
-        case EN_CULTIST_SUMMON: return true;
-        default: return false;
-    }
+    return e.optionalToKill;
 }
 
 Enemy InitEnemyData(ENEMY_ID id)
@@ -51,6 +47,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             },
             TG_TRUE_RANDOM,
             AB_WAIT,
+            "\0",
+            false,
         };
         break;
         
@@ -90,6 +88,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -129,6 +128,89 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
+        };
+        break;
+        
+        case ENB_CAT_WIZARD:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Nebulon the Archmage",
+                    .tileset = TL_CREATURES,
+                    .tileLookupPosition = (Vector2){0,9},
+                    .color = purple,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 2500,
+                    .health = 2500,
+                    .currentStamina = 1000,
+                    .stamina = 1000,
+                    .staminaRegen = 200,
+                    .speed = 300,
+                    .defense = 50,
+                    .armor = 1,
+                    .critBonus = 100,
+                    .critRate = 10,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_CAT_WIZARD_ARCANE_BLAST, AB_CAT_WIZARD_CURSE_OF_MEEK, AB_CAT_WIZARD_HEX_OF_AMBITION,
+                    AB_CAT_WIZARD_THOUSAND_SCRATCHES, AB_CAT_WIZARD_CRUSH, AB_CAT_WIZARD_ERECT_PILLAR, AB_CAT_WIZARD_ERECT_PILLAR,AB_WAIT}, 8),
+                .abilityCount = 8,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+            "\0",
+            false,
+        };
+        break;
+        
+        case ENB_CAT_WIZARD_PILLAR:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Arcane Resonator",
+                    .tileset = TL_JTAD,
+                    .tileLookupPosition = (Vector2){1,1},
+                    .color = skyblue,
+
+                    .ticksUntilNextTurn = 500,
+                    .currentHealth = 300,
+                    .health = 300,
+                    .currentStamina = 1000,
+                    .stamina = 1000,
+                    .staminaRegen = 200,
+                    .speed = 100,
+                    .defense = 200,
+                    .armor = 5,
+                    .critBonus = 100,
+                    .critRate = 10,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 500,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_CAT_WIZARD_PILLAR_ZAP,AB_CAT_WIZARD_PILLAR_OVERCLOCK,AB_CAT_WIZARD_PILLAR_AMPLIFY,AB_WAIT}, 4),
+                .abilityCount = 4,
+                .creatureEffect = LE_ONABIL_CAT_WIZARD_PILLAR,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+            "The arcane pillar crumbles.",
+            true,
         };
         break;
         
@@ -168,6 +250,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -207,6 +290,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -246,6 +330,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -285,6 +370,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
 
@@ -318,12 +404,13 @@ Enemy InitEnemyData(ENEMY_ID id)
                 .itemStats = CreateEmptyStatBonuses(),
                 .temporaryStats = {},
                 .lingeringEffects = {},
-                .abilities = InitAbilities((ABILITY[]){AB_CULTIST_SPAWN_ENROOT, AB_CULTIST_SPAWN_SPORES,AB_CULTIST_SPAWN_GROW,AB_CULTIST_SPAWN_INVIGORATE,AB_WAIT}, 5),
-                .abilityCount = 5,
+                .abilities = InitAbilities((ABILITY[]){AB_CULTIST_SPAWN_ENROOT, AB_CULTIST_SPAWN_SPORES,AB_CULTIST_SPAWN_GROW,AB_CULTIST_SPAWN_INVIGORATE,AB_CULTIST_SPAWN_MIRACLE,AB_WAIT}, 6),
+                .abilityCount = 6,
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            true,
         };
         break;
         
@@ -363,6 +450,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -402,6 +490,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -441,6 +530,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -480,6 +570,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -519,6 +610,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_FRONT,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -528,8 +620,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Tooth Fairy",
-                    .tileset = TL_COMMUNITY,
-                    .tileLookupPosition = (Vector2){4,4},
+                    .tileset = TL_QUIEK,
+                    .tileLookupPosition = (Vector2){2, 0},
                     .color = raywhite,
 
                     .ticksUntilNextTurn = 0,
@@ -558,6 +650,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -567,8 +660,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Tooth Golem",
-                    .tileset = TL_COMMUNITY,
-                    .tileLookupPosition = (Vector2){5,4},
+                    .tileset = TL_QUIEK,
+                    .tileLookupPosition = (Vector2){3, 0},
                     .color = raywhite,
 
                     .ticksUntilNextTurn = 400,
@@ -597,6 +690,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_FRONT,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -636,6 +730,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_TRUE_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -675,6 +770,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_TRUE_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -714,6 +810,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_BACK,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -753,6 +850,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         
@@ -792,6 +890,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_GORLAK_EQUIP,
             "The Gorlak nods approvingly and disappears in a puff of magic.",
+            false,
         };
         break;
 
@@ -831,6 +930,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         case EN_FIRE_ELEMENTAL:
@@ -869,6 +969,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         case EN_MANRAT:
@@ -908,6 +1009,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         case EN_GIANT_FROG:
@@ -916,8 +1018,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Giant Frog",
-                    .tileset = TL_COMMUNITY,
-                    .tileLookupPosition = (Vector2){4,6},
+                    .tileset = TL_JTAD,
+                    .tileLookupPosition = (Vector2){4, 2},
                     .color = darkblue,
 
                     .ticksUntilNextTurn = 0,
@@ -946,6 +1048,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         case EN_FROG_STINKFLY:
@@ -954,8 +1057,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Stinkfly",
-                    .tileset = TL_COMMUNITY,
-                    .tileLookupPosition = (Vector2){5,6},
+                    .tileset = TL_JTAD,
+                    .tileLookupPosition = (Vector2){5, 2},
                     .color = brown,
 
                     .ticksUntilNextTurn = 0,
@@ -984,6 +1087,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_WAIT,
             "\0",
+            false,
         };
         break;
         break;
@@ -993,7 +1097,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Quickpig",
-                    .tileset = TL_COMMUNITY,
+                    .tileset = TL_JTAD,
                     .tileLookupPosition = (Vector2){1,0},
                     .color = brown,
 
@@ -1023,6 +1127,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             TG_WEIGHTED_RANDOM,
             AB_QPIG_ROB,
             "\0",
+            false,
         };
         break;
         case EN_PIGJAR:
@@ -1032,7 +1137,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Jar",
-                    .tileset = TL_COMMUNITY,
+                    .tileset = TL_JTAD,
                     .tileLookupPosition = (rand() % 8 == 0)? (Vector2){2,0} : (Vector2){3,0},
                     .color = pickedcolor[(rand() % 16)],
 
@@ -1059,6 +1164,46 @@ Enemy InitEnemyData(ENEMY_ID id)
                 .abilities = InitAbilities((ABILITY[]){AB_WAIT}, 1),
                 .abilityCount = 1,
                 .creatureEffect = LE_ONDTH_JAR_BREAK_GOODIES,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+            "The jar shatters into pieces.",
+            true,
+        };
+        break;
+        case EN_TUNNEL_WYRM:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Tunnel Wyrm",
+                    .tileset = TL_PHOLIDIA,
+                    .tileLookupPosition = (Vector2){8,0},
+                    .color = maroon,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 750,
+                    .health = 750,
+                    .currentStamina = 1200,
+                    .stamina = 1200,
+                    .staminaRegen = 150,
+                    .speed = 120,
+                    .defense = 180,
+                    .armor = 8,
+                    .critBonus = 500,
+                    .critRate = 0,
+                    .critCounter = 0,
+                    .mastery = 0,
+                    .targetPriority = 100,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_TWYRM_VENOM_SPIT, AB_TWYRM_IMPEDE, AB_TWYRM_CLAMP_DOWN, AB_WAIT}, 4),
+                .abilityCount = 4,
+                .creatureEffect = LE_ONHIT_TUNNEL_WYRM,
             },
             TG_WEIGHTED_RANDOM,
             AB_WAIT,

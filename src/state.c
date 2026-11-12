@@ -198,6 +198,12 @@ void TransitionToBattle()
 	appState.stateData.gameState.playerTeam[1].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[1].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[1].stats.itemStats.stamina;
 	appState.stateData.gameState.playerTeam[2].stats.baseStats.currentStamina = appState.stateData.gameState.playerTeam[2].stats.baseStats.stamina + appState.stateData.gameState.playerTeam[2].stats.itemStats.stamina;
 
+	for(int i = 0; i < 3; i++)
+	{
+		if(appState.stateData.gameState.playerTeam[i].characterId != CHAR_SHAPESHIFTER) continue;
+		appState.stateData.gameState.playerTeam[i].stats.encounterStats.mastery += (appState.stateData.gameState.floor - 1) * 10;
+	}
+
 	EmptyLingeringEffects(&appState.stateData.gameState.playerTeam[0].stats);
 	EmptyLingeringEffects(&appState.stateData.gameState.playerTeam[1].stats);
 	EmptyLingeringEffects(&appState.stateData.gameState.playerTeam[2].stats);
@@ -581,8 +587,8 @@ void ProgressTime(short ticks)
 	HandleTemporaryStats(&appState.stateData.gameState.playerTeam[1].stats, ticks);
 	HandleTemporaryStats(&appState.stateData.gameState.playerTeam[2].stats, ticks);
 	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
-	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
-	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[0].stats, ticks);
+	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[1].stats, ticks);
+	HandleTemporaryStats(&appState.stateData.gameState.stateData.battleState.enemies[2].stats, ticks);
 
 	ProgressLingeringEffects(&appState.stateData.gameState.playerTeam[0].stats, ticks);
 	ProgressLingeringEffects(&appState.stateData.gameState.playerTeam[1].stats, ticks);
@@ -757,6 +763,7 @@ TurnIndicator CreateEnemyPrognosis(char id, Enemy *c, RNG *rng, short time)
 			}
 		}
 	}
+	break;
 	}
 
 	return result;

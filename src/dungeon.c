@@ -6,11 +6,11 @@
 
 extern struct AppState appState;
 
-ENCOUNTER_ID bossPoolTier1[2];
+ENCOUNTER_ID bossPoolTier1[4];
 ENCOUNTER_ID bossPoolTier2[1];
 
 ENCOUNTER_ID encounterPoolTier1[11];
-ENCOUNTER_ID encounterPoolTier2[4];
+ENCOUNTER_ID encounterPoolTier2[5];
 ENCOUNTER_ID encounterPoolTier3[4];
 
 ITEM_ID itemPoolTier1[ITEM_POOL_TIER_ONE_SIZE];
@@ -98,7 +98,7 @@ ITEM_ID MatchRewardToEncounter(ENCOUNTER_ID enc, char floor)
             }
             break;
         }
-        case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: default:
+        case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15:
         {
             switch(enc)
             {
@@ -112,6 +112,20 @@ ITEM_ID MatchRewardToEncounter(ENCOUNTER_ID enc, char floor)
             }
             break;
         }
+        default:
+        {
+            switch(enc)
+            {
+                case ENC_BONFIRE: case ENC_NONE:
+                result = ITEM_NONE;
+                break;
+
+                default:
+                result  = itemPoolTier3[rng_next_u32(&appState.stateData.gameState.runRng) % ARR_SIZE(itemPoolTier3)];
+                break;
+            }
+            break;
+        }
     }
     return result;
 }
@@ -120,6 +134,8 @@ void InitEncounterPools()
 {
     bossPoolTier1[0] = ENCB_GREEN_DRAGON;
     bossPoolTier1[1] = ENCB_CHOIR;
+    bossPoolTier1[2] = ENCB_CAT_WIZARD;
+    bossPoolTier1[3] = ENCB_CAT_WIZARD;
     
     bossPoolTier2[0] = ENCB_BLACK_DRAGON;
 
@@ -139,6 +155,7 @@ void InitEncounterPools()
     encounterPoolTier2[1] = ENC_JAR_CAMP;
     encounterPoolTier2[2] = ENC_CHEST;
     encounterPoolTier2[3] = ENC_MIMIC;
+    encounterPoolTier2[4] = ENC_TUNNEL_WYRMS;
 }
 
 void InitItemPools()
@@ -199,6 +216,10 @@ void InitItemPools()
     itemPoolTier2[26] = ITEM_VENGEFUL_SPIRIT;
     itemPoolTier2[27] = ITEM_ROSE_SIGNET;
     itemPoolTier2[28] = ITEM_TRUMPET;
+    itemPoolTier2[29] = ITEM_BELT_HOLSTER;
+
+    itemPoolTier3[0] = ITEM_IRON_KISS;
+    itemPoolTier3[1] = ITEM_ANCIENT_ROOTS;
 }
 
 Encounter GetEncounterData(ENCOUNTER_ID id)
@@ -229,6 +250,19 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 darkgray,
                 "The winged deathbringer, guarding the entrance to the city.",
                 {EN_NONE, ENB_BLACK_DRAGON, EN_NONE},
+                false,
+            };
+        case ENCB_CAT_WIZARD:
+            return (Encounter)
+            {
+                id,
+                "Archmage Nebulon",
+                "The little cat hisses in hostility. You can tell by its intent stare, that if it could speak to you, it would.",
+                TL_CREATURES,
+                (Vector2){0,9},
+                purple,
+                "A small beast stands in your way, unshaken in its resolve.",
+                {EN_NONE, ENB_CAT_WIZARD, ENB_CAT_WIZARD_PILLAR},
                 false,
             };
         case ENCB_GREEN_DRAGON:
@@ -328,8 +362,8 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 id,
                 "Tooth Fae",
                 "\0",
-                TL_COMMUNITY,
-                (Vector2){4, 4},
+                TL_QUIEK,
+                (Vector2){2,0},
                 raywhite,
                 "Where are they getting all these teeth from, and what do they plan to do with them?",
                 {EN_TOOTH_FAIRY, EN_NONE, EN_TOOTH_FAIRY},
@@ -406,8 +440,8 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 id,
                 "Giant Frog",
                 "A giant frog, alerted by your approach, pauses its hunt for stinkflies.",
-                TL_COMMUNITY,
-                (Vector2){4, 6},
+                TL_JTAD,
+                (Vector2){4, 2},
                 darkblue,
                 "This ambush predator usually just goes for bugs, but anything that fits in its mouth is fair game.",
                 {EN_FROG_STINKFLY, EN_GIANT_FROG, EN_FROG_STINKFLY},
@@ -419,11 +453,24 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 id,
                 "Abandoned Hideout",
                 "A Quickpig dashes between the jars.",
-                TL_COMMUNITY,
+                TL_JTAD,
                 (Vector2){3, 0},
                 brown,
                 "A camp filled with jars, probably with goodies around. Beware of scavengers!",
                 {EN_PIGJAR, EN_QUICKPIG, EN_PIGJAR},
+                false,
+            };
+        case ENC_TUNNEL_WYRMS:
+            return (Encounter)
+            {
+                id,
+                "Wyrm Warren",
+                "A pair of wyrms slithers out from the darkness. Although aggressive, they never fully leave their hiding spots.",
+                TL_PHOLIDIA,
+                (Vector2){8, 0},
+                maroon,
+                "The cave surface is covered in countless perfectly circular holes.",
+                {EN_TUNNEL_WYRM, EN_NONE, EN_TUNNEL_WYRM},
                 false,
             };
         default:

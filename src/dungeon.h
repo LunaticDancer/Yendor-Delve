@@ -9,6 +9,7 @@ typedef enum ENCOUNTER_ID
     ENC_NONE,
     ENCB_DUNGEON_MASTER,
     ENCB_BLACK_DRAGON,
+    ENCB_CAT_WIZARD,
     ENCB_GREEN_DRAGON,
     ENCB_CHOIR,
     ENC_BONFIRE,
@@ -25,6 +26,7 @@ typedef enum ENCOUNTER_ID
 
     ENC_GIANT_FROG,
     ENC_JAR_CAMP,
+    ENC_TUNNEL_WYRMS,
 } ENCOUNTER_ID;
 
 extern ENCOUNTER_ID encounterPoolTier1[];

@@ -204,8 +204,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Apprentice's Tiara",
-            TL_COMMUNITY,
-            (Vector2){4,1},
+            TL_JTAD,
+            (Vector2){9,0},
             lightgray,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -253,8 +253,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Juggernaut Helm",
-            TL_COMMUNITY,
-            (Vector2){2,3},
+            TL_PHOLIDIA,
+            (Vector2){2,0},
             darkgray,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -382,8 +382,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Thief's Hood",
-            TL_COMMUNITY,
-            (Vector2){3,3},
+            TL_PHOLIDIA,
+            (Vector2){3,0},
             gray,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -413,8 +413,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Hatfus",
-            TL_COMMUNITY,
-            (Vector2){6,0},
+            TL_SOFUS,
+            (Vector2){1,0},
             white,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -445,8 +445,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Torsofus",
-            TL_COMMUNITY,
-            (Vector2){7,0},
+            TL_SOFUS,
+            (Vector2){2,0},
             white,
             ES_TORSO,
             CreateEmptyStatBonuses(),
@@ -493,8 +493,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Hallowed Flesh",
-            TL_ITEMS,
-            (Vector2){3,7},
+            TL_QUIEK,
+            (Vector2){8,0},
             beige,
             ES_TORSO,
             CreateEmptyStatBonuses(),
@@ -555,8 +555,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Elemancer's Crown",
-            TL_COMMUNITY,
-            (Vector2){4,1},
+            TL_JTAD,
+            (Vector2){9, 0},
             red,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -572,8 +572,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Elemancer's Cape",
-            TL_COMMUNITY,
-            (Vector2){5,5},
+            TL_JTAD,
+            (Vector2){7, 1},
             red,
             ES_TORSO,
             CreateEmptyStatBonuses(),
@@ -589,8 +589,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Elemancer Belt",
-            TL_COMMUNITY,
-            (Vector2){2,6},
+            TL_JTAD,
+            (Vector2){2, 2},
             red,
             ES_LEGS,
             CreateEmptyStatBonuses(),
@@ -606,8 +606,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Elemancer's Axe",
-            TL_COMMUNITY,
-            (Vector2){3,1},
+            TL_JTAD,
+            (Vector2){8, 0},
             red,
             ES_WEAPON,
             CreateEmptyStatBonuses(),
@@ -743,8 +743,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Eight Eyed Mask",
-            TL_COMMUNITY,
-            (Vector2){7,6},
+            TL_JTAD,
+            (Vector2){7, 2},
             purple,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -761,8 +761,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Hollow Skull",
-            TL_COMMUNITY,
-            (Vector2){8,6},
+            TL_JTAD,
+            (Vector2){8,2},
             raywhite,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -794,8 +794,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Crystal Mail",
-            TL_COMMUNITY,
-            (Vector2){5,2},
+            TL_SOFUS,
+            (Vector2){0, 1},
             raywhite,
             ES_TORSO,
             CreateEmptyStatBonuses(),
@@ -861,8 +861,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Antler Helmet",
-            TL_COMMUNITY,
-            (Vector2){0,7},
+            TL_MAGNETER,
+            (Vector2){0,0},
             lightgray,
             ES_HEAD,
             CreateEmptyStatBonuses(),
@@ -878,8 +878,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Stone Boots",
-            TL_COMMUNITY,
-            (Vector2){1,7},
+            TL_MAGNETER,
+            (Vector2){1,0},
             gray,
             ES_LEGS,
             CreateEmptyStatBonuses(),
@@ -896,8 +896,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Golden Cloak",
-            TL_COMMUNITY,
-            (Vector2){5,5},
+            TL_JTAD,
+            (Vector2){7, 1},
             gold,
             ES_TORSO,
             CreateEmptyStatBonuses(),
@@ -913,8 +913,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Golden Skirt",
-            TL_COMMUNITY,
-            (Vector2){9,6},
+            TL_JTAD,
+            (Vector2){9, 2},
             gold,
             ES_LEGS,
             CreateEmptyStatBonuses(),
@@ -930,8 +930,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "The Coin",
-            TL_COMMUNITY,
-            (Vector2){6,6},
+            TL_JTAD,
+            (Vector2){6, 2},
             gold,
             ES_WEAPON,
             CreateEmptyStatBonuses(),
@@ -978,8 +978,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Master's Robe",
-            TL_COMMUNITY,
-            (Vector2){7,1},
+            TL_SOFUS,
+            (Vector2){7,0},
             darkgreen,
             ES_TORSO,
             CreateEmptyStatBonuses(),
@@ -993,8 +993,8 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Vengeful Spirit",
-            TL_COMMUNITY,
-            (Vector2){5,2},
+            TL_SOFUS,
+            (Vector2){0, 1},
             violet,
             ES_TORSO,
             CreateEmptyStatBonuses(),
@@ -1025,17 +1025,61 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Rose Signet",
-            TL_COMMUNITY,
-            (Vector2){6,7},
+            TL_JTAD,
+            (Vector2){2, 3},
             maroon,
             ES_TORSO,
             CreateEmptyStatBonuses(),
-            LE_REPLDMG_ROSE_SIGNET,
+            LE_RPLDMG_ROSE_SIGNET,
         };
         result.statBonuses.mastery = 50;
         result.statBonuses.staminaRegen = 50;
         result.statBonuses.critBonus = 20;
         
+                return result;
+        case ITEM_IRON_KISS:
+        result = (Item){
+            id,
+            "Iron Kiss",
+            TL_JTAD,
+            (Vector2){6, 3},
+            violet,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_ONHIT_IRON_KISS,
+        };
+        result.statBonuses.mastery = 80;
+        result.statBonuses.armor = 8;
+        result.statBonuses.defense = 80;
+        
+        return result;
+        case ITEM_BELT_HOLSTER:
+        result = (Item){
+            id,
+            "Belt Holster",
+            TL_JTAD,
+            (Vector2){7, 3},
+            brown,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_ONENC_BELT_HOLSTER,
+        };
+
+        return result;
+        case ITEM_ANCIENT_ROOTS:
+        result = (Item){
+            id,
+            "Ancient Roots",
+            TL_JTAD,
+            (Vector2){8, 3},
+            beige,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_ONDTH_ANCIENT_ROOTS,
+        };
+        result.statBonuses.speed = -40;
+        result.statBonuses.defense = 80;
+        result.statBonuses.mastery = 50;
         return result;
     }
 }

@@ -49,6 +49,7 @@ typedef enum ABILITY
     AB_CULTIST_SPAWN_SPORES,
     AB_CULTIST_SPAWN_GROW,
     AB_CULTIST_SPAWN_INVIGORATE,
+    AB_CULTIST_SPAWN_MIRACLE,
     AB_WOLF_BITE,
     AB_WOLF_HUNT,
     AB_WOLF_FERAL_AURA,
@@ -57,6 +58,15 @@ typedef enum ABILITY
     AB_GUIDE_HARMONIZE,
     AB_GUIDE_DISTRACT,
     AB_GUIDE_DANCE_OF_THE_DESPERATE,
+    AB_CAT_WIZARD_ARCANE_BLAST,     // aoe damage
+    AB_CAT_WIZARD_CURSE_OF_MEEK,    // reduce mastery by 80%
+    AB_CAT_WIZARD_HEX_OF_AMBITION,      // deal damage and stamina equal to enemy crit progress * crit bonus and empty their crit
+    AB_CAT_WIZARD_THOUSAND_SCRATCHES,       // big bleed and pain 
+    AB_CAT_WIZARD_CRUSH,            // deal damage dependant on target Def and missing health
+    AB_CAT_WIZARD_ERECT_PILLAR,     // create pillar
+    AB_CAT_WIZARD_PILLAR_ZAP,       // 50 true damage
+    AB_CAT_WIZARD_PILLAR_OVERCLOCK,     // make pillars faster
+    AB_CAT_WIZARD_PILLAR_AMPLIFY,       // give everyone 20 Mastery
     AB_MIMIC_PETRIFY,
     AB_MIMIC_CHOMP,
     AB_MIMIC_IMPALE,
@@ -104,6 +114,9 @@ typedef enum ABILITY
     AB_QPIG_TACKLE,
     AB_QPIG_ROB,
     AB_QPIG_SPRINT,
+    AB_TWYRM_VENOM_SPIT,
+    AB_TWYRM_IMPEDE,
+    AB_TWYRM_CLAMP_DOWN,
 } ABILITY;
 
 enum ABILITY_FLAGS

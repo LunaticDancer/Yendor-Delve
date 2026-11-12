@@ -318,7 +318,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .currentStamina = 1000,
                     .stamina = 1000,
                     .staminaRegen = 150,
-                    .speed = 100,
+                    .speed = 160,
                     .defense = 60,
                     .armor = 0,
                     .critBonus = 100,

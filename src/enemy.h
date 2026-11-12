@@ -10,6 +10,8 @@ typedef enum ENEMY_ID
     EN_NONE,
     ENB_DUNGEON_MASTER,
     ENB_GREEN_DRAGON,
+    ENB_CAT_WIZARD,
+    ENB_CAT_WIZARD_PILLAR,
     ENB_CHOIR_LEFT,
     ENB_CHOIR_PREACHER,
     ENB_CHOIR_RIGHT,
@@ -34,6 +36,7 @@ typedef enum ENEMY_ID
     EN_FROG_STINKFLY,
     EN_QUICKPIG,
     EN_PIGJAR,
+    EN_TUNNEL_WYRM,
 } ENEMY_ID;
 
 typedef enum TARGETTING_TYPE
@@ -51,6 +54,7 @@ typedef struct Enemy
     TARGETTING_TYPE targettingBehavior;
     ABILITY lastUsedAbility;
     char* customDeathMessage;
+    bool optionalToKill;
 } Enemy;
 
 bool IsEnemyIrrelevant(Enemy e);
