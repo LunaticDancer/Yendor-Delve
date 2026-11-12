@@ -2054,21 +2054,21 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             + appState.stateData.gameState.stateData.battleState.prayerFatigue * 15) < 400 * CalculateEffectAmplification(caster, true))
         {
             CreatureStats* target;
-            switch(rand() % 16)
+            switch(rand() % 17)
             {
                 case 0:
                 target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
-                (*target).encounterStats.shield += 50;
+                (*target).encounterStats.shield += 100;
                 message = CombineStrings("The Mindless One grants ", target->baseStats.name);
-                message = CombineStrings(message, " 50 Shield.");
+                message = CombineStrings(message, " 100 Shield.");
                 AddMessageToFeed(message);
                 break;
                 case 1:
                 target = &appState.stateData.gameState.stateData.battleState.enemies[rand()%3].stats;
                 message = CombineStrings("The Mindless One smites ", target->baseStats.name);
-                message = CombineStrings(message, " for 100 damage.");
+                message = CombineStrings(message, " for 300 damage.");
                 AddMessageToFeed(message);
-                DealDamage(100, target,false, NULL);
+                DealDamage(300, target,false, NULL);
                 break;
                 case 2:
                 Item cultistPrayItem = InitItem(itemPoolTier1[rand() % ITEM_POOL_TIER_ONE_SIZE]);
@@ -2081,19 +2081,19 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 Character* cultistPrayUpgradeCharacter = &appState.stateData.gameState.playerTeam[rand()%3];
                 Item* cultistPrayUpgradeItem = &(*cultistPrayUpgradeCharacter).items[rand()%4];
                 if(cultistPrayUpgradeItem->itemId == ITEM_NONE) break;
-                cultistPrayUpgradeItem->statBonuses.mastery += 5;
-                cultistPrayUpgradeCharacter->stats.itemStats.mastery += 5;
+                cultistPrayUpgradeItem->statBonuses.mastery += 20;
+                cultistPrayUpgradeCharacter->stats.itemStats.mastery += 20;
                 message = CombineStrings("The Mindless One upgrades ", (*cultistPrayUpgradeItem).name);
                 message = CombineStrings(message, " used by ");
                 message = CombineStrings(message, (*cultistPrayUpgradeCharacter).stats.baseStats.name);
-                message = CombineStrings(message, ", imbuing it with 5 additional Mastery.");
+                message = CombineStrings(message, ", imbuing it with 20 additional Mastery.");
                 AddMessageToFeed(message);
                 break;
                 case 4:
                 target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
-                (*target).baseStats.currentStamina += 100;
+                (*target).baseStats.currentStamina += 150;
                 message = CombineStrings("The Mindless One grants ", target->baseStats.name);
-                message = CombineStrings(message, " 100 Stamina.");
+                message = CombineStrings(message, " 150 Stamina.");
                 AddMessageToFeed(message);
                 break;
                 case 5:
@@ -2143,7 +2143,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 break;
                 case 12:
                 target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
-                (*target).itemStats.health += 100;
+                (*target).itemStats.health += 200;
                 message = CombineStrings("The Mindless One makes ", target->baseStats.name);
                 message = CombineStrings(message, " a little fatter.");
                 AddMessageToFeed(message);
@@ -2161,6 +2161,13 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 case 14:
                 AddMessageToFeed("Suddenly the world seems a little nicer.");
                 appState.stateData.gameState.karmicBalance += 1;
+                break;
+                case 15:
+                target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
+                target->statusEffects[SE_PROTECTION] += 2;
+                message = CombineStrings("The Mindless One blankets ", target->baseStats.name);
+                message = CombineStrings(message, " in an aura of good fortune.");
+                AddMessageToFeed(message);
                 break;
                 default:
                 AddMessageToFeed("The Mindless One laughs jubilantly, the otherworldly voice echoing across the cave system.");
