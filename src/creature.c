@@ -225,7 +225,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             CastAbility(AB_CULTIST_PRAY,0,&footFungusDummy,(CreatureStats *[0]){}, 0);
             break;
         case LE_ONHIT_TUNNEL_WYRM:
-            if(damage >= 100)
+            if(damage < 100) break;
                 message = CombineStrings("Startled by the powerful attack", (*c).baseStats.name);
                 message = CombineStrings(message, " retreats into its hole. Its next turn is delayed by 200 moments and it is applied 1 Protection and 30 Berserk.");
                 AddMessageToFeed(message);
@@ -3487,7 +3487,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " and doesn't let go, dealing ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " damage and reducing their Mastery by ");
-        sprintf(strnum, "%d", masteryDebuff);
+        sprintf(strnum, "%d", -masteryDebuff);
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " for 500 moments.");
         AddMessageToFeed(message);
