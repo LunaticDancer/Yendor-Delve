@@ -179,8 +179,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Arcane Resonator",
-                    .tileset = TL_COMMUNITY,
-                    .tileLookupPosition = (Vector2){1,2},
+                    .tileset = TL_JTAD,
+                    .tileLookupPosition = (Vector2){1,1},
                     .color = skyblue,
 
                     .ticksUntilNextTurn = 500,
@@ -620,8 +620,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Tooth Fairy",
-                    .tileset = TL_COMMUNITY,
-                    .tileLookupPosition = (Vector2){4,4},
+                    .tileset = TL_QUIEK,
+                    .tileLookupPosition = (Vector2){2, 0},
                     .color = raywhite,
 
                     .ticksUntilNextTurn = 0,
@@ -660,8 +660,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Tooth Golem",
-                    .tileset = TL_COMMUNITY,
-                    .tileLookupPosition = (Vector2){5,4},
+                    .tileset = TL_QUIEK,
+                    .tileLookupPosition = (Vector2){3, 0},
                     .color = raywhite,
 
                     .ticksUntilNextTurn = 400,
@@ -1018,8 +1018,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Giant Frog",
-                    .tileset = TL_COMMUNITY,
-                    .tileLookupPosition = (Vector2){4,6},
+                    .tileset = TL_JTAD,
+                    .tileLookupPosition = (Vector2){4, 2},
                     .color = darkblue,
 
                     .ticksUntilNextTurn = 0,
@@ -1057,8 +1057,8 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Stinkfly",
-                    .tileset = TL_COMMUNITY,
-                    .tileLookupPosition = (Vector2){5,6},
+                    .tileset = TL_JTAD,
+                    .tileLookupPosition = (Vector2){5, 2},
                     .color = brown,
 
                     .ticksUntilNextTurn = 0,
@@ -1097,7 +1097,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Quickpig",
-                    .tileset = TL_COMMUNITY,
+                    .tileset = TL_JTAD,
                     .tileLookupPosition = (Vector2){1,0},
                     .color = brown,
 
@@ -1137,7 +1137,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Jar",
-                    .tileset = TL_COMMUNITY,
+                    .tileset = TL_JTAD,
                     .tileLookupPosition = (rand() % 8 == 0)? (Vector2){2,0} : (Vector2){3,0},
                     .color = pickedcolor[(rand() % 16)],
 
