@@ -943,7 +943,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_WOLF_FERAL_AURA:
         sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Give everyone else ", strnum);
-        result = CombineStrings(result, " (20 + 20% Mastery) Berserk. Gain Armour equal to 1% of everyone's Berserk.");
+        result = CombineStrings(result, " (20 + 20% Mastery) Berserk. If you have none, gain 1 Protection.");
         return result;
     case AB_WOLF_PURSUE:
         return "Target enemy loses Speed equal to their Berserk.";
@@ -2174,11 +2174,9 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         break;
     case AB_WOLF_FERAL_AURA:
         primaryEffectValue = (20 + GET_SCALING(caster, mastery) * 0.2) * CalculateEffectAmplification(caster, true);
-        short wolfAuraSummaryBerserk = 0;
         for (int i = 0; i < numberOfTargets; i++)
         {
             if(targets[i]->baseStats.currentHealth <= 0) continue;
-            wolfAuraSummaryBerserk += targets[i]->statusEffects[SE_BERSERK];
             if(targets[i] == caster) continue;
             AddCreatureToFlicker(targets[i]);
             targets[i]->statusEffects[SE_BERSERK] += primaryEffectValue;
@@ -2186,12 +2184,9 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " stands ominously still, applying ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Berserk to everyone else and gaining ");
-        sprintf(strnum, "%d", (short)(wolfAuraSummaryBerserk * 0.01));
-        message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Armour.");
+        message = CombineStrings(message, " Berserk to everyone else and gaining 1 Protection.");
         AddMessageToFeed(message);
-        caster->encounterStats.armor += (short)(wolfAuraSummaryBerserk * 0.01);
+        if(caster->statusEffects[SE_PROTECTION] < 1) caster->statusEffects[SE_PROTECTION] += 1;
         break;
     case AB_WOLF_PURSUE:
         primaryEffectValue = targets[0]->statusEffects[SE_BERSERK];
