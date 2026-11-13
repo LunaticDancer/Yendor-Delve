@@ -1142,7 +1142,7 @@ Item InitItem(ITEM_ID id)
             LE_NONE,
         };
         result.statBonuses.critRate = 25;
-        result.statBonuses.speed = 10;
+        result.statBonuses.critBonus = 20;
         result.statBonuses.mastery = 10;
 
         return result;
