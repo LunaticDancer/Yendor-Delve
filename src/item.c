@@ -1137,7 +1137,7 @@ Item InitItem(ITEM_ID id)
             TL_ITEMS,
             (Vector2){19, 4},
             lightgray,
-            ES_LEGS,
+            ES_WEAPON,
             CreateEmptyStatBonuses(),
             LE_NONE,
         };
