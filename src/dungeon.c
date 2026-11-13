@@ -186,6 +186,10 @@ void InitItemPools()
     itemPoolTier1[23] = ITEM_BATTLE_SHIELD;
     itemPoolTier1[24] = ITEM_STONE_BOOTS;
     itemPoolTier1[25] = ITEM_TOY_DAGGER;
+    itemPoolTier1[26] = ITEM_ARTISAN_GOGGLES;
+    itemPoolTier1[27] = ITEM_ARTISAN_COAT;
+    itemPoolTier1[28] = ITEM_ARTISAN_TROUSERS;
+    itemPoolTier1[29] = ITEM_ARTISAN_TOOLS;
 
     itemPoolTier2[0] = ITEM_ELEMANCER_CROWN;
     itemPoolTier2[1] = ITEM_ELEMANCER_CAPE;

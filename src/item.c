@@ -1081,5 +1081,70 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.defense = 80;
         result.statBonuses.mastery = 50;
         return result;
+        case ITEM_ARTISAN_GOGGLES:
+        result = (Item){
+            id,
+            "Artisan's Goggles",
+            TL_JTAD,
+            (Vector2){9, 3},
+            beige,
+            ES_HEAD,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.critRate = 25;
+        result.statBonuses.mastery = 25;
+
+        return result;
+        case ITEM_ARTISAN_COAT:
+        result = (Item){
+            id,
+            "Artisan's Coat",
+            TL_SOFUS,
+            (Vector2){8, 0},
+            beige,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+            
+        };
+        result.statBonuses.critRate = 25;
+        result.statBonuses.mastery = 10;
+        result.statBonuses.armor = 2;
+
+        return result;
+        case ITEM_ARTISAN_TROUSERS:
+        result = (Item){
+            id,
+            "Artisan's Trousers",
+            TL_ITEMS,
+            (Vector2){12, 2},
+            beige,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+            
+        };
+        result.statBonuses.critRate = 25;
+        result.statBonuses.speed = 20;
+        result.statBonuses.armor = 1;
+
+        return result;
+        case ITEM_ARTISAN_TOOLS:
+        result = (Item){
+            id,
+            "Artisan's Tool",
+            TL_ITEMS,
+            (Vector2){19, 4},
+            lightgray,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.critRate = 25;
+        result.statBonuses.critBonus = 20;
+        result.statBonuses.mastery = 10;
+
+        return result;
     }
 }
