@@ -617,7 +617,7 @@ short CalculateNextTurnTicks(CreatureStats *_creature)
     if (speed > 0)
     {
         float value = 100.0 / (100 + speed);
-        return (short)(value * 1000);
+        return MAX(1,(short)(value * 1000));
     }
     else
     {
