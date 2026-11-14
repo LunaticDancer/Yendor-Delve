@@ -2126,6 +2126,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 appState.stateData.gameState.stateData.battleState.enemies[i] = InitEnemyData(EN_CULTIST_SUMMON);
                 appState.stateData.gameState.stateData.battleState.enemies[i].stats.baseStats.mastery = 
                     GET_SCALING(caster, mastery) * CalculateEffectAmplification(caster, true);
+                appState.stateData.gameState.stateData.battleState.enemies[i].stats.baseStats.speed = 
+                    GET_SCALING(caster, speed) * CalculateEffectAmplification(caster, true);
                 message = CombineStrings((*caster).baseStats.name, " summons the spawn of The Mindless One, blessing the earth with its presence.");
                 AddCreatureToFlicker(targets[0]);
                 AddMessageToFeed(message);
