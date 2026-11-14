@@ -165,7 +165,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONHIT_PENITENT_MAIL: return "When hit, gain 2 Bleed and 10 Speed.";
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
-        case LE_ONHIT_IRON_KISS: return "When you get hit and survive, retaliate by dealing damage equal to your mastery.";
+        case LE_ONHIT_IRON_KISS: return "When hit, return damage equal to your Mastery.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
         default: return NULL;
     }

@@ -215,6 +215,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.mastery = 60;
         result.statBonuses.armor = 3;
+        result.statBonuses.poise = 40;
         return result;
         //
         case ITEM_JUGGERNAUT_ARMOR:
@@ -231,6 +232,7 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.health = 500;
         result.statBonuses.armor = 8;
         result.statBonuses.defense = 160;
+        result.statBonuses.poise = 60;
         result.statBonuses.speed = -20;
         return result;
         //
@@ -264,6 +266,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.armor = 5;
         result.statBonuses.defense = 100;
+        result.statBonuses.poise = 60;
         result.statBonuses.speed = -15;
         return result;
         //
@@ -281,6 +284,7 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.health = 300;
         result.statBonuses.armor = 4;
         result.statBonuses.defense = 80;
+        result.statBonuses.poise = 60;
         result.statBonuses.speed = -10;
         return result;
         //
@@ -361,6 +365,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.targetPriority = -200;
         result.statBonuses.defense = 40;
+        result.statBonuses.poise = 180;
         result.statBonuses.speed = 20;
         return result;
         //
@@ -473,6 +478,7 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.defense = 100;
         result.statBonuses.armor = 10;
         result.statBonuses.targetPriority = 100;
+        result.statBonuses.poise = 100;
         result.statBonuses.speed = -10;
         return result;
         //
@@ -503,6 +509,7 @@ Item InitItem(ITEM_ID id)
             LE_NONE,
         };
         result.statBonuses.health = 1500;
+        result.statBonuses.poise = 500;
         return result;
         //
         case ITEM_TRAVELER_SHOES:
@@ -518,6 +525,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.stamina = 300;
         result.statBonuses.staminaRegen = 150;
+        result.statBonuses.poise = 20;
         return result;
         //
         case ITEM_BATTLE_SHIELD:
@@ -649,6 +657,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.targetPriority = 150;
         result.statBonuses.defense = 100;
+        result.statBonuses.poise = 200;
         result.statBonuses.armor = 20;
         return result;
         //
@@ -680,6 +689,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.mastery = 40;
         result.statBonuses.speed = 40;
+        result.statBonuses.poise = 50;
         return result;
         //
         case ITEM_CROWN_OF_FLOWERS:
@@ -694,6 +704,7 @@ Item InitItem(ITEM_ID id)
             LE_NONE,
         };
         result.statBonuses.staminaRegen = 400;
+        result.statBonuses.poise = 100;
         return result;
         //
         case ITEM_LIVING_CHAINMAIL:
@@ -709,6 +720,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.speed = 20;
         result.statBonuses.armor = 10;
+        result.statBonuses.poise = 40;
         return result;
         //
         case ITEM_BALL_ON_CHAIN:
@@ -724,6 +736,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.speed = -10;
         result.statBonuses.critBonus = 100;
+        result.statBonuses.poise = 40;
         return result;
         //
         case ITEM_MORNINGSTAR:
@@ -907,6 +920,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.mastery = 200;
         result.statBonuses.defense = 40;
+        result.statBonuses.poise = 60;
         result.statBonuses.speed = -20;
         
         return result;
@@ -924,6 +938,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.mastery = 200;
         result.statBonuses.defense = 40;
+        result.statBonuses.poise = 60;
         result.statBonuses.speed = -20;
         
         return result;
@@ -1053,6 +1068,7 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.mastery = 180;
         result.statBonuses.armor = 8;
         result.statBonuses.defense = 180;
+        result.statBonuses.poise = 180;
         
         return result;
         case ITEM_BELT_HOLSTER:
