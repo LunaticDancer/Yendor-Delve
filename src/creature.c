@@ -245,7 +245,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             break;
         case LE_ONHIT_TUNNEL_WYRM:
             if(damage < 100) break;
-                message = CombineStrings("Startled by the powerful attack", (*c).baseStats.name);
+                message = CombineStrings("Startled by the powerful attack" , (*c).baseStats.name);
                 message = CombineStrings(message, " retreats into its hole. Its next turn is delayed by 200 moments and it is applied 1 Protection and 30 Berserk.");
                 AddMessageToFeed(message);
                 c->baseStats.ticksUntilNextTurn += 200;
@@ -969,12 +969,12 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         +MAGUS_TUTOR_COST + caster->statusEffects[SE_EXHAUSTION]) * 0.01)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, " (40 + 40% Mastery) Mastery and ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (10 + 1% missing Stamina) Crit Multiplier.");
+        result = CombineStrings(result, " (10 + 1% missing Stamina) Crit Bonus.");
         return result;
-    case AB_MAGUS_SARCOPHAGUS:
+    case AB_MAGUS_AGUS:
         sprintf(strnum, "%.0f", (((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) + 
             (caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
-            +MAGUS_SARCOPHAGUS_COST)) * CalculateEffectAmplification(caster, true));
+            +MAGUS_AGUS_COST)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Give an ally ", strnum);
         sprintf(strnum, "%.0f", (((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.05) + 
             (caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
@@ -1008,7 +1008,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (60 + 60% Mastery) Exhaustion to an enemy and gain Mastery equal to 20% of their missing Health.");
         return result;
     case AB_CULTIST_MADDENING_TOUCH:
-        damage = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        damage = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
@@ -1020,10 +1020,10 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_CULTIST_MANIA:
         sprintf(strnum, "%.0f", ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 3.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Give an ally ", strnum);
-        sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (400 + 300% Mastery) Stamina Regen, ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (50 + 150% Mastery) Mastery and apply Confusion for 400 moments.");
+        result = CombineStrings(result, " (100 + 150% Mastery) Mastery and apply Confusion for 400 moments.");
         return result;
     case AB_CULTIST_SUMMON:
         return "Create a helpful monster in an empty enemy spot.";
@@ -1063,7 +1063,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         }
         sprintf(strnum, "%.0f", ((50+ (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Gain ", strnum);
-        sprintf(strnum, "%.0f", ((10 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (50 + 80% Mastery) Shield. Deal ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (20 + 30% Mastery) damage to an enemy. If your Defense is higher than the target's, the damage is further amplified by the difference.");
@@ -1332,7 +1332,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (80 + 100% Mastery) damage to an enemy.");
         return result;
     case AB_FIRE_ELEMENTAL_FLARE:
-        sprintf(strnum, "%.0f", ((20 + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((20 + GET_SCALING(caster, mastery) * 0.3)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Gain ", strnum);
         result = CombineStrings(result, " (20 + 30% Mastery) Speed and Mastery.");
         return result;
@@ -1391,7 +1391,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
             (GET_SCALING(caster, defense) * 0.10)
             )* GetDamageMult(caster) * CalculateEffectAmplification(caster, true)));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (25 + 25\% Mastery + 10\% Mastery) damage to an enemy.");
+        result = CombineStrings(result, " (25 + 25\% Mastery + 10\% Defense) damage to an enemy.");
         return result;
     case AB_FROG_SING:
         sprintf(strnum, "%.0f",(20 + GET_SCALING(caster, defense) * 0.1));
@@ -1402,13 +1402,13 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         ShowEnemyDamageOverlays((100 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true), false);
         sprintf(strnum, "%.0f",(100 + (GET_SCALING(caster, mastery) * 0.30) + (GET_SCALING(caster, speed) * 0.1))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (50 + 30% Mastery + 10% Speed) Damage, then permanently steal an item from their person if you haven't done so already.");
+        result = CombineStrings(result, " (100 + 30% Mastery + 10% Speed) Damage, then permanently steal an item from their person if you haven't done so already.");
         return result;
     case AB_QPIG_TACKLE:
         ShowEnemyDamageOverlays((150 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true), false);
         sprintf(strnum, "%.0f",(150 + (GET_SCALING(caster, mastery) * 0.40))* GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (70 + 40% Mastery) Damage and delay the target's turn by ");
+        result = CombineStrings(result, " (150 + 40% Mastery) Damage and delay the target's turn by ");
         sprintf(strnum, "%d", GET_SCALING(caster, speed));
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (100% Speed) moments.");
@@ -1992,7 +1992,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         magusSarcophagusBonus.armor = magusSarcophagusArmor;
         magusSarcophagusBonus.defense = primaryEffectValue;
         StatDebuff magusSarcophagusBuff = (StatDebuff){CalculateNextTurnTicks(caster), magusSarcophagusBonus};
-        ApplyStatDebuff(caster, magusSarcophagusBuff);
+        ApplyStatDebuff(targets[0], magusSarcophagusBuff);
         break;
     case AB_RIPPER_REND:
         primaryEffectValue = (10 + GET_SCALING(caster, mastery) * 0.15) * CalculateEffectAmplification(caster, true);
@@ -2093,7 +2093,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         cultistManiaBonus.mastery = cultistManiaMastery;
         cultistManiaBonus.staminaRegen = primaryEffectValue;
         StatDebuff cultistManiaBuff = (StatDebuff){400, cultistManiaBonus};
-        ApplyStatDebuff(caster, cultistManiaBuff);
+        ApplyStatDebuff(targets[0], cultistManiaBuff);
         ApplyStatusEffect(targets[0], SE_CONFUSION, 400);
         break;
     case AB_CULTIST_SUMMON:
@@ -3592,6 +3592,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Target Priority.");
         AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
         targets[0]->encounterStats.speed-=primaryEffectValue;
         targets[0]->encounterStats.defense-=defenseSap;
         targets[0]->encounterStats.targetPriority-=targetPriSap;
@@ -3614,7 +3615,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         StatBonuses twyrmClampBonus = CreateEmptyStatBonuses();
         twyrmClampBonus.mastery = masteryDebuff;
         StatDebuff twyrmClampDebuff = (StatDebuff){500, twyrmClampBonus};
-        ApplyStatDebuff(caster, twyrmClampDebuff);
+        ApplyStatDebuff(targets[0], twyrmClampDebuff);
         break;
     
     default:
