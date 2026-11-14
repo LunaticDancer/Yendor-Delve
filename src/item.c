@@ -42,6 +42,7 @@ char* GetItemStatSpread(Item it)
     GET_INT  (speed, "Speed");
     GET_INT  (defense, "Defense");
     GET_INT  (armor, "Armour");
+    GET_INT  (grit, "Grit");
     GET_FLOAT(critBonus, "% Crit Bonus", 1.0f);
     GET_INT  (critRate, "Crit Rate");
     GET_INT  (mastery, "Mastery");
@@ -107,6 +108,7 @@ char* GetItemStatDiff(Item current, Item selected)
     DIFF_INT  (speed, "Speed");
     DIFF_INT  (defense, "Defense");
     DIFF_INT  (armor, "Armour");
+    DIFF_INT  (grit, "Grit");
     DIFF_FLOAT(critBonus, "% Crit Bonus", 1.0f);
     DIFF_INT  (critRate, "Crit Rate");
     DIFF_INT  (mastery, "Mastery");

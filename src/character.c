@@ -27,6 +27,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 60,
                     .armor = 1,
+                    .grit = 40,
                     .critBonus = 100,
                     .critRate = 5,
                     .critCounter = 0,
@@ -69,6 +70,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 20,
                     .armor = 0,
+                    .grit = 20,
                     .critBonus = 100,
                     .critRate = 5,
                     .critCounter = 0,
@@ -111,6 +113,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 20,
                     .armor = 0,
+                    .grit = 0,
                     .critBonus = 40,
                     .critRate = 10,
                     .critCounter = 0,
@@ -153,6 +156,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 200,
                     .defense = 100,
                     .armor = 1,
+                    .grit = 500,
                     .critBonus = 100,
                     .critRate = 15,
                     .critCounter = 0,
@@ -195,6 +199,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 90,
                     .defense = 10,
                     .armor = 0,
+                    .grit = 0,
                     .critBonus = 100,
                     .critRate = 5,
                     .critCounter = 0,
@@ -237,6 +242,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 0,
                     .armor = 0,
+                    .grit = 0,
                     .critBonus = 100,
                     .critRate = 10,
                     .critCounter = 0,
@@ -279,6 +285,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 80,
                     .defense = 40,
                     .armor = 0,
+                    .grit = 50,
                     .critBonus = 60,
                     .critRate = 20,
                     .critCounter = 0,
@@ -321,6 +328,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 160,
                     .defense = 60,
                     .armor = 0,
+                    .grit = 50,
                     .critBonus = 100,
                     .critRate = 20,
                     .critCounter = 0,
@@ -363,6 +371,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 200,
                     .defense = 50,
                     .armor = 0,
+                    .grit = 200,
                     .critBonus = 100,
                     .critRate = 5,
                     .critCounter = 0,
@@ -405,6 +414,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 80,
                     .armor = 1,
+                    .grit = 100,
                     .critBonus = 100,
                     .critRate = 5,
                     .critCounter = 0,
@@ -507,6 +517,10 @@ char* GetCharacterStatsRundown(Character ch)
 
      result = CombineStrings(result, "\nArmour: ");
      sprintf(str_num, "%d", ch.stats.baseStats.armor + ch.stats.itemStats.armor);
+    result = CombineStrings(result, str_num);
+
+     result = CombineStrings(result, "\nGrit: ");
+     sprintf(str_num, "%d", ch.stats.baseStats.grit + ch.stats.itemStats.grit);
     result = CombineStrings(result, str_num);
 
      result = CombineStrings(result, "\nCrit Rate: ");

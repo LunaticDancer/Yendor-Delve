@@ -83,6 +83,7 @@ typedef struct CreatureBaseStats
     short speed;                      // diminishing formula, at speed 0 the wait time is 1000 ticks
     short defense;                      // diminishing formula
     short armor;                        // flat damage reduction
+    short grit;                             // resistance to status effects
     float critBonus;             // damage amplification percent on top of baseline 100%
     short critRate;                     // crit can exceed 100%, making it proc mustiple times, applying the multiplier each time
     short critCounter;                  // crit occurence accumulation, persists between battles
@@ -99,6 +100,7 @@ typedef struct StatBonuses
     short speed;
     short defense;
     short armor;
+    short grit;
     float critBonus;
     short critRate;
     short mastery;
@@ -150,7 +152,7 @@ void HandleStartOfCombatEffects(CreatureStats*);
 void HandleOnDeathEffects(CreatureStats*);
 void HandleOnAbilityEffects(CreatureStats*, ABILITY,CreatureStats **targets, short numberOfTargets);
 void EmptyStatusEffects(CreatureStats*);
-void ApplyStatusEffect(CreatureStats*, STATUS_EFFECT, short);
+void ApplyStatusEffect(CreatureStats*, STATUS_EFFECT, short,bool);
 void ResetTurnClock(CreatureStats*);
 short CalculateNextTurnTicks(CreatureStats* _creature);
 short CalculateDamage(short baseDamage, CreatureStats* target);

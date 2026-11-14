@@ -1039,13 +1039,13 @@ void DrawCharacterStats()
         appState.stateData.gameState.stateData.dungeonState.selectionX
         ].stats.baseStats.name;
     Vector2 textSize = MeasureTextEx(basicFontLarger, name, 16, 0);
-    Vector2 textPosition = (Vector2){480 - textSize.x / 2, 64 + LAYOUT_SPACING};
+    Vector2 textPosition = (Vector2){480 - textSize.x / 2, 60 + LAYOUT_SPACING};
     DrawTextEx(basicFontLarger, name, textPosition, 16, 0, *white);
 
     char* text = GetCharacterStatsRundown(appState.stateData.gameState.playerTeam[
         appState.stateData.gameState.stateData.dungeonState.selectionX
     ]);
-    DrawTextBoxed(basicFontLarger, text, (Rectangle){336, 88+LAYOUT_SPACING, 304-LAYOUT_SPACING, 360}, 16, 0, true, *gray);
+    DrawTextBoxed(basicFontLarger, text, (Rectangle){336, 84+LAYOUT_SPACING, 304-LAYOUT_SPACING, 360}, 16, 0, true, *gray);
 }
 
 void DrawItemSelection()
