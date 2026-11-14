@@ -770,7 +770,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.mastery = -50;
         result.statBonuses.targetPriority = 50;
-        result.statBonuses.defense = 70;
+        result.statBonuses.defense = 200;
         result.statBonuses.health = 750;
         
         return result;
@@ -903,9 +903,9 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
             LE_NONE,
         };
-        result.statBonuses.mastery = 80;
+        result.statBonuses.mastery = 200;
         result.statBonuses.defense = 40;
-        result.statBonuses.speed = -10;
+        result.statBonuses.speed = -20;
         
         return result;
         //
@@ -920,9 +920,9 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
             LE_NONE,
         };
-        result.statBonuses.mastery = 80;
+        result.statBonuses.mastery = 200;
         result.statBonuses.defense = 40;
-        result.statBonuses.speed = -10;
+        result.statBonuses.speed = -20;
         
         return result;
         //
@@ -952,7 +952,7 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
             LE_ONENC_ILLUSION_PROTECT,
         };
-        result.statBonuses.armor = 10;
+        result.statBonuses.armor = 30;
         result.statBonuses.targetPriority = -50;
         
         return result;
@@ -1032,8 +1032,8 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
             LE_RPLDMG_ROSE_SIGNET,
         };
-        result.statBonuses.mastery = 50;
-        result.statBonuses.staminaRegen = 50;
+        result.statBonuses.mastery = 60;
+        result.statBonuses.staminaRegen = 60;
         result.statBonuses.critBonus = 20;
         
                 return result;
@@ -1048,9 +1048,9 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
             LE_ONHIT_IRON_KISS,
         };
-        result.statBonuses.mastery = 80;
+        result.statBonuses.mastery = 180;
         result.statBonuses.armor = 8;
-        result.statBonuses.defense = 80;
+        result.statBonuses.defense = 180;
         
         return result;
         case ITEM_BELT_HOLSTER:
@@ -1145,6 +1145,22 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.critBonus = 20;
         result.statBonuses.mastery = 10;
 
+        return result;
+        //
+        case ITEM_WARPICK:
+        result = (Item){
+            id,
+            "Warpick",
+            TL_ITEMS,
+            (Vector2){3, 4},
+            gray,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_ONATT_WARPICK,
+        };
+        result.statBonuses.mastery = 80;
+        result.statBonuses.critRate = 80;
+        result.statBonuses.critBonus = 80;
         return result;
     }
 }
