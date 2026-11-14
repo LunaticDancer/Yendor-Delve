@@ -924,9 +924,9 @@ void HandleEncounterSelection()
 		break;
 
 	case ENC_BONFIRE:
-		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[0].stats.baseStats.health + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) * 0.3;
-		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[1].stats.baseStats.health + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) * 0.3;
-		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth += (appState.stateData.gameState.playerTeam[2].stats.baseStats.health + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth += 1 + (appState.stateData.gameState.playerTeam[0].stats.baseStats.health + appState.stateData.gameState.playerTeam[0].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth += 1 + (appState.stateData.gameState.playerTeam[1].stats.baseStats.health + appState.stateData.gameState.playerTeam[1].stats.itemStats.health) * 0.3;
+		appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth += 1 + (appState.stateData.gameState.playerTeam[2].stats.baseStats.health + appState.stateData.gameState.playerTeam[2].stats.itemStats.health) * 0.3;
 
 		appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth = appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth >
 																						   (appState.stateData.gameState.playerTeam[0].stats.baseStats.health + appState.stateData.gameState.playerTeam[0].stats.itemStats.health)
