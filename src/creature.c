@@ -1011,7 +1011,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 4.0)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 4.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (100 + 100% Mastery) Damage and apply Confusion for ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (400 + 400% Mastery) moments to an enemy.");
@@ -1073,9 +1073,9 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (40 + 100% Mastery) Defense and Poise.");
         return result;
     case AB_GUIDE_DISTRACT:
-        sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.5)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Target ally becomes a guaranteed target of every enemy ability for ", strnum);
-        result = CombineStrings(result, " (300 + 150% Mastery) moments.");
+        result = CombineStrings(result, " (400 + 250% Mastery) moments.");
         return result;
     case AB_GUIDE_DANCE_OF_THE_DESPERATE:
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.6)) * CalculateEffectAmplification(caster, true));
@@ -2380,7 +2380,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_GUIDE_DISTRACT:
-        primaryEffectValue = (300 + GET_SCALING(caster, mastery) * 1.5) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (400 + GET_SCALING(caster, mastery) * 2.5) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " creates an aggravating dissonance near ");
         message = CombineStrings(message, targets[0]->baseStats.name);
