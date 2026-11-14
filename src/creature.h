@@ -150,6 +150,7 @@ void HandleStartOfCombatEffects(CreatureStats*);
 void HandleOnDeathEffects(CreatureStats*);
 void HandleOnAbilityEffects(CreatureStats*, ABILITY,CreatureStats **targets, short numberOfTargets);
 void EmptyStatusEffects(CreatureStats*);
+void ApplyStatusEffect(CreatureStats*, STATUS_EFFECT, short);
 void ResetTurnClock(CreatureStats*);
 short CalculateNextTurnTicks(CreatureStats* _creature);
 short CalculateDamage(short baseDamage, CreatureStats* target);

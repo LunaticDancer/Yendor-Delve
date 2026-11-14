@@ -194,7 +194,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             AddMessageToFeed(message);
             c->encounterStats.speed += primaryValue;
             if(caster != NULL)
-                caster->statusEffects[SE_PAIN] += primaryValue;
+                ApplyStatusEffect(caster, SE_PAIN, primaryValue);
             break;
         case LE_ONHIT_WOLF_BITE:
             primaryValue = c->lingeringEffects[i].storedValue;
@@ -203,7 +203,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             message = CombineStrings(message, strnum);
             message = CombineStrings(message, " Berserk.");
             AddMessageToFeed(message);
-            c->statusEffects[SE_BERSERK] += primaryValue;
+                ApplyStatusEffect(c, SE_BERSERK, primaryValue);
             break;
         case LE_ONHIT_PENITENT_MAIL:
             if(caster == NULL) break;
@@ -211,7 +211,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             message = CombineStrings(message, "'s armor to puncture them, applying 2 Bleed and sobering them with 10 additional Speed.");
             AddMessageToFeed(message);
             c->encounterStats.speed += 10;
-            c->statusEffects[SE_BLEED] += 2;
+            ApplyStatusEffect(c, SE_BLEED, 2);
             break;
         case LE_ONHIT_CRYSTAL_MAIL:
             AddMessageToFeed("The Crystal Mail chips and shatters, losing 1 Armour.");
@@ -249,8 +249,8 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
                 message = CombineStrings(message, " retreats into its hole. Its next turn is delayed by 200 moments and it is applied 1 Protection and 30 Berserk.");
                 AddMessageToFeed(message);
                 c->baseStats.ticksUntilNextTurn += 200;
-                c->statusEffects[SE_PROTECTION]+=1;
-                c->statusEffects[SE_BERSERK]+=30;
+                ApplyStatusEffect(c, SE_PROTECTION, 1);
+                ApplyStatusEffect(c, SE_BERSERK, 30);
             break;
         }
     }
@@ -270,8 +270,8 @@ void HandleOnAttackEffects(CreatureStats *c, short damage, CreatureStats *caster
         {
             case LE_ONATT_HAMMER_OF_GLORY:
                 AddMessageToFeed("The magical hammer applies 10 Pain through the power of flame and 10 Exhaust through the power of frost.");
-                c->statusEffects[SE_PAIN]+=10;
-                c->statusEffects[SE_EXHAUSTION]+=10;
+                ApplyStatusEffect(c, SE_PAIN, 10);
+                ApplyStatusEffect(c, SE_EXHAUSTION, 10);
                 break;
             case LE_ONATT_BALL_ON_CHAIN:
                 AddMessageToFeed("The Ball on Chain swings with the attack, hitting the target, stunning them for 100 moments and delaying their turn.");
@@ -279,7 +279,7 @@ void HandleOnAttackEffects(CreatureStats *c, short damage, CreatureStats *caster
                 break;
             case LE_ONATT_MORNINGSTAR:
                 AddMessageToFeed("The spike-covered ball of the Morningstar mauls its target, applying 10 Bleed.");
-                c->statusEffects[SE_BLEED]+=10;
+                ApplyStatusEffect(c, SE_BLEED, 10);
                 break;
             case LE_ONATT_WARPICK:
                 AddMessageToFeed("The warpick chips away at the target, reducing their Defense by 15.");
@@ -289,10 +289,10 @@ void HandleOnAttackEffects(CreatureStats *c, short damage, CreatureStats *caster
                 message = CombineStrings("As ", (*caster).baseStats.name);
                 message = CombineStrings(message, " puts all their hatred into the swing, it carries with it all the afflictions they carry.");
                 AddMessageToFeed(message);
-                c->statusEffects[SE_BLEED]+=caster->statusEffects[SE_BLEED];
-                c->statusEffects[SE_BERSERK]+=caster->statusEffects[SE_BERSERK];
-                c->statusEffects[SE_EXHAUSTION]+=caster->statusEffects[SE_EXHAUSTION];
-                c->statusEffects[SE_PAIN]+=caster->statusEffects[SE_PAIN];
+                ApplyStatusEffect(c, SE_BLEED, caster->statusEffects[SE_BLEED]);
+                ApplyStatusEffect(c, SE_EXHAUSTION, caster->statusEffects[SE_EXHAUSTION]);
+                ApplyStatusEffect(c, SE_BERSERK, caster->statusEffects[SE_BERSERK]);
+                ApplyStatusEffect(c, SE_PAIN, caster->statusEffects[SE_PAIN]);
                 break;
         }
     }
@@ -310,8 +310,7 @@ void HandleStartOfTurnEffects(CreatureStats* c)
         switch (c->lingeringEffects[i].effectId)
         {
             case LE_ONTURN_AMBROSIA:
-                if(c->statusEffects[SE_CONFUSION] < 1)
-                c->statusEffects[SE_CONFUSION] = 1;
+                ApplyStatusEffect(c, SE_CONFUSION, 1);
                 break;
             case LE_ONABIL_CAT_WIZARD_PILLAR:
                 if(rand()%10 != 0) break;
@@ -347,7 +346,7 @@ void HandleStartOfCombatEffects(CreatureStats* c)
             case LE_ONENC_ILLUSION_PROTECT:
             message = CombineStrings(c->baseStats.name, "'s armor swirls in a strange pattern, granting 1 Protection.");
             AddMessageToFeed(message);
-            c->statusEffects[SE_PROTECTION] +=1;
+                ApplyStatusEffect(c, SE_PROTECTION, 1);
             break;
 
             case LE_ONENC_BELT_HOLSTER:
@@ -519,7 +518,7 @@ void HandleOnAbilityEffects(CreatureStats *c, ABILITY a, CreatureStats **targets
             break;
             case LE_ONABIL_SCRYER_BALL:
             if (numberOfTargets == 1) {
-                targets[0]->statusEffects[SE_UNTARGETABLE] = 241;
+                ApplyStatusEffect(targets[0], SE_UNTARGETABLE, 241);
                 message = CombineStrings((*c).baseStats.name, " uses the ball to predict the future, helping ");
                 message = CombineStrings(message, targets[0]->baseStats.name);
                 message = CombineStrings(message, " avoid attacks.");
@@ -599,6 +598,12 @@ void EmptyStatusEffects(CreatureStats *_creature)
     {
         _creature->statusEffects[i] = 0;
     }
+}
+
+void ApplyStatusEffect(CreatureStats* c, STATUS_EFFECT se, short amt)
+{
+    if(c->statusEffects[se] < 0) c->statusEffects[se] = 0;
+    c->statusEffects[se] = MIN(9999, c->statusEffects[se] + amt);
 }
 
 void ResetTurnClock(CreatureStats *_creature)
@@ -1475,7 +1480,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         break;
     case AB_BERSERKER_SWING:
         short berserkerSwingRageGain = ((10 + GET_SCALING(caster, mastery) * 0.1)) * CalculateEffectAmplification(caster, false);
-        caster->statusEffects[SE_BERSERK] += berserkerSwingRageGain;
+        ApplyStatusEffect(caster, SE_BERSERK, berserkerSwingRageGain);
         primaryEffectValue = ((10 + GET_SCALING(caster, mastery) * 0.2)) * CalculateEffectAmplification(caster, true);
         targets[0]->encounterStats.defense -= primaryEffectValue;
         short berserkerSwingDamage =  ((40 + GET_SCALING(caster, mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
@@ -1520,7 +1525,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Berserk.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(caster);
-        caster->statusEffects[SE_BERSERK] += primaryEffectValue/2;
+        ApplyStatusEffect(caster, SE_BERSERK, primaryEffectValue/2);
         caster->encounterStats.targetPriority += primaryEffectValue;
         caster->baseStats.currentStamina /= 2;
         ApplyStatDebuff(caster, (StatDebuff){2, (StatBonuses){.speed = caster->statusEffects[SE_BERSERK]}});
@@ -1764,7 +1769,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
         // >:3
-        targets[0]->statusEffects[SE_PAIN] += folemStrikePain;
+        ApplyStatusEffect(targets[0], SE_PAIN, folemStrikePain);
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_FOLEM_EXPUNGE:
@@ -1824,7 +1829,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Bleed.");
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
-        targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_BLEED, primaryEffectValue);
         break;
     case AB_FOLEM_MEND:
         if ((appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 4)) == false)
@@ -1999,8 +2004,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Bleed and Pain.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
-        targets[0]->statusEffects[SE_PAIN] += primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_BLEED, primaryEffectValue);
+        ApplyStatusEffect(targets[0], SE_PAIN, primaryEffectValue);
         DealDamage(0, targets[0], true, caster);
         break;
     case AB_RIPPER_EVISCERATE:
@@ -2047,7 +2052,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         sprintf(strnum, "%d", ripperChaseMastery);
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Mastery through the excitement.");
-        targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_EXHAUSTION, primaryEffectValue);
         caster->encounterStats.mastery += ripperChaseMastery;
         AddCreatureToFlicker(targets[0]);
         AddMessageToFeed(message);
@@ -2067,7 +2072,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Confusion.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        targets[0]->statusEffects[SE_CONFUSION] = cultistMadTouchConfusion;
+        ApplyStatusEffect(targets[0], SE_CONFUSION, cultistMadTouchConfusion);
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_CULTIST_MANIA:
@@ -2089,7 +2094,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         cultistManiaBonus.staminaRegen = primaryEffectValue;
         StatDebuff cultistManiaBuff = (StatDebuff){400, cultistManiaBonus};
         ApplyStatDebuff(caster, cultistManiaBuff);
-        targets[0]->statusEffects[SE_CONFUSION] = 400;
+        ApplyStatusEffect(targets[0], SE_CONFUSION, 400);
         break;
     case AB_CULTIST_SUMMON:
         if(targets[0]->baseStats.currentHealth>0)
@@ -2245,7 +2250,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 break;
                 case 15:
                 target = &appState.stateData.gameState.playerTeam[rand()%3].stats;
-                target->statusEffects[SE_PROTECTION] += 2;
+                ApplyStatusEffect(target, SE_PROTECTION, 2);
                 message = CombineStrings("The Mindless One blankets ", target->baseStats.name);
                 message = CombineStrings(message, " in an aura of good fortune.");
                 AddMessageToFeed(message);
@@ -2300,7 +2305,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             if(targets[i]->baseStats.currentHealth <= 0) continue;
             if(targets[i] == caster) continue;
             AddCreatureToFlicker(targets[i]);
-            targets[i]->statusEffects[SE_BERSERK] += primaryEffectValue;
+            ApplyStatusEffect(targets[i], SE_BERSERK, primaryEffectValue);
         }
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " stands ominously still, applying ");
@@ -2389,7 +2394,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Pain to self.");
         AddMessageToFeed(message);
-        caster->statusEffects[SE_PAIN] += guideDancePain;
+        ApplyStatusEffect(caster, SE_PAIN, guideDancePain);
         for (int i = 0; i < numberOfTargets; i++)
         {
             AddCreatureToFlicker(targets[i]);
@@ -2426,7 +2431,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
                 targets[i]->baseStats.tileLookupPosition.y == caster->baseStats.tileLookupPosition.y &&
                 targets[i]->baseStats.tileset == caster->baseStats.tileset) continue;
             AddCreatureToFlicker(targets[i]);
-            targets[i]->statusEffects[SE_CONFUSION] = primaryEffectValue;
+            ApplyStatusEffect(targets[i], SE_CONFUSION, primaryEffectValue);
         }
         break;
     case AB_CULTIST_SPAWN_GROW:
@@ -2508,8 +2513,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Bleed and Pain.");
         AddMessageToFeed(message);
-        targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
-        targets[0]->statusEffects[SE_PAIN] += primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_PAIN, primaryEffectValue);
+        ApplyStatusEffect(targets[0], SE_BLEED, primaryEffectValue);
         AddCreatureToFlicker(targets[0]);
         break;
         case AB_CAT_WIZARD_CRUSH:
@@ -2627,7 +2632,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         DealDamage(0, targets[0], true, caster); // 0 damage proc to cause on-hit reactions
-        targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_BLEED, primaryEffectValue);
         break;
     case AB_BLOFAEMYS_INSPIRE:
         primaryEffectValue = 10 * CalculateEffectAmplification(caster, true);
@@ -2792,7 +2797,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             message = CombineStrings(message, " Pain.");
             AddMessageToFeed(message);
             AddCreatureToFlicker(targets[0]);
-            targets[0]->statusEffects[SE_PAIN] += toothgolemStrikePain;
+        ApplyStatusEffect(targets[0], SE_PAIN, toothgolemStrikePain);
             DealDamage(primaryEffectValue, targets[0], false, caster);
             break;
         case AB_TOOTHOLEM_PROTECT:
@@ -2831,7 +2836,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Speed.");
         AddMessageToFeed(message);
-        targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_EXHAUSTION, primaryEffectValue);
         caster->encounterStats.speed += primaryEffectValue;
         AddCreatureToFlicker(targets[0]);
         break;
@@ -2844,7 +2849,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " damage and becoming Untargetable for 200 moments.");
         AddMessageToFeed(message);
-        caster->statusEffects[SE_UNTARGETABLE] = 200;
+        ApplyStatusEffect(caster, SE_UNTARGETABLE, 200);
         AddCreatureToFlicker(targets[0]);
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
@@ -3080,7 +3085,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             AddMessageToFeed(message);
             DealDamage(1000, caster, true,targets[0]);
         }
-        targets[0]->statusEffects[SE_BERSERK] += primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_BERSERK, primaryEffectValue);
         break;
     case AB_BANDIT_JESTER_BACKFLIP:
         message = CombineStrings((*caster).baseStats.name, " performs a spontaeous backflip and yells \"Jester's immunity!\", gaining 300 moments of Untargettability in the process.");
@@ -3098,7 +3103,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Pain.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        targets[0]->statusEffects[SE_PAIN] += primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_PAIN, primaryEffectValue);
         break;
     case AB_BANDIT_CUTPURSE_SHIV:
         primaryEffectValue = (10 + GET_SCALING(caster, mastery) * 0.3) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
@@ -3110,7 +3115,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Bleed.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_BLEED, primaryEffectValue);
         break;
     case AB_BANDIT_CUTPURSE_DISCOMBOBULATE:
         primaryEffectValue = (30 + GET_SCALING(caster, mastery) * 0.6) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
@@ -3122,7 +3127,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " damage and applying 300 Confusion.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        targets[0]->statusEffects[SE_CONFUSION] = 300;
+        ApplyStatusEffect(targets[0], SE_CONFUSION, 300);
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_BANDIT_CUTPURSE_INVIGORATING_SMOKE:
@@ -3172,8 +3177,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         for (int i = 0; i < numberOfTargets; i++)
         {
             AddCreatureToFlicker(targets[i]);
-            targets[i]->statusEffects[SE_PAIN] += primaryEffectValue;
-            targets[i]->statusEffects[SE_CONFUSION] = gorlakClapConfusion;
+        ApplyStatusEffect(targets[i], SE_PAIN, primaryEffectValue);
+        ApplyStatusEffect(targets[i], SE_CONFUSION, gorlakClapConfusion);
         }
         break;
     case AB_GORLAK_EQUIP:
@@ -3238,7 +3243,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Exhaustion.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        targets[0]->statusEffects[SE_EXHAUSTION] += iceElemShardsExhaustion;
+        ApplyStatusEffect(targets[0], SE_EXHAUSTION, iceElemShardsExhaustion);
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_ICE_ELEMENTAL_AURA:
@@ -3348,7 +3353,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Pain.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        targets[0]->statusEffects[SE_PAIN]+=primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_PAIN, primaryEffectValue);
         break;
     case AB_FROG_FLY_STINK:
         primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 0.3);
@@ -3361,7 +3366,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
 
         AddCreatureToFlicker(targets[0]);
-        targets[0]->statusEffects[SE_EXHAUSTION] += primaryEffectValue;
+        ApplyStatusEffect(targets[0], SE_EXHAUSTION, primaryEffectValue);
         targets[0]->encounterStats.targetPriority += primaryEffectValue*0.5;
         break;
     case AB_FROG_FLY_BUZZ:
@@ -3563,7 +3568,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, " but applying 40 Bleed to themselves.");
         AddMessageToFeed(message);
-        caster->statusEffects[SE_BLEED]+=40;
+        ApplyStatusEffect(caster, SE_BLEED, 40);
         AddCreatureToFlicker(targets[0]);
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break; 
