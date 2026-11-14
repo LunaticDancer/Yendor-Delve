@@ -952,7 +952,7 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
             LE_ONENC_ILLUSION_PROTECT,
         };
-        result.statBonuses.armor = 30;
+        result.statBonuses.armor = 10;
         result.statBonuses.targetPriority = -50;
         
         return result;
