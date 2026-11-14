@@ -1070,7 +1070,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_GUIDE_HARMONIZE:
         sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Give every ally ", strnum);
-        result = CombineStrings(result, " (40 + 100% Mastery) Defense.");
+        result = CombineStrings(result, " (40 + 100% Mastery) Defense and Poise.");
         return result;
     case AB_GUIDE_DISTRACT:
         sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true));
@@ -2370,12 +2370,13 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " plays a somber note with their bell, attuning the team to its resonance, granting all allies ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Defense.");
+        message = CombineStrings(message, " Defense and Poise.");
         AddMessageToFeed(message);
         for (int i = 0; i < numberOfTargets; i++)
         {
             AddCreatureToFlicker(targets[i]);
             targets[i]->encounterStats.defense += primaryEffectValue;
+            targets[i]->encounterStats.poise += primaryEffectValue;
         }
         break;
     case AB_GUIDE_DISTRACT:
