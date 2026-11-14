@@ -383,16 +383,16 @@ void HandleFleshGolemUpgrade()
 		hpGain = 250;
 		break;
 	case 1:
-		hpGain = 150;
+		hpGain = 200;
 		break;
 	case 2:
-		hpGain = 100;
+		hpGain = 150;
 		break;
 	case 3:
-		hpGain = 50;
+		hpGain = 100;
 		break;
 	case 4:
-		hpGain = 10;
+		hpGain = 50;
 		break;
 	case 5:
 		hpGain = 0;
@@ -405,6 +405,8 @@ void HandleFleshGolemUpgrade()
 		{
 			appState.stateData.gameState.playerTeam[i].stats.baseStats.currentHealth += hpGain;
 			appState.stateData.gameState.playerTeam[i].stats.baseStats.health += hpGain;
+			appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority += hpGain/2;
+			appState.stateData.gameState.playerTeam[i].stats.baseStats.grit += hpGain/10;
 		}
 	}
 }
