@@ -1880,7 +1880,16 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_SHAPESHIFTER_TRANSFORM:
-        if(strcmp(targets[0]->baseStats.name, "Empty Space") == 0)
+        if(caster==targets[0])
+        {
+            AddMessageToFeed("Somehow in its confusion, the Shapeshifter remembers its original form.\nIt feels like home...");
+            Character shafter = InitCharacterData(CHAR_SHAPESHIFTER);
+            caster->baseStats = shafter.stats.baseStats;
+            caster->abilities = shafter.stats.abilities;
+            caster->abilityCount = shafter.stats.abilityCount;
+            break;
+        }
+        else if(strcmp(targets[0]->baseStats.name, "Empty Space") == 0)
         {
         message = CombineStrings((*caster).baseStats.name, " becomes an incidental little critter found on the dungeon floor.");
         }
