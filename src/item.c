@@ -1093,7 +1093,7 @@ Item InitItem(ITEM_ID id)
             LE_NONE,
         };
         result.statBonuses.critRate = 25;
-        result.statBonuses.mastery = 25;
+        result.statBonuses.mastery = 70;
 
         return result;
         case ITEM_ARTISAN_COAT:
@@ -1109,8 +1109,8 @@ Item InitItem(ITEM_ID id)
             
         };
         result.statBonuses.critRate = 25;
-        result.statBonuses.mastery = 10;
-        result.statBonuses.armor = 2;
+        result.statBonuses.mastery = 40;
+        result.statBonuses.armor = 5;
 
         return result;
         case ITEM_ARTISAN_TROUSERS:
@@ -1126,8 +1126,8 @@ Item InitItem(ITEM_ID id)
             
         };
         result.statBonuses.critRate = 25;
-        result.statBonuses.speed = 20;
-        result.statBonuses.armor = 1;
+        result.statBonuses.speed = 30;
+        result.statBonuses.armor = 4;
 
         return result;
         case ITEM_ARTISAN_TOOLS:
@@ -1143,7 +1143,7 @@ Item InitItem(ITEM_ID id)
         };
         result.statBonuses.critRate = 25;
         result.statBonuses.critBonus = 20;
-        result.statBonuses.mastery = 10;
+        result.statBonuses.mastery = 40;
 
         return result;
         //
