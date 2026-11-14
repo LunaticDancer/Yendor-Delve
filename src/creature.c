@@ -624,7 +624,7 @@ short CalculateNextTurnTicks(CreatureStats *_creature)
     }
 }
 
-short CalculateDamage(short baseDamage, CreatureStats *target)
+short CalculateDamage(int baseDamage, CreatureStats *target)
 {
     short result = 0;
 
@@ -633,23 +633,23 @@ short CalculateDamage(short baseDamage, CreatureStats *target)
 
     if (effectiveDef > 0)
     {
-        result = (short)((float)baseDamage * (100.0 / (100 + effectiveDef)));
+        result = MIN((float)baseDamage * (100.0 / (100 + effectiveDef)),9999);
     }
     else
     {
         double logScale = 36.7879441234;
-        result = (short)((float)baseDamage * log((100-effectiveDef)/logScale));
+        result = MIN((float)baseDamage * log((100-effectiveDef)/logScale),9999);
     }
     if(effectiveArmor>0) result -= effectiveArmor;
 
     return result;
 }
 
-void DealDamage(short damage, CreatureStats *target, bool trueDamage, CreatureStats *dealer)
+void DealDamage(int damage, CreatureStats *target, bool trueDamage, CreatureStats *dealer)
 {
     bool wasAlreadyDead = (*target).baseStats.currentHealth <= 0;
     short finalValue = 0;
-    finalValue = (trueDamage ? (short)damage : CalculateDamage((short)damage, target));
+    finalValue = (trueDamage ? MIN(damage,9999) : CalculateDamage(damage, target));
     if(finalValue <= 0)
     {
         finalValue = 0;
