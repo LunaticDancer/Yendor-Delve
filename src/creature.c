@@ -2611,6 +2611,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         targets[0]->baseStats.currentStamina -= mimicChompStaminaLoss;
+        if(targets[0]->baseStats.currentStamina < 0) targets[0]->baseStats.currentStamina = 0;
         DealDamage(primaryEffectValue, targets[0], true, caster);
         break;
     case AB_MIMIC_IMPALE:
