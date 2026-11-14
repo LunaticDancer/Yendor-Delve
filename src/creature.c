@@ -463,6 +463,8 @@ void HandleOnDeathEffects(CreatureStats *c)
     {
         if(appState.stateData.gameState.playerTeam[i].characterId != CHAR_RIPPER) continue;
         if(appState.stateData.gameState.playerTeam[i].stats.baseStats.currentHealth < 1) continue;
+        if(appState.stateData.gameState.stateData.battleState.currentActingEntity==i)
+            appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
         appState.stateData.gameState.playerTeam[i].stats.baseStats.ticksUntilNextTurn = 0;
         appState.stateData.gameState.playerTeam[i].stats.baseStats.critCounter += 100;
         AddMessageToFeed("The Ripper gets excited and acts out of turn.");
@@ -1995,11 +1997,6 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         targets[0]->statusEffects[SE_BLEED] += primaryEffectValue;
         targets[0]->statusEffects[SE_PAIN] += primaryEffectValue;
         DealDamage(0, targets[0], true, caster);
-        if(targets[0]->baseStats.currentHealth <= 0) 
-        {
-            appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
-            dontResetCritProgress = true;
-        }
         break;
     case AB_RIPPER_EVISCERATE:
         primaryEffectValue = (2 * (targets[0]->statusEffects[SE_BLEED] + targets[0]->statusEffects[SE_BERSERK] + targets[0]->statusEffects[SE_EXHAUSTION] 
@@ -2013,11 +2010,6 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
         DealDamage(primaryEffectValue, targets[0], false, caster);
-        if(targets[0]->baseStats.currentHealth <= 0) 
-        {
-            appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
-            dontResetCritProgress = true;
-        }
         break;
     case AB_RIPPER_STALK:
         primaryEffectValue = (20 + GET_SCALING(caster, mastery) * 0.3) * CalculateEffectAmplification(caster, true);
