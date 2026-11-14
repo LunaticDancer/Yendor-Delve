@@ -83,7 +83,7 @@ typedef struct CreatureBaseStats
     short speed;                      // diminishing formula, at speed 0 the wait time is 1000 ticks
     short defense;                      // diminishing formula
     short armor;                        // flat damage reduction
-    short grit;                             // resistance to status effects
+    short poise;                             // resistance to status effects
     float critBonus;             // damage amplification percent on top of baseline 100%
     short critRate;                     // crit can exceed 100%, making it proc mustiple times, applying the multiplier each time
     short critCounter;                  // crit occurence accumulation, persists between battles
@@ -100,7 +100,7 @@ typedef struct StatBonuses
     short speed;
     short defense;
     short armor;
-    short grit;
+    short poise;
     float critBonus;
     short critRate;
     short mastery;

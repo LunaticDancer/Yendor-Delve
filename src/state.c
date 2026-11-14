@@ -406,7 +406,7 @@ void HandleFleshGolemUpgrade()
 			appState.stateData.gameState.playerTeam[i].stats.baseStats.currentHealth += hpGain;
 			appState.stateData.gameState.playerTeam[i].stats.baseStats.health += hpGain;
 			appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority += hpGain/2;
-			appState.stateData.gameState.playerTeam[i].stats.baseStats.grit += hpGain/10;
+			appState.stateData.gameState.playerTeam[i].stats.baseStats.poise += hpGain/10;
 		}
 	}
 }

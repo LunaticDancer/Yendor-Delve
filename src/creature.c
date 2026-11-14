@@ -603,7 +603,7 @@ void EmptyStatusEffects(CreatureStats *_creature)
 void ApplyStatusEffect(CreatureStats* c, STATUS_EFFECT se, short amt, bool ignoreGrit)
 {
     if(c->statusEffects[se] < 0) c->statusEffects[se] = 0;
-    c->statusEffects[se] = (short)MIN(9999.0, c->statusEffects[se] + amt * (ignoreGrit ? 1.0 : 100.0/(100+GET_SCALING(c,grit))));
+    c->statusEffects[se] = (short)MIN(9999.0, c->statusEffects[se] + amt * (ignoreGrit ? 1.0 : 100.0/(100+GET_SCALING(c,poise))));
 }
 
 void ResetTurnClock(CreatureStats *_creature)
