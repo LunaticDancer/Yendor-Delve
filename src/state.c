@@ -773,9 +773,9 @@ char PickSingularTarget(Enemy *c, RNG *rng)
 {
 	char pick = 0;
 	bool targets[] = {
-		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[0].stats.statusEffects[SE_UNTARGETABLE] <= 0),
-		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[1].stats.statusEffects[SE_UNTARGETABLE] <= 0),
-		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0 && appState.stateData.gameState.playerTeam[2].stats.statusEffects[SE_UNTARGETABLE] <= 0),
+		(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth > 0),
+		(appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth > 0),
+		(appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth > 0),
 	};
 	char numberOfLivingTargets =
 		(targets[0] ? 1 : 0) +

@@ -1457,7 +1457,17 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
 
     if(numberOfTargets == 1)
     {
-        if(targets[0]->statusEffects[SE_PROTECTION]>0)
+        if(targets[0]->statusEffects[SE_UNTARGETABLE]>0)
+        {
+            skipAbility = true;
+            message = CombineStrings(caster->baseStats.name, "'s ");
+            message = CombineStrings(message, InitAbility(id).name);
+            message = CombineStrings(message, " has completely missed ");
+            message = CombineStrings(message, targets[0]->baseStats.name);
+            message = CombineStrings(message, ".");
+            AddMessageToFeed(message);
+        }
+        else if(targets[0]->statusEffects[SE_PROTECTION]>0)
         {
             skipAbility = true;
             targets[0]->statusEffects[SE_PROTECTION] -= 1;
@@ -2365,7 +2375,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " creates an aggravating dissonance near ");
         message = CombineStrings(message, targets[0]->baseStats.name);
-        message = CombineStrings(message, ", making them the  centre of attention for ");
+        message = CombineStrings(message, ", making them the centre of attention for ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " moments.");
         AddMessageToFeed(message);
