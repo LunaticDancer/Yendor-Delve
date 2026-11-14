@@ -1291,9 +1291,9 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Apply ", strnum);
         result = CombineStrings(result, " (20 + 40% Mastery) Pain and ");
-        sprintf(strnum, "%.0f", ((150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((250 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.8)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (150 + 80% Mastery) Confusion.");
+        result = CombineStrings(result, " (250 + 280% Mastery) Confusion.");
         return result;
     case AB_GORLAK_EQUIP:
         return "Find a random piece of equipment and gain its bonuses.";
@@ -2536,7 +2536,6 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         ApplyStatusEffect(targets[0], SE_PAIN, primaryEffectValue,false);
         ApplyStatusEffect(targets[0], SE_BLEED, primaryEffectValue,false);
-        DealDamage(0,targets[0],true,caster);
         AddCreatureToFlicker(targets[0]);
         break;
         case AB_CAT_WIZARD_CRUSH:
@@ -3188,7 +3187,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         break;
     case AB_GORLAK_CLAP:
         primaryEffectValue = (20 + GET_SCALING(caster, mastery) * 0.4) * CalculateEffectAmplification(caster, true);
-        short gorlakClapConfusion = (150 + GET_SCALING(caster, mastery) * 0.8) * CalculateEffectAmplification(caster, true);
+        short gorlakClapConfusion = (250 + GET_SCALING(caster, mastery) * 2.8) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " performs a mighty, incredibly loud clap, applying ");
         message = CombineStrings(message, strnum);
@@ -3219,6 +3218,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         caster->encounterStats.staminaRegen += gorlakItem.statBonuses.staminaRegen;
         caster->encounterStats.speed += gorlakItem.statBonuses.speed;
         caster->encounterStats.defense += gorlakItem.statBonuses.defense;
+        caster->encounterStats.poise += gorlakItem.statBonuses.poise;
         caster->encounterStats.mastery += gorlakItem.statBonuses.mastery;
         caster->encounterStats.targetPriority += gorlakItem.statBonuses.targetPriority;
         break;
