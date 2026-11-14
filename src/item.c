@@ -1151,7 +1151,7 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Warpick",
-            TL_ITEMS,
+            TL_JTAD,
             (Vector2){3, 4},
             gray,
             ES_WEAPON,
