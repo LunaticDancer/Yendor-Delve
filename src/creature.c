@@ -788,12 +788,12 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         sprintf(strnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (10 + 10% Mastery) Berserk, removing ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (10 + 40% Mastery) Defense from the target and dealing ");
+        result = CombineStrings(result, " (10 + 20% Mastery) Defense from the target and dealing ");
         damage = ((40 + GET_SCALING(caster, mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((40 + GET_SCALING(caster, mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (40 + 120% Mastery) damage.");
+        result = CombineStrings(result, " (40 + 80% Mastery) damage.");
         return result;
     case AB_BERSERKER_BASH:
         sprintf(strnum, "%.0f", MIN(9999,(100+ GET_SCALING(caster, armor) * GET_SCALING(caster, mastery)) * CalculateEffectAmplification(caster, false)));
@@ -971,10 +971,10 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (10 + 1% missing Stamina) Crit Bonus.");
         return result;
-    case AB_MAGUS_AGUS:
+    case AB_MAGUS_SARCOPHAGUS:
         sprintf(strnum, "%.0f", (((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) + 
             (caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
-            +MAGUS_AGUS_COST)) * CalculateEffectAmplification(caster, true));
+            +MAGUS_SARCOPHAGUS_COST)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Give an ally ", strnum);
         sprintf(strnum, "%.0f", (((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.05) + 
             (caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
