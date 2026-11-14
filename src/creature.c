@@ -1281,12 +1281,12 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (20 + 40% Mastery) Shield and 20 Speed.");
         return result;
     case AB_GORLAK_FLURRY:
-        sprintf(strnum, "%d", (short)appState.stateData.gameState.floor);
+        sprintf(strnum, "%.0f", (1+((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (current dungeon level) damage ");
-        sprintf(strnum, "%.0f", (2+((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (1 + 10% Mastery) damage ");
+        sprintf(strnum, "%d", (short)appState.stateData.gameState.floor*2);
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (2 + 10% Mastery) times.");
+        result = CombineStrings(result, " (current dungeon level x 2) times.");
         return result;
     case AB_GORLAK_CLAP:
         sprintf(strnum, "%.0f", ((5 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
@@ -3167,8 +3167,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_GORLAK_FLURRY:
-        primaryEffectValue = appState.stateData.gameState.floor * GetDamageMult(caster);
-        multihit = (2 + GET_SCALING(caster, mastery) * 0.1) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (1 + GET_SCALING(caster, mastery) * 0.1) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        multihit = appState.stateData.gameState.floor * 2;
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " performs a flurry of stabs against ");
         message = CombineStrings(message, targets[0]->baseStats.name);
