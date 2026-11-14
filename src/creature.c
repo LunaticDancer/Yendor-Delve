@@ -245,7 +245,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             break;
         case LE_ONHIT_TUNNEL_WYRM:
             if(damage < 100) break;
-                message = CombineStrings("Startled by the powerful attack" , (*c).baseStats.name);
+                message = CombineStrings("Startled by the powerful attack, ", (*c).baseStats.name);
                 message = CombineStrings(message, " retreats into its hole. Its next turn is delayed by 200 moments and it is applied 1 Protection and 30 Berserk.");
                 AddMessageToFeed(message);
                 c->baseStats.ticksUntilNextTurn += 200;
