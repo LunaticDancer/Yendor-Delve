@@ -224,6 +224,7 @@ void InitItemPools()
 
     itemPoolTier3[0] = ITEM_IRON_KISS;
     itemPoolTier3[1] = ITEM_ANCIENT_ROOTS;
+    itemPoolTier3[2] = ITEM_WARPICK;
 }
 
 Encounter GetEncounterData(ENCOUNTER_ID id)

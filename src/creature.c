@@ -154,6 +154,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONATT_HAMMER_OF_GLORY: return "When attacking, apply 10 Pain and Exhaust.";
         case LE_ONATT_BALL_ON_CHAIN: return "When attacking, delay the target's turn by 100 moments.";
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 10 Bleed.";
+        case LE_ONATT_WARPICK: return "When attacking, reduce the target's Defense by 15.";
         case LE_ONATT_MALEVOLENCE: return "When attacking, apply all the negative status you carry.";
         case LE_ONDTH_VENGEFUL_SPIRIT: return "On death, deal 1000 unavoidable damage to opposite enemy.";
         case LE_ONDTH_ANCIENT_ROOTS: return "On death, return with 55\% of your health, then permanently destroy this item.";
@@ -279,6 +280,10 @@ void HandleOnAttackEffects(CreatureStats *c, short damage, CreatureStats *caster
             case LE_ONATT_MORNINGSTAR:
                 AddMessageToFeed("The spike-covered ball of the Morningstar mauls its target, applying 10 Bleed.");
                 c->statusEffects[SE_BLEED]+=10;
+                break;
+            case LE_ONATT_WARPICK:
+                AddMessageToFeed("The warpick chips away at the target, reducing their Defense by 15.");
+                c->encounterStats.defense -= 15;
                 break;
             case LE_ONATT_MALEVOLENCE:
                 message = CombineStrings("As ", (*caster).baseStats.name);
