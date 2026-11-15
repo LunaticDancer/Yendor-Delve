@@ -114,7 +114,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .defense = 20,
                     .armor = 0,
                     .poise = 0,
-                    .critBonus = 40,
+                    .critBonus = 0,
                     .critRate = 10,
                     .critCounter = 0,
                     .mastery = 0,
