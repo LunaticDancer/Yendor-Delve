@@ -551,6 +551,8 @@ void DrawBattleScreenPartyMember(char index)
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING, *black);
     DrawTextureNPatch(ornateFrame, frameInfo, (Rectangle){LAYOUT_SPACING + creatureBoxSize * index, SCREEN_HEIGHT - creatureBoxSize + LAYOUT_SPACING,
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
+            (appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW && appState.stateData.gameState.stateData.battleState.turnIndicators[
+                appState.stateData.gameState.stateData.battleState.horizontalSelection].senderId == index) ? *gold :
             ((appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT 
                 && appState.stateData.gameState.stateData.battleState.horizontalSelection == index)) ? *red : 
                 (appState.stateData.gameState.stateData.battleState.currentActingEntity == index) ? *white : *darkgray);
@@ -663,6 +665,8 @@ void DrawBattleScreenEnemy(char index)
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING, *black);
     DrawTextureNPatch(boneFrame, frameInfo, (Rectangle){ SCREEN_WIDTH + LAYOUT_SPACING - creatureBoxSize * (index+1), LAYOUT_SPACING,
         creatureBoxSize - 2 * LAYOUT_SPACING, creatureBoxSize - 2 * LAYOUT_SPACING}, (Vector2){0,0}, 0,
+        (appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_OVERVIEW && appState.stateData.gameState.stateData.battleState.turnIndicators[
+                appState.stateData.gameState.stateData.battleState.horizontalSelection].senderId-3 == index) ? *gold :
         (appState.stateData.gameState.stateData.battleState.currentActingEntity == index+3) ? *white :
             ((appState.stateData.gameState.stateData.battleState.battleState == BS_PLAYER_TARGET_SELECT 
                 && appState.stateData.gameState.stateData.battleState.horizontalSelection == index+3)) ? *red : *darkgray);
