@@ -420,6 +420,14 @@ void HandleStartOfTurnProcs()
 	if (appState.stateData.gameState.stateData.battleState.currentActingEntity < 3)
 	{
 		_creature = &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats;
+		if(_creature->baseStats.critCounter >= 100)
+		{
+			short critValue = (short)(100 * CalculateEffectAmplification(_creature, false));
+			sprintf(strnum, "%d", critValue);
+			message = CombineStrings("The next ability you use will be a critical success, its effectiveness amplified by ", strnum);
+			message = CombineStrings(message, "%!");
+			AddMessageToFeed(message);
+		}
 	}
 	else
 	{
