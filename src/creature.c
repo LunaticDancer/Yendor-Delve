@@ -1625,9 +1625,11 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         sprintf(strnum, "%d", duelistLungeSpeed);
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Speed.");
+        if(caster->encounterStats.speed>10000)
+            message = CombineStrings(message, "\nYou've reached the speed limit!");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
-        caster->encounterStats.speed += duelistLungeSpeed;
+        caster->encounterStats.speed = MIN(10000, caster->encounterStats.speed + duelistLungeSpeed);
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_DUELIST_OPPORTUNITY:
