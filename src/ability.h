@@ -2,9 +2,9 @@
 #define ability_h
 #include "raylib.h"
 
-#define MAGUS_DISINTEGRATE_COST 300
-#define MAGUS_ARCANE_BLAST_COST 350
-#define MAGUS_TUTOR_COST 300
+#define MAGUS_DISINTEGRATE_COST 250
+#define MAGUS_ARCANE_BLAST_COST 300
+#define MAGUS_TUTOR_COST 250
 #define MAGUS_SARCOPHAGUS_COST 50
 
 typedef enum ABILITY
