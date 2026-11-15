@@ -373,7 +373,10 @@ void HandleStartOfCombatEffects(CreatureStats* c)
                 message = CombineStrings(message, ".");
                 AddMessageToFeed(message);
             }
-            
+            break;
+
+            case LE_ONENC_SOFUS_ITEM:
+            appState.stateData.gameState.karmicBalance -= 1;
             break;
         }
     }

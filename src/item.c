@@ -425,7 +425,7 @@ Item InitItem(ITEM_ID id)
             white,
             ES_HEAD,
             CreateEmptyStatBonuses(),
-            LE_NONE,
+            LE_ONENC_SOFUS_ITEM,
         };
         result.statBonuses.mastery = 150;
         result.statBonuses.health = -300;
@@ -441,7 +441,7 @@ Item InitItem(ITEM_ID id)
             white,
             ES_LEGS,
             CreateEmptyStatBonuses(),
-            LE_NONE,
+            LE_ONENC_SOFUS_ITEM,
         };
         result.statBonuses.speed = 180;
         result.statBonuses.defense = -90;
@@ -457,7 +457,7 @@ Item InitItem(ITEM_ID id)
             white,
             ES_TORSO,
             CreateEmptyStatBonuses(),
-            LE_NONE,
+            LE_ONENC_SOFUS_ITEM,
         };
         result.statBonuses.stamina = 1000;
         result.statBonuses.armor = -10;
