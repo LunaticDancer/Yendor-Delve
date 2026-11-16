@@ -1036,12 +1036,12 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (200 + 100% Mastery) Exhaustion to an enemy and gain Mastery equal to 20% of their missing Health.");
         return result;
     case AB_CULTIST_MADDENING_TOUCH:
-        damage = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        damage = ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
-        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
         sprintf(strnum, "%.0f", ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 4.0)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (100 + 100% Mastery) Damage and apply Confusion for ");
+        result = CombineStrings(result, " (60 + 100% Mastery) Damage and apply Confusion for ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (400 + 400% Mastery) moments to an enemy.");
         return result;
@@ -2138,7 +2138,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         if(targets[0]->baseStats.currentHealth <= 0) appState.stateData.gameState.stateData.battleState.takeAnotherTurn = true;
     break;
     case AB_CULTIST_MADDENING_TOUCH:
-        primaryEffectValue = (100 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (60 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         short cultistMadTouchConfusion = (400 + GET_SCALING(caster, mastery) * 4.0) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " invades ");
