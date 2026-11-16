@@ -1190,21 +1190,21 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (50 + 100% Mastery) Defense, and remove the same amount of Speed.");
         return result;
     case AB_BLOFAEWAR_CUT:
-        sprintf(strnum, "%.0f", ((5 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((5 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Attack an enemy for ", strnum);
-        result = CombineStrings(result, " (5 + 20% Mastery) damage, then apply the unmitigated damage as Bleed points.");
+        result = CombineStrings(result, " (5 + 50% Mastery) damage, then apply the unmitigated damage as Bleed points.");
         return result;
     case AB_BLOFAEMYS_INSPIRE:
         return "Give 10 Mastery to every ally.";
     case AB_BLOFAEMYS_HASTE:
-        sprintf(strnum, "%.0f", ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.3)) * CalculateEffectAmplification(caster, false));
+        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Give an entity ", strnum);
-        result = CombineStrings(result, " (30 + 30% Mastery) Speed.");
+        result = CombineStrings(result, " (40 + 40% Mastery) Speed.");
         return result;
     case AB_BLOFAEMYS_MOCK:
-        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 5.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Mock an enemy, delaying their turn by ", strnum);
-        result = CombineStrings(result, " (100 + 200% Mastery) moments.");
+        result = CombineStrings(result, " (100 + 500% Mastery) moments.");
         return result;
     case AB_CAUCUBE_NIBBLE:
         damage = ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.6)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
@@ -2704,7 +2704,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddCreatureToFlicker(targets[0]);
         break;
     case AB_BLOFAEWAR_CUT:
-        primaryEffectValue = CalculateDamage(((5 + GET_SCALING(caster, mastery) * 0.2)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), targets[0]);
+        primaryEffectValue = CalculateDamage(((5 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), targets[0]);
         primaryEffectValue = primaryEffectValue < 0 ? 0 : primaryEffectValue;
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " cuts ");
@@ -2730,7 +2730,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         break;
     case AB_BLOFAEMYS_HASTE:
-        primaryEffectValue = (30 + GET_SCALING(caster, mastery) * 0.3) * CalculateEffectAmplification(caster, false);
+        primaryEffectValue = (40 + GET_SCALING(caster, mastery) * 0.4) * CalculateEffectAmplification(caster, false);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " spurs ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -2742,7 +2742,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         targets[0]->encounterStats.speed += primaryEffectValue;
         break;
     case AB_BLOFAEMYS_MOCK:
-        primaryEffectValue = ((100 + GET_SCALING(caster, mastery) * 2.0)) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = ((100 + GET_SCALING(caster, mastery) * 5.0)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " giggles at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
