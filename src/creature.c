@@ -1309,17 +1309,17 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (20 + 40% Mastery) Shield and 20 Speed.");
         return result;
     case AB_GORLAK_FLURRY:
-        sprintf(strnum, "%.0f", (1+((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.1)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", (1+((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.5)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (1 + 10% Mastery) damage ");
-        sprintf(strnum, "%d", (short)appState.stateData.gameState.floor*2);
+        result = CombineStrings(result, " (1 + 50% Mastery) damage ");
+        sprintf(strnum, "%d", (short)appState.stateData.gameState.floor+1);
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (current dungeon level x 2) times.");
+        result = CombineStrings(result, " (current dungeon level + 1) times.");
         return result;
     case AB_GORLAK_CLAP:
-        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Apply ", strnum);
-        result = CombineStrings(result, " (20 + 40% Mastery) Pain and ");
+        result = CombineStrings(result, " (20 + 80% Mastery) Pain and ");
         sprintf(strnum, "%.0f", ((250 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.8)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (250 + 280% Mastery) Confusion.");
@@ -1327,9 +1327,9 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_GORLAK_EQUIP:
         return "Find a random piece of equipment and gain its bonuses.";
     case AB_GORLAK_POSE:
-        sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((70 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Gain ", strnum);
-        result = CombineStrings(result, " (40 + 10% Mastery) Shield and 10 Speed.");
+        result = CombineStrings(result, " (70 + 100% Mastery) Shield and 80 Speed.");
         return result;
     case AB_ICE_ELEMENTAL_FREEZE:
         sprintf(strnum, "%.0f", ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
@@ -3228,8 +3228,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_GORLAK_FLURRY:
-        primaryEffectValue = (1 + GET_SCALING(caster, mastery) * 0.1) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
-        multihit = appState.stateData.gameState.floor * 2;
+        primaryEffectValue = (1 + GET_SCALING(caster, mastery) * 0.5) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        multihit = appState.stateData.gameState.floor + 1;
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " performs a flurry of stabs against ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -3247,7 +3247,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         }
         break;
     case AB_GORLAK_CLAP:
-        primaryEffectValue = (20 + GET_SCALING(caster, mastery) * 0.4) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (20 + GET_SCALING(caster, mastery) * 0.8) * CalculateEffectAmplification(caster, true);
         short gorlakClapConfusion = (250 + GET_SCALING(caster, mastery) * 2.8) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " performs a mighty, incredibly loud clap, applying ");
@@ -3284,15 +3284,15 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         caster->encounterStats.targetPriority += gorlakItem.statBonuses.targetPriority;
         break;
     case AB_GORLAK_POSE:
-        primaryEffectValue = (40 + GET_SCALING(caster, mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (70 + GET_SCALING(caster, mastery) * 1.0) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " strikes an awe-inspiring pose, shining with renewed luster, gaining ");
         message = CombineStrings(message, strnum);
-        message = CombineStrings(message, " Shield and 10 Speed.");
+        message = CombineStrings(message, " Shield and 80 Speed.");
         AddMessageToFeed(message);
         AddCreatureToFlicker(caster);
         caster->encounterStats.shield += primaryEffectValue;
-        caster->encounterStats.speed += 10;
+        caster->encounterStats.speed += 80;
         switch(rand()%4)
         {
             case 0: caster->baseStats.color = magenta; break;
