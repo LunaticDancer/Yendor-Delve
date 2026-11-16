@@ -2217,7 +2217,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings((*caster).baseStats.name, " prays to The Mindless One, causing fate to change.");
         AddMessageToFeed(message);
         appState.stateData.gameState.stateData.battleState.prayerFatigue++;
-        if(rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng) % (450 + GET_SCALING(caster, mastery)*4 
+        if(caster->statusEffects[SE_CONFUSION] > 0 || rng_next_u32(&appState.stateData.gameState.stateData.battleState.battleRng) % (450 + GET_SCALING(caster, mastery)*4 
             + appState.stateData.gameState.stateData.battleState.prayerFatigue * 15) < 400 * CalculateEffectAmplification(caster, true))
         {
             CreatureStats* target;
