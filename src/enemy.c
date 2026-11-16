@@ -1240,5 +1240,87 @@ Enemy InitEnemyData(ENEMY_ID id)
             "\0",
         };
         break;
+        case EN_SNAPTRAP:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Snaptrap",
+                    .tileset = TL_ITEMS,
+                    .tileLookupPosition = (Vector2){23,3},
+                    .color = gray,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 1,
+                    .health = 1,
+                    .currentStamina = 1200,
+                    .stamina = 1200,
+                    .staminaRegen = 0,
+                    .speed = 50,
+                    .defense = 0,
+                    .armor = 0,
+                    .poise = 500,
+                    .critBonus = 500,
+                    .critRate = 99,
+                    .critCounter = 0,
+                    .mastery = 100,
+                    .targetPriority = 100,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_WAIT}, 1),
+                .abilityCount = 1,
+                .creatureEffect = LE_ONHIT_SNAPTRAP,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+            "The Snaptrap breaks.",
+            true,
+        };
+        break;
+        case EN_TRAPPER:
+        return (Enemy){
+            id,
+            (CreatureStats){
+                .baseStats = (CreatureBaseStats){
+                    .name = "Trapper",
+                    .tileset = TL_JTAD,
+                    .tileLookupPosition = (Vector2){1, 5},
+                    .color = darkgreen,
+
+                    .ticksUntilNextTurn = 0,
+                    .currentHealth = 800,
+                    .health = 800,
+                    .currentStamina = 800,
+                    .stamina = 800,
+                    .staminaRegen = 150,
+                    .speed = 210,
+                    .defense = 280,
+                    .armor = 5,
+                    .poise = 200,
+                    .critBonus = 200,
+                    .critRate = 30,
+                    .critCounter = 0,
+                    .mastery = 50,
+                    .targetPriority = 100,
+                },
+                .statusEffects = {},
+                .encounterStats = CreateEmptyStatBonuses(),
+                .itemStats = CreateEmptyStatBonuses(),
+                .temporaryStats = {},
+                .lingeringEffects = {},
+                .abilities = InitAbilities((ABILITY[]){AB_TRAPPER_SET_TRAP, AB_TRAPPER_HAZE, AB_TRAPPER_CBOLT, AB_TRAPPER_DBOLT, AB_WAIT}, 5),
+                .abilityCount = 5,
+                .creatureEffect = LE_NONE,
+            },
+            TG_WEIGHTED_RANDOM,
+            AB_WAIT,
+            "\0",
+            false,
+        };
+        break;
     }
 }

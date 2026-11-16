@@ -869,6 +869,38 @@ Ability InitAbility(ABILITY id)
             50,
             AF_TARGETS_ENEMIES
         };
+        case AB_TRAPPER_SET_TRAP:
+        return (Ability)
+        {
+            id,
+            "Set Trap",
+            20,
+            AF_TARGETS_SELF
+        };
+        case AB_TRAPPER_HAZE:
+        return (Ability)
+        {
+            id,
+            "Dazzling Haze",
+            60,
+            AF_AOE + AF_TARGETS_ENEMIES
+        };
+        case AB_TRAPPER_CBOLT:
+        return (Ability)
+        {
+            id,
+            "Chaos Bolt",
+            60,
+            AF_TARGETS_ENEMIES
+        };
+        case AB_TRAPPER_DBOLT:
+        return (Ability)
+        {
+            id,
+            "Devastating Bolt",
+            70,
+            AF_TARGETS_ENEMIES
+        };
     }
 }
 
