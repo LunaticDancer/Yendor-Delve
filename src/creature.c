@@ -1465,7 +1465,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (60 + 20% Mastery) for 500 moments.");
         return result;
     case AB_TRAPPER_SET_TRAP:
-        result = "Set up Snaptraps";
+        result = "Set up Snaptraps.";
         return result;
     case AB_TRAPPER_CBOLT:
         damage = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
@@ -1488,10 +1488,10 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_TRAPPER_HAZE:
         int trapperHazeConfusion = ((200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true);
         int trapperHazeSpeed = (((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * .15));
-        sprintf(strnum, "%.0f", trapperHazeSpeed);
+        sprintf(strnum, "%d", trapperHazeSpeed);
         result = CombineStrings("Gain ", strnum);
         result = CombineStrings(result, " (15% Mastery) Speed and apply Confusion for ");
-        sprintf(strnum, "%.0f", trapperHazeConfusion);
+        sprintf(strnum, "%d", trapperHazeConfusion);
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (200 + 200% Mastery) moments to all enemies.");
         return result;
