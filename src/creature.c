@@ -1472,10 +1472,10 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        sprintf(strnum, "%.0f", ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 4.0)) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 3.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, " (100 + 100% Mastery) Damage and apply Confusion for ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (400 + 400% Mastery) moments to an enemy.");
+        result = CombineStrings(result, " (300 + 300% Mastery) moments to an enemy.");
         return result;
     case AB_TRAPPER_DBOLT:
         damage = ((100 + GET_SCALING(caster, mastery) * 1.5 + GET_SCALING(caster, speed) * .5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
@@ -1486,14 +1486,14 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (100 + 150% Mastery + 50% Speed) Damage to an enemy.");
         return result;
     case AB_TRAPPER_HAZE:
-        int trapperHazeConfusion = ((200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true);
+        int trapperHazeConfusion = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true);
         int trapperHazeSpeed = (((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * .15));
         sprintf(strnum, "%d", trapperHazeSpeed);
         result = CombineStrings("Gain ", strnum);
         result = CombineStrings(result, " (15% Mastery) Speed and apply Confusion for ");
         sprintf(strnum, "%d", trapperHazeConfusion);
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (200 + 200% Mastery) moments to all enemies.");
+        result = CombineStrings(result, " (100 + 150% Mastery) moments to all enemies.");
         return result;
     default:
         return "Ability description missing, oopsie!";
@@ -3716,12 +3716,13 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             message = CombineStrings(caster->baseStats.name, " sets up Snaptraps.");
             AddMessageToFeed(message);
         } else {
-            AddMessageToFeed("There appears to be no room for more traps.");
+            message = CombineStrings(caster->baseStats.name, " fails to set up any more traps.");
+            AddMessageToFeed(message);
         }
         break;
     case AB_TRAPPER_CBOLT:
         primaryEffectValue = (100 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
-        short ChaosBoltConfusion = (400 + GET_SCALING(caster, mastery) * 4.0) * CalculateEffectAmplification(caster, true);
+        short ChaosBoltConfusion = (300 + GET_SCALING(caster, mastery) * 3.0) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " fires a poisonous dart at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -3749,7 +3750,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_TRAPPER_HAZE:
-        int trapperHazeConfusion = ((200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, true);
+        int trapperHazeConfusion = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true);
         primaryEffectValue = (((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * .15));
         message = CombineStrings((*caster).baseStats.name, " conjures a sweet-smelling haze, applying ");
         sprintf(strnum, "%d", trapperHazeConfusion);
