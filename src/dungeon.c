@@ -190,6 +190,7 @@ void InitItemPools()
     itemPoolTier1[27] = ITEM_ARTISAN_COAT;
     itemPoolTier1[28] = ITEM_ARTISAN_TROUSERS;
     itemPoolTier1[29] = ITEM_ARTISAN_TOOLS;
+    itemPoolTier1[30] = ITEM_PILLORY;
 
     itemPoolTier2[0] = ITEM_ELEMANCER_CROWN;
     itemPoolTier2[1] = ITEM_ELEMANCER_CAPE;
@@ -221,6 +222,7 @@ void InitItemPools()
     itemPoolTier2[27] = ITEM_ROSE_SIGNET;
     itemPoolTier2[28] = ITEM_TRUMPET;
     itemPoolTier2[29] = ITEM_BELT_HOLSTER;
+    itemPoolTier2[30] = ITEM_STUPID_BOOTS;
 
     itemPoolTier3[0] = ITEM_IRON_KISS;
     itemPoolTier3[1] = ITEM_ANCIENT_ROOTS;

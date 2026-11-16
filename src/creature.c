@@ -166,6 +166,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
         case LE_ONHIT_IRON_KISS: return "When hit, return damage equal to your Mastery.";
+        case LE_ONHIT_PILLORY: return "When hit, give all allies +25 Mastery.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
         default: return NULL;
     }
@@ -240,6 +241,15 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
 
                 AddCreatureToFlicker(caster);
                 DealDamage(totaldamage, caster, false, c);
+            }
+            break;
+        case LE_ONHIT_PILLORY:
+            message = CombineStrings((*c).baseStats.name, "'s allies gain 25 Mastery.");
+            AddMessageToFeed(message);
+            for(int j = 0; j < 3; j++)
+            {
+                if(&appState.stateData.gameState.playerTeam[j].stats != c)
+                appState.stateData.gameState.playerTeam[j].stats.encounterStats.mastery += 25;
             }
             break;
         case LE_ONHIT_TUNNEL_WYRM:
