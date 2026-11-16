@@ -1020,7 +1020,8 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         for(int i=0;i<3;i++)
         {
             DrawEnemyDamageOverlay(i, CalculateDamage( (appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_BERSERK] + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_BLEED]
-                + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_EXHAUSTION] + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_PAIN])
+                + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_EXHAUSTION] + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_PAIN]  
+                + appState.stateData.gameState.stateData.battleState.enemies[i].stats.statusEffects[SE_CONFUSION])
                 * 2 * GetDamageMult(caster) * CalculateEffectAmplification(caster, true), &appState.stateData.gameState.stateData.battleState.enemies[i].stats));
         }
         result = "Deal damage to an enemy equal to twice the sum of negative effects they carry.";
@@ -2089,7 +2090,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         break;
     case AB_RIPPER_EVISCERATE:
         primaryEffectValue = (2 * (targets[0]->statusEffects[SE_BLEED] + targets[0]->statusEffects[SE_BERSERK] + targets[0]->statusEffects[SE_EXHAUSTION] 
-            + targets[0]->statusEffects[SE_PAIN])) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+            + targets[0]->statusEffects[SE_PAIN]  + targets[0]->statusEffects[SE_CONFUSION])) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " tears ");
         message = CombineStrings(message, targets[0]->baseStats.name);
