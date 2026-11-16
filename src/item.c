@@ -1135,7 +1135,7 @@ Item InitItem(ITEM_ID id)
         result = (Item){
             id,
             "Artisan's Trousers",
-            TL_ITEMS,
+            TL_JTAD,
             (Vector2){4, 4},
             beige,
             ES_LEGS,
