@@ -1180,5 +1180,39 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.critRate = 80;
         result.statBonuses.critBonus = 80;
         return result;
+        //
+        case ITEM_PILLORY:
+        result = (Item){
+            id,
+            "Pillory",
+            TL_JTAD,
+            (Vector2){5, 4},
+            brown,
+            ES_TORSO,
+            CreateEmptyStatBonuses(),
+            LE_ONHIT_PILLORY,
+        };
+        result.statBonuses.staminaRegen = -50;
+        result.statBonuses.speed = -30;
+        result.statBonuses.poise = -15;
+        result.statBonuses.targetPriority = 150;
+        return result;
+        //
+        case ITEM_STUPID_BOOTS:
+        result = (Item){
+            id,
+            "Thick Boots",
+            TL_JTAD,
+            (Vector2){8, 4},
+            maroon,
+            ES_LEGS,
+            CreateEmptyStatBonuses(),
+            LE_NONE,
+        };
+        result.statBonuses.poise = 100;
+        result.statBonuses.staminaRegen = 100;
+        result.statBonuses.stamina = 300;
+        result.statBonuses.defense = 100;
+        return result;
     }
 }

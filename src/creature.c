@@ -166,6 +166,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
         case LE_ONHIT_IRON_KISS: return "When hit, return damage equal to your Mastery.";
+        case LE_ONHIT_PILLORY: return "When hit, give all allies +25 Mastery.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
         default: return NULL;
     }
@@ -242,6 +243,15 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
                 DealDamage(totaldamage, caster, false, c);
             }
             break;
+        case LE_ONHIT_PILLORY:
+            message = CombineStrings((*c).baseStats.name, "'s allies gain 25 Mastery.");
+            AddMessageToFeed(message);
+            for(int j = 0; j < 3; j++)
+            {
+                if(&appState.stateData.gameState.playerTeam[j].stats != c)
+                appState.stateData.gameState.playerTeam[j].stats.encounterStats.mastery += 25;
+            }
+            break;
         case LE_ONHIT_TUNNEL_WYRM:
             if(damage < 100) break;
                 message = CombineStrings("Startled by the powerful attack, ", (*c).baseStats.name);
@@ -250,6 +260,22 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
                 c->baseStats.ticksUntilNextTurn += 200;
                 ApplyStatusEffect(c, SE_PROTECTION, 1,true);
                 ApplyStatusEffect(c, SE_BERSERK, 30,true);
+            break;
+        case LE_ONHIT_SNAPTRAP:
+            if (caster && caster != c && c->baseStats.currentHealth <= 0){
+                int totaldamage = (GET_SCALING(c, mastery) * 2 * GetDamageMult(c) * CalculateEffectAmplification(caster, true));
+                
+                message = CombineStrings((*c).baseStats.name, " snaps shut, dealing ");
+                sprintf(strnum, "%d", CalculateDamage(totaldamage, caster));
+                message = CombineStrings(message, strnum);
+                message = CombineStrings(message, " damage to ");
+                message = CombineStrings(message, caster->baseStats.name);
+                message = CombineStrings(message, ".");
+                AddMessageToFeed(message);
+
+                AddCreatureToFlicker(caster);
+                DealDamage(totaldamage, caster, false, c);
+            }
             break;
         }
     }
@@ -1088,7 +1114,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (50 + 100% Mastery) Pain to self.");
         return result;
-        case AB_CULTIST_SPAWN_ENROOT:
+    case AB_CULTIST_SPAWN_ENROOT:
         damage = ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
@@ -1438,7 +1464,37 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (60 + 20% Mastery) for 500 moments.");
         return result;
-        
+    case AB_TRAPPER_SET_TRAP:
+        result = "Set up Snaptraps.";
+        return result;
+    case AB_TRAPPER_CBOLT:
+        damage = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 3.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (100 + 100% Mastery) Damage and apply Confusion for ");
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (300 + 300% Mastery) moments to an enemy.");
+        return result;
+    case AB_TRAPPER_DBOLT:
+        damage = ((100 + GET_SCALING(caster, mastery) * 1.5 + GET_SCALING(caster, speed) * .5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        sprintf(strnum, "%.0f", ((400 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 4.0)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (100 + 150% Mastery + 50% Speed) Damage to an enemy.");
+        return result;
+    case AB_TRAPPER_HAZE:
+        int trapperHazeConfusion = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true);
+        int trapperHazeSpeed = (((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * .15));
+        sprintf(strnum, "%d", trapperHazeSpeed);
+        result = CombineStrings("Gain ", strnum);
+        result = CombineStrings(result, " (15% Mastery) Speed and apply Confusion for ");
+        sprintf(strnum, "%d", trapperHazeConfusion);
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (100 + 150% Mastery) moments to all enemies.");
+        return result;
     default:
         return "Ability description missing, oopsie!";
     }
@@ -3643,7 +3699,77 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         StatDebuff twyrmClampDebuff = (StatDebuff){500, twyrmClampBonus};
         ApplyStatDebuff(targets[0], twyrmClampDebuff);
         break;
-    
+    case AB_TRAPPER_SET_TRAP:
+        bool didSetUpSnaptraps = false;
+        for (int i = 0; i < 3; i++) {
+            if(appState.stateData.gameState.stateData.battleState.enemies[i].stats.baseStats.currentHealth < 1)
+            {
+                appState.stateData.gameState.stateData.battleState.enemies[i] = InitEnemyData(EN_SNAPTRAP);
+                LingeringEffect le;
+                le.effectId = LE_ONHIT_SNAPTRAP;
+                le.isPermanent = true;
+                ApplyLingeringEffect(&appState.stateData.gameState.stateData.battleState.enemies[i].stats, le);
+                didSetUpSnaptraps = true;
+            }
+        }
+        if (didSetUpSnaptraps) {
+            message = CombineStrings(caster->baseStats.name, " sets up Snaptraps.");
+            AddMessageToFeed(message);
+        } else {
+            message = CombineStrings(caster->baseStats.name, " fails to set up any more traps.");
+            AddMessageToFeed(message);
+        }
+        break;
+    case AB_TRAPPER_CBOLT:
+        primaryEffectValue = (100 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        short ChaosBoltConfusion = (300 + GET_SCALING(caster, mastery) * 3.0) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " fires a poisonous dart at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage and applying ");
+        sprintf(strnum, "%d", ChaosBoltConfusion);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Confusion.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        ApplyStatusEffect(targets[0], SE_CONFUSION, ChaosBoltConfusion,false);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break;
+    case AB_TRAPPER_DBOLT:
+        primaryEffectValue = (100 + GET_SCALING(caster, mastery) * 1.5 + GET_SCALING(caster, speed) * .5) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
+        message = CombineStrings((*caster).baseStats.name, " fires a massive dart at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break;
+    case AB_TRAPPER_HAZE:
+        int trapperHazeConfusion = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5)) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * .15));
+        message = CombineStrings((*caster).baseStats.name, " conjures a sweet-smelling haze, applying ");
+        sprintf(strnum, "%d", trapperHazeConfusion);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " confusion to the opposing team, while gaining ");
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " speed.");
+        AddMessageToFeed(message);
+
+        AddCreatureToFlicker(caster);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            ApplyStatusEffect(targets[i], SE_CONFUSION, trapperHazeConfusion,false);
+        }
+        caster->encounterStats.speed += primaryEffectValue;
+        break;
+        
     default:
         message = CombineStrings((*caster).baseStats.name, " uses an ability that wasn't implemented yet, how embarassing!");
         AddMessageToFeed(message);

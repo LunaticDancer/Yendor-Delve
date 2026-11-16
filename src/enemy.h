@@ -37,6 +37,8 @@ typedef enum ENEMY_ID
     EN_QUICKPIG,
     EN_PIGJAR,
     EN_TUNNEL_WYRM,
+    EN_SNAPTRAP,
+    EN_TRAPPER,
 } ENEMY_ID;
 
 typedef enum TARGETTING_TYPE

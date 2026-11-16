@@ -10,7 +10,7 @@ ENCOUNTER_ID bossPoolTier1[4];
 ENCOUNTER_ID bossPoolTier2[1];
 
 ENCOUNTER_ID encounterPoolTier1[11];
-ENCOUNTER_ID encounterPoolTier2[5];
+ENCOUNTER_ID encounterPoolTier2[6];
 ENCOUNTER_ID encounterPoolTier3[4];
 
 ITEM_ID itemPoolTier1[ITEM_POOL_TIER_ONE_SIZE];
@@ -156,6 +156,7 @@ void InitEncounterPools()
     encounterPoolTier2[2] = ENC_CHEST;
     encounterPoolTier2[3] = ENC_MIMIC;
     encounterPoolTier2[4] = ENC_TUNNEL_WYRMS;
+    encounterPoolTier2[5] = ENC_TRAPPER;
 }
 
 void InitItemPools()
@@ -190,6 +191,7 @@ void InitItemPools()
     itemPoolTier1[27] = ITEM_ARTISAN_COAT;
     itemPoolTier1[28] = ITEM_ARTISAN_TROUSERS;
     itemPoolTier1[29] = ITEM_ARTISAN_TOOLS;
+    itemPoolTier1[30] = ITEM_PILLORY;
 
     itemPoolTier2[0] = ITEM_ELEMANCER_CROWN;
     itemPoolTier2[1] = ITEM_ELEMANCER_CAPE;
@@ -221,6 +223,7 @@ void InitItemPools()
     itemPoolTier2[27] = ITEM_ROSE_SIGNET;
     itemPoolTier2[28] = ITEM_TRUMPET;
     itemPoolTier2[29] = ITEM_BELT_HOLSTER;
+    itemPoolTier2[30] = ITEM_STUPID_BOOTS;
 
     itemPoolTier3[0] = ITEM_IRON_KISS;
     itemPoolTier3[1] = ITEM_ANCIENT_ROOTS;
@@ -476,6 +479,19 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
                 maroon,
                 "The cave surface is covered in countless perfectly circular holes.",
                 {EN_TUNNEL_WYRM, EN_NONE, EN_TUNNEL_WYRM},
+                false,
+            };
+        case ENC_TRAPPER:
+            return (Encounter)
+            {
+                id,
+                "Trapper",
+                "The Trapper has already spotted you.",
+                TL_JTAD,
+                (Vector2){1, 5},
+                darkgreen,
+                "A figure moves in the corner of your eye. A sweet scent fills the air.",
+                {EN_TRAPPER, EN_NONE, EN_SNAPTRAP},
                 false,
             };
         default:
