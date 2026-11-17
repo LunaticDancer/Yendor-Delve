@@ -469,6 +469,38 @@ Ability InitAbility(ABILITY id)
             100,
             AF_TARGETS_ALLIES + AF_AOE,
         };
+        case AB_GREEN_DRAGON_THRUM:
+        return (Ability)
+        { 
+            id, 
+            "Thrum", 
+            200, 
+            AF_TARGETS_ENEMIES + AF_AOE 
+        };
+        case AB_GREEN_DRAGON_TAIL_SWEEP:
+        return (Ability)
+        { 
+            id, 
+            "Tail Sweep", 
+            300, 
+            AF_TARGETS_ENEMIES + AF_AOE 
+        };
+        case AB_GREEN_DRAGON_FIRE_BREATH:
+        return (Ability)
+        { 
+            id, 
+            "Fire Breath", 
+            250, 
+            AF_TARGETS_ENEMIES 
+        };
+        case AB_GREEN_DRAGON_STALK:
+        return (Ability)
+        { 
+            id, 
+            "Stalk", 
+            150, 
+            AF_TARGETS_ENEMIES 
+        };
         case AB_MIMIC_CHOMP:
         return (Ability)
         {

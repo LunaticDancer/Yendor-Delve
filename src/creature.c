@@ -277,6 +277,10 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
                 DealDamage(totaldamage, caster, false, c);
             }
             break;
+        case LE_ONHIT_GREEN_DRAGON:
+            c->baseStats.ticksUntilNextTurn -= damage;
+            c->encounterStats.defense += 10;
+            AddMessageToFeed(CombineStrings(c->baseStats.name, " becomes irritated, gaining 10 Defense and shortening the wait until its next turn."));
         }
     }
 }
@@ -1132,42 +1136,70 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings("Gain ", strnum);
         result = CombineStrings(result, " (80 + 80% Mastery) Speed.");
         return result;
-        case AB_CULTIST_SPAWN_INVIGORATE:
+    case AB_CULTIST_SPAWN_INVIGORATE:
         sprintf(strnum, "%.0f", ((60 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Give ", strnum);
         result = CombineStrings(result, " (60 + 100% Mastery) Stamina to an enemy.");
         return result;
-        case AB_CULTIST_SPAWN_MIRACLE:
+    case AB_CULTIST_SPAWN_MIRACLE:
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Give ", strnum);
         result = CombineStrings(result, " (50 + 100% Mastery) Shield to an enemy and cure all ailments they have.");
         return result;
-        case AB_CAT_WIZARD_ARCANE_BLAST:
+    case AB_CAT_WIZARD_ARCANE_BLAST:
             sprintf(strnum, "%.0f", ((50 + GET_SCALING(caster, mastery) * 1.0)) 
             * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
             result = CombineStrings("Deal ", strnum);
             result = CombineStrings(result, " (50 + 100% Mastery) damage to all enemies.");
             return result;
-        case AB_CAT_WIZARD_CURSE_OF_MEEK:
+    case AB_CAT_WIZARD_CURSE_OF_MEEK:
         return "Reduce an enemy's Mastery by 80%.";
-        case AB_CAT_WIZARD_HEX_OF_AMBITION:
+    case AB_CAT_WIZARD_HEX_OF_AMBITION:
         return "Deal damage to an enemy equal to their Crit Progress times Crit Bonus above 100, then empty their Crit Progress.";
-        case AB_CAT_WIZARD_THOUSAND_SCRATCHES:
+    case AB_CAT_WIZARD_THOUSAND_SCRATCHES:
             sprintf(strnum, "%.0f", ((GET_SCALING(caster, mastery) * 0.8)) 
             * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
             result = CombineStrings("Apply ", strnum);
             result = CombineStrings(result, " (80% Mastery) Bleed and Pain to an enemy.");
             return result;
-        case AB_CAT_WIZARD_CRUSH:
+    case AB_CAT_WIZARD_CRUSH:
         return "Deal damage to an enemy equal to their Defense combined with their missing Health.";
-        case AB_CAT_WIZARD_ERECT_PILLAR:
+    case AB_CAT_WIZARD_ERECT_PILLAR:
         return "Create an allied Arcane Resonator.";
-        case AB_CAT_WIZARD_PILLAR_ZAP:
+    case AB_CAT_WIZARD_PILLAR_ZAP:
         return "Deal 50 unavoidable damage.";
-        case AB_CAT_WIZARD_PILLAR_OVERCLOCK:
+    case AB_CAT_WIZARD_PILLAR_OVERCLOCK:
         return "Give all Arcane Resonators 100 Speed.";
-        case AB_CAT_WIZARD_PILLAR_AMPLIFY:
+    case AB_CAT_WIZARD_PILLAR_AMPLIFY:
         return "Give all allies 20 Mastery.";
+    case AB_GREEN_DRAGON_THRUM:
+        sprintf(strnum, "%.0f", ((100 + GET_SCALING(caster, mastery) * 0.3)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Apply ", strnum);
+        result = CombineStrings(result, " (100 + 30% Mastery) Exhaustion to all enemies and remove their Untargetability.");
+        return result;
+    case AB_GREEN_DRAGON_TAIL_SWEEP:
+        ShowEnemyDamageOverlays((100 + (GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.10) * CalculateEffectAmplification(caster, true), false);
+        sprintf(strnum, "%.0f", (100 + (GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.10) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (100 + 10% missing Health) damage to all enemies. Apply ");
+        sprintf(strnum, "%.0f", (50 + (GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.05) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (50 + 5% missing Health) Pain, and delay their turns by ");
+        sprintf(strnum, "%.0f", (GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.20);
+        result = CombineStrings(result, strnum);
+        result = CombineStrings(result, " (20% missing Health) moments.");
+        return result;
+    case AB_GREEN_DRAGON_FIRE_BREATH:
+        damage = (150 + GET_SCALING(caster, mastery) * 1.0
+            + (GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.15) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        ShowEnemyDamageOverlays(damage, false);
+        sprintf(strnum, "%d", damage);
+        result = CombineStrings("Halve an enemy's Defense and deal ", strnum);
+        result = CombineStrings(result, " (150 + 100% Mastery + 15% missing Health) damage.");
+        return result;
+    case AB_GREEN_DRAGON_STALK:
+        result = "Gain Shield equal to the target's missing Health and Mastery equal to half of the target's missing Stamina.";
+        return result;
     case AB_MIMIC_CHOMP:
         damage = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
@@ -2526,7 +2558,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, " Speed.");
         AddMessageToFeed(message);
         break;
-        case AB_CULTIST_SPAWN_INVIGORATE:
+    case AB_CULTIST_SPAWN_INVIGORATE:
         primaryEffectValue = (60 + GET_SCALING(caster, mastery) * 1.0) * CalculateEffectAmplification(caster, false);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " radiates a nurturing aura, granting ");
@@ -2538,7 +2570,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddCreatureToFlicker(targets[0]);
         targets[0]->baseStats.currentStamina += primaryEffectValue;
         break;
-        case AB_CULTIST_SPAWN_MIRACLE:
+    case AB_CULTIST_SPAWN_MIRACLE:
         primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 1.0) * CalculateEffectAmplification(caster, false);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " transmits the divine presence through its mycelium, granting ");
@@ -2551,7 +2583,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddCreatureToFlicker(targets[0]);
         targets[0]->encounterStats.shield += primaryEffectValue;
         break;
-        case AB_CAT_WIZARD_ARCANE_BLAST:
+    case AB_CAT_WIZARD_ARCANE_BLAST:
         primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " projects an explosive wave of arcane energy, dealing ");
@@ -2564,7 +2596,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             DealDamage(primaryEffectValue, targets[i], false, caster);
         }
         break;
-        case AB_CAT_WIZARD_CURSE_OF_MEEK:
+    case AB_CAT_WIZARD_CURSE_OF_MEEK:
         targets[0]->encounterStats.mastery -= GET_SCALING(targets[0], mastery);
         sprintf(strnum, "%d", GET_SCALING(targets[0], mastery));
         message = CombineStrings((*caster).baseStats.name, " renders ");
@@ -2574,7 +2606,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         message = CombineStrings(message, ".");
         AddMessageToFeed(message);
         break;
-        case AB_CAT_WIZARD_HEX_OF_AMBITION:
+    case AB_CAT_WIZARD_HEX_OF_AMBITION:
         primaryEffectValue = targets[0]->baseStats.critCounter * MAX(GET_SCALING(targets[0], critBonus) - 100, 1) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " turns ");
@@ -2587,7 +2619,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         targets[0]->baseStats.critCounter = 0;
         AddCreatureToFlicker(targets[0]);
         break;
-        case AB_CAT_WIZARD_THOUSAND_SCRATCHES:
+    case AB_CAT_WIZARD_THOUSAND_SCRATCHES:
         primaryEffectValue = GET_SCALING(caster, mastery) * 0.8 * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " scratches ");
@@ -2600,7 +2632,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         ApplyStatusEffect(targets[0], SE_BLEED, primaryEffectValue,false);
         AddCreatureToFlicker(targets[0]);
         break;
-        case AB_CAT_WIZARD_CRUSH:
+    case AB_CAT_WIZARD_CRUSH:
         primaryEffectValue = (GET_SCALING(targets[0], defense) + GET_SCALING(targets[0], health) - targets[0]->baseStats.currentHealth) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " crushes ");
@@ -2612,7 +2644,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(primaryEffectValue, targets[0], false, caster);
         AddCreatureToFlicker(targets[0]);
         break;
-        case AB_CAT_WIZARD_ERECT_PILLAR:
+    case AB_CAT_WIZARD_ERECT_PILLAR:
         if(appState.stateData.gameState.stateData.battleState.enemies[0].stats.baseStats.currentHealth < 1)
         {
             appState.stateData.gameState.stateData.battleState.enemies[0] = InitEnemyData(ENB_CAT_WIZARD_PILLAR);
@@ -2629,7 +2661,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             ApplyStatDebuff(caster, (StatDebuff){2, (StatBonuses){.speed = 1000}});
         }
         break;
-        case AB_CAT_WIZARD_PILLAR_ZAP:
+    case AB_CAT_WIZARD_PILLAR_ZAP:
         message = CombineStrings((*caster).baseStats.name, " zaps ");
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, " with arcane energy, dealing 50 unavoidable damage.");
@@ -2655,6 +2687,85 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             AddCreatureToFlicker(targets[i]);
             targets[i]->encounterStats.mastery += 20;
         }
+        break;
+    case AB_GREEN_DRAGON_THRUM:
+        primaryEffectValue = ((100 + GET_SCALING(caster, mastery) * 0.3)) * CalculateEffectAmplification(caster, true);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " flaps its majestic wings with might, applying ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Exhaustion to all enemies and stripping their Untargetability through the sheer force of the shockwave.");
+        AddMessageToFeed(message);
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            ApplyStatusEffect(targets[i], SE_EXHAUSTION, primaryEffectValue, false);
+            targets[i]->statusEffects[SE_UNTARGETABLE] = 0;
+        }
+        break;
+    case AB_GREEN_DRAGON_TAIL_SWEEP:
+    {
+        int casterMissingHealth = MAX(0,GET_SCALING(caster, health) - caster->baseStats.currentHealth);
+        primaryEffectValue = (100 + casterMissingHealth * 0.10) * CalculateEffectAmplification(caster, true);
+        short tailSweepPain = (50 + casterMissingHealth * 0.05) * CalculateEffectAmplification(caster, true);
+        short tailSweepDelay = (short)(casterMissingHealth * 0.20);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " sweeps its hefty tail in a wide arc, dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage to all enemies, applying ");
+        sprintf(strnum, "%d", tailSweepPain);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Pain, and delaying their turns by ");
+        sprintf(strnum, "%d", tailSweepDelay);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " moments.");
+        AddMessageToFeed(message);
+
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            AddCreatureToFlicker(targets[i]);
+            targets[i]->baseStats.ticksUntilNextTurn += tailSweepDelay;
+            ApplyStatusEffect(targets[i], SE_PAIN, tailSweepPain, false);
+            DealDamage(primaryEffectValue, targets[i], false, caster);
+        }
+        break;
+    }
+    case AB_GREEN_DRAGON_FIRE_BREATH:
+        primaryEffectValue = (150 + GET_SCALING(caster, mastery) * 1.0
+            + (GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.15) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+
+        targets[0]->encounterStats.defense -= GET_SCALING(targets[0], defense) / 2;
+
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " breathes a concentrated beam of fire at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", halving their Defense and dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " damage.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        DealDamage(primaryEffectValue, targets[0], false, caster);
+        break;
+        case AB_GREEN_DRAGON_STALK:
+        if (numberOfTargets < 1)
+        {
+            AddMessageToFeed("Inanimate targets don't excite the hunting instinct.");
+            break;
+        }
+        primaryEffectValue = GET_SCALING(targets[0], health) - targets[0]->baseStats.currentHealth;
+        short stalkMastery = (GET_SCALING(targets[0], stamina) - targets[0]->baseStats.currentStamina) / 2;
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " studies ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", sensing their weakness and getting ready to strike, gaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Shield and ");
+        sprintf(strnum, "%d", stalkMastery);
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Mastery.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        caster->encounterStats.shield += primaryEffectValue;
+        caster->encounterStats.mastery += stalkMastery;
         break;
     case AB_MIMIC_CHOMP:
         primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 0.2) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);

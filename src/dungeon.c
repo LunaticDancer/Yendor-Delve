@@ -6,7 +6,7 @@
 
 extern struct AppState appState;
 
-ENCOUNTER_ID bossPoolTier1[4];
+ENCOUNTER_ID bossPoolTier1[5];
 ENCOUNTER_ID bossPoolTier2[1];
 
 ENCOUNTER_ID encounterPoolTier1[11];
@@ -136,6 +136,7 @@ void InitEncounterPools()
     bossPoolTier1[1] = ENCB_CHOIR;
     bossPoolTier1[2] = ENCB_CAT_WIZARD;
     bossPoolTier1[3] = ENCB_CAT_WIZARD;
+    bossPoolTier1[4] = ENCB_GREEN_DRAGON;
     
     bossPoolTier2[0] = ENCB_BLACK_DRAGON;
 
