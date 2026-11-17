@@ -811,7 +811,7 @@ char PickSingularTarget(Enemy *c, RNG *rng)
 		{
 			if (!targets[i])
 				continue;
-			if (highestPriority > appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority +
+			if (highestPriority < appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority +
 									  appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority)
 			{
 				pick = i;
@@ -825,7 +825,7 @@ char PickSingularTarget(Enemy *c, RNG *rng)
 		{
 			if (!targets[i])
 				continue;
-			if (lowestPriority < appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority +
+			if (lowestPriority > appState.stateData.gameState.playerTeam[i].stats.baseStats.targetPriority +
 									 appState.stateData.gameState.playerTeam[i].stats.itemStats.targetPriority + appState.stateData.gameState.playerTeam[i].stats.encounterStats.targetPriority)
 			{
 				pick = i;

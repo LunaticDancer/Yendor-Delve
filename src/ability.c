@@ -587,7 +587,7 @@ Ability InitAbility(ABILITY id)
             id,
             "Harden",
             50,
-            AF_TARGETS_ENEMIES,
+            AF_TARGETS_SELF,
         };
         case AB_TOOTHOLEM_PROTECT:
         return (Ability)
