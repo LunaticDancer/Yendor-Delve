@@ -388,6 +388,8 @@ void DrawBattleAbilitySelection()
 
 void DrawBattleAbilityDescription(CreatureStats* c, ABILITY a)
 {
+    if (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth <= 0 
+        && appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth <= 0) return;
     char* abilityDesc = GetAbilityDescription(a, c);
 
     DrawRectangle(152, 128, 488 - LAYOUT_SPACING, 224, *black);

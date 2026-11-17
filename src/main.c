@@ -652,6 +652,11 @@ void HandleBattleInput()
 	{
 		if (IsPressed(K_BACK))
 		{
+			if (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth <= 0)
+			{
+				InitGameState(GS_GAME_OVER);
+				return;
+			}
 			appState.stateData.gameState.isPaused = !appState.stateData.gameState.isPaused;
 			appState.stateData.gameState.pauseMenuSelection = 0;
 		}

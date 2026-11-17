@@ -352,11 +352,11 @@ void HandleAbilityTargetInit()
 
 void PassTurn()
 {
-	if (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth <= 0)
+	/*if (appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth <= 0)
 	{
-		InitGameState(GS_GAME_OVER);
+		appState.stateData.gameState.stateData.battleState.battleState = BS_PLAYER_OVERVIEW;
 		return;
-	}
+	}*/
 
 	appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
 	appState.stateData.gameState.stateData.battleState.opportunitySkillCountdown--;
@@ -871,7 +871,9 @@ void HandleEnemyTurn()
 		if (appState.stateData.gameState.stateData.battleState.statePauseTimer <= 0)
 		{
 			appState.stateData.gameState.stateData.battleState.flickeringMask = 0;
-			appState.stateData.gameState.stateData.battleState.battleState = appState.stateData.gameState.stateData.battleState.currentActingEntity < 3 ? BS_PLAYER_OVERVIEW : BS_ENEMY_TURN;
+			appState.stateData.gameState.stateData.battleState.battleState = (appState.stateData.gameState.stateData.battleState.currentActingEntity < 3 || 
+				(appState.stateData.gameState.playerTeam[0].stats.baseStats.currentHealth <= 0 && appState.stateData.gameState.playerTeam[1].stats.baseStats.currentHealth <= 0 
+					&& appState.stateData.gameState.playerTeam[2].stats.baseStats.currentHealth <= 0)) ? BS_PLAYER_OVERVIEW : BS_ENEMY_TURN;
 			appState.stateData.gameState.stateData.battleState.horizontalSelection = 0;
 		}
 	}
