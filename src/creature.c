@@ -2756,7 +2756,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " studies ");
         message = CombineStrings(message, targets[0]->baseStats.name);
-        message = CombineStrings(message, ", sensing their weakness and getting ready to strike, gaining ");
+        message = CombineStrings(message, ", assessing their weakness and getting ready to strike, gaining ");
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Shield and ");
         sprintf(strnum, "%d", stalkMastery);

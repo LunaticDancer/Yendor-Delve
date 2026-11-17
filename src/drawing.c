@@ -1711,7 +1711,7 @@ char* WrapText(Font font, const char* text, float fontSize, float spacing, float
     char* result = (char*)malloc(length * 2 + 1);
     if (!result) return NULL;
 
-    int outLen = 0; 
+    int outLen = 0;
     float lineWidth = 0.0f;
     float spaceWidth = MeasureTextEx(font, " ", fontSize, spacing).x;
 
@@ -1721,6 +1721,33 @@ char* WrapText(Font font, const char* text, float fontSize, float spacing, float
     const char* p = text;
     while (*p)
     {
+        if (*p == '[')
+        {
+            const char* tagStart = p;
+            const char* tagEnd   = NULL;
+
+            if (p[1] == 'r' && p[2] == ']')
+            {
+                tagEnd = p + 2;
+            }
+            else if ((p[1] == 'c' || p[1] == 'b') && p[2] != '\0')
+            {
+                const char* scan = p + 2;
+                while (*scan && *scan != ']') scan++;
+                if (*scan == ']') tagEnd = scan;
+            }
+
+            if (tagEnd)
+            {
+                int tagLen = (int)(tagEnd - tagStart) + 1;
+                memcpy(&result[outLen], tagStart, tagLen);
+                outLen += tagLen;
+
+                p = tagEnd + 1;
+                continue;
+            }
+        }
+
         int cpByteCount = 0;
         int codepoint = GetCodepoint(p, &cpByteCount);
         if (cpByteCount <= 0) cpByteCount = 1;
@@ -1758,6 +1785,17 @@ char* WrapText(Font font, const char* text, float fontSize, float spacing, float
                 lineWidth = 0.0f;
                 for (int i = lastBreakOut + 1; i < outLen; )
                 {
+                    if (result[i] == '[')
+                    {
+                        const char* t = &result[i];
+                        if (t[1] == 'r' && t[2] == ']') { i += 3; continue; }
+                        if ((t[1] == 'c' || t[1] == 'b') && t[2])
+                        {
+                            const char* s = t + 2;
+                            while (*s && *s != ']') s++;
+                            if (*s == ']') { i = (int)(s - result) + 1; continue; }
+                        }
+                    }
                     int bc = 0;
                     GetCodepoint(&result[i], &bc);
                     if (bc <= 0) bc = 1;
@@ -1766,7 +1804,7 @@ char* WrapText(Font font, const char* text, float fontSize, float spacing, float
                     lineWidth += MeasureTextEx(font, g, fontSize, spacing).x;
                     i += bc;
                 }
-                lineWidth += glyphWidth; 
+                lineWidth += glyphWidth;
                 lastBreakOut = -1;
             }
         }
@@ -1785,7 +1823,7 @@ char* WrapText(Font font, const char* text, float fontSize, float spacing, float
     }
 
     result[outLen] = '\0';
-    (void)widthAtBreak; 
+    (void)widthAtBreak;
     return result;
 }
 
