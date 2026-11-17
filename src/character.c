@@ -113,7 +113,7 @@ Character InitCharacterData(CHARACTER_ID id)
                     .speed = 100,
                     .defense = 20,
                     .armor = 0,
-                    .poise = 0,
+                    .poise = 250,
                     .critBonus = 0,
                     .critRate = 10,
                     .critCounter = 0,
