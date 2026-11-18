@@ -415,7 +415,7 @@ void HandleStartOfCombatEffects(CreatureStats* c)
 void HandleOnDeathEffects(CreatureStats *c)
 {
     // Death sound
-    PlaySFX(SFX_Death);
+    PlaySFX(SFX_DEATH);
 
     char strnum[8];
     char *message;
@@ -756,7 +756,7 @@ void DealDamage(int damage, CreatureStats *target, bool trueDamage, CreatureStat
             AddMessageToFeed(message);
             HandleOnDeathEffects(target);
         }
-    } else {PlaySFX(SFX_Hit);}
+    } else {PlaySFX(SFX_HIT);}
 }
 
 float GetDamageMult(CreatureStats* c)

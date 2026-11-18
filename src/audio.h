@@ -3,15 +3,21 @@
 #include "raylib.h"
 #include "state.h"
 
-extern Sound SFX_Hit;
-extern Sound SFX_Enhance;
-extern Sound SFX_Delve;
-extern Sound SFX_Death;
-extern Sound SFX_Ping;
-extern Sound SFX_Nullify;
+typedef enum SFX_ID {
+    SFX_HIT,
+    SFX_ENHANCE,
+    SFX_DELVE,
+    SFX_DEATH,
+    SFX_PING,
+    SFX_NULLIFY,
+
+    SFX_SIZE,
+} SFX_ID;
+
+extern Sound SFX_Sounds[SFX_SIZE];
 
 void LoadAudio(void);
 void UnloadAudio(void);
-void PlaySFX(Sound);
+void PlaySFX(SFX_ID);
 
 #endif

@@ -14,6 +14,9 @@ Sofus
 Jtad  
 Bloep  
 
+**Additional audio design**
+Jtad
+
 **Additional game design**  
 King of Quiek  
 Pholidia  
