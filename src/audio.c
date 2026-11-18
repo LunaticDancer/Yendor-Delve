@@ -4,41 +4,31 @@
 #include "state.h"
 
 
-Sound SFX_Hit;
-Sound SFX_Enhance;
-Sound SFX_Delve;
-Sound SFX_Death;
-Sound SFX_Ping;
-Sound SFX_Nullify;
-
 extern struct AppState appState;
+Sound SFX_Sounds[SFX_SIZE];
 
 void LoadAudio(void) {
     InitAudioDevice();
 
-    SFX_Hit = LoadSound("assets/audio/sfx/hit.wav");
-    SFX_Enhance = LoadSound("assets/audio/sfx/enhance.wav");
-    SFX_Delve = LoadSound("assets/audio/sfx/delve.wav");
-    SFX_Death = LoadSound("assets/audio/sfx/death.wav");
-    SFX_Ping = LoadSound("assets/audio/sfx/ping.wav");
-    SFX_Nullify = LoadSound("assets/audio/sfx/nullify.wav");
+    SFX_Sounds[SFX_HIT] = LoadSound("assets/audio/sfx/hit.wav");
+    SFX_Sounds[SFX_ENHANCE] = LoadSound("assets/audio/sfx/enhance.wav");
+    SFX_Sounds[SFX_DELVE] = LoadSound("assets/audio/sfx/delve.wav");
+    SFX_Sounds[SFX_DEATH] = LoadSound("assets/audio/sfx/death.wav");
+    SFX_Sounds[SFX_PING] = LoadSound("assets/audio/sfx/ping.wav");
+    SFX_Sounds[SFX_NULLIFY] = LoadSound("assets/audio/sfx/nullify.wav");
 };
 
 void UnloadAudio(void) {
-    UnloadSound(SFX_Hit);
-    UnloadSound(SFX_Enhance);
-    UnloadSound(SFX_Delve);
-    UnloadSound(SFX_Death);
-    UnloadSound(SFX_Ping);
-    UnloadSound(SFX_Nullify);
-    
+    for (int i = 0; i < SFX_SIZE; i++) {
+        UnloadSound(SFX_Sounds[i]);
+    }
     CloseAudioDevice();
 
     return;
 };
 
-void PlaySFX(Sound sound) {
-    SetSoundVolume(sound, ((float)appState.settings.sfxVolume)/10.);
-    StopSound(sound);
-    PlaySound(sound);
+void PlaySFX(SFX_ID sound) {
+    SetSoundVolume(SFX_Sounds[sound], ((float)appState.settings.sfxVolume)/10.);
+    StopSound(SFX_Sounds[sound]);
+    PlaySound(SFX_Sounds[sound]);
 };
