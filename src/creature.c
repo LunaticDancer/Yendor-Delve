@@ -902,16 +902,16 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (50 + 100% Mastery) stamina and gain double the Crit Progress. Halve all of your status effects.");
         return result;
     case AB_MONK_MEDITATE:
-        sprintf(strnum, "%.0f", (10 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, false));
+        sprintf(strnum, "%.0f", (20 + ((caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.2)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Gain ", strnum);
-        result = CombineStrings(result, " (10 + 20% Mastery) Mastery and double the Crit Progress this turn.");
+        result = CombineStrings(result, " (20 + 20% Mastery) Mastery and double the Crit Progress this turn.");
         return result;
     case AB_MONK_TRUE_STRIKE:
-        damage = ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        damage = ((80 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, true);
-        sprintf(strnum, "%.0f", ((100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((80 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ? " (100 + 200% Mastery) unavoidable damage to all enemies." : " (100 + 200% Mastery) unavoidable damage to target enemy. Becomes an area ability upon crit.");
+        result = CombineStrings(result, (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ? " (80 + 100% Mastery) unavoidable damage to all enemies." : " (80 + 100% Mastery) unavoidable damage to target enemy. Becomes an area ability upon crit.");
         return result;
     case AB_MONK_ATTUNEMENT:
         sprintf(strnum, "%.0f", ((150 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.0)) * CalculateEffectAmplification(caster, false));
@@ -1766,7 +1766,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     case AB_MONK_MEDITATE:
         dontResetCritProgress = true;
         (*caster).baseStats.critCounter += GET_SCALING(caster, critRate);
-        primaryEffectValue = (10 + GET_SCALING(caster, mastery) * 0.2) * CalculateEffectAmplification(caster, false);
+        primaryEffectValue = (20 + GET_SCALING(caster, mastery) * 0.2) * CalculateEffectAmplification(caster, false);
         (*caster).encounterStats.mastery += primaryEffectValue;
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " meditates, gaining ");
@@ -1778,7 +1778,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         break;
     case AB_MONK_TRUE_STRIKE:
-        primaryEffectValue = (100 + GET_SCALING(caster, mastery) * 2.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (80 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " uses True Strike, dealing ");
         message = CombineStrings(message, strnum);
