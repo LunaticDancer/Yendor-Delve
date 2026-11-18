@@ -1073,11 +1073,11 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (50 + 80% Mastery) damage to that enemy.");
         return result;
     case AB_WOLF_HUNT:
-        damage = ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 5.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        damage = ((200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 3.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
-        sprintf(strnum, "%.0f", ((300 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 5.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", ((200 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 3.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (300 + 500% Mastery) damage to an enemy, lose 50 Speed.");
+        result = CombineStrings(result, " (200 + 300% Mastery) damage to an enemy, lose 50 Speed.");
         return result;
     case AB_WOLF_FERAL_AURA:
         sprintf(strnum, "%.0f", ((40 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.4)) * CalculateEffectAmplification(caster, true));
@@ -2400,7 +2400,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         DealDamage(primaryEffectValue, targets[0], false, caster);
         break;
     case AB_WOLF_HUNT:
-        primaryEffectValue = (300 + GET_SCALING(caster, mastery) * 5.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = (200 + GET_SCALING(caster, mastery) * 3.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " springs at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
