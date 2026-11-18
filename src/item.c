@@ -918,7 +918,7 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
             LE_NONE,
         };
-        result.statBonuses.mastery = 200;
+        result.statBonuses.mastery = 120;
         result.statBonuses.defense = 40;
         result.statBonuses.poise = 60;
         result.statBonuses.speed = -20;
@@ -936,7 +936,7 @@ Item InitItem(ITEM_ID id)
             CreateEmptyStatBonuses(),
             LE_NONE,
         };
-        result.statBonuses.mastery = 200;
+        result.statBonuses.mastery = 120;
         result.statBonuses.defense = 40;
         result.statBonuses.poise = 60;
         result.statBonuses.speed = -20;
