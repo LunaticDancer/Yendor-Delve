@@ -973,15 +973,15 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_SHAPESHIFTER_TRANSFORM:
         return "Become an exact copy of target enemy, retaining your ability to change shapes.";
     case AB_MAGUS_DISINTEGRATE:
-        damage = ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.5) + 
+        damage = ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5) + 
             (caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
-            +MAGUS_DISINTEGRATE_COST + caster->statusEffects[SE_EXHAUSTION]) * 0.6) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+            +MAGUS_DISINTEGRATE_COST + caster->statusEffects[SE_EXHAUSTION]) * 0.4) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
-        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.5) + 
+        sprintf(strnum, "%.0f", ((20 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.5) + 
             (caster->baseStats.stamina + caster->encounterStats.stamina + caster->itemStats.stamina-caster->baseStats.currentStamina
-            +MAGUS_DISINTEGRATE_COST + caster->statusEffects[SE_EXHAUSTION]) * 0.6) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
+            +MAGUS_DISINTEGRATE_COST + caster->statusEffects[SE_EXHAUSTION]) * 0.4) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (20 + 120% Mastery + 50% missing Stamina) damage to an enemy.");
+        result = CombineStrings(result, " (20 + 150% Mastery + 40% missing Stamina) damage to an enemy.");
         return result;
     case AB_MAGUS_ARCANE_BLAST:
         damage = ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) + 
@@ -2033,8 +2033,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddCreatureToFlicker(targets[0]);
         break;
     case AB_MAGUS_DISINTEGRATE:
-        primaryEffectValue = ((100 + GET_SCALING(caster, mastery) * 2.5) + 
-            (GET_SCALING(caster, stamina)-caster->baseStats.currentStamina) * 0.6) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = ((20 + GET_SCALING(caster, mastery) * 1.5) + 
+            (GET_SCALING(caster, stamina)-caster->baseStats.currentStamina) * 0.4) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
         message = CombineStrings((*caster).baseStats.name, " shoots a ray of concentrated arcane energy at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
