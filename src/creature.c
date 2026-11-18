@@ -923,25 +923,25 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = (caster->baseStats.critCounter >= CRIT_PROGRESS_MAX) ? "Cleanse all status effects from all creatures and entities." : "Cleanse all status effects from target creature. Becomes an area ability upon crit.";
         return result;
     case AB_FOLEM_STRIKE:
-        damage = ((GET_SCALING(caster, health) * 0.2 + 
+        damage = ((GET_SCALING(caster, health) * 0.05 + 
         GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%d", damage);
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (20% Health + 30% Mastery) damage and apply ");
+        result = CombineStrings(result, " (5% Health + 30% Mastery) damage and apply ");
         sprintf(strnum, "%.0f", ((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.02 + GET_SCALING(caster, armor)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (100% Armour + 2% missing Health) Pain.");
         return result;
     case AB_FOLEM_EXPUNGE:
-        damage = ((GET_SCALING(caster, health) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        damage = ((GET_SCALING(caster, health) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%d", damage);
         result = CombineStrings("Deal ", strnum);
-        sprintf(strnum, "%.0f", ((GET_SCALING(caster, health) * 0.2)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (100% Health) damage to an enemy and ");
+        sprintf(strnum, "%.0f", ((GET_SCALING(caster, health) * 0.3)) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings(result, " (50% Health) damage to an enemy and ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (20% Health) damage to self.");
+        result = CombineStrings(result, " (30% Health) damage to self.");
         return result;
     case AB_FOLEM_EPIDERMIZE:
         sprintf(strnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.9)) * CalculateEffectAmplification(caster, false));
@@ -1857,7 +1857,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 1;
         }
-        primaryEffectValue = ((GET_SCALING(caster, health) * 0.2 
+        primaryEffectValue = ((GET_SCALING(caster, health) * 0.05 
             + GET_SCALING(caster, mastery) * 0.3)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         short folemStrikePain = ((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.02 + GET_SCALING(caster, armor)) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
@@ -1880,9 +1880,9 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         {
             appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask += 2;
         }
-        primaryEffectValue = ((GET_SCALING(caster, health) * 1.0)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
+        primaryEffectValue = ((GET_SCALING(caster, health) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
-        short folemExpungeValue = ((GET_SCALING(caster, health) * 0.2)) * CalculateEffectAmplification(caster, true);
+        short folemExpungeValue = ((GET_SCALING(caster, health) * 0.3)) * CalculateEffectAmplification(caster, true);
         message = CombineStrings((*caster).baseStats.name, " explodes violently with viscera, dealing ");
         message = CombineStrings(message, strnum);
         sprintf(strnum, "%d", CalculateDamage(folemExpungeValue, caster));
