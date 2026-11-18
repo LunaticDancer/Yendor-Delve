@@ -215,7 +215,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             break;
         case LE_ONHIT_CRYSTAL_MAIL:
             AddMessageToFeed("The Crystal Mail chips and shatters, losing 1 Armour.");
-            c->encounterStats.armor -= 1;
+            c->itemStats.armor -= 1;
             for(int j = 0; j < 3; j++)
             {
                 if(&appState.stateData.gameState.playerTeam[j].stats == c)
@@ -388,8 +388,19 @@ void HandleStartOfCombatEffects(CreatureStats* c)
                     }
                 }
             Item copied_weapon = appState.stateData.gameState.playerTeam[dual_wielder_index].items[3];
-            Item belt_holster = appState.stateData.gameState.playerTeam[dual_wielder_index].items[2];
-            belt_holster.statBonuses = copied_weapon.statBonuses;
+            
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.armor += copied_weapon.statBonuses.armor;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.critBonus += copied_weapon.statBonuses.critBonus;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.critRate += copied_weapon.statBonuses.critRate;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.damageMultiplier += copied_weapon.statBonuses.damageMultiplier;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.defense += copied_weapon.statBonuses.defense;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.health += copied_weapon.statBonuses.health;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.mastery += copied_weapon.statBonuses.mastery;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.poise += copied_weapon.statBonuses.poise;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.speed += copied_weapon.statBonuses.speed;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.stamina += copied_weapon.statBonuses.stamina;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.staminaRegen += copied_weapon.statBonuses.staminaRegen;
+            appState.stateData.gameState.playerTeam[dual_wielder_index].stats.encounterStats.targetPriority += copied_weapon.statBonuses.targetPriority;
             
             // Copy triggered abilities
             LingeringEffect le;
