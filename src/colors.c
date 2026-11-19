@@ -314,7 +314,7 @@ Palette_Values get_palette(int palette_index)
         CLITERAL(Color){213,181,0,255},//BROWN,
         CLITERAL(Color){164,115,0,255},//DARKBROWN,
         CLITERAL(Color){249,245,236,255},// WHITE,
-        CLITERAL(Color){0,31,26,22},// BLACK,
+        CLITERAL(Color){0,31,26,255},// BLACK,
         CLITERAL(Color){240,255,51,255},//MAGENTA,
         CLITERAL(Color){249,255,168,255},//RAYWHITE
     };break;
