@@ -2727,7 +2727,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         if (missingHealth < 1) missingHealth = 1;
         appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats.baseStats.currentHealth = missingHealth;
         appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats.encounterStats = CreateEmptyStatBonuses();
-        appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats.baseStats.name = CombineStrings("The Missing ", visageTarget.baseStats.name);
+        appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats.baseStats.name = CombineStrings("Loss of ", visageTarget.baseStats.name);
         appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats.baseStats.color = raywhite;
         EmptyLingeringEffects(&appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats);
 
