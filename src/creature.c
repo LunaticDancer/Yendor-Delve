@@ -955,14 +955,14 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (30% Health) damage to self.");
         return result;
     case AB_FOLEM_EPIDERMIZE:
-        sprintf(strnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.9)) * CalculateEffectAmplification(caster, false));
+        sprintf(strnum, "%.0f", ((30 + GET_SCALING(caster, mastery) * 1.6)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Gain ", strnum);
         sprintf(strnum, "%.0f", ((GET_SCALING(caster, health) * 0.1) +
             ((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.2) + 
         GET_SCALING(caster, mastery) * 1.0) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, " (10 + 90% Mastery) Defense and ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (100% Mastery + 10% Health + 20% missing Health) Shield points.");
+        result = CombineStrings(result, " (100% Mastery + 10% Health + 20% missing Health) Shield points OR give an ally half as much Shield and 1 Protection.");
         return result;
     case AB_FOLEM_CRIPPLE:
         sprintf(strnum, "%.0f", (((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.1)) * CalculateEffectAmplification(caster, true));
@@ -1918,6 +1918,8 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         short folemEpidermizeShield = ((GET_SCALING(caster, health) * 0.1) +
             ((GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.2) + 
         GET_SCALING(caster, mastery) * 1.0) * CalculateEffectAmplification(caster, false);
+        if(targets[0] == caster)
+        {
         message = CombineStrings((*caster).baseStats.name, " rapidly hardens its epidermis into a carapace, gaining ");
         message = CombineStrings(message, strnum);
         sprintf(strnum, "%d", folemEpidermizeShield);
@@ -1928,6 +1930,20 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddMessageToFeed(message);
         caster->encounterStats.defense += primaryEffectValue;
         caster->encounterStats.shield += folemEpidermizeShield;
+        }
+        else
+        {
+        message = CombineStrings((*caster).baseStats.name, " embraces ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        sprintf(strnum, "%d", folemEpidermizeShield/2);
+        message = CombineStrings(message, " in a flesh cocoon, granting them protection and  ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Shield points.");
+        AddCreatureToFlicker(targets[0]);
+        AddMessageToFeed(message);
+        targets[0]->encounterStats.shield += folemEpidermizeShield/2;
+        ApplyStatusEffect(targets[0], SE_PROTECTION, 1, true);
+        }
         break;
     case AB_FOLEM_CRIPPLE:
         if ((appState.stateData.gameState.stateData.battleState.fleshGolemSkillMask & (1 << 3)) == false)

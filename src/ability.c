@@ -163,7 +163,7 @@ Ability InitAbility(ABILITY id)
             id,
             "Epidermize",
             200,
-            AF_TARGETS_SELF,
+            AF_TARGETS_ALLIES,
         };
         case AB_FOLEM_CRIPPLE:
         return (Ability)
