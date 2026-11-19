@@ -440,11 +440,11 @@ Character InitCharacterData(CHARACTER_ID id)
     }
 }
 
-void EquipItem(Character* ch, ITEM_ID it, char slot)
+void EquipItem(Character* ch, Item* it, char slot)
 {
     UnequipItem(ch, slot);
 
-    (*ch).items[slot] = InitItem(it);
+    (*ch).items[slot] = (*it);
 
     (*ch).stats.itemStats.armor += (*ch).items[slot].statBonuses.armor;
     (*ch).stats.itemStats.critBonus += (*ch).items[slot].statBonuses.critBonus;

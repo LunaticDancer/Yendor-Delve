@@ -477,6 +477,7 @@ void AddItemToInventory(Item it)
 
 void HandleItemEquip()
 {
+	Item empty = InitItem(ITEM_NONE);
 	if (appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.dungeonState.selectionX].items[appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot].itemId != ITEM_NONE)
 	{
 		AddItemToInventory(appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.dungeonState.selectionX].items[appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot]);
@@ -486,7 +487,7 @@ void HandleItemEquip()
 				appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot);
 
 	EquipItem(&appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.dungeonState.selectionX],
-			  (appState.stateData.gameState.stateData.dungeonState.highlightedItem == 0) ? ITEM_NONE : appState.stateData.gameState.inventory[appState.stateData.gameState.stateData.dungeonState.slotItemIndexes[appState.stateData.gameState.stateData.dungeonState.highlightedItem - 1]].itemId,
+			  (appState.stateData.gameState.stateData.dungeonState.highlightedItem == 0) ? &empty : &appState.stateData.gameState.inventory[appState.stateData.gameState.stateData.dungeonState.slotItemIndexes[appState.stateData.gameState.stateData.dungeonState.highlightedItem - 1]],
 			  appState.stateData.gameState.stateData.dungeonState.highlightedEquipmentSlot);
 
 	if (appState.stateData.gameState.stateData.dungeonState.highlightedItem != 0)
