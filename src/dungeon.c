@@ -240,7 +240,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Dungeon Master",
-                "They await you, calmly and expectingly.",
+                "As you enter the inner sanctum of the workshop, a mighty voice makes the ornate walls tremble:\n\"Brave fools, you've proven your mettle by making it this far. Now perish!\"",
                 TL_BIG_CREATURES,
                 (Vector2){5,3},
                 gold,

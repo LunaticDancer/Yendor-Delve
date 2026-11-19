@@ -1221,14 +1221,14 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_BLACK_DRAGON_VISAGE_OF_DEATH:
         return "Create a copy of target enemy. The copy's current Health equals the target's missing Health.";
     case AB_BLACK_DRAGON_DISINTEGRATION_BREATH:
-        sprintf(strnum, "%.0f", (200 + GET_SCALING(caster, mastery) * 1.0));
+        sprintf(strnum, "%.0f", (200 + GET_SCALING(caster, mastery) * 0.5));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (200 + 100% Mastery) unavoidable damage to an enemy.");
+        result = CombineStrings(result, " (200 + 50% Mastery) unavoidable damage to an enemy.");
         return result;
     case AB_BLACK_DRAGON_CURSE_OF_WITHERING:
-        sprintf(strnum, "%.0f", (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Curse all enemies for ", strnum);
-        result = CombineStrings(result, " (100 + 100% Mastery) moments. While cursed, each time they use an ability they gain Pain and Exhaustion equal to its Stamina cost.");
+        result = CombineStrings(result, " (100 + 80% Mastery) moments. While cursed, each time they use an ability they gain Pain and Exhaustion equal to its Stamina cost.");
         return result;
     case AB_CAT_WIZARD_ARCANE_BLAST:
             sprintf(strnum, "%.0f", ((50 + GET_SCALING(caster, mastery) * 1.0)) 
@@ -2740,7 +2740,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     }
     case AB_BLACK_DRAGON_DISINTEGRATION_BREATH:
     {
-        primaryEffectValue = (200 + GET_SCALING(caster, mastery) * 1.0);
+        primaryEffectValue = (200 + GET_SCALING(caster, mastery) * 0.5);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " exhales a beam of pure annihilation at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -2754,7 +2754,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     }
     case AB_BLACK_DRAGON_CURSE_OF_WITHERING:
     {
-        short curseDuration = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        short curseDuration = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true);
         for (int i = 0; i < numberOfTargets; i++)
         {
             if ((*targets[i]).baseStats.currentHealth <= 0) continue;
