@@ -292,7 +292,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             if (c->lingeringEffects[i].storedValue >= 1000)
             {
                 c->lingeringEffects[i].storedValue = 0;
-                AddMessageToFeed(CombineStrings(c->baseStats.name, "'s black heart goes into overdrive, exploding with a force perverting life!"));
+                AddMessageToFeed(CombineStrings(c->baseStats.name, "'s black heart goes into overdrive, exploding with a force perverting life! It heals for 1500 Health and deals 1000 damage to everything else."));
                 for (int j = 0; j < 3; j++)
                 {
                     if (&appState.stateData.gameState.playerTeam[j].stats != c && appState.stateData.gameState.playerTeam[j].stats.baseStats.currentHealth > 0)
