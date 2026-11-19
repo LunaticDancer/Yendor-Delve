@@ -1198,7 +1198,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (50 + 5% missing Health) Pain, and delay their turns by ");
         sprintf(strnum, "%.0f", (GET_SCALING(caster, health) - caster->baseStats.currentHealth) * 0.20);
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (20% missing Health) moments.");
+        result = CombineStrings(result, " (60% missing Health) moments.");
         return result;
     case AB_GREEN_DRAGON_FIRE_BREATH:
         damage = (150 + GET_SCALING(caster, mastery) * 1.0
@@ -2734,7 +2734,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         int casterMissingHealth = MAX(0,GET_SCALING(caster, health) - caster->baseStats.currentHealth);
         primaryEffectValue = (100 + casterMissingHealth * 0.10) * CalculateEffectAmplification(caster, true);
         short tailSweepPain = (50 + casterMissingHealth * 0.05) * CalculateEffectAmplification(caster, true);
-        short tailSweepDelay = (short)(casterMissingHealth * 0.20);
+        short tailSweepDelay = (short)(casterMissingHealth * 0.60);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " sweeps its hefty tail in a wide arc, dealing ");
         message = CombineStrings(message, strnum);

@@ -235,7 +235,7 @@ Enemy InitEnemyData(ENEMY_ID id)
                     .currentStamina = 1000,
                     .stamina = 1000,
                     .staminaRegen = 200,
-                    .speed = 0,
+                    .speed = 50,
                     .defense = 100,
                     .armor = 5,
                     .poise = 200,
