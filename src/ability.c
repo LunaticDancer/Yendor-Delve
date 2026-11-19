@@ -397,6 +397,38 @@ Ability InitAbility(ABILITY id)
             150,
             AF_TARGETS_ENEMIES,
         };
+                case AB_BLACK_DRAGON_VITALITY_SAP:
+        return (Ability)
+        {
+            id,
+            "Vitality Sap",
+            200,
+            AF_TARGETS_ENEMIES + AF_AOE,
+        };
+        case AB_BLACK_DRAGON_VISAGE_OF_DEATH:
+        return (Ability)
+        {
+            id,
+            "Visage of Death",
+            250,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_BLACK_DRAGON_DISINTEGRATION_BREATH:
+        return (Ability)
+        {
+            id,
+            "Disintegration Breath",
+            200,
+            AF_TARGETS_ENEMIES,
+        };
+        case AB_BLACK_DRAGON_CURSE_OF_WITHERING:
+        return (Ability)
+        {
+            id,
+            "Withering Curse",
+            300,
+            AF_TARGETS_ENEMIES + AF_AOE,
+        };
         case AB_CAT_WIZARD_ARCANE_BLAST:
         return (Ability)
         {

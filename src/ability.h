@@ -58,6 +58,10 @@ typedef enum ABILITY
     AB_GUIDE_HARMONIZE,
     AB_GUIDE_DISTRACT,
     AB_GUIDE_DANCE_OF_THE_DESPERATE,
+    AB_BLACK_DRAGON_VITALITY_SAP,
+    AB_BLACK_DRAGON_VISAGE_OF_DEATH,
+    AB_BLACK_DRAGON_DISINTEGRATION_BREATH,
+    AB_BLACK_DRAGON_CURSE_OF_WITHERING,
     AB_CAT_WIZARD_ARCANE_BLAST,     // aoe damage
     AB_CAT_WIZARD_CURSE_OF_MEEK,    // reduce mastery by 80%
     AB_CAT_WIZARD_HEX_OF_AMBITION,      // deal damage and stamina equal to enemy crit progress * crit bonus and empty their crit

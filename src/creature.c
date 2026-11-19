@@ -134,6 +134,9 @@ void ShowLingeringEffectPassedMessage(CreatureStats* c, LINGERING_EFFECT e)
         case LE_ONHIT_WOLF_BITE:
         message = CombineStrings((*c).baseStats.name, "'s bite mark stops itching.");
         AddMessageToFeed(message);
+        case LE_ONABIL_BLACK_DRAGON_CURSE:
+        message = CombineStrings((*c).baseStats.name, " is finally free of the Withering Curse.");
+        AddMessageToFeed(message);
         break;
     }
 }
@@ -151,6 +154,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONABIL_ANTLER_HELMET: return "When using an ability which targets only allies, gain 30 Mastery.";
         case LE_ONABIL_MASTER_ROBE: return "When targetting allies, transfer your Crit Progress to them.";
         case LE_ONABIL_TRUMPET: return "When using an ability, gain 50 Target Priority.";
+        case LE_ONABIL_BLACK_DRAGON_CURSE: return "When using an ability, take Pain and Exhaustion equal to its Stamina cost.";
         case LE_ONATT_HAMMER_OF_GLORY: return "When attacking, apply 20 Pain and Exhaust.";
         case LE_ONATT_BALL_ON_CHAIN: return "When attacking, delay the target's turn by 100 moments.";
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 20 Bleed.";
@@ -166,7 +170,8 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONHIT_CRYSTAL_MAIL: return "When hit, this item loses 1 Armour permanently.";
         case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
         case LE_ONHIT_IRON_KISS: return "When hit, return damage equal to your Mastery.";
-        case LE_ONHIT_PILLORY: return "When hit, give all allies +25 Mastery.";
+        case LE_ONHIT_PILLORY: return "When hit, give all allies +25 Mastery.";        
+        case LE_ONHIT_BLACK_DRAGON: return "Damage accumulates between turns. At 1000, explode for 1000 damage to all others and heal for 1500.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
         default: return NULL;
     }
@@ -281,6 +286,32 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             c->baseStats.ticksUntilNextTurn -= damage;
             c->encounterStats.defense += 10;
             AddMessageToFeed(CombineStrings(c->baseStats.name, " becomes irritated, gaining 10 Defense and shortening the wait until its next turn."));
+            break;
+        case LE_ONHIT_BLACK_DRAGON:
+            c->lingeringEffects[i].storedValue += damage;
+            if (c->lingeringEffects[i].storedValue >= 1000)
+            {
+                c->lingeringEffects[i].storedValue = 0;
+                AddMessageToFeed(CombineStrings(c->baseStats.name, "'s black heart goes into overdrive, exploding with a force perverting life!"));
+                for (int j = 0; j < 3; j++)
+                {
+                    if (&appState.stateData.gameState.playerTeam[j].stats != c && appState.stateData.gameState.playerTeam[j].stats.baseStats.currentHealth > 0)
+                        DealDamage(1000, &appState.stateData.gameState.playerTeam[j].stats, false, c);
+                    if (appState.stateData.gameState.stateData.battleState.enemies[j].stats.baseStats.currentHealth > 0 && &appState.stateData.gameState.stateData.battleState.enemies[j].stats != c)
+                        DealDamage(1000, &appState.stateData.gameState.stateData.battleState.enemies[j].stats, false, c);
+                }
+                c->baseStats.currentHealth += 1500;
+                if (c->baseStats.currentHealth > GET_SCALING(c, health))
+                    c->baseStats.currentHealth = GET_SCALING(c, health);
+            }
+            else
+            {
+                sprintf(strnum, "%d", 1000 - c->lingeringEffects[i].storedValue - 1);
+                message = CombineStrings("The Dragon's monstrous heart begins to beat faster. It can take at most ", strnum);
+                message = CombineStrings(message, " more damage before something calamitous happens.");
+                AddMessageToFeed(message);
+            }
+            break;
         }
     }
 }
@@ -349,6 +380,13 @@ void HandleStartOfTurnEffects(CreatureStats* c)
                     case 1: AddMessageToFeed("The enchanted pillar emits speech from its crystal: \"Turn back or I will kill you.\""); break;
                     case 2: AddMessageToFeed("The enchanted pillar emits speech from its crystal: \"You tresspass where you don't belong, typical for your kind.\""); break;
                 }
+                break;
+            case LE_ONHIT_BLACK_DRAGON:
+                c->lingeringEffects[i].storedValue = 0;
+                AddMessageToFeed("The dragon's heartbeat calms down.");
+                break;
+            case LE_ONABIL_BLACK_DRAGON_CURSE:
+                AddMessageToFeed("The Withering Curse lingers...");
                 break;
         }
     }
@@ -631,6 +669,22 @@ void HandleOnAbilityEffects(CreatureStats *c, ABILITY a, CreatureStats **targets
                 appState.stateData.gameState.stateData.battleState.enemies[1].stats.statusEffects[SE_PROTECTION]++;
                 AddMessageToFeed("The Arcane Resonator recalibrates itself, forming a protective barrier around its master.");
                 break;
+            case LE_ONABIL_BLACK_DRAGON_CURSE:
+            {
+                short stamCost = InitAbility(a).staminaCost;
+                if (stamCost > 0)
+                {
+                    ApplyStatusEffect(c, SE_PAIN, stamCost, false);
+                    ApplyStatusEffect(c, SE_EXHAUSTION, stamCost, false);
+                    sprintf(strnum, "%d", stamCost);
+                    message = CombineStrings("The effort withers ", (*c).baseStats.name);
+                    message = CombineStrings(message, "'s feeble body, applying ");
+                    message = CombineStrings(message, strnum);
+                    message = CombineStrings(message, " Pain and Exhaustion.");
+                    AddMessageToFeed(message);
+                }
+            }
+            break;
         }
     }
 }
@@ -763,6 +817,10 @@ void DealDamage(int damage, CreatureStats *target, bool trueDamage, CreatureStat
                 message = appState.stateData.gameState.stateData.battleState.enemies[i].customDeathMessage;
             }
             (*target).baseStats.currentHealth = 0;
+            if((appState.stateData.gameState.stateData.battleState.currentActingEntity < 3) ? 
+                &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats == target :
+                &appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats == target)
+                    PassTurn();
             if(!shownAltMessage) message = CombineStrings((*target).baseStats.name, " was slain!");
             AddMessageToFeed(message);
             HandleOnDeathEffects(target);
@@ -1156,6 +1214,21 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Give ", strnum);
         result = CombineStrings(result, " (50 + 100% Mastery) Shield to an enemy and cure all ailments they have.");
+        return result;
+    case AB_BLACK_DRAGON_VITALITY_SAP:
+        result = "Remove half of the current Stamina from all enemies. Gain that much Mastery.";
+        return result;
+    case AB_BLACK_DRAGON_VISAGE_OF_DEATH:
+        return "Create a copy of target enemy. The copy's current Health equals the target's missing Health.";
+    case AB_BLACK_DRAGON_DISINTEGRATION_BREATH:
+        sprintf(strnum, "%.0f", (200 + GET_SCALING(caster, mastery) * 1.0));
+        result = CombineStrings("Deal ", strnum);
+        result = CombineStrings(result, " (200 + 100% Mastery) unavoidable damage to an enemy.");
+        return result;
+    case AB_BLACK_DRAGON_CURSE_OF_WITHERING:
+        sprintf(strnum, "%.0f", (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true));
+        result = CombineStrings("Curse all enemies for ", strnum);
+        result = CombineStrings(result, " (100 + 100% Mastery) moments. While cursed, each time they use an ability they gain Pain and Exhaustion equal to its Stamina cost.");
         return result;
     case AB_CAT_WIZARD_ARCANE_BLAST:
             sprintf(strnum, "%.0f", ((50 + GET_SCALING(caster, mastery) * 1.0)) 
@@ -2610,6 +2683,96 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddCreatureToFlicker(targets[0]);
         targets[0]->encounterStats.shield += primaryEffectValue;
         break;
+    case AB_BLACK_DRAGON_VITALITY_SAP:
+    {
+        short totalStaminaDrained = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            if ((*targets[i]).baseStats.currentHealth <= 0) continue;
+            short drained = (*targets[i]).baseStats.currentStamina / 2;
+            (*targets[i]).baseStats.currentStamina -= drained;
+            totalStaminaDrained += drained;
+        }
+        caster->encounterStats.mastery += totalStaminaDrained;
+        sprintf(strnum, "%d", totalStaminaDrained);
+        message = CombineStrings((*caster).baseStats.name, " gathers living mana from its surroundings with a proud and cruel stare, halving the Stamina of all its opponents and gaining ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " Mastery.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(caster);
+        break;
+    }
+    case AB_BLACK_DRAGON_VISAGE_OF_DEATH:
+    {
+        int emptySlot = -1;
+        for (int i = 0; i < 3; i++)
+        {
+            if (appState.stateData.gameState.stateData.battleState.enemies[i].stats.baseStats.currentHealth <= 0
+                || appState.stateData.gameState.stateData.battleState.enemies[i].enemyId == EN_CULTIST_SUMMON)
+            {
+                emptySlot = i;
+                break;
+            }
+        }
+        if (emptySlot == -1)
+        {
+            AddMessageToFeed(CombineStrings(caster->baseStats.name, " attempts to summon more undead, but the battlefield is too crowded."));
+            break;
+        }
+        
+        CreatureStats visageTarget = *targets[0];
+
+        appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats = visageTarget;
+        short missingHealth = GET_SCALING(&visageTarget, health) - visageTarget.baseStats.currentHealth;
+        if (missingHealth < 1) missingHealth = 1;
+        appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats.baseStats.currentHealth = missingHealth;
+        appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats.encounterStats = CreateEmptyStatBonuses();
+        appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats.baseStats.name = CombineStrings("Loss of ", visageTarget.baseStats.name);
+        appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats.baseStats.color = raywhite;
+        EmptyLingeringEffects(&appState.stateData.gameState.stateData.battleState.enemies[emptySlot].stats);
+
+        message = CombineStrings((*caster).baseStats.name, " creates a mirror image of ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", made of everything they've lost along the journey.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(caster);
+        break;
+    }
+    case AB_BLACK_DRAGON_DISINTEGRATION_BREATH:
+    {
+        primaryEffectValue = (200 + GET_SCALING(caster, mastery) * 1.0);
+        sprintf(strnum, "%d", primaryEffectValue);
+        message = CombineStrings((*caster).baseStats.name, " exhales a beam of pure annihilation at ");
+        message = CombineStrings(message, targets[0]->baseStats.name);
+        message = CombineStrings(message, ", dealing ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " unavoidable damage.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(targets[0]);
+        DealDamage(primaryEffectValue, targets[0], true, caster);
+        break;
+    }
+    case AB_BLACK_DRAGON_CURSE_OF_WITHERING:
+    {
+        short curseDuration = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        for (int i = 0; i < 3; i++)
+        {
+            if ((*targets[i]).baseStats.currentHealth <= 0) continue;
+            LingeringEffect witheringCurse;
+            witheringCurse.effectId = LE_ONABIL_BLACK_DRAGON_CURSE;
+            witheringCurse.tickDuration = curseDuration;
+            witheringCurse.triggerLimit = 0;
+            witheringCurse.isPermanent = false;
+            ApplyLingeringEffect((targets[i]), witheringCurse);
+        }
+        sprintf(strnum, "%d", curseDuration);
+        message = CombineStrings((*caster).baseStats.name, " hums in an ancient draconic language, cursing all enemies for ");
+        message = CombineStrings(message, strnum);
+        message = CombineStrings(message, " moments. Using abilities will now cause Pain and Exhaustion equal to the stamina cost of chosen ability.");
+        AddMessageToFeed(message);
+        AddCreatureToFlicker(caster);
+        break;
+    }
     case AB_CAT_WIZARD_ARCANE_BLAST:
         primaryEffectValue = (50 + GET_SCALING(caster, mastery) * 1.0) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", primaryEffectValue);
