@@ -89,7 +89,7 @@ enum COLOR_SELECTION
 	//CS_EPHEMERA,			// by LunaticDancer
 	//CS_DELICIOUS_BLOOD,		// by Jtad
 	//CS_OVERGROWN_TEMPLE,		// by Jtad
-	CS_CAUTERIZOR,		// by Jtad
+	CS_CAUTERIZER,		// by Jtad
 	CS_LENGTH,
 };
 

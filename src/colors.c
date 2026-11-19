@@ -263,7 +263,7 @@ Palette_Values get_palette(int palette_index)
         CLITERAL(Color){226,245,244,255},//RAYWHITE
     };break;
 
-    case CS_CAUTERIZOR: //CAUTERIZOR
+    case CS_CAUTERIZER: //CAUTERIZOR
     return (Palette_Values){
         CLITERAL(Color){255,176,138,255},// LIGHTGRAY,
         CLITERAL(Color){158,53,21,255},// GRAY,
