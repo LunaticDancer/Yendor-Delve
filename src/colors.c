@@ -241,7 +241,7 @@ Palette_Values get_palette(int palette_index)
         CLITERAL(Color){132,140,163,255},// GRAY,
         CLITERAL(Color){73,77,112,255},// DARKGRAY,
         CLITERAL(Color){255,243,165,255},// YELLOW,
-        CLITERAL(Color){255,223,95,255},// ORANGE
+        CLITERAL(Color){255,223,95,255},// GOLD
         CLITERAL(Color){255,192,82,255},//ORANGE,
         CLITERAL(Color){237,35,110,255},// RED,
         CLITERAL(Color){173,36,83,255},// MAROON,
@@ -261,6 +261,34 @@ Palette_Values get_palette(int palette_index)
         CLITERAL(Color){0,3,33,255},// BLACK,
         CLITERAL(Color){197,110,212,255},//MAGENTA,
         CLITERAL(Color){226,245,244,255},//RAYWHITE
+    };break;
+
+    case CS_CAUTERIZOR: //CAUTERIZOR
+    return (Palette_Values){
+        CLITERAL(Color){255,176,138,255},// LIGHTGRAY,
+        CLITERAL(Color){158,53,21,255},// GRAY,
+        CLITERAL(Color){99,42,24,255},// DARKGRAY,
+        CLITERAL(Color){255,185,0,255},// YELLOW,
+        CLITERAL(Color){255,144,0,255},// GOLD
+        CLITERAL(Color){255,84,0,255},//ORANGE,
+        CLITERAL(Color){255,0,0,255},// RED,
+        CLITERAL(Color){217,19,59,255},// MAROON,
+        CLITERAL(Color){132,255,102,255},//GREEN,
+        CLITERAL(Color){223,255,0,255},//LIME,
+        CLITERAL(Color){140,184,122,255},//DARKGREEN,
+        CLITERAL(Color){202,255,255,255},//SKYBLUE,
+        CLITERAL(Color){76,221,255,255},//BLUE,
+        CLITERAL(Color){0,158,255,255},//DARKBLUE,
+        CLITERAL(Color){245,60,128,255},//PURPLE,
+        CLITERAL(Color){255,102,162,255},//VIOLET,
+        CLITERAL(Color){245,0,84,255},//DARKPURPLE,
+        CLITERAL(Color){255,217,116,255},//BEIGE,
+        CLITERAL(Color){143,124,80,255},//BROWN,
+        CLITERAL(Color){105,91,59,255},//DARKBROWN,
+        CLITERAL(Color){255,247,237,255},// WHITE,
+        CLITERAL(Color){41,0,0,255},// BLACK,
+        CLITERAL(Color){255,117,249,255},//MAGENTA,
+        CLITERAL(Color){255,239,192,255},//RAYWHITE
     };break;
     
     /*case CS_OVERGROWN_TEMPLE: //Overgrown

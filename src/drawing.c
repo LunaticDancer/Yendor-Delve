@@ -176,6 +176,7 @@ void DrawSettings()
         case CS_NEON:text = "NEON";break;
         //case CS_DELICIOUS_BLOOD:text = "Delicious Blood";break;
         case CS_NIGHT_SKY:text = "Night Sky";break;
+        case CS_CAUTERIZOR:text = "Cauterizor";break;
         //case CS_OVERGROWN_TEMPLE:text = "Overgrown Temple";break;
     }
     textSize = MeasureTextEx(basicFontLarger, text, 32, 0);
