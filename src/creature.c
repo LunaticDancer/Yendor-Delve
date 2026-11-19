@@ -887,7 +887,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         sprintf(strnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.1)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings("Gain ", strnum);
         sprintf(strnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (10 + 10% Mastery) Berserk, then reme ");
+        result = CombineStrings(result, " (10 + 10% Mastery) Berserk, then remove ");
         result = CombineStrings(result, strnum);
         result = CombineStrings(result, " (10 + 20% Mastery) Defense from target enemy and deal ");
         damage = ((40 + GET_SCALING(caster, mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
