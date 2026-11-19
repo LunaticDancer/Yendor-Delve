@@ -197,7 +197,7 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             message = CombineStrings(message, strnum);
             message = CombineStrings(message, " Pain to the assailant.");
             AddMessageToFeed(message);
-            c->encounterStats.speed += primaryValue;
+            c->encounterStats.speed = MIN(10000, c->encounterStats.speed + primaryValue);
             if(caster != NULL)
                 ApplyStatusEffect(caster, SE_PAIN, primaryValue,true);
             break;
@@ -1789,7 +1789,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     case AB_DUELIST_LUNGE:
         primaryEffectValue = ((60 + GET_SCALING(caster, mastery) * 0.5)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         sprintf(strnum, "%d", CalculateDamage(primaryEffectValue, targets[0]));
-        short duelistLungeSpeed = ((40 + GET_SCALING(caster, mastery) * 0.8)) * CalculateEffectAmplification(caster, false);
+        short duelistLungeSpeed = MIN(10000,((40 + GET_SCALING(caster, mastery) * 0.8)) * CalculateEffectAmplification(caster, false));
         message = CombineStrings((*caster).baseStats.name, " lunges at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
         message = CombineStrings(message, ", dealing ");
@@ -1798,7 +1798,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         sprintf(strnum, "%d", duelistLungeSpeed);
         message = CombineStrings(message, strnum);
         message = CombineStrings(message, " Speed.");
-        if(caster->encounterStats.speed>10000)
+        if(caster->encounterStats.speed + duelistLungeSpeed>10000)
             message = CombineStrings(message, "\nYou've reached the speed limit!");
         AddMessageToFeed(message);
         AddCreatureToFlicker(targets[0]);
