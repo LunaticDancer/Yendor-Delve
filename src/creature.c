@@ -1439,7 +1439,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings(result, " (20 + 80% Mastery) Pain and ");
         sprintf(strnum, "%.0f", ((250 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 2.8)) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (250 + 280% Mastery) Confusion.");
+        result = CombineStrings(result, " (250 + 280% Mastery) Confusion to all enemies.");
         return result;
     case AB_GORLAK_EQUIP:
         return "Find a random piece of equipment and gain its bonuses.";
