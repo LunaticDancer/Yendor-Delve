@@ -2686,7 +2686,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     case AB_BLACK_DRAGON_VITALITY_SAP:
     {
         short totalStaminaDrained = 0;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < numberOfTargets; i++)
         {
             if ((*targets[i]).baseStats.currentHealth <= 0) continue;
             short drained = (*targets[i]).baseStats.currentStamina / 2;
@@ -2755,7 +2755,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     case AB_BLACK_DRAGON_CURSE_OF_WITHERING:
     {
         short curseDuration = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < numberOfTargets; i++)
         {
             if ((*targets[i]).baseStats.currentHealth <= 0) continue;
             LingeringEffect witheringCurse;
