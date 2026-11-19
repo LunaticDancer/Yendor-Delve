@@ -763,6 +763,10 @@ void DealDamage(int damage, CreatureStats *target, bool trueDamage, CreatureStat
                 message = appState.stateData.gameState.stateData.battleState.enemies[i].customDeathMessage;
             }
             (*target).baseStats.currentHealth = 0;
+            if((appState.stateData.gameState.stateData.battleState.currentActingEntity < 3) ? 
+                &appState.stateData.gameState.playerTeam[appState.stateData.gameState.stateData.battleState.currentActingEntity].stats == target :
+                &appState.stateData.gameState.stateData.battleState.enemies[appState.stateData.gameState.stateData.battleState.currentActingEntity-3].stats == target)
+                    PassTurn();
             if(!shownAltMessage) message = CombineStrings((*target).baseStats.name, " was slain!");
             AddMessageToFeed(message);
             HandleOnDeathEffects(target);
