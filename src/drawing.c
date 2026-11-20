@@ -890,27 +890,37 @@ void DrawBattleScreenMessageFeed()
 
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[11]);
     result = CombineStrings(result, "\n");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 11) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[10]);
     result = CombineStrings(result, "\n");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 10) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[9]);
     result = CombineStrings(result, "\n");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 9) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[8]);
     result = CombineStrings(result, "\n");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 8) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[7]);
     result = CombineStrings(result, "\n");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 7) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[6]);
     result = CombineStrings(result, "\n");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 6) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[5]);
     result = CombineStrings(result, "\n");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 5) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[4]);
     result = CombineStrings(result, "\n");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 4) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[3]);
     result = CombineStrings(result, "\n");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 3) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[2]);
     result = CombineStrings(result, "\n");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 2) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[1]);
     result = CombineStrings(result, "\n");
-    result = CombineStrings(result, "[cffffffff]");
+     if(appState.stateData.gameState.stateData.battleState.newMessageCount == 1) result = CombineStrings(result, "[cffffffff]");
      result = CombineStrings(result, appState.stateData.gameState.stateData.battleState.messages[0]);
     result = CombineStrings(result, "[r]");
 

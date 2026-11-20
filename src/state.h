@@ -55,6 +55,7 @@ struct BattleState
 	bool abilityTargetsEnemies;
 	TurnIndicator turnIndicators[TURN_PROGNOSES];
 	char* messages[12];
+	char newMessageCount;
 	char flickeringMask;
 	float statePauseTimer;
 	enum BATTLE_STATE battleState;

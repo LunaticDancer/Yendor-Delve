@@ -1681,6 +1681,9 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     bool dontResetCritProgress = false;
     bool skipAbility = false;
 
+    if(caster == &appState.stateData.gameState.playerTeam[0].stats || caster == &appState.stateData.gameState.playerTeam[1].stats || caster == &appState.stateData.gameState.playerTeam[2].stats)
+        appState.stateData.gameState.stateData.battleState.newMessageCount = 0;
+
     caster->baseStats.currentStamina -= cost + ((id == AB_WAIT) ? 0 : caster->statusEffects[SE_EXHAUSTION]);
 
     if(numberOfTargets == 1)
