@@ -160,6 +160,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 20 Bleed.";
         case LE_ONATT_WARPICK: return "When attacking, reduce the target's Defense by 15.";
         case LE_ONATT_MALEVOLENCE: return "When attacking, apply all the negative status you carry.";
+        case LE_ONATT_KNIFE_OF_EVIL: return "When attacking, force the target to attack one of its allies.";
         case LE_ONDTH_VENGEFUL_SPIRIT: return "On death, deal 1000 unavoidable damage to opposite enemy.";
         case LE_ONDTH_ANCIENT_ROOTS: return "On death, return with 55\% of your health, then permanently destroy this item.";
         case LE_ONENC_COIN: return "At the start of combat, you move first.";
@@ -354,6 +355,58 @@ void HandleOnAttackEffects(CreatureStats *c, short damage, CreatureStats *caster
                 ApplyStatusEffect(c, SE_BERSERK, caster->statusEffects[SE_BERSERK],false);
                 ApplyStatusEffect(c, SE_PAIN, caster->statusEffects[SE_PAIN],false);
                 break;
+            case LE_ONATT_KNIFE_OF_EVIL:
+            {
+                appState.stateData.gameState.karmicBalance -= 1;
+                char allyCandidates[3];
+                char allyCount = 0;
+                for (int j = 0; j < 3; j++)
+                {
+                    if (appState.stateData.gameState.stateData.battleState.enemies[j].stats.baseStats.currentHealth <= 0) continue;
+                    allyCandidates[allyCount++] = j;
+                }
+                if (allyCount == 0)
+                {
+                    message = CombineStrings("The Knife of Evil twists ", c->baseStats.name);
+                    message = CombineStrings(message, "'s mind, but there is no ally left standing.");
+                    AddMessageToFeed(message);
+                    break;
+                }
+                int chosenAlly = allyCandidates[rand() % allyCount];
+
+                Ability chosenAbility = {0};
+                bool foundAbility = false;
+                int matchingCount = 0;
+                for (int k = 0; k < (*c).abilityCount; k++)
+                {
+                    if (!DoesAbilityHaveFlag((*c).abilities[k], AF_TARGETS_ENEMIES)) continue;
+                    matchingCount++;
+                    if (rand() % matchingCount == 0)
+                    {
+                        chosenAbility = (*c).abilities[k];
+                        foundAbility = true;
+                    }
+                }
+                if (!foundAbility)
+                {
+                    message = CombineStrings("The Knife of Evil twists ", c->baseStats.name);
+                    message = CombineStrings(message, "'s mind, but they are incapable of harm.");
+                    AddMessageToFeed(message);
+                    break;
+                }
+
+                message = CombineStrings("The Knife of Evil twists the mind of ", c->baseStats.name);
+                message = CombineStrings(message, ", forcing them to use ");
+                message = CombineStrings(message, chosenAbility.name);
+                message = CombineStrings(message, " against their own ally!");
+                AddMessageToFeed(message);
+
+                CreatureStats *forcedTargets[1];
+                forcedTargets[0] = &appState.stateData.gameState.stateData.battleState.enemies[chosenAlly].stats;
+                AddCreatureToFlicker(forcedTargets[0]);
+                CastAbility(chosenAbility.abilityId, 0, c, forcedTargets, 1);
+                break;
+            }
         }
     }
 }

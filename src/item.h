@@ -85,6 +85,7 @@ typedef enum ITEM_ID
     ITEM_ANCIENT_ROOTS,
     ITEM_IRON_KISS,
     ITEM_WARPICK,
+    ITEM_KNIFE_OF_EVIL,
 } ITEM_ID;
 
 typedef struct Item
