@@ -319,6 +319,34 @@ Palette_Values get_palette(int palette_index)
         CLITERAL(Color){240,235,211,255},//RAYWHITE
     };break;*/
 
+    case CS_TOXIC_WASTE:
+    return (Palette_Values){
+        CLITERAL(Color){170,160,138,255},// LIGHTGRAY,
+        CLITERAL(Color){121,108,98,255},// GRAY,
+        CLITERAL(Color){75,67,65,255},// DARKGRAY,
+        CLITERAL(Color){255,250,51,255},// YELLOW,
+        CLITERAL(Color){255,168,36,255},// GOLD,
+        CLITERAL(Color){223,95,0,255},// ORANGE,
+        CLITERAL(Color){34,255,106,255},// RED,
+        CLITERAL(Color){0,196,122,255},// MAROON,
+        CLITERAL(Color){149,255,70,255},//GREEN,
+        CLITERAL(Color){203,255,94,255},//LIME,
+        CLITERAL(Color){22,221,0,255},//DARKGREEN,
+        CLITERAL(Color){159,255,200,255},//SKYBLUE,
+        CLITERAL(Color){74,255,183,255},//BLUE,
+        CLITERAL(Color){34,255,227,255},//DARKBLUE,
+        CLITERAL(Color){133,204,0,255},//PURPLE,
+        CLITERAL(Color){183,255,13,255},//VIOLET,
+        CLITERAL(Color){74,187,0,255},//DARKPURPLE,
+        CLITERAL(Color){255,252,113,255},//BEIGE,
+        CLITERAL(Color){213,181,0,255},//BROWN,
+        CLITERAL(Color){164,115,0,255},//DARKBROWN,
+        CLITERAL(Color){249,245,236,255},// WHITE,
+        CLITERAL(Color){0,31,26,255},// BLACK,
+        CLITERAL(Color){240,255,51,255},//MAGENTA,
+        CLITERAL(Color){249,255,168,255},//RAYWHITE
+    };break;
+
     default: // DEFAULT
     return (Palette_Values){
         LIGHTGRAY,

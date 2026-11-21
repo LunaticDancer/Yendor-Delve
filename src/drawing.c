@@ -178,6 +178,7 @@ void DrawSettings()
         case CS_NIGHT_SKY:text = "Night Sky";break;
         case CS_CAUTERIZER:text = "Cauterizer";break;
         //case CS_OVERGROWN_TEMPLE:text = "Overgrown Temple";break;
+        case CS_TOXIC_WASTE:text = "Toxic Waste";break;
     }
     textSize = MeasureTextEx(basicFontLarger, text, 32, 0);
     textPosition.x = 608 - textSize.x;
