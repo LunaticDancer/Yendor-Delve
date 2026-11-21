@@ -938,25 +938,25 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         return "Inaction. Let the opportunity pass.";
     case AB_BERSERKER_SWING:
         sprintf(strnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.1)) * CalculateEffectAmplification(caster, false));
-        result = CombineStrings("Bring the battle axe down in a wild swing, gaining ", strnum);
+        result = CombineStrings("Gain ", strnum);
         sprintf(strnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (10 + 10% Mastery) Berserk, removing ");
+        result = CombineStrings(result, " (10 + 10% Mastery) Berserk, then remove ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (10 + 20% Mastery) Defense from the target and dealing ");
+        result = CombineStrings(result, " (10 + 20% Mastery) Defense from target enemy and deal ");
         damage = ((40 + GET_SCALING(caster, mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((40 + GET_SCALING(caster, mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (40 + 80% Mastery) damage.");
+        result = CombineStrings(result, " (40 + 80% Mastery) damage to it.");
         return result;
     case AB_BERSERKER_BASH:
         sprintf(strnum, "%.0f", MIN(9999,(100+ GET_SCALING(caster, armor) * GET_SCALING(caster, mastery)) * CalculateEffectAmplification(caster, false)));
-        result = CombineStrings("Stun an enemy with a powerful shield strike, delaying their next turn by ", strnum);
+        result = CombineStrings("Delay an enemy's next turn by ", strnum);
         result = CombineStrings(result, " (100 + Armour x Mastery) moments of time.");
         return result;
     case AB_BERSERKER_BATTLECRY:
         sprintf(strnum, "%.0f", (((caster->baseStats.currentStamina) * 0.25)) * CalculateEffectAmplification(caster, false));
-        result = CombineStrings("Perform a mighty cry, expending half of your current Stamina, gaining ", strnum);
+        result = CombineStrings("Expend half of your current Stamina to gain ", strnum);
         result = CombineStrings(result, " (50% of expended Stamina) Berserk and ");
         sprintf(strnum, "%.0f", (((caster->baseStats.currentStamina) * 0.5)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, strnum);
@@ -964,7 +964,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         return result;
     case AB_BERSERKER_BRACE:
         sprintf(strnum, "%.0f", ((1 + GET_SCALING(caster, mastery) * 0.05)) * CalculateEffectAmplification(caster, false));
-        result = CombineStrings("Raise the shield in a defensive stance, gaining ", strnum);
+        result = CombineStrings("Gaining ", strnum);
         result = CombineStrings(result, " (1 + 5% Mastery) Armour and ");
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, strnum);
