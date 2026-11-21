@@ -85,11 +85,11 @@ enum COLOR_SELECTION
 	CS_FADING,		// by LunaticDancer
 	CS_GREENORANGE,		// by LunaticDancer
 	CS_NIGHT_SKY,		// by Jtad
+	CS_TOXIC_WASTE,			// by Pholidia
 	CS_NEON,		// by Jtad
 	//CS_EPHEMERA,			// by LunaticDancer
 	//CS_DELICIOUS_BLOOD,		// by Jtad
 	//CS_OVERGROWN_TEMPLE,		// by Jtad
-	CS_TOXIC_WASTE,			// by Pholidia
 	CS_LENGTH,
 };
 
