@@ -589,6 +589,14 @@ Ability InitAbility(ABILITY id)
             5,
             AF_TARGETS_ENEMIES,
         };
+        case AB_BLOFAEMYS_HARVEST:
+        return (Ability)
+        {
+            id,
+            "Harvest",
+            25,
+            AF_TARGETS_ENEMIES + AF_AOE + AF_TARGETS_ALLIES,
+        };
         case AB_CAUCUBE_NIBBLE:
         return (Ability)
         {

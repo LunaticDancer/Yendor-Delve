@@ -1376,6 +1376,8 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         result = CombineStrings("Mock an enemy, delaying their turn by ", strnum);
         result = CombineStrings(result, " (100 + 500% Mastery) moments.");
         return result;
+    case AB_BLOFAEMYS_HARVEST:
+        return "Deal unavoidable damage to all things equal to their Bleed.";
     case AB_CAUCUBE_NIBBLE:
         damage = ((30 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.6)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
@@ -3111,6 +3113,15 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         AddCreatureToFlicker(targets[0]);
         targets[0]->baseStats.ticksUntilNextTurn += primaryEffectValue;
         break;
+    case AB_BLOFAEMYS_HARVEST:
+        AddMessageToFeed(CombineStrings((*caster).baseStats.name, " pulls a sudden gush of blood out of everyone with their hemokinetic powers."));
+        for (int i = 0; i < numberOfTargets; i++)
+        {
+            if(targets[i]->statusEffects[SE_BLEED] <= 0) continue;
+            if(targets[i]->baseStats.currentHealth <= 0) continue;
+            DealDamage(targets[i]->statusEffects[SE_BLEED], targets[i], true, caster);
+            AddCreatureToFlicker(targets[i]);
+        }
     case AB_CAUCUBE_NIBBLE:
         primaryEffectValue = (30 + GET_SCALING(caster, mastery) * 0.6) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         short caucubeNibbleMasteryLoss = (2 + GET_SCALING(caster, mastery) * 0.2) * CalculateEffectAmplification(caster, true);
