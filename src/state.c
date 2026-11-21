@@ -145,6 +145,7 @@ void InitGameState(enum GAME_STATE _state)
 		appState.stateData.gameState.stateData.battleState.verticalSelection = 0;
 		appState.stateData.gameState.stateData.battleState.horizontalSelection = 0;
 		appState.stateData.gameState.stateData.battleState.battleState = BS_ENEMY_TURN;
+		appState.stateData.gameState.stateData.battleState.newMessageCount = 1;
 		appState.stateData.gameState.stateData.battleState.messages[0] = "The battle has begun!";
 		appState.stateData.gameState.stateData.battleState.messages[1] = "";
 		appState.stateData.gameState.stateData.battleState.messages[2] = "";
@@ -449,6 +450,7 @@ void HandleStartOfTurnProcs()
 
 void AddMessageToFeed(char *msg)
 {
+	appState.stateData.gameState.stateData.battleState.newMessageCount += 1;
 	appState.stateData.gameState.stateData.battleState.messages[11] = appState.stateData.gameState.stateData.battleState.messages[10];
 	appState.stateData.gameState.stateData.battleState.messages[10] = appState.stateData.gameState.stateData.battleState.messages[9];
 	appState.stateData.gameState.stateData.battleState.messages[9] = appState.stateData.gameState.stateData.battleState.messages[8];

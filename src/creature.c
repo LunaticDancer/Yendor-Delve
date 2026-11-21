@@ -160,6 +160,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONATT_MORNINGSTAR: return "When attacking, apply 20 Bleed.";
         case LE_ONATT_WARPICK: return "When attacking, reduce the target's Defense by 15.";
         case LE_ONATT_MALEVOLENCE: return "When attacking, apply all the negative status you carry.";
+        case LE_ONATT_KNIFE_OF_EVIL: return "When attacking, force the target to attack one of its allies.";
         case LE_ONDTH_VENGEFUL_SPIRIT: return "On death, deal 1000 unavoidable damage to opposite enemy.";
         case LE_ONDTH_ANCIENT_ROOTS: return "On death, return with 55\% of your health, then permanently destroy this item.";
         case LE_ONENC_COIN: return "At the start of combat, you move first.";
@@ -354,6 +355,58 @@ void HandleOnAttackEffects(CreatureStats *c, short damage, CreatureStats *caster
                 ApplyStatusEffect(c, SE_BERSERK, caster->statusEffects[SE_BERSERK],false);
                 ApplyStatusEffect(c, SE_PAIN, caster->statusEffects[SE_PAIN],false);
                 break;
+            case LE_ONATT_KNIFE_OF_EVIL:
+            {
+                appState.stateData.gameState.karmicBalance -= 1;
+                char allyCandidates[3];
+                char allyCount = 0;
+                for (int j = 0; j < 3; j++)
+                {
+                    if (appState.stateData.gameState.stateData.battleState.enemies[j].stats.baseStats.currentHealth <= 0) continue;
+                    allyCandidates[allyCount++] = j;
+                }
+                if (allyCount == 0)
+                {
+                    message = CombineStrings("The Knife of Evil twists ", c->baseStats.name);
+                    message = CombineStrings(message, "'s mind, but there is no ally left standing.");
+                    AddMessageToFeed(message);
+                    break;
+                }
+                int chosenAlly = allyCandidates[rand() % allyCount];
+
+                Ability chosenAbility = {0};
+                bool foundAbility = false;
+                int matchingCount = 0;
+                for (int k = 0; k < (*c).abilityCount; k++)
+                {
+                    if (!DoesAbilityHaveFlag((*c).abilities[k], AF_TARGETS_ENEMIES)) continue;
+                    matchingCount++;
+                    if (rand() % matchingCount == 0)
+                    {
+                        chosenAbility = (*c).abilities[k];
+                        foundAbility = true;
+                    }
+                }
+                if (!foundAbility)
+                {
+                    message = CombineStrings("The Knife of Evil twists ", c->baseStats.name);
+                    message = CombineStrings(message, "'s mind, but they are incapable of harm.");
+                    AddMessageToFeed(message);
+                    break;
+                }
+
+                message = CombineStrings("The Knife of Evil twists the mind of ", c->baseStats.name);
+                message = CombineStrings(message, ", forcing them to use ");
+                message = CombineStrings(message, chosenAbility.name);
+                message = CombineStrings(message, " against their own ally!");
+                AddMessageToFeed(message);
+
+                CreatureStats *forcedTargets[1];
+                forcedTargets[0] = &appState.stateData.gameState.stateData.battleState.enemies[chosenAlly].stats;
+                AddCreatureToFlicker(forcedTargets[0]);
+                CastAbility(chosenAbility.abilityId, 0, c, forcedTargets, 1);
+                break;
+            }
         }
     }
 }
@@ -885,25 +938,25 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         return "Inaction. Let the opportunity pass.";
     case AB_BERSERKER_SWING:
         sprintf(strnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.1)) * CalculateEffectAmplification(caster, false));
-        result = CombineStrings("Bring the battle axe down in a wild swing, gaining ", strnum);
+        result = CombineStrings("Gain ", strnum);
         sprintf(strnum, "%.0f", ((10 + GET_SCALING(caster, mastery) * 0.2)) * CalculateEffectAmplification(caster, true));
-        result = CombineStrings(result, " (10 + 10% Mastery) Berserk, removing ");
+        result = CombineStrings(result, " (10 + 10% Mastery) Berserk, then remove ");
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (10 + 20% Mastery) Defense from the target and dealing ");
+        result = CombineStrings(result, " (10 + 20% Mastery) Defense from target enemy and deal ");
         damage = ((40 + GET_SCALING(caster, mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         ShowEnemyDamageOverlays(damage, false);
         sprintf(strnum, "%.0f", ((40 + GET_SCALING(caster, mastery) * 0.8)) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true));
         result = CombineStrings(result, strnum);
-        result = CombineStrings(result, " (40 + 80% Mastery) damage.");
+        result = CombineStrings(result, " (40 + 80% Mastery) damage to it.");
         return result;
     case AB_BERSERKER_BASH:
         sprintf(strnum, "%.0f", MIN(9999,(100+ GET_SCALING(caster, armor) * GET_SCALING(caster, mastery)) * CalculateEffectAmplification(caster, false)));
-        result = CombineStrings("Stun an enemy with a powerful shield strike, delaying their next turn by ", strnum);
+        result = CombineStrings("Delay an enemy's next turn by ", strnum);
         result = CombineStrings(result, " (100 + Armour x Mastery) moments of time.");
         return result;
     case AB_BERSERKER_BATTLECRY:
         sprintf(strnum, "%.0f", (((caster->baseStats.currentStamina) * 0.25)) * CalculateEffectAmplification(caster, false));
-        result = CombineStrings("Perform a mighty cry, expending half of your current Stamina, gaining ", strnum);
+        result = CombineStrings("Expend half of your current Stamina to gain ", strnum);
         result = CombineStrings(result, " (50% of expended Stamina) Berserk and ");
         sprintf(strnum, "%.0f", (((caster->baseStats.currentStamina) * 0.5)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, strnum);
@@ -911,7 +964,7 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
         return result;
     case AB_BERSERKER_BRACE:
         sprintf(strnum, "%.0f", ((1 + GET_SCALING(caster, mastery) * 0.05)) * CalculateEffectAmplification(caster, false));
-        result = CombineStrings("Raise the shield in a defensive stance, gaining ", strnum);
+        result = CombineStrings("Gaining ", strnum);
         result = CombineStrings(result, " (1 + 5% Mastery) Armour and ");
         sprintf(strnum, "%.0f", ((50 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8)) * CalculateEffectAmplification(caster, false));
         result = CombineStrings(result, strnum);
@@ -1221,14 +1274,14 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_BLACK_DRAGON_VISAGE_OF_DEATH:
         return "Create a copy of target enemy. The copy's current Health equals the target's missing Health.";
     case AB_BLACK_DRAGON_DISINTEGRATION_BREATH:
-        sprintf(strnum, "%.0f", (200 + GET_SCALING(caster, mastery) * 1.0));
+        sprintf(strnum, "%.0f", (200 + GET_SCALING(caster, mastery) * 0.5));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (200 + 100% Mastery) unavoidable damage to an enemy.");
+        result = CombineStrings(result, " (200 + 50% Mastery) unavoidable damage to an enemy.");
         return result;
     case AB_BLACK_DRAGON_CURSE_OF_WITHERING:
-        sprintf(strnum, "%.0f", (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true));
+        sprintf(strnum, "%.0f", (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true));
         result = CombineStrings("Curse all enemies for ", strnum);
-        result = CombineStrings(result, " (100 + 100% Mastery) moments. While cursed, each time they use an ability they gain Pain and Exhaustion equal to its Stamina cost.");
+        result = CombineStrings(result, " (100 + 80% Mastery) moments. While cursed, each time they use an ability they gain Pain and Exhaustion equal to its Stamina cost.");
         return result;
     case AB_CAT_WIZARD_ARCANE_BLAST:
             sprintf(strnum, "%.0f", ((50 + GET_SCALING(caster, mastery) * 1.0)) 
@@ -1627,6 +1680,9 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     bool isCrit = (*caster).baseStats.critCounter >= CRIT_PROGRESS_MAX;
     bool dontResetCritProgress = false;
     bool skipAbility = false;
+
+    if(caster == &appState.stateData.gameState.playerTeam[0].stats || caster == &appState.stateData.gameState.playerTeam[1].stats || caster == &appState.stateData.gameState.playerTeam[2].stats)
+        appState.stateData.gameState.stateData.battleState.newMessageCount = 0;
 
     caster->baseStats.currentStamina -= cost + ((id == AB_WAIT) ? 0 : caster->statusEffects[SE_EXHAUSTION]);
 
@@ -2740,7 +2796,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     }
     case AB_BLACK_DRAGON_DISINTEGRATION_BREATH:
     {
-        primaryEffectValue = (200 + GET_SCALING(caster, mastery) * 1.0);
+        primaryEffectValue = (200 + GET_SCALING(caster, mastery) * 0.5);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " exhales a beam of pure annihilation at ");
         message = CombineStrings(message, targets[0]->baseStats.name);
@@ -2754,7 +2810,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     }
     case AB_BLACK_DRAGON_CURSE_OF_WITHERING:
     {
-        short curseDuration = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 1.0) * CalculateEffectAmplification(caster, true);
+        short curseDuration = (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true);
         for (int i = 0; i < numberOfTargets; i++)
         {
             if ((*targets[i]).baseStats.currentHealth <= 0) continue;

@@ -229,6 +229,7 @@ void InitItemPools()
     itemPoolTier3[0] = ITEM_IRON_KISS;
     itemPoolTier3[1] = ITEM_ANCIENT_ROOTS;
     itemPoolTier3[2] = ITEM_WARPICK;
+    itemPoolTier3[3] = ITEM_KNIFE_OF_EVIL;
 }
 
 Encounter GetEncounterData(ENCOUNTER_ID id)
@@ -240,7 +241,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Dungeon Master",
-                "They await you, calmly and expectingly.",
+                "As you enter the inner sanctum of the workshop, a mighty voice makes the ornate walls tremble:\n\"Brave fools, you've proven your mettle by making it this far. Now perish!\"",
                 TL_BIG_CREATURES,
                 (Vector2){5,3},
                 gold,
@@ -253,7 +254,7 @@ Encounter GetEncounterData(ENCOUNTER_ID id)
             {
                 id,
                 "Black Dragon",
-                "\0",
+                "The dignified beast, as black as starless night, calmly expects you. You feel an intense aura of menace. You notice the creature's artificial heart, beating with profane necrotic power. Your instincts scream at you to keep its pulse in check.",
                 TL_BIG_COMMUNITY,
                 (Vector2){6,0},
                 darkgray,

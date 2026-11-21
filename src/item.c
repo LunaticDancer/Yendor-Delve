@@ -1214,5 +1214,21 @@ Item InitItem(ITEM_ID id)
         result.statBonuses.stamina = 300;
         result.statBonuses.defense = 100;
         return result;
+
+        case ITEM_KNIFE_OF_EVIL:
+        result = (Item){
+            id,
+            "Knife of Evil",
+            TL_JTAD,
+            (Vector2){9, 4},
+            darkpurple,
+            ES_WEAPON,
+            CreateEmptyStatBonuses(),
+            LE_ONATT_KNIFE_OF_EVIL,
+        };
+        result.statBonuses.critRate = 100;
+        result.statBonuses.critBonus = 100;
+        result.statBonuses.mastery = 100;
+        return result;
     }
 }
