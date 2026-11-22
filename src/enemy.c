@@ -100,7 +100,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Black Dragon",
-                    .tileset = TL_BIG_COMMUNITY,
+                    .tileset = TL_BIG_JTAD,
                     .tileLookupPosition = (Vector2){6,0},
                     .color = darkgray,
 
@@ -227,7 +227,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Green Dragon",
-                    .tileset = TL_BIG_COMMUNITY,
+                    .tileset = TL_BIG_JTAD,
                     .tileLookupPosition = (Vector2){2,0},
                     .color = green,
 
@@ -269,7 +269,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Choir",
-                    .tileset = TL_BIG_COMMUNITY,
+                    .tileset = TL_BIG_JTAD,
                     .tileLookupPosition = (Vector2){3,0},
                     .color = orange,
 
@@ -310,7 +310,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Choir",
-                    .tileset = TL_BIG_COMMUNITY,
+                    .tileset = TL_BIG_JTAD,
                     .tileLookupPosition = (Vector2){5,0},
                     .color = orange,
 
@@ -351,7 +351,7 @@ Enemy InitEnemyData(ENEMY_ID id)
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Choir",
-                    .tileset = TL_BIG_COMMUNITY,
+                    .tileset = TL_BIG_JTAD,
                     .tileLookupPosition = (Vector2){4,0},
                     .color = orange,
 
