@@ -30,7 +30,7 @@ extern Texture magneterAtlas;
 extern Texture pholidiaAtlas;
 extern Texture quiekAtlas;
 extern Texture sofusAtlas;
-extern Texture bigCommunityAtlas;
+extern Texture bigJtadAtlas;
 extern Texture boneFrame;
 extern Texture spikeFrame;
 extern Texture ornateFrame;
@@ -1469,8 +1469,8 @@ Texture GetTileset(enum TILESET ts)
         case TL_SOFUS:
             return sofusAtlas;
             break;
-        case TL_BIG_COMMUNITY:
-            return bigCommunityAtlas;
+        case TL_BIG_JTAD:
+            return bigJtadAtlas;
             break;
     }
 }
@@ -1840,7 +1840,7 @@ char* WrapText(Font font, const char* text, float fontSize, float spacing, float
 
 bool IsBigSpritesheet(enum TILESET tileset) {
     switch (tileset) {
-        case TL_BIG_COMMUNITY:
+        case TL_BIG_JTAD:
             return true;
             break;
         case TL_BIG_CREATURES:

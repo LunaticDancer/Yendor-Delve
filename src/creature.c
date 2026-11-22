@@ -2144,7 +2144,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
         {
         message = CombineStrings((*caster).baseStats.name, " becomes an incidental little critter found on the dungeon floor.");
         }
-        else if(appState.stateData.gameState.floor%8 == 0 || targets[0]->baseStats.tileset == TL_BIG_CREATURES || targets[0]->baseStats.tileset == TL_BIG_COMMUNITY)
+        else if(appState.stateData.gameState.floor%8 == 0 || targets[0]->baseStats.tileset == TL_BIG_CREATURES || targets[0]->baseStats.tileset == TL_BIG_JTAD)
         {
             AddMessageToFeed("Despite best efforts, the Shapeshifter fails to assume that form.");
             AddCreatureToFlicker(caster);
