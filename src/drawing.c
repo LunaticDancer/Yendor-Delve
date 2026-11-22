@@ -30,7 +30,7 @@ extern Texture magneterAtlas;
 extern Texture pholidiaAtlas;
 extern Texture quiekAtlas;
 extern Texture sofusAtlas;
-extern Texture bigCommunityAtlas;
+extern Texture bigJtadAtlas;
 extern Texture boneFrame;
 extern Texture spikeFrame;
 extern Texture ornateFrame;
@@ -1470,7 +1470,7 @@ Texture GetTileset(enum TILESET ts)
             return sofusAtlas;
             break;
         case TL_BIG_COMMUNITY:
-            return bigCommunityAtlas;
+            return bigJtadAtlas;
             break;
     }
 }
