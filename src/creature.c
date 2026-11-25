@@ -3122,6 +3122,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
             DealDamage(targets[i]->statusEffects[SE_BLEED], targets[i], true, caster);
             AddCreatureToFlicker(targets[i]);
         }
+        break;
     case AB_CAUCUBE_NIBBLE:
         primaryEffectValue = (30 + GET_SCALING(caster, mastery) * 0.6) * GetDamageMult(caster) * CalculateEffectAmplification(caster, true);
         short caucubeNibbleMasteryLoss = (2 + GET_SCALING(caster, mastery) * 0.2) * CalculateEffectAmplification(caster, true);
