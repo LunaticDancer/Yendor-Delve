@@ -172,7 +172,7 @@ char* GetLingeringEffectDescription(LINGERING_EFFECT e)
         case LE_ONHIT_FOOT_FUNGUS: return "When hit, Pray.";
         case LE_ONHIT_IRON_KISS: return "When hit, return damage equal to your Mastery.";
         case LE_ONHIT_PILLORY: return "When hit, give all allies +25 Mastery.";        
-        case LE_ONHIT_BLACK_DRAGON: return "Damage accumulates between turns. At 1000, explode for 1000 damage to all others and heal for 1500.";
+        case LE_ONHIT_BLACK_DRAGON: return "Damage accumulates between turns. At 1000, explode for damage equal to Mastery to all others and heal for 1500.";
         case LE_ONTURN_AMBROSIA: return "You're always confused.";
         default: return NULL;
     }
@@ -293,13 +293,17 @@ void HandleOnHitEffects(CreatureStats *c, short damage, CreatureStats *caster)
             if (c->lingeringEffects[i].storedValue >= 1000)
             {
                 c->lingeringEffects[i].storedValue = 0;
-                AddMessageToFeed(CombineStrings(c->baseStats.name, "'s black heart goes into overdrive, exploding with a force perverting life! It heals for 1500 Health and deals 1000 damage to everything else."));
+                sprintf(strnum, "%d", GET_SCALING(c, mastery));
+                message = CombineStrings(c->baseStats.name, "'s black heart goes into overdrive, exploding with a life-perverting force! It heals for 1500 Health and deals ");
+                message = CombineStrings(message, strnum);
+                message = CombineStrings(message, " damage to everything else.");
+                AddMessageToFeed(message);
                 for (int j = 0; j < 3; j++)
                 {
                     if (&appState.stateData.gameState.playerTeam[j].stats != c && appState.stateData.gameState.playerTeam[j].stats.baseStats.currentHealth > 0)
-                        DealDamage(1000, &appState.stateData.gameState.playerTeam[j].stats, false, c);
+                        DealDamage(GET_SCALING(c, mastery), &appState.stateData.gameState.playerTeam[j].stats, false, c);
                     if (appState.stateData.gameState.stateData.battleState.enemies[j].stats.baseStats.currentHealth > 0 && &appState.stateData.gameState.stateData.battleState.enemies[j].stats != c)
-                        DealDamage(1000, &appState.stateData.gameState.stateData.battleState.enemies[j].stats, false, c);
+                        DealDamage(GET_SCALING(c, mastery), &appState.stateData.gameState.stateData.battleState.enemies[j].stats, false, c);
                 }
                 c->baseStats.currentHealth += 1500;
                 if (c->baseStats.currentHealth > GET_SCALING(c, health))
@@ -1274,9 +1278,9 @@ char *GetAbilityDescription(ABILITY id, CreatureStats *caster)
     case AB_BLACK_DRAGON_VISAGE_OF_DEATH:
         return "Create a copy of target enemy. The copy's current Health equals the target's missing Health.";
     case AB_BLACK_DRAGON_DISINTEGRATION_BREATH:
-        sprintf(strnum, "%.0f", (200 + GET_SCALING(caster, mastery) * 0.5));
+        sprintf(strnum, "%.0f", (200 + GET_SCALING(caster, mastery) * 0.3));
         result = CombineStrings("Deal ", strnum);
-        result = CombineStrings(result, " (200 + 50% Mastery) unavoidable damage to an enemy.");
+        result = CombineStrings(result, " (200 + 30% Mastery) unavoidable damage to an enemy.");
         return result;
     case AB_BLACK_DRAGON_CURSE_OF_WITHERING:
         sprintf(strnum, "%.0f", (100 + (caster->baseStats.mastery + caster->encounterStats.mastery + caster->itemStats.mastery) * 0.8) * CalculateEffectAmplification(caster, true));
@@ -2798,7 +2802,7 @@ void CastAbility(ABILITY id, short cost, CreatureStats *caster, CreatureStats **
     }
     case AB_BLACK_DRAGON_DISINTEGRATION_BREATH:
     {
-        primaryEffectValue = (200 + GET_SCALING(caster, mastery) * 0.5);
+        primaryEffectValue = (200 + GET_SCALING(caster, mastery) * 0.3);
         sprintf(strnum, "%d", primaryEffectValue);
         message = CombineStrings((*caster).baseStats.name, " exhales a beam of pure annihilation at ");
         message = CombineStrings(message, targets[0]->baseStats.name);

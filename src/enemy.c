@@ -131,7 +131,7 @@ Enemy InitEnemyData(ENEMY_ID id)
                 .abilityCount = 5,
             },
             TG_WEIGHTED_RANDOM,
-            AB_WAIT,
+            AB_BLACK_DRAGON_VITALITY_SAP,
             "\0",
             false,
         };
