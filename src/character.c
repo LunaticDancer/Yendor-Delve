@@ -10,7 +10,7 @@ Character InitCharacterData(CHARACTER_ID id)
         case CHAR_BERSERKER:
         return (Character){
             id,
-            "As reckless as he is effective, the Berserker dominates his opponents through sheer force and rage, endangering himself beyond reason just to chase the thrill of murder.\nThe Berserker is all about calculated risks, enraging himself which amplifies both outgoing and incoming damage. His brute strength is capable of incapacitating his enemies or killing them outright, but is held back by his lack of speed.",
+            "Reckless yet effective, the Berserker dominates the battlefield, chasing the thrill of murder.\nThe Berserker is uses two-sided damage amplification to kill his enemies quicker while putting his life at risk. His brutal hits uniquely shred through enemy defenses.",
             (CreatureStats){
                 .baseStats = (CreatureBaseStats){
                     .name = "Berserker",
